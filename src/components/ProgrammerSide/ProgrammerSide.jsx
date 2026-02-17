@@ -14,6 +14,7 @@ import {
   Coffee,
   Braces,
 } from 'lucide-react';
+import { imagePaths } from '../../imagePaths';
 import './ProgrammerSide.css';
 
 const containerVariants = {
@@ -40,28 +41,28 @@ const skills = [
 
 const projects = [
   {
+    title: 'Competitive Programming Module',
+    description:
+      'A module for competitive programming platforms with features like live coding sessions, test case management, and real-time feedback.',
+    tech: ['Laravel', 'React', 'Wordpress', 'HTML Canvas'],
+    stars: 891,
+    image: imagePaths.projectCompetitiveProgrammingModule,
+  },
+  {
     title: 'Advance Quiz Platform',
     description:
       'A real-time correction quiz platform with correction, many question types, and detailed analytics for educators and students.',
     tech: ['Laravel', 'JavaScript', 'JQuery', 'mySQL'],
     stars: 52,
-    image: null,
+    image: imagePaths.projectAdvanceQuizPlatform,
   },
   {
-    title: 'NeuralAPI Framework',
+    title: 'HalalCraft, Minecraft Plugin',
     description:
-      'Open-source REST API generator with automatic documentation, rate limiting, and AI-powered query optimization.',
-    tech: ['TypeScript', 'Express', 'OpenAPI', 'ML'],
-    stars: 891,
-    image: null,
-  },
-  {
-    title: 'DevMetrics Dashboard',
-    description:
-      'Analytics dashboard for dev teams: commit patterns, PR velocity, code quality scoring, and sprint burndown tracking.',
-    tech: ['Next.js', 'D3.js', 'PostgreSQL', 'GraphQL'],
+      'A Minecraft plugin that adds using religiously compliant halal food items, prayer spaces, and educational content about Islamic culture within the game.',
+    tech: ['Java', 'Spigot API', 'Maven'],
     stars: 214,
-    image: null,
+    image: imagePaths.projectHalalcraft,
   },
   {
     title: 'PixelForge Engine',
@@ -69,32 +70,46 @@ const projects = [
       'Lightweight 2D game engine with ECS architecture, WebGL renderer, and built-in physics simulation.',
     tech: ['TypeScript', 'WebGL', 'WASM', 'Rust'],
     stars: 1247,
-    image: null,
+    image: imagePaths.projectPixelForge,
   },
 ];
 
 const experience = [
   {
-    role: 'Senior Full-Stack Engineer',
-    company: 'TechCorp Inc.',
+    role: 'Mentor & Coach for Competitive Programming',
+    company: 'SMK Cyber Media Jakarta',
     period: '2023 — Present',
     description:
-      'Leading a team of 8 engineers building next-gen SaaS platform. Architected microservices handling 10M+ daily requests.',
+      'Mentoring high school students in competitive programming.',
   },
   {
-    role: 'Software Engineer',
-    company: 'StartupXYZ',
-    period: '2021 — 2023',
+    role: 'Freelance Web Developer',
+    company: 'Bursa Umroh Haji Indonesia',
+    period: 'Feb 2025 — Aug 2025',
     description:
-      'Full-stack development with React and Node.js. Reduced page load times by 60% through code splitting and SSR.',
+      'Full-stack company profile website development with Laravel and React.',
   },
   {
-    role: 'Open Source Contributor',
-    company: 'Various Projects',
-    period: '2019 — Present',
+    role: 'Full-stack Web Developer',
+    company: 'PT. Lintas Teknologi Indonesia',
+    period: 'Jul 2024 — Sep 2024',
     description:
-      '500+ contributions across major open source projects. Core maintainer of 3 popular npm packages.',
+      'Full-stack development with Laravel and Tailwind CSS.',
   },
+  {
+    role: 'Back-end Web Developer',
+    company: 'PT. Parsaoran Global Datatrans',
+    period: 'Mar 2024 — Jun 2024',
+    description:
+      'Back-end development with Laravel, API design, and database management.',
+  },
+  // {
+  //   role: 'Open Source Contributor',
+  //   company: 'Various Projects',
+  //   period: '2019 — Present',
+  //   description:
+  //     '500+ contributions across major open source projects. Core maintainer of 3 popular npm packages.',
+  // },
 ];
 
 export default function ProgrammerSide() {
@@ -112,9 +127,9 @@ export default function ProgrammerSide() {
       {/* Hero Section */}
       <motion.section className="dev-hero" variants={itemVariants}>
         <div className="dev-hero-content">
-          <div className="dev-avatar-wrapper">
+            <div className="dev-avatar-wrapper">
             <div className="dev-avatar-placeholder">
-              <img src="https://placehold.co/160x160" alt="Profile" className="dev-avatar-img" />
+              <img src={imagePaths.devAvatar} alt="Profile" className="dev-avatar-img" />
             </div>
             <div className="dev-status-indicator">
               <span className="dev-status-dot" />
@@ -220,7 +235,7 @@ export default function ProgrammerSide() {
               whileHover={{ y: -6, borderColor: '#64ffda55' }}
             >
               <div className="dev-project-image-placeholder">
-                <img src="https://placehold.co/480x180" alt={project.title} className="dev-project-img" />
+                <img src={project.image} alt={project.title} className="dev-project-img" />
               </div>
               <div className="dev-project-body">
                 <div className="dev-project-header">
@@ -276,7 +291,7 @@ export default function ProgrammerSide() {
       </motion.section>
 
       {/* GitHub Stats (placeholder) */}
-      <motion.section className="dev-section" variants={itemVariants}>
+      {/* <motion.section className="dev-section" variants={itemVariants}>
         <h2 className="dev-section-title">
           <Github size={24} />
           <span>GitHub Activity</span>
@@ -313,7 +328,7 @@ export default function ProgrammerSide() {
           </div>
           <p className="dev-contrib-label">Contribution Graph (placeholder)</p>
         </div>
-      </motion.section>
+      </motion.section> */}
 
       {/* Contact Section */}
       <motion.section className="dev-section dev-contact" variants={itemVariants}>

@@ -23,6 +23,7 @@ import {
   Clock,
   Map,
 } from 'lucide-react';
+import { imagePaths } from '../../imagePaths';
 import './CSPlayerSide.css';
 
 const containerVariants = {
@@ -49,35 +50,35 @@ const stats = [
 
 const achievements = [
   {
-    title: 'FACEIT Level 10',
-    description: 'Reached the highest competitive level on FACEIT with 3,200+ ELO.',
+    title: '18K++ ELO on Premier',
+    description: 'Reached medium-high competitive level on Official Premiere.',
     date: '2025',
-    tier: 'legendary',
-  },
-  {
-    title: 'Regional LAN Champion',
-    description: 'Won 1st place at the Regional CS Championship with team "Phantom Protocol" — $10K prize pool.',
-    date: '2024',
-    tier: 'epic',
-  },
-  {
-    title: 'ESEA Main Finalist',
-    description: 'Led team to the Grand Finals of ESEA Main Season 42. Finished top 2 in the division.',
-    date: '2024',
-    tier: 'epic',
-  },
-  {
-    title: 'Online Cup — 5x Winner',
-    description: 'Dominated multiple online tournaments on platforms like Challengermode and FACEIT Cups.',
-    date: '2023-2025',
     tier: 'rare',
   },
-  {
-    title: 'Stream Highlight Viral',
-    description: 'An insane 1v5 clutch clip on Mirage went viral — 2.5M+ views across platforms.',
-    date: '2024',
-    tier: 'legendary',
-  },
+  // {
+  //   title: 'Regional LAN Champion',
+  //   description: 'Won 1st place at the Regional CS Championship with team "Phantom Protocol" — $10K prize pool.',
+  //   date: '2024',
+  //   tier: 'epic',
+  // },
+  // {
+  //   title: 'ESEA Main Finalist',
+  //   description: 'Led team to the Grand Finals of ESEA Main Season 42. Finished top 2 in the division.',
+  //   date: '2024',
+  //   tier: 'epic',
+  // },
+  // {
+  //   title: 'Online Cup — 5x Winner',
+  //   description: 'Dominated multiple online tournaments on platforms like Challengermode and FACEIT Cups.',
+  //   date: '2023-2025',
+  //   tier: 'rare',
+  // },
+  // {
+  //   title: 'Stream Highlight Viral',
+  //   description: 'An insane 1v5 clutch clip on Mirage went viral — 2.5M+ views across platforms.',
+  //   date: '2024',
+  //   tier: 'legendary',
+  // },
 ];
 
 const maps = [
@@ -98,10 +99,10 @@ const team = [
 ];
 
 const setup = [
-  { item: 'Monitor', detail: '240Hz IPS, 1ms', icon: <Monitor size={18} /> },
-  { item: 'Mouse', detail: 'Lightweight, 50g, PAW3395', icon: <Mouse size={18} /> },
-  { item: 'Keyboard', detail: '60% Mechanical, Hall Effect', icon: <Keyboard size={18} /> },
-  { item: 'Headset', detail: 'Open-back, Hi-Res Audio', icon: <Headphones size={18} /> },
+  { item: 'LG 24GN600', detail: '144Hz, 1ms', image: imagePaths.setupMonitor },
+  { item: 'Scyrox V8', detail: '38g, PAW3950, 2K Polling Rate', image: imagePaths.setupMouse },
+  { item: 'Zifriend M68', detail: '68% Mechanical Hall Effect', image: imagePaths.setupKeyboard },
+  { item: 'dbe GM210', detail: '7.1 Surround Sound', image: imagePaths.setupHeadset },
 ];
 
 const storyGames = [
@@ -112,7 +113,7 @@ const storyGames = [
     rating: 10,
     description: 'A masterpiece of storytelling. The Bloody Baron questline alone is better than most full games. Did every side quest, both DLCs. Hearts of Stone hit different.',
     genre: 'RPG / Open World',
-    image: null,
+    image: imagePaths.storyWitcher3,
   },
   {
     title: 'Red Dead Redemption 2',
@@ -121,7 +122,7 @@ const storyGames = [
     rating: 10,
     description: 'Arthur Morgan\'s journey is the greatest character arc in gaming. The slow pacing is intentional — it makes you *live* in that world. Cried at the ending.',
     genre: 'Action-Adventure',
-    image: null,
+    image: imagePaths.storyRedDead2,
   },
   {
     title: 'God of War: Ragnarök',
@@ -130,7 +131,7 @@ const storyGames = [
     rating: 9,
     description: 'Father and son, gods and mortals. The combat evolution is insane and the story delivers on every front. That final act is pure cinema.',
     genre: 'Action-Adventure',
-    image: null,
+    image: imagePaths.storyGowRagnarok,
   },
   {
     title: 'Elden Ring',
@@ -139,7 +140,7 @@ const storyGames = [
     rating: 10,
     description: 'FromSoft at their peak. Open world done right — every corner hides something terrifying and beautiful. Malenia took me 47 attempts. Worth every death.',
     genre: 'Action RPG / Souls-like',
-    image: null,
+    image: imagePaths.storyEldenRing,
   },
   {
     title: 'Baldur\'s Gate 3',
@@ -148,7 +149,7 @@ const storyGames = [
     rating: 10,
     description: 'The new gold standard for CRPGs. Every choice matters, every playthrough is different. The depth of reactivity is unmatched. Did 3 full runs.',
     genre: 'RPG / Turn-Based',
-    image: null,
+    image: imagePaths.storyBg3,
   },
   {
     title: 'Cyberpunk 2077: Phantom Liberty',
@@ -157,14 +158,20 @@ const storyGames = [
     rating: 9,
     description: 'The glow-up of the decade. Night City after 2.0 is the best open world ever crafted. Phantom Liberty\'s spy thriller story is a banger.',
     genre: 'Action RPG',
-    image: null,
+    image: imagePaths.storyCyberpunkPhantomLiberty,
   },
 ];
 
 const currentlyPlaying = [
-  { title: 'Ghost of Tsushima', progress: 65, genre: 'Action-Adventure' },
-  { title: 'Disco Elysium', progress: 40, genre: 'RPG' },
-  { title: 'Hollow Knight: Silksong', progress: 25, genre: 'Metroidvania' },
+  { title: 'Ghost of Tsushima', progress: 65, genre: 'Action-Adventure', image: imagePaths.gameGhostOfTsushima },
+  { title: 'Disco Elysium', progress: 40, genre: 'RPG', image: imagePaths.gameDiscoElysium },
+  { title: 'Hollow Knight: Silksong', progress: 25, genre: 'Metroidvania', image: imagePaths.gameSilksong },
+];
+
+const highlightImages = [
+  imagePaths.highlight1,
+  imagePaths.highlight2,
+  imagePaths.highlight3,
 ];
 
 const backlog = [
@@ -218,9 +225,9 @@ export default function CSPlayerSide() {
       {/* Hero Section */}
       <motion.section className="cs-hero" variants={itemVariants}>
         <div className="cs-hero-content">
-          <div className="cs-avatar-wrapper">
+            <div className="cs-avatar-wrapper">
             <div className="cs-avatar-placeholder">
-              <img src="https://placehold.co/160x160" alt="Profile" className="cs-avatar-img" />
+              <img src={imagePaths.csAvatar} alt="Profile" className="cs-avatar-img" />
             </div>
             <div className="cs-rank-badge">
               <Gamepad2 size={14} />
@@ -329,7 +336,7 @@ export default function CSPlayerSide() {
             </section>
 
             {/* Map Stats */}
-            <section className="cs-section">
+            {/* <section className="cs-section">
               <h2 className="cs-section-title">
                 <Crosshair size={24} />
                 <span>Map Performance</span>
@@ -363,7 +370,7 @@ export default function CSPlayerSide() {
                   </motion.div>
                 ))}
               </div>
-            </section>
+            </section> */}
 
             {/* Achievements */}
             <section className="cs-section">
@@ -395,7 +402,7 @@ export default function CSPlayerSide() {
             </section>
 
             {/* Team Roster */}
-            <section className="cs-section">
+            {/* <section className="cs-section">
               <h2 className="cs-section-title">
                 <Users size={24} />
                 <span>Team — Phantom Protocol</span>
@@ -424,7 +431,7 @@ export default function CSPlayerSide() {
                   </motion.div>
                 ))}
               </div>
-            </section>
+            </section> */}
 
             {/* Setup / Gear */}
             <section className="cs-section">
@@ -440,7 +447,7 @@ export default function CSPlayerSide() {
                     whileHover={{ y: -4, borderColor: '#ff4655' }}
                   >
                     <div className="cs-setup-image-placeholder">
-                      <img src="https://placehold.co/280x120" alt={gear.item} className="cs-setup-img" />
+                      <img src={gear.image} alt={gear.item} className="cs-setup-img" />
                     </div>
                     <div className="cs-setup-info">
                       <h4>{gear.item}</h4>
@@ -460,13 +467,13 @@ export default function CSPlayerSide() {
               <div className="cs-settings-grid">
                 <div className="cs-setting-card">
                   <h4>Sensitivity</h4>
-                  <span className="cs-setting-value">0.8</span>
-                  <span className="cs-setting-detail">400 DPI — eDPI: 320</span>
+                  <span className="cs-setting-value">0.57</span>
+                  <span className="cs-setting-detail">1600 DPI — eDPI: 912</span>
                 </div>
                 <div className="cs-setting-card">
                   <h4>Resolution</h4>
-                  <span className="cs-setting-value">1280×960</span>
-                  <span className="cs-setting-detail">4:3 Stretched</span>
+                  <span className="cs-setting-value">1280×1024</span>
+                  <span className="cs-setting-detail">5:4 Stretched</span>
                 </div>
                 <div className="cs-setting-card">
                   <h4>Crosshair</h4>
@@ -480,7 +487,7 @@ export default function CSPlayerSide() {
                 <div className="cs-setting-card">
                   <h4>Viewmodel</h4>
                   <span className="cs-setting-value">Custom</span>
-                  <span className="cs-setting-detail">fov_cs_debug 110</span>
+                  <span className="cs-setting-detail">fov 68</span>
                 </div>
               </div>
             </section>
@@ -499,7 +506,7 @@ export default function CSPlayerSide() {
                     whileHover={{ scale: 1.03 }}
                   >
                     <div className="cs-highlight-thumbnail">
-                      <img src="https://placehold.co/380x160" alt={`Clip ${num}`} className="cs-highlight-img" />
+                      <img src={highlightImages[num - 1]} alt={`Clip ${num}`} className="cs-highlight-img" />
                       <div className="cs-play-overlay">
                         <ChevronRight size={36} />
                       </div>
@@ -544,7 +551,7 @@ export default function CSPlayerSide() {
                     whileHover={{ y: -4 }}
                   >
                     <div className="cs-playing-image-placeholder">
-                      <img src="https://placehold.co/380x100" alt={game.title} className="cs-playing-img" />
+                      <img src={game.image} alt={game.title} className="cs-playing-img" />
                     </div>
                     <div className="cs-playing-info">
                       <h4>{game.title}</h4>
@@ -580,7 +587,7 @@ export default function CSPlayerSide() {
                     whileHover={{ y: -6, borderColor: '#a855f7' }}
                   >
                     <div className="cs-story-image-placeholder">
-                      <img src="https://placehold.co/560x140" alt={game.title} className="cs-story-img" />
+                      <img src={game.image} alt={game.title} className="cs-story-img" />
                     </div>
                     <div className="cs-story-body">
                       <div className="cs-story-header">
