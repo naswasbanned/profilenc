@@ -46,7 +46,7 @@ const projects = [
       'A module for competitive programming platforms with features like live coding sessions, test case management, and real-time feedback.',
     tech: ['Laravel', 'React', 'Wordpress', 'HTML Canvas'],
     stars: 891,
-    image: imagePaths.projectCompetitiveProgrammingModule,
+    image: imagePaths.project1,
   },
   {
     title: 'Advance Quiz Platform',
@@ -54,7 +54,7 @@ const projects = [
       'A real-time correction quiz platform with correction, many question types, and detailed analytics for educators and students.',
     tech: ['Laravel', 'JavaScript', 'JQuery', 'mySQL'],
     stars: 52,
-    image: imagePaths.projectAdvanceQuizPlatform,
+    image: imagePaths.project2,
   },
   {
     title: 'HalalCraft, Minecraft Plugin',
@@ -62,7 +62,7 @@ const projects = [
       'A Minecraft plugin that adds using religiously compliant halal food items, prayer spaces, and educational content about Islamic culture within the game.',
     tech: ['Java', 'Spigot API', 'Maven'],
     stars: 214,
-    image: imagePaths.projectHalalcraft,
+    image: imagePaths.project3,
   },
   {
     title: 'PixelForge Engine',
@@ -70,7 +70,7 @@ const projects = [
       'Lightweight 2D game engine with ECS architecture, WebGL renderer, and built-in physics simulation.',
     tech: ['TypeScript', 'WebGL', 'WASM', 'Rust'],
     stars: 1247,
-    image: imagePaths.projectPixelForge,
+    image: imagePaths.project4,
   },
 ];
 

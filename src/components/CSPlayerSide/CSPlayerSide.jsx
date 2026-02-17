@@ -131,7 +131,7 @@ const storyGames = [
     rating: 9,
     description: 'Father and son, gods and mortals. The combat evolution is insane and the story delivers on every front. That final act is pure cinema.',
     genre: 'Action-Adventure',
-    image: imagePaths.storyGowRagnarok,
+    image: imagePaths.story3,
   },
   {
     title: 'Elden Ring',
@@ -140,7 +140,7 @@ const storyGames = [
     rating: 10,
     description: 'FromSoft at their peak. Open world done right — every corner hides something terrifying and beautiful. Malenia took me 47 attempts. Worth every death.',
     genre: 'Action RPG / Souls-like',
-    image: imagePaths.storyEldenRing,
+    image: imagePaths.story4,
   },
   {
     title: 'Baldur\'s Gate 3',
@@ -149,7 +149,7 @@ const storyGames = [
     rating: 10,
     description: 'The new gold standard for CRPGs. Every choice matters, every playthrough is different. The depth of reactivity is unmatched. Did 3 full runs.',
     genre: 'RPG / Turn-Based',
-    image: imagePaths.storyBg3,
+    image: imagePaths.story5,
   },
   {
     title: 'Cyberpunk 2077: Phantom Liberty',
@@ -158,14 +158,14 @@ const storyGames = [
     rating: 9,
     description: 'The glow-up of the decade. Night City after 2.0 is the best open world ever crafted. Phantom Liberty\'s spy thriller story is a banger.',
     genre: 'Action RPG',
-    image: imagePaths.storyCyberpunkPhantomLiberty,
+    image: imagePaths.story6,
   },
 ];
 
 const currentlyPlaying = [
-  { title: 'Ghost of Tsushima', progress: 65, genre: 'Action-Adventure', image: imagePaths.gameGhostOfTsushima },
-  { title: 'Disco Elysium', progress: 40, genre: 'RPG', image: imagePaths.gameDiscoElysium },
-  { title: 'Hollow Knight: Silksong', progress: 25, genre: 'Metroidvania', image: imagePaths.gameSilksong },
+  { title: 'Ghost of Tsushima', progress: 65, genre: 'Action-Adventure', image: imagePaths.game1 },
+  { title: 'Disco Elysium', progress: 40, genre: 'RPG', image: imagePaths.game2 },
+  { title: 'Hollow Knight: Silksong', progress: 25, genre: 'Metroidvania', image: imagePaths.game3 },
 ];
 
 const highlightImages = [

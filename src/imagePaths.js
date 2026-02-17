@@ -17,10 +17,10 @@ export const imagePaths = {
 
   // Programmer projects – wide banner image (~480×180 in UI)
   // Recommended: 480×180 or any 8:3 / 16:6 ratio, at least that large.
-  projectCompetitiveProgrammingModule: '/images/projects/competitive-programming-module.png',
-  projectAdvanceQuizPlatform: '/images/projects/advance-quiz-platform.png',
-  projectHalalcraft: '/images/projects/halalcraft.png',
-  projectPixelForge: '/images/projects/pixelforge-engine.png',
+  project1: '/images/projects/competitive-programming-module.png',
+  project2: '/images/projects/advance-quiz-platform.png',
+  project3: '/images/projects/halalcraft.png',
+  project4: '/images/projects/pixelforge-engine.png',
 
   // CS highlight clips – medium-wide thumbnails (~380×160 in UI)
   // Recommended: 380×160 or similar 19:8 ratio.
@@ -30,16 +30,16 @@ export const imagePaths = {
 
   // Currently playing games – smaller wide thumbnails (~380×100 in UI)
   // Recommended: 380×100 or similar 19:5 ratio.
-  gameGhostOfTsushima: '/images/gaming/currently-playing/ghost-of-tsushima.png',
-  gameDiscoElysium: '/images/gaming/currently-playing/disco-elysium.png',
-  gameSilksong: '/images/gaming/currently-playing/silksong.png',
+  game1: '/images/gaming/currently-playing/ghost-of-tsushima.png',
+  game2: '/images/gaming/currently-playing/disco-elysium.png',
+  game3: '/images/gaming/currently-playing/silksong.png',
 
   // Favorite story games – large wide banners (~560×140 in UI)
   // Recommended: 560×140 or similar 4:1 ratio.
-  storyWitcher3: '/images/gaming/story-games/witcher-3.png',
-  storyRedDead2: '/images/gaming/story-games/red-dead-2.png',
-  storyGowRagnarok: '/images/gaming/story-games/gow-ragnarok.png',
-  storyEldenRing: '/images/gaming/story-games/elden-ring.png',
-  storyBg3: '/images/gaming/story-games/bg3.png',
-  storyCyberpunkPhantomLiberty: '/images/gaming/story-games/cyberpunk-phantom-liberty.png',
+  story1: '/images/gaming/story-games/witcher-3.png',
+  story2: '/images/gaming/story-games/red-dead-2.png',
+  story3: '/images/gaming/story-games/gow-ragnarok.png',
+  story4: '/images/gaming/story-games/elden-ring.png',
+  story5: '/images/gaming/story-games/bg3.png',
+  story6: '/images/gaming/story-games/cyberpunk-phantom-liberty.png',
 };
