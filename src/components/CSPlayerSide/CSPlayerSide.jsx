@@ -220,7 +220,7 @@ export default function CSPlayerSide() {
         <div className="cs-hero-content">
           <div className="cs-avatar-wrapper">
             <div className="cs-avatar-placeholder">
-              <Gamepad2 size={56} />
+              <img src="https://placehold.co/160x160" alt="Profile" className="cs-avatar-img" />
             </div>
             <div className="cs-rank-badge">
               <Gamepad2 size={14} />
@@ -440,8 +440,7 @@ export default function CSPlayerSide() {
                     whileHover={{ y: -4, borderColor: '#ff4655' }}
                   >
                     <div className="cs-setup-image-placeholder">
-                      {gear.icon}
-                      <span>Placeholder</span>
+                      <img src="https://placehold.co/280x120" alt={gear.item} className="cs-setup-img" />
                     </div>
                     <div className="cs-setup-info">
                       <h4>{gear.item}</h4>
@@ -500,8 +499,7 @@ export default function CSPlayerSide() {
                     whileHover={{ scale: 1.03 }}
                   >
                     <div className="cs-highlight-thumbnail">
-                      <Crosshair size={32} />
-                      <span>Clip #{num}</span>
+                      <img src="https://placehold.co/380x160" alt={`Clip ${num}`} className="cs-highlight-img" />
                       <div className="cs-play-overlay">
                         <ChevronRight size={36} />
                       </div>
@@ -546,8 +544,7 @@ export default function CSPlayerSide() {
                     whileHover={{ y: -4 }}
                   >
                     <div className="cs-playing-image-placeholder">
-                      <Gamepad2 size={28} />
-                      <span>Placeholder</span>
+                      <img src="https://placehold.co/380x100" alt={game.title} className="cs-playing-img" />
                     </div>
                     <div className="cs-playing-info">
                       <h4>{game.title}</h4>
@@ -583,8 +580,7 @@ export default function CSPlayerSide() {
                     whileHover={{ y: -6, borderColor: '#a855f7' }}
                   >
                     <div className="cs-story-image-placeholder">
-                      <BookOpen size={32} />
-                      <span>Cover Art</span>
+                      <img src="https://placehold.co/560x140" alt={game.title} className="cs-story-img" />
                     </div>
                     <div className="cs-story-body">
                       <div className="cs-story-header">

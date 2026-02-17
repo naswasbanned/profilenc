@@ -30,21 +30,21 @@ const itemVariants = {
 };
 
 const skills = [
-  { name: 'React / Next.js', level: 95, icon: <Layers size={16} /> },
-  { name: 'TypeScript', level: 90, icon: <Braces size={16} /> },
-  { name: 'Node.js', level: 88, icon: <Terminal size={16} /> },
-  { name: 'Python', level: 85, icon: <Code2 size={16} /> },
-  { name: 'PostgreSQL / MongoDB', level: 82, icon: <Database size={16} /> },
-  { name: 'Docker / DevOps', level: 78, icon: <Globe size={16} /> },
+  { name: 'Laravel', tier: 'Expert', icon: <Globe size={16} /> },
+  { name: 'React', tier: 'Mediocre', icon: <Layers size={16} /> },
+  { name: 'Tailwind', tier: 'Mediocre', icon: <Braces size={16} /> },
+  { name: 'Node.js', tier: 'Mediocre', icon: <Terminal size={16} /> },
+  { name: 'Java', tier: 'Beginner', icon: <Code2 size={16} /> },
+  { name: 'Docker', tier: 'Beginner', icon: <GitBranch size={16} /> },
 ];
 
 const projects = [
   {
-    title: 'CloudSync Platform',
+    title: 'Advance Quiz Platform',
     description:
-      'A real-time collaborative workspace with WebSocket-driven sync, conflict resolution, and offline-first architecture.',
-    tech: ['React', 'Node.js', 'WebSocket', 'Redis'],
-    stars: 342,
+      'A real-time correction quiz platform with correction, many question types, and detailed analytics for educators and students.',
+    tech: ['Laravel', 'JavaScript', 'JQuery', 'mySQL'],
+    stars: 52,
     image: null,
   },
   {
@@ -114,7 +114,7 @@ export default function ProgrammerSide() {
         <div className="dev-hero-content">
           <div className="dev-avatar-wrapper">
             <div className="dev-avatar-placeholder">
-              <Code2 size={48} />
+              <img src="https://placehold.co/160x160" alt="Profile" className="dev-avatar-img" />
             </div>
             <div className="dev-status-indicator">
               <span className="dev-status-dot" />
@@ -127,11 +127,11 @@ export default function ProgrammerSide() {
             </motion.p>
             <motion.h1 className="dev-name" variants={itemVariants}>
               <span className="dev-bracket">{'<'}</span>
-              NAS
+              AQIL
               <span className="dev-bracket">{' />'}</span>
             </motion.h1>
             <motion.p className="dev-title" variants={itemVariants}>
-              Full-Stack Engineer & System Architect
+              Web Developer | Open Source Enthusiast | Tech Blogger
             </motion.p>
             <motion.p className="dev-bio" variants={itemVariants}>
               I build performant, scalable applications with clean architecture.
@@ -157,7 +157,7 @@ export default function ProgrammerSide() {
             <span className="terminal-dot red" />
             <span className="terminal-dot yellow" />
             <span className="terminal-dot green" />
-            <span className="terminal-title">nas@portfolio:~</span>
+            <span className="terminal-title">aqil@portfolio:~</span>
           </div>
           <div className="terminal-body">
             <p>
@@ -167,7 +167,7 @@ export default function ProgrammerSide() {
               Full-stack developer with 5+ years of experience.
             </p>
             <p className="terminal-output">
-              Specializing in React, Node.js, and cloud infrastructure.
+              Specializing in Laravel, React, and competitive modules.
             </p>
             <p>
               <span className="terminal-prompt">$</span> echo $CURRENT_STATUS
@@ -198,15 +198,7 @@ export default function ProgrammerSide() {
               <div className="dev-skill-header">
                 {skill.icon}
                 <span>{skill.name}</span>
-                <span className="dev-skill-pct">{skill.level}%</span>
-              </div>
-              <div className="dev-skill-bar-track">
-                <motion.div
-                  className="dev-skill-bar-fill"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${skill.level}%` }}
-                  transition={{ duration: 1.2, ease: 'easeOut', delay: 0.5 }}
-                />
+                <span className={`dev-skill-tier tier-${skill.tier.toLowerCase()}`}>{skill.tier}</span>
               </div>
             </motion.div>
           ))}
@@ -228,8 +220,7 @@ export default function ProgrammerSide() {
               whileHover={{ y: -6, borderColor: '#64ffda55' }}
             >
               <div className="dev-project-image-placeholder">
-                <Layers size={32} />
-                <span>Project Preview</span>
+                <img src="https://placehold.co/480x180" alt={project.title} className="dev-project-img" />
               </div>
               <div className="dev-project-body">
                 <div className="dev-project-header">

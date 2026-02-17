@@ -77,6 +77,13 @@
   color: var(--cs-accent);
   clip-path: polygon(10% 0%, 100% 0%, 100% 90%, 90% 100%, 0% 100%, 0% 10%);
   transition: all 0.3s;
+  overflow: hidden;
+}
+
+.cs-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cs-avatar-placeholder:hover {
@@ -602,6 +609,13 @@ span.cs-ach-tier.tier-rare {
   font-size: 0.65rem;
   border-bottom: 1px solid var(--cs-border);
   font-family: 'JetBrains Mono', monospace;
+  overflow: hidden;
+}
+
+.cs-setup-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cs-setup-image-placeholder svg {
@@ -728,6 +742,13 @@ span.cs-ach-tier.tier-rare {
   color: var(--cs-text-dim);
   font-size: 0.7rem;
   font-family: 'JetBrains Mono', monospace;
+  overflow: hidden;
+}
+
+.cs-highlight-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cs-highlight-thumbnail svg {
@@ -911,6 +932,13 @@ span.cs-ach-tier.tier-rare {
   font-size: 0.6rem;
   font-family: 'JetBrains Mono', monospace;
   border-bottom: 1px solid var(--cs-border);
+  overflow: hidden;
+}
+
+.cs-playing-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cs-playing-image-placeholder svg {
@@ -991,6 +1019,13 @@ span.cs-ach-tier.tier-rare {
   font-size: 0.65rem;
   font-family: 'JetBrains Mono', monospace;
   border-bottom: 1px solid var(--cs-border);
+  overflow: hidden;
+}
+
+.cs-story-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cs-story-image-placeholder svg {
