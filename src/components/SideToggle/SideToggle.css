@@ -1,0 +1,73 @@
+.side-toggle-wrapper {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 20px;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50px;
+}
+
+.toggle-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: all 0.3s;
+  letter-spacing: 0.03em;
+}
+
+.toggle-option:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.toggle-option.active {
+  color: #fff;
+}
+
+.toggle-option.dev-active {
+  background: rgba(100, 255, 218, 0.1);
+  color: #64ffda;
+}
+
+.toggle-option.cs-active {
+  background: rgba(255, 70, 85, 0.1);
+  color: #ff4655;
+}
+
+.toggle-track {
+  width: 48px;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  transition: background 0.3s;
+}
+
+.toggle-track:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.toggle-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #64ffda, #ff4655);
+}

@@ -1,0 +1,26 @@
+.app {
+  position: relative;
+  min-height: 100vh;
+}
+
+.app-footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
+
+.app-footer.dev {
+  color: var(--dev-text-dim);
+  border-top: 1px solid var(--dev-border);
+  background: var(--dev-bg);
+}
+
+.app-footer.cs {
+  color: var(--cs-text-dim);
+  border-top: 1px solid var(--cs-border);
+  background: var(--cs-bg);
+  font-family: 'Orbitron', sans-serif;
+}

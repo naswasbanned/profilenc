@@ -1,0 +1,71 @@
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/700.css';
+@import '@fontsource/orbitron/400.css';
+@import '@fontsource/orbitron/700.css';
+@import '@fontsource/orbitron/900.css';
+
+:root {
+  /* Programmer side (dark elegant) */
+  --dev-bg: #0a0a0f;
+  --dev-surface: #12121a;
+  --dev-accent: #64ffda;
+  --dev-accent-dim: #64ffda33;
+  --dev-text: #ccd6f6;
+  --dev-text-dim: #8892b0;
+  --dev-border: #1d1d2e;
+  
+  /* CS Player side (sharp, aggressive) */
+  --cs-bg: #0d0d0d;
+  --cs-surface: #1a1a1a;
+  --cs-accent: #ff4655;
+  --cs-accent-secondary: #ff8c00;
+  --cs-text: #efefef;
+  --cs-text-dim: #999999;
+  --cs-border: #2a2a2a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background: #0a0a0f;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+::selection {
+  background: #64ffda33;
+  color: #64ffda;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
