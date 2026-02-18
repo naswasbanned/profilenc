@@ -921,7 +921,10 @@ span.cs-ach-tier.tier-rare {
 }
 
 .cs-playing-image-placeholder {
-  height: 100px;
+  position: relative;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1920 / 620; /* Match story games banner ratio */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1008,7 +1011,10 @@ span.cs-ach-tier.tier-rare {
 }
 
 .cs-story-image-placeholder {
-  height: 140px;
+  position: relative;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1920 / 620; /* 1920x620 banner ratio */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1108,6 +1114,32 @@ span.cs-ach-tier.tier-rare {
   color: var(--cs-text-dim);
   line-height: 1.7;
   font-family: 'JetBrains Mono', monospace;
+  text-align: justify;
+}
+
+/* ======================================
+   STORY CONTINUE BANNER
+   ====================================== */
+.cs-continue-banner {
+  margin-top: 24px;
+}
+
+.cs-continue-inner {
+  width: 100%;
+  padding: 10px 20px;
+  border: 1px solid #a855f7;
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.18), transparent, rgba(236, 72, 153, 0.18));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cs-continue-text {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #e5e5ff;
+  font-family: 'Orbitron', sans-serif;
 }
 
 /* ======================================

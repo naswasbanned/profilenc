@@ -65,11 +65,11 @@ const projects = [
     image: imagePaths.project3,
   },
   {
-    title: 'PixelForge Engine',
+    title: 'Company Profile Templating System',
     description:
-      'Lightweight 2D game engine with ECS architecture, WebGL renderer, and built-in physics simulation.',
-    tech: ['TypeScript', 'WebGL', 'WASM', 'Rust'],
-    stars: 1247,
+      'A templating system for company profiles that allows users to create and customize their profiles with a drag-and-drop interface, and pre-designed templates.',
+    tech: ['Laravel', 'React', 'Tailwind CSS', 'Figma API'],
+    stars: 271,
     image: imagePaths.project4,
   },
 ];
@@ -152,7 +152,7 @@ export default function ProgrammerSide() {
               I build performant, scalable applications with clean architecture.
               Passionate about open source, developer tooling, and pushing the
               boundaries of web technology. When I'm not coding, I'm probably
-              reviewing PRs or exploring new frameworks.
+              exploring new frameworks or linux distro.
             </motion.p>
             <motion.div className="dev-socials" variants={itemVariants}>
               <a href="#" className="dev-social-link" aria-label="GitHub">
@@ -340,7 +340,7 @@ export default function ProgrammerSide() {
           Interested in working together? I'm always open to discussing new
           projects, creative ideas, or opportunities to be part of your vision.
         </p>
-        <a href="mailto:placeholder@email.com" className="dev-contact-btn">
+        <a href="mailto:naufalaqilnasrullah12@gmail.com" className="dev-contact-btn">
           <Mail size={18} />
           Say Hello
         </a>

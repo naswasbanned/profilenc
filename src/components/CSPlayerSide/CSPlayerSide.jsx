@@ -107,65 +107,119 @@ const setup = [
 
 const storyGames = [
   {
-    title: 'The Witcher 3: Wild Hunt',
+    title: 'Persona 4 Golden',
     status: 'Completed',
     hours: 186,
-    rating: 10,
-    description: 'A masterpiece of storytelling. The Bloody Baron questline alone is better than most full games. Did every side quest, both DLCs. Hearts of Stone hit different.',
-    genre: 'RPG / Open World',
-    image: imagePaths.storyWitcher3,
+    rating: "GOLDEN",
+    description: 'A masterpiece of storytelling. Emotional at its peak, the best one in the series. I wrote a whole essay about how good this game is and passed my university course with it. Best Game Of All Time. Argue with a wall.',
+    genre: 'Adventure-JRPG / Turn Based',
+    image: imagePaths.story1,
   },
   {
     title: 'Red Dead Redemption 2',
     status: 'Completed',
-    hours: 142,
+    hours: 280,
     rating: 10,
-    description: 'Arthur Morgan\'s journey is the greatest character arc in gaming. The slow pacing is intentional — it makes you *live* in that world. Cried at the ending.',
+    description: 'Arthur Morgan\'s journey is the greatest character arc in gaming. The slow pacing is intentional. Details like the dynamic weather and NPC interactions make the world feel alive. The story is a tragic masterpiece.',
     genre: 'Action-Adventure',
-    image: imagePaths.storyRedDead2,
+    image: imagePaths.story2,
   },
-  {
-    title: 'God of War: Ragnarök',
+    {
+    title: 'Elden Ring',
     status: 'Completed',
-    hours: 68,
-    rating: 9,
-    description: 'Father and son, gods and mortals. The combat evolution is insane and the story delivers on every front. That final act is pure cinema.',
-    genre: 'Action-Adventure',
+    hours: 73,
+    rating: 10,
+    description: 'FromSoft at their peak. Open world done right — every corner hides something terrifying and beautiful. Fuck Maliketh. Worth every death.',
+    genre: 'Action RPG / Souls-like',
     image: imagePaths.story3,
   },
   {
-    title: 'Elden Ring',
+    title: 'Kingdom Hearts 2',
     status: 'Completed',
-    hours: 210,
+    hours: 101,
     rating: 10,
-    description: 'FromSoft at their peak. Open world done right — every corner hides something terrifying and beautiful. Malenia took me 47 attempts. Worth every death.',
-    genre: 'Action RPG / Souls-like',
+    description: 'The best Kingdom Hearts game. The story is a masterpiece of emotional storytelling and character development. Thankyou for introducing me to gaming.',
+    genre: 'Action-Adventure / RPG',
     image: imagePaths.story4,
   },
   {
-    title: 'Baldur\'s Gate 3',
+    title: 'Clair Obscur: Expedition 33',
     status: 'Completed',
-    hours: 156,
-    rating: 10,
-    description: 'The new gold standard for CRPGs. Every choice matters, every playthrough is different. The depth of reactivity is unmatched. Did 3 full runs.',
-    genre: 'RPG / Turn-Based',
+    hours: 96,
+    rating: 9,
+    description: 'A beautiful, atmospheric, and emotionally resonant game. The story is a masterpiece of character development and narrative depth. Somehow the ending really bothers me.',
+    genre: 'Adventure-RPG / Turn Based',
     image: imagePaths.story5,
   },
   {
-    title: 'Cyberpunk 2077: Phantom Liberty',
+    title: 'Final Fantasy VII Remake Integrade',
     status: 'Completed',
     hours: 98,
     rating: 9,
-    description: 'The glow-up of the decade. Night City after 2.0 is the best open world ever crafted. Phantom Liberty\'s spy thriller story is a banger.',
-    genre: 'Action RPG',
+    description: 'The best Final Fantasy VII game. The story is a masterpiece of emotional storytelling and character development. Though i never really played the original. Sorry for that.',
+    genre: 'Action-Adventure',
     image: imagePaths.story6,
+  },
+  {
+    title: 'Metaphor: ReFantazio',
+    status: 'Completed',
+    hours: 67,
+    rating: 9,
+    description: 'My 2024 GOTY. A stunningly beautiful and emotionally resonant game. The story is a masterpiece of character development and narrative depth. The combat is fun and rewarding. The world is a work of art. Diveristy is amazing. The only flaw is the pacing a bit rushed at the ending.',
+    genre: 'Adventure-JRPG / Turn Based',
+    image: imagePaths.story7,
+  },
+  {
+    title: 'Persona 3 Reload',
+    status: 'Completed',
+    hours: 72,
+    rating: 9,
+    description: 'A great remake of a classic. The story is just as compelling as P4G, with a darker tone and more mature themes. The new combat system is a great improvement. The DLC is the weakest point of the series, not worth the money. Should have been free content. Atleast bring back Kotone.',
+    genre: 'Adventure-JRPG / Turn Based',
+    image: imagePaths.story8,
+  },
+  {
+    title: 'God of War: Ragnarok',
+    status: 'Completed',
+    hours: 41,
+    rating: 9,
+    description: 'Really good expansion from the first one. Story deepens and really show how Kratos could fit in another world not just as a fighter but also a leader and.. hope. Really solid game, cant wait how atreus will develop in the next game. Hope they can make the game longer tho, pacing kinda fast.',
+    genre: 'Action-Adventure / RPG',
+    image: imagePaths.story9,
+  },
+  {
+    title: 'Marvel Spiderman Remastered',
+    status: 'Completed',
+    hours: 27,
+    rating: 9,
+    description: 'A fun and emotional superhero game. The story is a heartfelt tribute to the character and his world. The DLC is a nice addition, but not essential. No fast-travel needed, peak traversal mechanism. Need more playtime. Finish in one sitting. Yes, 21 hours straight.',
+    genre: 'Action-Adventure',
+    image: imagePaths.story10,
+  },
+  {
+    title: 'Persona 5 Royal',
+    status: 'Completed',
+    hours: 119,
+    rating: 8,
+    description: 'Best mechanics in the series. Arguably the best music and ambience. The story is good, but not as emotionally resonant as P4G or P3R. The DLC is a nice addition, but not essential. Overall a great game, but not my favorite in the series. Little note on the side characters, felt not deeply developed.',
+    genre: 'Adventure-JRPG / Turn Based',
+    image: imagePaths.story11,
+  },
+  {
+    title: 'God of War (2018)',
+    status: 'Completed',
+    hours: 38,
+    rating: 8,
+    description: 'Really good reboot to the series, Kratos doesnt seem really fit in nordic mythology. Proves himself in Ragnarok. Though for me the story itself felt a bit underwhelming, i mean just about father and son sowing ashes. Its a really good build up. The way they develop every detail this game had in Ragnarok is insanely good.',
+    genre: 'Adventure-JRPG / Turn Based',
+    image: imagePaths.story12,
   },
 ];
 
 const currentlyPlaying = [
-  { title: 'Ghost of Tsushima', progress: 65, genre: 'Action-Adventure', image: imagePaths.game1 },
-  { title: 'Disco Elysium', progress: 40, genre: 'RPG', image: imagePaths.game2 },
-  { title: 'Hollow Knight: Silksong', progress: 25, genre: 'Metroidvania', image: imagePaths.game3 },
+  { title: 'Phoenix Wright: Ace Attorney Trilogy', progress: 65, genre: 'Visual Novel', image: imagePaths.game1 },
+  { title: 'RAIDOU Remastered', progress: 40, genre: 'JRPG', image: imagePaths.game2 },
+  { title: 'Shin Megami Tensei IV', progress: 25, genre: 'JRPG', image: imagePaths.game3 },
 ];
 
 const highlightImages = [
@@ -175,12 +229,12 @@ const highlightImages = [
 ];
 
 const backlog = [
-  'Death Stranding 2',
-  'Final Fantasy VII Rebirth',
-  'Metaphor: ReFantazio',
-  'Hades II',
-  'Silksong (remaining)',
+  'Apollo Justice: Ace Attorney',
   'Black Myth: Wukong',
+  'Metal Gear Solid V',
+  'The Witcher 3: Wild Hunt',
+  'Persona 6',
+  'Grand Theft Auto VI',
 ];
 
 const subPageVariants = {
@@ -243,27 +297,25 @@ export default function CSPlayerSide() {
               NAS
             </motion.h1>
             <motion.p className="cs-role" variants={itemVariants}>
-              Competitive CS Player &amp; Story Game Enthusiast
+              Story Game Enthusiast &amp; Competitive Player 
             </motion.p>
             <motion.p className="cs-bio" variants={itemVariants}>
-              Two sides of the same gamer. On one hand — a ruthless entry fragger
-              hunting FACEIT ELO and LAN trophies. On the other — someone who
-              spends 200 hours in an RPG talking to every NPC, reading every lore
-              note, and crying at the credits. Gaming isn't just a hobby, it's a
-              lifestyle.
+              Two sides of the same gamer. On one hand — head hunter in every 
+              competitive match. On the other — someone who
+              spends 200 hours in an RPG finding achievements.
             </motion.p>
             <motion.div className="cs-quick-stats" variants={itemVariants}>
               <div className="cs-quick-stat">
                 <Crosshair size={18} />
                 <div>
-                  <span className="cs-qs-value">3,200+</span>
-                  <span className="cs-qs-label">FACEIT ELO</span>
+                  <span className="cs-qs-value">4,700+</span>
+                  <span className="cs-qs-label">Competitive Hrs</span>
                 </div>
               </div>
               <div className="cs-quick-stat">
                 <BookOpen size={18} />
                 <div>
-                  <span className="cs-qs-value">860+</span>
+                  <span className="cs-qs-value">800+</span>
                   <span className="cs-qs-label">Story Hrs</span>
                 </div>
               </div>
@@ -537,42 +589,7 @@ export default function CSPlayerSide() {
             animate="center"
             exit="exit"
           >
-            {/* Currently Playing */}
-            <section className="cs-section">
-              <h2 className="cs-section-title story-title">
-                <Clock size={24} />
-                <span>Currently Playing</span>
-              </h2>
-              <div className="cs-currently-playing">
-                {currentlyPlaying.map((game, i) => (
-                  <motion.div
-                    key={i}
-                    className="cs-playing-card"
-                    whileHover={{ y: -4 }}
-                  >
-                    <div className="cs-playing-image-placeholder">
-                      <img src={game.image} alt={game.title} className="cs-playing-img" />
-                    </div>
-                    <div className="cs-playing-info">
-                      <h4>{game.title}</h4>
-                      <span className="cs-playing-genre">{game.genre}</span>
-                      <div className="cs-playing-progress">
-                        <div className="cs-playing-bar-track">
-                          <motion.div
-                            className="cs-playing-bar-fill"
-                            initial={{ width: 0 }}
-                            animate={{ width: `${game.progress}%` }}
-                            transition={{ duration: 1, delay: 0.2 + i * 0.15 }}
-                          />
-                        </div>
-                        <span className="cs-playing-pct">{game.progress}%</span>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </section>
-
+            
             {/* Favorite Story Games */}
             <section className="cs-section">
               <h2 className="cs-section-title story-title">
@@ -603,6 +620,47 @@ export default function CSPlayerSide() {
                         <span className={`cs-story-status-badge ${game.status.toLowerCase()}`}>{game.status}</span>
                       </div>
                       <p className="cs-story-desc">{game.description}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              <div className="cs-continue-banner">
+                <div className="cs-continue-inner">
+                  <span className="cs-continue-text">TO BE CONTINUED...</span>
+                </div>
+              </div>
+            </section>
+
+            {/* Currently Playing */}
+            <section className="cs-section">
+              <h2 className="cs-section-title story-title">
+                <Clock size={24} />
+                <span>Currently Playing</span>
+              </h2>
+              <div className="cs-currently-playing">
+                {currentlyPlaying.map((game, i) => (
+                  <motion.div
+                    key={i}
+                    className="cs-playing-card"
+                    whileHover={{ y: -4 }}
+                  >
+                    <div className="cs-playing-image-placeholder">
+                      <img src={game.image} alt={game.title} className="cs-playing-img" />
+                    </div>
+                    <div className="cs-playing-info">
+                      <h4>{game.title}</h4>
+                      <span className="cs-playing-genre">{game.genre}</span>
+                      <div className="cs-playing-progress">
+                        <div className="cs-playing-bar-track">
+                          <motion.div
+                            className="cs-playing-bar-fill"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${game.progress}%` }}
+                            transition={{ duration: 1, delay: 0.2 + i * 0.15 }}
+                          />
+                        </div>
+                        <span className="cs-playing-pct">{game.progress}%</span>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
