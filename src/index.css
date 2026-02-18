@@ -65,7 +65,22 @@ a {
   color: inherit;
 }
 
+/* === Global Image Optimizations === */
+img {
+  image-rendering: auto;
+  -webkit-image-rendering: auto;
+  content-visibility: auto;
+}
+
 #root {
   width: 100%;
   min-height: 100vh;
+}
+
+/* === Global Mobile Adjustments === */
+@media (max-width: 768px) {
+  body {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
 }

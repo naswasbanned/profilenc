@@ -24,3 +24,10 @@
   background: var(--cs-bg);
   font-family: 'Orbitron', sans-serif;
 }
+
+@media (max-width: 768px) {
+  .app-footer {
+    padding: 24px 16px;
+    font-size: 0.6rem;
+  }
+}

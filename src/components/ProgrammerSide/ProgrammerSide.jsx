@@ -15,6 +15,7 @@ import {
   Braces,
 } from 'lucide-react';
 import { imagePaths } from '../../imagePaths';
+import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './ProgrammerSide.css';
 
 const containerVariants = {
@@ -129,7 +130,7 @@ export default function ProgrammerSide() {
         <div className="dev-hero-content">
             <div className="dev-avatar-wrapper">
             <div className="dev-avatar-placeholder">
-              <img src={imagePaths.devAvatar} alt="Profile" className="dev-avatar-img" />
+              <OptimizedImage src={imagePaths.devAvatar} alt="Profile" className="dev-avatar-img" width={160} height={160} />
             </div>
             <div className="dev-status-indicator">
               <span className="dev-status-dot" />
@@ -235,7 +236,7 @@ export default function ProgrammerSide() {
               whileHover={{ y: -6, borderColor: '#64ffda55' }}
             >
               <div className="dev-project-image-placeholder">
-                <img src={project.image} alt={project.title} className="dev-project-img" />
+                <OptimizedImage src={project.image} alt={project.title} className="dev-project-img" width={480} height={180} />
               </div>
               <div className="dev-project-body">
                 <div className="dev-project-header">

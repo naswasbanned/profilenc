@@ -14,8 +14,8 @@ export default function SideToggle({ activeSide, onToggle }) {
         className={`toggle-option ${activeSide === 'dev' ? 'active dev-active' : ''}`}
         onClick={() => onToggle('dev')}
       >
-        <Code2 size={16} />
-        <span>Developer</span>
+        <Code2 size={16} className="toggle-icon" />
+        <span className="toggle-label">Developer</span>
       </button>
 
       <motion.div
@@ -36,8 +36,8 @@ export default function SideToggle({ activeSide, onToggle }) {
         className={`toggle-option ${activeSide === 'cs' ? 'active cs-active' : ''}`}
         onClick={() => onToggle('cs')}
       >
-        <Gamepad2 size={16} />
-        <span>Gamer</span>
+        <Gamepad2 size={16} className="toggle-icon" />
+        <span className="toggle-label">Gamer</span>
       </button>
     </motion.div>
   );

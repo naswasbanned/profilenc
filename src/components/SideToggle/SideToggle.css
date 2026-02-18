@@ -71,3 +71,55 @@
   border-radius: 50%;
   background: linear-gradient(135deg, #64ffda, #ff4655);
 }
+
+/* === Mobile Responsive === */
+@media (max-width: 768px) {
+  .side-toggle-wrapper {
+    top: 12px;
+    gap: 8px;
+    padding: 6px 12px;
+    max-width: calc(100vw - 24px);
+  }
+
+  .toggle-option {
+    gap: 5px;
+    padding: 6px 8px;
+    font-size: 0.65rem;
+  }
+
+  .toggle-option span {
+    display: none;
+  }
+
+  .toggle-track {
+    width: 40px;
+    height: 22px;
+  }
+
+  .toggle-thumb {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .side-toggle-wrapper {
+    top: 8px;
+    gap: 6px;
+    padding: 5px 10px;
+  }
+
+  .toggle-option {
+    padding: 5px 6px;
+  }
+
+  .toggle-track {
+    width: 36px;
+    height: 20px;
+  }
+
+  .toggle-thumb {
+    width: 14px;
+    height: 14px;
+  }
+}

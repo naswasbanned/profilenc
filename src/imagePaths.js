@@ -2,8 +2,6 @@
 // Put your actual image files under `public/images/...` matching these paths,
 // or update these strings to point wherever you prefer.
 
-import { s } from "framer-motion/client";
-
 export const imagePaths = {
   // Profile avatars (square, used at ~160×160 in UI)
   // Recommended: 160×160 or larger square (e.g. 512×512) so it stays sharp.

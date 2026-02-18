@@ -846,6 +846,156 @@ span.cs-ach-tier.tier-rare {
   .cs-philosophy-grid {
     grid-template-columns: 1fr;
   }
+
+  .cs-section-title {
+    font-size: 1rem;
+    margin-bottom: 28px;
+  }
+
+  .cs-avatar-placeholder {
+    width: 120px;
+    height: 120px;
+  }
+
+  .cs-tag-line {
+    margin: 0 auto 16px;
+  }
+
+  .cs-bio {
+    margin: 0 auto 28px;
+  }
+
+  .cs-category-divider {
+    padding: 0 20px;
+  }
+
+  .cs-sub-toggle {
+    max-width: 100%;
+    margin: 0 20px;
+  }
+
+  .cs-sub-btn {
+    font-size: 0.65rem;
+    padding: 12px 14px;
+  }
+
+  .cs-quick-stat {
+    padding: 10px 14px;
+  }
+
+  .cs-qs-value {
+    font-size: 0.95rem;
+  }
+
+  .cs-qs-label {
+    font-size: 0.55rem;
+  }
+
+  .cs-achievement-card {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .cs-story-body {
+    padding: 14px;
+  }
+
+  .cs-story-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .cs-story-desc {
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cs-hero {
+    padding: 50px 16px 30px;
+  }
+
+  .cs-gamertag {
+    font-size: 2.2rem;
+  }
+
+  .cs-section {
+    padding: 30px 16px;
+  }
+
+  .cs-stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .cs-stat-value {
+    font-size: 1.4rem;
+  }
+
+  .cs-backlog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-quick-stats {
+    gap: 10px;
+  }
+
+  .cs-quick-stat {
+    padding: 8px 12px;
+    clip-path: none;
+  }
+
+  .cs-category-divider {
+    padding: 0 16px;
+  }
+
+  .cs-sub-toggle {
+    margin: 0 16px;
+  }
+
+  .cs-divider-label {
+    font-size: 0.65rem;
+    padding: 6px 16px;
+    letter-spacing: 0.1em;
+  }
+
+  .cs-map-item {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .cs-map-winrate {
+    width: 100%;
+  }
+
+  .cs-avatar-placeholder {
+    width: 100px;
+    height: 100px;
+  }
+
+  .cs-setup-grid,
+  .cs-settings-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cs-highlights-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-continue-text {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+  }
+
+  .cs-playing-info h4 {
+    font-size: 0.75rem;
+  }
+
+  .cs-philosophy-card {
+    padding: 20px 16px;
+  }
 }
 
 /* ======================================
@@ -997,6 +1147,12 @@ span.cs-ach-tier.tier-rare {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .cs-story-games-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .cs-story-card {

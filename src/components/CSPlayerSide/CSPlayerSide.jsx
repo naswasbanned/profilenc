@@ -24,6 +24,7 @@ import {
   Map,
 } from 'lucide-react';
 import { imagePaths } from '../../imagePaths';
+import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './CSPlayerSide.css';
 
 const containerVariants = {
@@ -281,7 +282,7 @@ export default function CSPlayerSide() {
         <div className="cs-hero-content">
             <div className="cs-avatar-wrapper">
             <div className="cs-avatar-placeholder">
-              <img src={imagePaths.csAvatar} alt="Profile" className="cs-avatar-img" />
+              <OptimizedImage src={imagePaths.csAvatar} alt="Profile" className="cs-avatar-img" width={160} height={160} />
             </div>
             <div className="cs-rank-badge">
               <Gamepad2 size={14} />
@@ -499,7 +500,7 @@ export default function CSPlayerSide() {
                     whileHover={{ y: -4, borderColor: '#ff4655' }}
                   >
                     <div className="cs-setup-image-placeholder">
-                      <img src={gear.image} alt={gear.item} className="cs-setup-img" />
+                      <OptimizedImage src={gear.image} alt={gear.item} className="cs-setup-img" width={200} height={140} />
                     </div>
                     <div className="cs-setup-info">
                       <h4>{gear.item}</h4>
@@ -558,7 +559,7 @@ export default function CSPlayerSide() {
                     whileHover={{ scale: 1.03 }}
                   >
                     <div className="cs-highlight-thumbnail">
-                      <img src={highlightImages[num - 1]} alt={`Clip ${num}`} className="cs-highlight-img" />
+                      <OptimizedImage src={highlightImages[num - 1]} alt={`Clip ${num}`} className="cs-highlight-img" width={380} height={160} />
                       <div className="cs-play-overlay">
                         <ChevronRight size={36} />
                       </div>
@@ -604,7 +605,7 @@ export default function CSPlayerSide() {
                     whileHover={{ y: -6, borderColor: '#a855f7' }}
                   >
                     <div className="cs-story-image-placeholder">
-                      <img src={game.image} alt={game.title} className="cs-story-img" />
+                      <OptimizedImage src={game.image} alt={game.title} className="cs-story-img" width={560} height={180} />
                     </div>
                     <div className="cs-story-body">
                       <div className="cs-story-header">
@@ -645,7 +646,7 @@ export default function CSPlayerSide() {
                     whileHover={{ y: -4 }}
                   >
                     <div className="cs-playing-image-placeholder">
-                      <img src={game.image} alt={game.title} className="cs-playing-img" />
+                      <OptimizedImage src={game.image} alt={game.title} className="cs-playing-img" width={380} height={122} />
                     </div>
                     <div className="cs-playing-info">
                       <h4>{game.title}</h4>
