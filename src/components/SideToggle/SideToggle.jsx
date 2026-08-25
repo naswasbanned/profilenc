@@ -3,6 +3,8 @@ import { Code2, Gamepad2 } from 'lucide-react';
 import './SideToggle.css';
 
 export default function SideToggle({ activeSide, onToggle }) {
+  const isHobbies = activeSide === 'cs' || activeSide === 'hobbies';
+
   return (
     <motion.div
       className="side-toggle-wrapper"
@@ -33,11 +35,11 @@ export default function SideToggle({ activeSide, onToggle }) {
       </motion.div>
 
       <button
-        className={`toggle-option ${activeSide === 'cs' ? 'active cs-active' : ''}`}
+        className={`toggle-option ${isHobbies ? 'active cs-active' : ''}`}
         onClick={() => onToggle('cs')}
       >
         <Gamepad2 size={16} className="toggle-icon" />
-        <span className="toggle-label">Gamer</span>
+        <span className="toggle-label">Hobbies</span>
       </button>
     </motion.div>
   );

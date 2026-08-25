@@ -18,7 +18,8 @@
   background: var(--dev-bg);
 }
 
-.app-footer.cs {
+.app-footer.cs,
+.app-footer.hobbies {
   color: var(--cs-text-dim);
   border-top: 1px solid var(--cs-border);
   background: var(--cs-bg);

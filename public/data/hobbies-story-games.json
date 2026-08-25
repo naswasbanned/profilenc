@@ -1,0 +1,110 @@
+[
+  {
+    "title": "Persona 4 Golden",
+    "status": "Completed",
+    "hours": 186,
+    "rating": "GOLDEN",
+    "description": "A masterpiece of storytelling. Emotional at its peak, the best one in the series. I wrote a whole essay about how good this game is and passed my university course with it. Best Game Of All Time. Argue with a wall.",
+    "genre": "Adventure-JRPG / Turn Based",
+    "image": "/images/gaming/story-games/p4g.webp"
+  },
+  {
+    "title": "Red Dead Redemption 2",
+    "status": "Completed",
+    "hours": 280,
+    "rating": 10,
+    "description": "Arthur Morgan's journey is the greatest character arc in gaming. The slow pacing is intentional. Details like the dynamic weather and NPC interactions make the world feel alive. The story is a tragic masterpiece.",
+    "genre": "Action-Adventure",
+    "image": "/images/gaming/story-games/rdr2.png"
+  },
+  {
+    "title": "Elden Ring",
+    "status": "Completed",
+    "hours": 73,
+    "rating": 10,
+    "description": "FromSoft at their peak. Open world done right — every corner hides something terrifying and beautiful. Fuck Maliketh. Worth every death.",
+    "genre": "Action RPG / Souls-like",
+    "image": "/images/gaming/story-games/elden-ring.webp"
+  },
+  {
+    "title": "Kingdom Hearts 2",
+    "status": "Completed",
+    "hours": 101,
+    "rating": 10,
+    "description": "The best Kingdom Hearts game. The story is a masterpiece of emotional storytelling and character development. Thankyou for introducing me to gaming.",
+    "genre": "Action-Adventure / RPG",
+    "image": "/images/gaming/story-games/kh2.png"
+  },
+  {
+    "title": "Clair Obscur: Expedition 33",
+    "status": "Completed",
+    "hours": 96,
+    "rating": 9,
+    "description": "A beautiful, atmospheric, and emotionally resonant game. The story is a masterpiece of character development and narrative depth. Somehow the ending really bothers me.",
+    "genre": "Adventure-RPG / Turn Based",
+    "image": "/images/gaming/story-games/e33.jpg"
+  },
+  {
+    "title": "Final Fantasy VII Remake Integrade",
+    "status": "Completed",
+    "hours": 98,
+    "rating": 9,
+    "description": "The best Final Fantasy VII game. The story is a masterpiece of emotional storytelling and character development. Though i never really played the original. Sorry for that.",
+    "genre": "Action-Adventure",
+    "image": "/images/gaming/story-games/ff7.jpg"
+  },
+  {
+    "title": "Metaphor: ReFantazio",
+    "status": "Completed",
+    "hours": 67,
+    "rating": 9,
+    "description": "My 2024 GOTY. A stunningly beautiful and emotionally resonant game. The story is a masterpiece of character development and narrative depth. The combat is fun and rewarding. The world is a work of art. Diveristy is amazing. The only flaw is the pacing a bit rushed at the ending.",
+    "genre": "Adventure-JRPG / Turn Based",
+    "image": "/images/gaming/story-games/metaphor.jpg"
+  },
+  {
+    "title": "Persona 3 Reload",
+    "status": "Completed",
+    "hours": 72,
+    "rating": 9,
+    "description": "A great remake of a classic. The story is just as compelling as P4G, with a darker tone and more mature themes. The new combat system is a great improvement. The DLC is the weakest point of the series, not worth the money. Should have been free content. Atleast bring back Kotone.",
+    "genre": "Adventure-JRPG / Turn Based",
+    "image": "/images/gaming/story-games/p3r.png"
+  },
+  {
+    "title": "God of War: Ragnarok",
+    "status": "Completed",
+    "hours": 41,
+    "rating": 9,
+    "description": "Really good expansion from the first one. Story deepens and really show how Kratos could fit in another world not just as a fighter but also a leader and.. hope. Really solid game, cant wait how atreus will develop in the next game. Hope they can make the game longer tho, pacing kinda fast.",
+    "genre": "Action-Adventure / RPG",
+    "image": "/images/gaming/story-games/gowr.jpg"
+  },
+  {
+    "title": "Marvel Spiderman Remastered",
+    "status": "Completed",
+    "hours": 27,
+    "rating": 9,
+    "description": "A fun and emotional superhero game. The story is a heartfelt tribute to the character and his world. The DLC is a nice addition, but not essential. No fast-travel needed, peak traversal mechanism. Need more playtime. Finish in one sitting. Yes, 21 hours straight.",
+    "genre": "Action-Adventure",
+    "image": "/images/gaming/story-games/spiderman.jpg"
+  },
+  {
+    "title": "Persona 5 Royal",
+    "status": "Completed",
+    "hours": 119,
+    "rating": 8,
+    "description": "Best mechanics in the series. Arguably the best music and ambience. The story is good, but not as emotionally resonant as P4G or P3R. The DLC is a nice addition, but not essential. Overall a great game, but not my favorite in the series. Little note on the side characters, felt not deeply developed.",
+    "genre": "Adventure-JRPG / Turn Based",
+    "image": "/images/gaming/story-games/p5r.jpg"
+  },
+  {
+    "title": "God of War (2018)",
+    "status": "Completed",
+    "hours": 38,
+    "rating": 8,
+    "description": "Really good reboot to the series, Kratos doesnt seem really fit in nordic mythology. Proves himself in Ragnarok. Though for me the story itself felt a bit underwhelming, i mean just about father and son sowing ashes. Its a really good build up. The way they develop every detail this game had in Ragnarok is insanely good.",
+    "genre": "Adventure-JRPG / Turn Based",
+    "image": "/images/gaming/story-games/gow.jpg"
+  }
+]

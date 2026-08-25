@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Competitive Programming Module",
+    "description": "A module for competitive programming platforms with features like live coding sessions, test case management, and real-time feedback.",
+    "tech": ["Laravel", "React", "Wordpress", "HTML Canvas"],
+    "stars": 891,
+    "image": "/images/projects/competitive-programming-module.png"
+  },
+  {
+    "title": "Advance Quiz Platform",
+    "description": "A real-time correction quiz platform with correction, many question types, and detailed analytics for educators and students.",
+    "tech": ["Laravel", "JavaScript", "JQuery", "mySQL"],
+    "stars": 52,
+    "image": "/images/projects/advance-quiz-platform.png"
+  },
+  {
+    "title": "HalalCraft, Minecraft Plugin",
+    "description": "A Minecraft plugin that adds using religiously compliant halal food items, prayer spaces, and educational content about Islamic culture within the game.",
+    "tech": ["Java", "Spigot API", "Maven"],
+    "stars": 214,
+    "image": "/images/projects/halalcraft.png"
+  },
+  {
+    "title": "Company Profile Templating System",
+    "description": "A templating system for company profiles that allows users to create and customize their profiles with a drag-and-drop interface, and pre-designed templates.",
+    "tech": ["Laravel", "React", "Tailwind CSS", "Figma API"],
+    "stars": 271,
+    "image": "/images/projects/template.png"
+  }
+]

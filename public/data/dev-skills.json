@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Laravel",
+    "tier": "Expert",
+    "category": "Backend",
+    "icon": "SiLaravel",
+    "color": "#FF2D20",
+    "experience": "3+ years"
+  },
+  {
+    "name": "React",
+    "tier": "Proficient",
+    "category": "Frontend",
+    "icon": "SiReact",
+    "color": "#61DAFB",
+    "experience": "2+ years"
+  },
+  {
+    "name": "Tailwind CSS",
+    "tier": "Proficient",
+    "category": "Frontend",
+    "icon": "SiTailwindcss",
+    "color": "#06B6D4",
+    "experience": "2+ years"
+  },
+  {
+    "name": "Node.js",
+    "tier": "Intermediate",
+    "category": "Backend",
+    "icon": "SiNodedotjs",
+    "color": "#5FA04E",
+    "experience": "1.5+ years"
+  },
+  {
+    "name": "Java",
+    "tier": "Intermediate",
+    "category": "Backend",
+    "icon": "FaJava",
+    "color": "#EA2D2E",
+    "experience": "1+ year"
+  },
+  {
+    "name": "Docker",
+    "tier": "Familiar",
+    "category": "DevOps",
+    "icon": "SiDocker",
+    "color": "#2496ED",
+    "experience": "1+ year"
+  },
+  {
+    "name": "MySQL",
+    "tier": "Proficient",
+    "category": "Database",
+    "icon": "SiMysql",
+    "color": "#4479A1",
+    "experience": "3+ years"
+  },
+  {
+    "name": "Git",
+    "tier": "Proficient",
+    "category": "Tools",
+    "icon": "SiGit",
+    "color": "#F05032",
+    "experience": "3+ years"
+  }
+]

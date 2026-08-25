@@ -1,0 +1,757 @@
+.hobbies-side {
+  position: relative;
+  min-height: 100vh;
+  background: var(--cs-bg);
+  color: var(--cs-text);
+  font-family: 'Orbitron', sans-serif;
+  padding: 0 0 80px;
+  overflow: hidden;
+}
+
+/* === Background Effects === */
+.hobbies-bg-scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 229, 255, 0.015) 2px,
+    rgba(0, 229, 255, 0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hobbies-bg-vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hobbies-bg-accent-glow {
+  position: fixed;
+  top: -300px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* === Hero === */
+.hobbies-hero {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 40px 60px;
+}
+
+.hobbies-hero-content {
+  display: flex;
+  gap: 50px;
+  align-items: flex-start;
+}
+
+.hobbies-avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.hobbies-avatar-placeholder {
+  width: 160px;
+  height: 160px;
+  background: var(--cs-surface);
+  border: 2px solid #a855f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a855f7;
+  clip-path: polygon(10% 0%, 100% 0%, 100% 90%, 90% 100%, 0% 100%, 0% 10%);
+  transition: all 0.3s;
+  overflow: hidden;
+}
+
+.hobbies-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hobbies-avatar-placeholder:hover {
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+}
+
+.hobbies-rank-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
+}
+
+.hobbies-hero-text {
+  flex: 1;
+}
+
+.hobbies-tag-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: #a855f7;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+}
+
+.hobbies-gamertag {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #fff 40%, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hobbies-role {
+  font-size: 0.95rem;
+  color: #a855f7;
+  margin-bottom: 20px;
+  letter-spacing: 0.05em;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hobbies-bio {
+  font-size: 0.82rem;
+  color: var(--cs-text-dim);
+  line-height: 1.8;
+  max-width: 560px;
+  margin-bottom: 28px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hobbies-quick-stats {
+  display: flex;
+  gap: 24px;
+}
+
+.hobbies-quick-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: var(--cs-surface);
+  border: 1px solid var(--cs-border);
+  clip-path: polygon(0% 0%, 95% 0%, 100% 30%, 100% 100%, 5% 100%, 0% 70%);
+}
+
+.hobbies-quick-stat svg {
+  color: #a855f7;
+}
+
+.hobbies-qs-value {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.hobbies-qs-label {
+  display: block;
+  font-size: 0.6rem;
+  color: var(--cs-text-dim);
+  letter-spacing: 0.05em;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* === Sections === */
+.hobbies-section {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 40px;
+}
+
+/* === Sub-Side Toggle (Games vs Gears) === */
+.hobbies-sub-toggle {
+  position: relative;
+  display: flex;
+  max-width: 420px;
+  margin: 0 auto;
+  background: var(--cs-surface);
+  border: 1px solid var(--cs-border);
+  border-radius: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hobbies-sub-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: none;
+  border: none;
+  color: var(--cs-text-dim);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: color 0.3s;
+  position: relative;
+  z-index: 1;
+}
+
+.hobbies-sub-btn:hover {
+  color: var(--cs-text);
+}
+
+.hobbies-sub-btn.active.games {
+  color: #a855f7;
+}
+
+.hobbies-sub-btn.active.gears {
+  color: #00e5ff;
+}
+
+.hobbies-sub-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 3px;
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  z-index: 0;
+}
+
+.hobbies-sub-btn.active.gears ~ .hobbies-sub-indicator {
+  background: linear-gradient(90deg, #00e5ff, #3b82f6);
+}
+
+.hobbies-section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 40px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #a855f7;
+  letter-spacing: 0.05em;
+}
+
+.hobbies-section-title svg {
+  color: #a855f7;
+}
+
+.hobbies-section-title.gears-title {
+  border-bottom-color: #00e5ff;
+}
+
+.hobbies-section-title.gears-title svg {
+  color: #00e5ff;
+}
+
+.hobbies-section-title.story-title {
+  border-bottom-color: #a855f7;
+}
+
+.hobbies-section-title.story-title svg {
+  color: #a855f7;
+}
+
+/* === PC Hardware Specs Grid === */
+.hobbies-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.hobbies-spec-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 24px;
+  background: var(--cs-surface);
+  border: 1px solid var(--cs-border);
+  border-left: 3px solid #00e5ff;
+  transition: all 0.3s;
+}
+
+.hobbies-spec-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  color: #00e5ff;
+  flex-shrink: 0;
+  clip-path: polygon(0% 0%, 90% 0%, 100% 25%, 100% 100%, 10% 100%, 0% 75%);
+}
+
+.hobbies-spec-info {
+  flex: 1;
+}
+
+.hobbies-spec-category {
+  display: inline-block;
+  font-size: 0.6rem;
+  color: #00e5ff;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 4px;
+}
+
+.hobbies-spec-name {
+  font-size: 0.95rem;
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.hobbies-spec-detail {
+  font-size: 0.72rem;
+  color: var(--cs-text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.5;
+}
+
+/* === Setup & Peripherals Grid === */
+.hobbies-setup-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.hobbies-setup-card {
+  background: var(--cs-surface);
+  border: 1px solid var(--cs-border);
+  overflow: hidden;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.hobbies-setup-image-placeholder {
+  position: relative;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 229, 255, 0.03);
+  border-bottom: 1px solid var(--cs-border);
+  overflow: hidden;
+}
+
+.hobbies-setup-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hobbies-setup-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 2px 8px;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  color: #00e5ff;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hobbies-setup-info {
+  padding: 16px;
+  flex: 1;
+}
+
+.hobbies-setup-info h4 {
+  font-size: 0.85rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.hobbies-setup-info p {
+  font-size: 0.7rem;
+  color: var(--cs-text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.5;
+}
+
+/* === Currently Playing === */
+.hobbies-currently-playing {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.hobbies-playing-card {
+  background: var(--cs-surface);
+  border: 1px solid var(--cs-border);
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.hobbies-playing-card:hover {
+  border-color: #a855f7;
+}
+
+.hobbies-playing-image-placeholder {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1920 / 620;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.05), var(--cs-surface));
+  color: var(--cs-text-dim);
+  font-size: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  border-bottom: 1px solid var(--cs-border);
+  overflow: hidden;
+}
+
+.hobbies-playing-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hobbies-playing-info {
+  padding: 16px;
+}
+
+.hobbies-playing-info h4 {
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.hobbies-playing-genre {
+  font-size: 0.6rem;
+  color: #a855f7;
+  letter-spacing: 0.05em;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hobbies-playing-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.hobbies-playing-bar-track {
+  flex: 1;
+  height: 4px;
+  background: var(--cs-border);
+  overflow: hidden;
+}
+
+.hobbies-playing-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+}
+
+.hobbies-playing-pct {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #a855f7;
+}
+
+/* === Story Games === */
+.hobbies-story-games-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.hobbies-story-card {
+  background: var(--cs-surface);
+  border: 1px solid var(--cs-border);
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.hobbies-story-card:hover {
+  border-color: #a855f7;
+}
+
+.hobbies-story-image-placeholder {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1920 / 620;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.06), var(--cs-bg));
+  color: var(--cs-text-dim);
+  font-size: 0.65rem;
+  font-family: 'JetBrains Mono', monospace;
+  border-bottom: 1px solid var(--cs-border);
+  overflow: hidden;
+}
+
+.hobbies-story-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hobbies-story-body {
+  padding: 20px;
+}
+
+.hobbies-story-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.hobbies-story-header h3 {
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.hobbies-story-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #facc15;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.hobbies-story-rating svg {
+  color: #facc15;
+}
+
+.hobbies-story-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  align-items: center;
+}
+
+.hobbies-story-genre-tag {
+  font-size: 0.6rem;
+  padding: 3px 10px;
+  background: rgba(168, 85, 247, 0.12);
+  color: #a855f7;
+  letter-spacing: 0.03em;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hobbies-story-hours {
+  font-size: 0.6rem;
+  color: var(--cs-text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hobbies-story-status-badge {
+  font-size: 0.55rem;
+  padding: 2px 8px;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.hobbies-story-status-badge.completed {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+
+.hobbies-story-status-badge.playing {
+  background: rgba(168, 85, 247, 0.12);
+  color: #a855f7;
+}
+
+.hobbies-story-desc {
+  font-size: 0.78rem;
+  color: var(--cs-text-dim);
+  line-height: 1.7;
+  font-family: 'JetBrains Mono', monospace;
+  text-align: justify;
+}
+
+/* === Story Continue Banner === */
+.hobbies-continue-banner {
+  margin-top: 24px;
+}
+
+.hobbies-continue-inner {
+  width: 100%;
+  padding: 10px 20px;
+  border: 1px solid #a855f7;
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.18), transparent, rgba(236, 72, 153, 0.18));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hobbies-continue-text {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #e5e5ff;
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* === Backlog === */
+.hobbies-backlog-subtitle {
+  font-size: 0.82rem;
+  color: var(--cs-text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.hobbies-backlog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.hobbies-backlog-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--cs-surface);
+  border: 1px solid var(--cs-border);
+  font-size: 0.8rem;
+  transition: all 0.3s;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hobbies-backlog-item:hover {
+  border-color: #a855f7;
+}
+
+.hobbies-backlog-number {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: #a855f7;
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* === Gaming Philosophy === */
+.hobbies-philosophy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.hobbies-philosophy-card {
+  background: var(--cs-surface);
+  border: 1px solid var(--cs-border);
+  border-top: 2px solid #a855f7;
+  padding: 28px 24px;
+  transition: all 0.3s;
+}
+
+.hobbies-philosophy-card:hover {
+  border-color: #a855f7;
+}
+
+.hobbies-philosophy-card h4 {
+  font-size: 0.9rem;
+  color: #a855f7;
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+.hobbies-philosophy-card p {
+  font-size: 0.78rem;
+  color: var(--cs-text-dim);
+  line-height: 1.8;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .hobbies-hero {
+    padding: 60px 20px 40px;
+  }
+  .hobbies-hero-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+  }
+  .hobbies-gamertag {
+    font-size: 2.8rem;
+  }
+  .hobbies-quick-stats {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .hobbies-section {
+    padding: 40px 20px;
+  }
+  .hobbies-specs-grid {
+    grid-template-columns: 1fr;
+  }
+  .hobbies-setup-grid,
+  .hobbies-story-games-grid,
+  .hobbies-currently-playing,
+  .hobbies-backlog-grid,
+  .hobbies-philosophy-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .hobbies-hero {
+    padding: 50px 16px 30px;
+  }
+  .hobbies-gamertag {
+    font-size: 2.2rem;
+  }
+  .hobbies-section {
+    padding: 30px 16px;
+  }
+  .hobbies-setup-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "category": "Processor",
+    "name": "AMD Ryzen 5 5600",
+    "detail": "6 Cores, 12 Threads • 3.5GHz Base / 4.4GHz Boost",
+    "icon": "Cpu"
+  },
+  {
+    "category": "Graphics Card",
+    "name": "NVIDIA GeForce RTX 4060",
+    "detail": "8GB GDDR6 • DLSS 3 & Ray Tracing",
+    "icon": "Tv"
+  },
+  {
+    "category": "Motherboard",
+    "name": "MSI B550M PRO-VDH WiFi",
+    "detail": "PCIe 4.0, Dual M.2, Wi-Fi & Bluetooth",
+    "icon": "CircuitBoard"
+  },
+  {
+    "category": "Memory (RAM)",
+    "name": "32GB (2x16GB) DDR4 3200MHz",
+    "detail": "Dual Channel • CL16 Low Latency",
+    "icon": "Layers"
+  },
+  {
+    "category": "Storage",
+    "name": "1TB NVMe PCIe 4.0 SSD + 1TB SSD",
+    "detail": "Read up to 5000MB/s • Fast Game Load Times",
+    "icon": "HardDrive"
+  },
+  {
+    "category": "Power Supply",
+    "name": "650W 80+ Bronze Certified",
+    "detail": "Flat Black Cables • High Efficiency",
+    "icon": "Zap"
+  },
+  {
+    "category": "Cooling",
+    "name": "DeepCool AG400 Digital ARGB",
+    "detail": "Real-time Temp Display • 4 Heatpipes",
+    "icon": "Fan"
+  },
+  {
+    "category": "Case",
+    "name": "Montech Air 100 ARGB",
+    "detail": "Tempered Glass • High Airflow Mesh Front",
+    "icon": "Box"
+  }
+]

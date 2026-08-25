@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SideToggle from './components/SideToggle/SideToggle';
 import TransitionOverlay from './components/TransitionOverlay/TransitionOverlay';
 import ProgrammerSide from './components/ProgrammerSide/ProgrammerSide';
-import CSPlayerSide from './components/CSPlayerSide/CSPlayerSide';
+import HobbiesSide from './components/HobbiesSide/HobbiesSide';
+import useDataFetch from './hooks/useDataFetch';
 import './App.css';
 
 const pageVariants = {
@@ -16,6 +17,20 @@ function App() {
   const [activeSide, setActiveSide] = useState('dev');
   const [transitioning, setTransitioning] = useState(false);
   const [targetSide, setTargetSide] = useState('dev');
+
+  // Lift ALL data fetching to App so it persists across AnimatePresence mount/unmount
+  const { data: profile } = useDataFetch('/data/profile.json');
+  const { data: skills } = useDataFetch('/data/dev-skills.json');
+  const { data: projects } = useDataFetch('/data/dev-projects.json');
+  const { data: experience } = useDataFetch('/data/dev-experience.json');
+  const { data: specs } = useDataFetch('/data/hobbies-specs.json');
+  const { data: setup } = useDataFetch('/data/hobbies-setup.json');
+  const { data: storyGames } = useDataFetch('/data/hobbies-story-games.json');
+  const { data: currentlyPlaying } = useDataFetch('/data/hobbies-currently-playing.json');
+  const { data: backlog } = useDataFetch('/data/hobbies-backlog.json');
+  const { data: philosophy } = useDataFetch('/data/hobbies-philosophy.json');
+
+  const footer = profile?.footer;
 
   const handleToggle = useCallback(
     (side) => {
@@ -55,17 +70,31 @@ function App() {
             animate="animate"
             exit="exit"
           >
-            <ProgrammerSide />
+            <ProgrammerSide
+              profile={profile?.dev}
+              contact={profile?.contact}
+              skills={skills}
+              projects={projects}
+              experience={experience}
+            />
           </motion.div>
         ) : (
           <motion.div
-            key="cs"
+            key="hobbies"
             variants={pageVariants}
             initial="initial"
             animate="animate"
             exit="exit"
           >
-            <CSPlayerSide />
+            <HobbiesSide
+              profile={profile?.hobbies}
+              specs={specs}
+              setup={setup}
+              storyGames={storyGames}
+              currentlyPlaying={currentlyPlaying}
+              backlog={backlog}
+              philosophy={philosophy}
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -73,10 +102,10 @@ function App() {
       {/* Footer */}
       <footer className={`app-footer ${activeSide}`}>
         <p>
-          &copy; 2026 NAS —{' '}
+          {footer?.copyright || '© 2026 NAS'} —{' '}
           {activeSide === 'dev'
-            ? 'Built with React + Framer Motion'
-            : 'Press Start to continue...'}
+            ? (footer?.devTagline || 'Built with React + Framer Motion')
+            : (footer?.hobbiesTagline || 'Press Start to continue...')}
         </p>
       </footer>
     </div>

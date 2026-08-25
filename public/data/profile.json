@@ -1,0 +1,47 @@
+{
+  "dev": {
+    "avatar": "/images/profile/dev-avatar.png",
+    "name": "AQIL",
+    "greeting": "// Hello world, I am",
+    "title": "Web Developer | Open Source Enthusiast | Tech Blogger",
+    "bio": "I build performant, scalable applications with clean architecture. Passionate about open source, developer tooling, and pushing the boundaries of web technology. When I'm not coding, I'm probably exploring new frameworks or linux distro.",
+    "status": "Available for work",
+    "socials": [
+      { "platform": "GitHub", "url": "#", "icon": "Github" },
+      { "platform": "LinkedIn", "url": "#", "icon": "Linkedin" },
+      { "platform": "Email", "url": "#", "icon": "Mail" }
+    ],
+    "terminal": {
+      "title": "aqil@portfolio:~",
+      "lines": [
+        { "command": "cat about.txt", "output": "Full-stack developer with 5+ years of experience." },
+        { "command": null, "output": "Specializing in Laravel, React, and modular architecture." },
+        { "command": "echo $CURRENT_STATUS", "output": "\"Building something amazing...\"" }
+      ]
+    }
+  },
+  "hobbies": {
+    "avatar": "/images/profile/cs-avatar.png",
+    "gamertag": "NAS",
+    "tagline": "HOBBIES",
+    "role": "Story Game Enthusiast & Battlestation Geek",
+    "bio": "Immersive worlds and optimized hardware. On one hand — exploring narrative masterpieces and hunting every secret achievement. On the other — fine-tuning the PC rig and setup.",
+    "rankBadge": "GAMER",
+    "quickStats": [
+      { "icon": "Gamepad2", "value": "42+", "label": "Games Beat" },
+      { "icon": "BookOpen", "value": "800+", "label": "Story Hrs" },
+      { "icon": "Cpu", "value": "Rig", "label": "Custom PC" }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2026 NAS",
+    "devTagline": "Built with React + Framer Motion",
+    "hobbiesTagline": "Press Start to continue..."
+  },
+  "contact": {
+    "heading": "Get In Touch",
+    "text": "Interested in working together? I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.",
+    "email": "naufalaqilnasrullah12@gmail.com",
+    "buttonText": "Say Hello"
+  }
+}

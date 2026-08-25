@@ -1,0 +1,26 @@
+[
+  {
+    "category": "Display",
+    "item": "LG 24GN600",
+    "detail": "24\" IPS, 144Hz Refresh Rate, 1ms MBR, HDR10",
+    "image": "/images/setup/monitor.png"
+  },
+  {
+    "category": "Mouse",
+    "item": "Scyrox V8",
+    "detail": "38g Ultra-lightweight, PAW3950 Optical Sensor, 2K Polling Rate",
+    "image": "/images/setup/mouse.png"
+  },
+  {
+    "category": "Keyboard",
+    "item": "Zifriend M68",
+    "detail": "68% Compact Layout, Magnetic Hall Effect Switches, Rapid Trigger",
+    "image": "/images/setup/keyboard.png"
+  },
+  {
+    "category": "Audio",
+    "item": "dbe GM210",
+    "detail": "7.1 Virtual Surround Sound, 50mm Drivers, Noise-Cancelling Mic",
+    "image": "/images/setup/headset.png"
+  }
+]

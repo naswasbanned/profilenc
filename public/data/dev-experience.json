@@ -1,0 +1,42 @@
+[
+  {
+    "role": "Mentor & Coach for Competitive Programming",
+    "company": "SMK Cyber Media Jakarta",
+    "period": "2023 — Present",
+    "description": "Mentoring high school students in competitive programming, algorithmic problem solving, and data structures.",
+    "images": [
+      "/images/experience/competitive-programming-module.png",
+      "/images/experience/advance-quiz-platform.png",
+      "/images/experience/halalcraft.png"
+    ]
+  },
+  {
+    "role": "Freelance Web Developer",
+    "company": "Bursa Umroh Haji Indonesia",
+    "period": "Feb 2025 — Aug 2025",
+    "description": "Full-stack company profile website development with Laravel and React, implementing responsive layouts and CMS.",
+    "images": [
+      "/images/experience/template.png",
+      "/images/experience/advance-quiz-platform.png"
+    ]
+  },
+  {
+    "role": "Full-stack Web Developer",
+    "company": "PT. Lintas Teknologi Indonesia",
+    "period": "Jul 2024 — Sep 2024",
+    "description": "Full-stack development with Laravel and Tailwind CSS, building enterprise web dashboards and reporting tools.",
+    "images": [
+      "/images/experience/competitive-programming-module.png"
+    ]
+  },
+  {
+    "role": "Back-end Web Developer",
+    "company": "PT. Parsaoran Global Datatrans",
+    "period": "Mar 2024 — Jun 2024",
+    "description": "Back-end development with Laravel, RESTful API design, database schema optimization, and third-party service integrations.",
+    "images": [
+      "/images/experience/halalcraft.png",
+      "/images/experience/template.png"
+    ]
+  }
+]
