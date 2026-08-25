@@ -36,6 +36,7 @@ if (!profile) { return <shell /> }
 ### Affected Files
 - `src/components/ProgrammerSide/ProgrammerSide.jsx` — gate: `profile && skills && projects && experience`
 - `src/components/HobbiesSide/HobbiesSide.jsx` — gate: `profile && specs && setup && storyGames && currentlyPlaying && backlog && philosophy`
+- `src/components/DiarySide/DiarySide.jsx` — gate: `profile && entries`
 
 ### When Adding New Sections
 If you add a new data-fetched section to either side:

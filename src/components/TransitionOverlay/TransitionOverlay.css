@@ -76,3 +76,22 @@
   background: #64ffda;
   box-shadow: 0 0 10px #64ffda;
 }
+
+/* Diary transition */
+.transition-overlay.to-diary {
+  background: radial-gradient(ellipse at center, #1a1008, #0d0b0f);
+}
+
+.to-diary .transition-icon {
+  color: #f4a261;
+  filter: drop-shadow(0 0 40px rgba(244, 162, 97, 0.6));
+}
+
+.to-diary .glitch-line {
+  background: linear-gradient(90deg, transparent 5%, #f4a261 20%, #f4a26188 50%, transparent 95%);
+}
+
+.to-diary .t-particle {
+  background: #f4a261;
+  box-shadow: 0 0 10px #f4a261;
+}

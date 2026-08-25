@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "date": "2026-08-20",
+    "content": "Finally upgraded my entire dev setup. New monitor, new keyboard layout, new workflow. Feels like a fresh start every time you optimize your environment.",
+    "mood": "excited",
+    "image": "https://placehold.co/500x500",
+    "likes": 24
+  },
+  {
+    "id": 2,
+    "date": "2026-08-15",
+    "content": "Been diving deep into system design patterns lately. There's something satisfying about drawing architecture diagrams at 2AM with lo-fi playing in the background.",
+    "mood": "focused",
+    "image": null,
+    "likes": 18
+  },
+  {
+    "id": 3,
+    "date": "2026-08-10",
+    "content": "Hot take: the best code you'll ever write is the code you delete. Refactored an entire module today — removed 400 lines and it runs better.",
+    "mood": "proud",
+    "image": null,
+    "likes": 42
+  },
+  {
+    "id": 4,
+    "date": "2026-08-05",
+    "content": "Sometimes you just need to step away from the screen. Went for a long walk, came back, and the bug that haunted me for 3 hours was a missing semicolon.",
+    "mood": "amused",
+    "image": null,
+    "likes": 31
+  },
+  {
+    "id": 5,
+    "date": "2026-07-28",
+    "content": "New project brewing. Can't share details yet but it involves real-time collaboration and some really cool WebSocket stuff. Stay tuned.",
+    "mood": "mysterious",
+    "image": null,
+    "likes": 56
+  },
+  {
+    "id": 6,
+    "date": "2026-07-20",
+    "content": "Appreciation post for dark mode. Every app, every website, every IDE. If it doesn't have dark mode, I'm not using it. Non-negotiable.",
+    "mood": "opinionated",
+    "image": null,
+    "likes": 89
+  },
+  {
+    "id": 7,
+    "date": "2026-07-15",
+    "content": "Just finished a 12-hour coding session. Built an entire feature from scratch. My back hurts but my soul is happy. This is what passion feels like.",
+    "mood": "exhausted",
+    "image": null,
+    "likes": 37
+  },
+  {
+    "id": 8,
+    "date": "2026-07-08",
+    "content": "Reading 'Clean Code' for the third time. Every re-read hits different when you have more experience. Some chapters I disagreed with before now make perfect sense.",
+    "mood": "reflective",
+    "image": null,
+    "likes": 15
+  }
+]

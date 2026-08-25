@@ -3,6 +3,8 @@
 @import '@fontsource/orbitron/400.css';
 @import '@fontsource/orbitron/700.css';
 @import '@fontsource/orbitron/900.css';
+@import '@fontsource/crimson-text/400.css';
+@import '@fontsource/crimson-text/700.css';
 
 :root {
   /* Programmer side (dark elegant) */
@@ -22,6 +24,15 @@
   --cs-text: #efefef;
   --cs-text-dim: #999999;
   --cs-border: #2a2a2a;
+
+  /* Diary side (warm, journal-like) */
+  --diary-bg: #0d0b0f;
+  --diary-surface: #1a1520;
+  --diary-accent: #f4a261;
+  --diary-accent-dim: #f4a26133;
+  --diary-text: #e8ddd3;
+  --diary-text-dim: #9a8e82;
+  --diary-border: #2a2230;
 }
 
 * {

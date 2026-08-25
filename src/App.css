@@ -26,6 +26,13 @@
   font-family: 'Orbitron', sans-serif;
 }
 
+.app-footer.diary {
+  color: var(--diary-text-dim);
+  border-top: 1px solid var(--diary-border);
+  background: var(--diary-bg);
+  font-family: 'Crimson Text', serif;
+}
+
 @media (max-width: 768px) {
   .app-footer {
     padding: 24px 16px;

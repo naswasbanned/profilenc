@@ -33,10 +33,18 @@
       { "icon": "Cpu", "value": "Rig", "label": "Custom PC" }
     ]
   },
+  "diary": {
+    "avatar": "/images/profile/dev-avatar.png",
+    "name": "AQIL",
+    "tagline": "Broadcasts",
+    "bio": "Thoughts, updates, and random musings from my corner of the internet. Like a tiny window into what's going on in my world.",
+    "pinnedQuote": "\"Write it down. Even if no one reads it, you'll remember why it mattered.\""
+  },
   "footer": {
     "copyright": "© 2026 NAS",
     "devTagline": "Built with React + Framer Motion",
-    "hobbiesTagline": "Press Start to continue..."
+    "hobbiesTagline": "Press Start to continue...",
+    "diaryTagline": "Every day is a page worth writing."
   },
   "contact": {
     "heading": "Get In Touch",

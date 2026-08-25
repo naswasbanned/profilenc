@@ -1,13 +1,26 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Code2, Crosshair } from 'lucide-react';
+import { Code2, Gamepad2, BookHeart } from 'lucide-react';
 import './TransitionOverlay.css';
+
+const iconMap = {
+  dev: <Code2 size={64} />,
+  cs: <Gamepad2 size={64} />,
+  hobbies: <Gamepad2 size={64} />,
+  diary: <BookHeart size={64} />,
+};
+
+function getOverlayClass(targetSide) {
+  if (targetSide === 'dev') return 'to-dev';
+  if (targetSide === 'diary') return 'to-diary';
+  return 'to-cs'; // hobbies / cs
+}
 
 export default function TransitionOverlay({ isActive, targetSide }) {
   return (
     <AnimatePresence>
       {isActive && (
         <motion.div
-          className={`transition-overlay ${targetSide === 'cs' ? 'to-cs' : 'to-dev'}`}
+          className={`transition-overlay ${getOverlayClass(targetSide)}`}
           initial={{ clipPath: 'circle(0% at 50% 50%)' }}
           animate={{ clipPath: 'circle(150% at 50% 50%)' }}
           exit={{ opacity: 0 }}
@@ -22,7 +35,7 @@ export default function TransitionOverlay({ isActive, targetSide }) {
             animate={{ scale: 1, rotate: 0 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
           >
-            {targetSide === 'cs' ? <Crosshair size={64} /> : <Code2 size={64} />}
+            {iconMap[targetSide] || <Code2 size={64} />}
           </motion.div>
 
           {/* Glitch lines */}
@@ -53,8 +66,8 @@ export default function TransitionOverlay({ isActive, targetSide }) {
               <motion.div
                 key={i}
                 className="t-particle"
-                initial={{ 
-                  x: 0, y: 0, opacity: 0, scale: 0 
+                initial={{
+                  x: 0, y: 0, opacity: 0, scale: 0,
                 }}
                 animate={{
                   x: (Math.random() - 0.5) * 600,

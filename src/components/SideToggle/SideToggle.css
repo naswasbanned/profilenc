@@ -6,8 +6,8 @@
   z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 8px 20px;
+  gap: 4px;
+  padding: 6px 8px;
   background: rgba(10, 10, 15, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -16,18 +16,19 @@
 }
 
 .toggle-option {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.35);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   cursor: pointer;
-  padding: 6px 12px;
-  border-radius: 20px;
-  transition: all 0.3s;
+  padding: 8px 14px;
+  border-radius: 24px;
+  transition: color 0.3s;
   letter-spacing: 0.03em;
 }
 
@@ -35,91 +36,76 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+/* Active states per section */
 .toggle-option.active {
   color: #fff;
 }
 
 .toggle-option.dev-active {
-  background: rgba(100, 255, 218, 0.1);
   color: #64ffda;
 }
 
-.toggle-option.cs-active {
-  background: rgba(255, 70, 85, 0.1);
+.toggle-option.hobbies-active {
   color: #ff4655;
 }
 
-.toggle-track {
-  width: 48px;
-  height: 26px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 13px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 3px;
-  transition: background 0.3s;
+.toggle-option.diary-active {
+  color: #f4a261;
 }
 
-.toggle-track:hover {
-  background: rgba(255, 255, 255, 0.12);
+/* Animated underline bar */
+.toggle-active-bar {
+  position: absolute;
+  bottom: 2px;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  border-radius: 1px;
 }
 
-.toggle-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #64ffda, #ff4655);
+.dev-active .toggle-active-bar {
+  background: #64ffda;
+  box-shadow: 0 0 8px rgba(100, 255, 218, 0.5);
+}
+
+.hobbies-active .toggle-active-bar {
+  background: #ff4655;
+  box-shadow: 0 0 8px rgba(255, 70, 85, 0.5);
+}
+
+.diary-active .toggle-active-bar {
+  background: #f4a261;
+  box-shadow: 0 0 8px rgba(244, 162, 97, 0.5);
 }
 
 /* === Mobile Responsive === */
 @media (max-width: 768px) {
   .side-toggle-wrapper {
     top: 12px;
-    gap: 8px;
-    padding: 6px 12px;
+    gap: 2px;
+    padding: 5px 6px;
     max-width: calc(100vw - 24px);
   }
 
   .toggle-option {
     gap: 5px;
     padding: 6px 8px;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
   }
 
-  .toggle-option span {
+  .toggle-label {
     display: none;
-  }
-
-  .toggle-track {
-    width: 40px;
-    height: 22px;
-  }
-
-  .toggle-thumb {
-    width: 16px;
-    height: 16px;
   }
 }
 
 @media (max-width: 480px) {
   .side-toggle-wrapper {
     top: 8px;
-    gap: 6px;
-    padding: 5px 10px;
+    gap: 2px;
+    padding: 4px 6px;
   }
 
   .toggle-option {
-    padding: 5px 6px;
-  }
-
-  .toggle-track {
-    width: 36px;
-    height: 20px;
-  }
-
-  .toggle-thumb {
-    width: 14px;
-    height: 14px;
+    padding: 6px 8px;
   }
 }
