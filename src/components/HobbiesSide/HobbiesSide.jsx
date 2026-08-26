@@ -96,12 +96,6 @@ export default function HobbiesSide({
   const [subSide, setSubSide] = useState('games');
   const [direction, setDirection] = useState(1);
 
-  const handleSubToggle = (side) => {
-    if (side === subSide) return;
-    setDirection(tabOrder[side] > tabOrder[subSide] ? 1 : -1);
-    setSubSide(side);
-  };
-
   // ⚠️ CRITICAL: Gate on ALL data props, not just profile.
   // Framer Motion's containerVariants (staggerChildren) fires once on mount.
   // FIX: Block the entire animated tree until every data dependency is present.
@@ -126,6 +120,27 @@ export default function HobbiesSide({
       </div>
     );
   }
+
+  // Dynamic available subtabs based on visibility controls
+  const availableTabs = [
+    { id: 'games', label: 'Games', icon: Gamepad2, visible: visibility?.gamesTab !== false && visibility?.games !== false },
+    { id: 'movies', label: 'Movies & Series', icon: Film, visible: visibility?.moviesTab !== false && visibility?.movies !== false },
+    { id: 'gears', label: 'Gears', icon: Cpu, visible: visibility?.gearsTab !== false && visibility?.gears !== false },
+  ].filter((t) => t.visible);
+
+  const activeSubSide = availableTabs.some((t) => t.id === subSide)
+    ? subSide
+    : (availableTabs[0]?.id || 'games');
+
+  const activeTabIndex = availableTabs.findIndex((t) => t.id === activeSubSide);
+
+  const handleSubToggle = (side) => {
+    if (side === activeSubSide) return;
+    const fromIdx = availableTabs.findIndex((t) => t.id === activeSubSide);
+    const toIdx = availableTabs.findIndex((t) => t.id === side);
+    setDirection(toIdx > fromIdx ? 1 : -1);
+    setSubSide(side);
+  };
 
   // Filter out hidden items
   const activeSpecs = (specs || []).filter((s) => !s.hidden);
@@ -207,39 +222,35 @@ export default function HobbiesSide({
       )}
 
       {/* Sub-side toggle: Games vs Movies & Series vs Gears */}
-      <motion.div className="hobbies-sub-toggle" variants={itemVariants}>
-        <button
-          className={`hobbies-sub-btn ${subSide === 'games' ? 'active games' : ''}`}
-          onClick={() => handleSubToggle('games')}
-        >
-          <Gamepad2 size={16} />
-          <span>Games</span>
-        </button>
-        <button
-          className={`hobbies-sub-btn ${subSide === 'movies' ? 'active movies' : ''}`}
-          onClick={() => handleSubToggle('movies')}
-        >
-          <Film size={16} />
-          <span>Movies & Series</span>
-        </button>
-        <button
-          className={`hobbies-sub-btn ${subSide === 'gears' ? 'active gears' : ''}`}
-          onClick={() => handleSubToggle('gears')}
-        >
-          <Cpu size={16} />
-          <span>Gears</span>
-        </button>
-        {/* Animated underline */}
-        <motion.div
-          className={`hobbies-sub-indicator ${subSide}`}
-          animate={{ x: `${tabOrder[subSide] * 100}%` }}
-          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-        />
-      </motion.div>
+      {availableTabs.length > 1 && (
+        <motion.div className="hobbies-sub-toggle" variants={itemVariants}>
+          {availableTabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                className={`hobbies-sub-btn ${activeSubSide === tab.id ? `active ${tab.id}` : ''}`}
+                onClick={() => handleSubToggle(tab.id)}
+                style={{ flex: 1 }}
+              >
+                <Icon size={16} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+          {/* Animated underline */}
+          <motion.div
+            className={`hobbies-sub-indicator ${activeSubSide}`}
+            style={{ width: `${100 / availableTabs.length}%` }}
+            animate={{ x: `${(activeTabIndex >= 0 ? activeTabIndex : 0) * 100}%` }}
+            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+          />
+        </motion.div>
+      )}
 
       {/* Animated sub-content */}
       <AnimatePresence mode="wait" custom={direction}>
-        {subSide === 'gears' && (
+        {activeSubSide === 'gears' && (
           <motion.div
             key="gears"
             custom={direction}
@@ -308,7 +319,7 @@ export default function HobbiesSide({
           </motion.div>
         )}
 
-        {subSide === 'movies' && (
+        {activeSubSide === 'movies' && (
           <motion.div
             key="movies"
             custom={direction}
@@ -430,7 +441,7 @@ export default function HobbiesSide({
           </motion.div>
         )}
 
-        {subSide === 'games' && (
+        {activeSubSide === 'games' && (
           <motion.div
             key="games"
             custom={direction}

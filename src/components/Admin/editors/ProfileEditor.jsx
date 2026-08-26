@@ -181,55 +181,76 @@ export default function ProfileEditor({ data, setData, token }) {
               type="toggle"
             />
             <AdminField
-              label="Story Games"
+              label="Games Tab (Select Bar)"
+              value={getVisibility('hobbies.gamesTab', true)}
+              onChange={(v) => update('visibility.hobbies.gamesTab', v)}
+              type="toggle"
+              placeholder="Show or hide Games in Hobbies tab bar"
+            />
+            <AdminField
+              label="Movies & Series Tab (Select Bar)"
+              value={getVisibility('hobbies.moviesTab', true)}
+              onChange={(v) => update('visibility.hobbies.moviesTab', v)}
+              type="toggle"
+              placeholder="Show or hide Movies & Series in Hobbies tab bar"
+            />
+            <AdminField
+              label="Gears Tab (Select Bar)"
+              value={getVisibility('hobbies.gearsTab', true)}
+              onChange={(v) => update('visibility.hobbies.gearsTab', v)}
+              type="toggle"
+              placeholder="Show or hide Gears in Hobbies tab bar"
+            />
+            <AdminField
+              label="Story Games Section"
               value={getVisibility('hobbies.storyGames', true)}
               onChange={(v) => update('visibility.hobbies.storyGames', v)}
               type="toggle"
             />
             <AdminField
-              label="Currently Playing (Games)"
+              label="Currently Playing Section (Games)"
               value={getVisibility('hobbies.currentlyPlaying', true)}
               onChange={(v) => update('visibility.hobbies.currentlyPlaying', v)}
               type="toggle"
             />
             <AdminField
-              label="Game Backlog"
+              label="Game Backlog Section"
               value={getVisibility('hobbies.backlog', true)}
               onChange={(v) => update('visibility.hobbies.backlog', v)}
               type="toggle"
             />
             <AdminField
-              label="Gaming Philosophy"
+              label="Gaming Philosophy Section"
               value={getVisibility('hobbies.philosophy', true)}
               onChange={(v) => update('visibility.hobbies.philosophy', v)}
               type="toggle"
             />
             <AdminField
-              label="Favorite Movies & Series"
+              label="Favorite Movies & Series Section"
               value={getVisibility('hobbies.moviesList', true)}
               onChange={(v) => update('visibility.hobbies.moviesList', v)}
               type="toggle"
             />
             <AdminField
-              label="Currently Watching (Movies)"
+              label="Currently Watching Section (Movies)"
               value={getVisibility('hobbies.moviesWatching', true)}
               onChange={(v) => update('visibility.hobbies.moviesWatching', v)}
               type="toggle"
             />
             <AdminField
-              label="Movies Watchlist Backlog"
+              label="Movies Watchlist Backlog Section"
               value={getVisibility('hobbies.moviesBacklog', true)}
               onChange={(v) => update('visibility.hobbies.moviesBacklog', v)}
               type="toggle"
             />
             <AdminField
-              label="PC Hardware Specs"
+              label="PC Hardware Specs Section"
               value={getVisibility('hobbies.specs', true)}
               onChange={(v) => update('visibility.hobbies.specs', v)}
               type="toggle"
             />
             <AdminField
-              label="Battlestation Peripherals & Gear"
+              label="Battlestation Peripherals & Gear Section"
               value={getVisibility('hobbies.setup', true)}
               onChange={(v) => update('visibility.hobbies.setup', v)}
               type="toggle"
