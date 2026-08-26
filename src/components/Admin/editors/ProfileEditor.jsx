@@ -63,6 +63,7 @@ const VISIBILITY_GROUPS = [
           { key: 'dev.name', label: 'Display Name (Aqil)', desc: 'Greeting, name and developer title' },
           { key: 'dev.avatar', label: 'Avatar & Status Pill', desc: 'Profile photo and online status indicator' },
           { key: 'dev.bio', label: 'Developer Bio', desc: 'About summary paragraph' },
+          { key: 'dev.socials', label: 'Developer Social Links (GitHub, LinkedIn, Email, Instagram)', desc: 'Social icon buttons in Developer hero' },
           { key: 'dev.terminal', label: 'Interactive Terminal', desc: 'Terminal window widget' },
         ],
       },
@@ -150,6 +151,7 @@ const VISIBILITY_GROUPS = [
           { key: 'diary.name', label: 'Author Name & Tagline', desc: 'Journalist display name and subtitle' },
           { key: 'diary.avatar', label: 'Diary Avatar', desc: 'Profile photo' },
           { key: 'diary.bio', label: 'Diary Bio & Stats Row', desc: 'Journal overview and counter pills' },
+          { key: 'diary.socials', label: 'Diary Social Links (GitHub, LinkedIn, Email, Instagram)', desc: 'Social icon buttons in Diary hero' },
         ],
       },
       {
@@ -182,6 +184,27 @@ export default function ProfileEditor({ data, setData, token }) {
       cur = cur[k];
     }
     return cur !== false;
+  };
+
+  const getSocialUrl = (section, platform) => {
+    const socials = data[section]?.socials || [];
+    const item = socials.find((s) => s.platform.toLowerCase() === platform.toLowerCase());
+    return item ? item.url : '';
+  };
+
+  const updateSocialUrl = (section, platform, icon, url) => {
+    let socials = [...(data[section]?.socials || [])];
+    const idx = socials.findIndex((s) => s.platform.toLowerCase() === platform.toLowerCase());
+    if (idx >= 0) {
+      if (!url.trim()) {
+        socials.splice(idx, 1);
+      } else {
+        socials[idx] = { ...socials[idx], url, icon };
+      }
+    } else if (url.trim()) {
+      socials.push({ platform, url, icon });
+    }
+    update(`${section}.socials`, socials);
   };
 
   // Filter groups based on active category tab & search query
@@ -337,7 +360,7 @@ export default function ProfileEditor({ data, setData, token }) {
       {/* Dev Profile */}
       <div className="admin-form-group">
         <div className="admin-form-group-title">
-          <Code2 size={16} /> Developer Profile
+          <Code2 size={16} /> Developer Profile & Identity
         </div>
         <div className="admin-field-grid">
           <AdminField label="Name" value={data.dev?.name} onChange={(v) => update('dev.name', v)} />
@@ -346,6 +369,10 @@ export default function ProfileEditor({ data, setData, token }) {
           <AdminField label="Avatar" value={data.dev?.avatar} onChange={(v) => update('dev.avatar', v)} type="image" token={token} fullWidth />
           <AdminField label="Title" value={data.dev?.title} onChange={(v) => update('dev.title', v)} fullWidth />
           <AdminField label="Bio" value={data.dev?.bio} onChange={(v) => update('dev.bio', v)} type="textarea" fullWidth />
+          <AdminField label="GitHub Profile URL" value={getSocialUrl('dev', 'GitHub')} onChange={(v) => updateSocialUrl('dev', 'GitHub', 'Github', v)} type="url" placeholder="https://github.com/..." />
+          <AdminField label="LinkedIn Profile URL" value={getSocialUrl('dev', 'LinkedIn')} onChange={(v) => updateSocialUrl('dev', 'LinkedIn', 'Linkedin', v)} type="url" placeholder="https://linkedin.com/in/..." />
+          <AdminField label="Email Address / Mailto" value={getSocialUrl('dev', 'Email')} onChange={(v) => updateSocialUrl('dev', 'Email', 'Mail', v)} type="url" placeholder="mailto:you@example.com" />
+          <AdminField label="Instagram Profile URL" value={getSocialUrl('dev', 'Instagram')} onChange={(v) => updateSocialUrl('dev', 'Instagram', 'Instagram', v)} type="url" placeholder="https://instagram.com/..." />
         </div>
       </div>
 
@@ -367,13 +394,17 @@ export default function ProfileEditor({ data, setData, token }) {
       {/* Diary Profile */}
       <div className="admin-form-group">
         <div className="admin-form-group-title">
-          <BookHeart size={16} /> Diary Profile
+          <BookHeart size={16} /> Diary Profile & Identity
         </div>
         <div className="admin-field-grid">
           <AdminField label="Name" value={data.diary?.name} onChange={(v) => update('diary.name', v)} />
           <AdminField label="Tagline" value={data.diary?.tagline} onChange={(v) => update('diary.tagline', v)} />
           <AdminField label="Avatar" value={data.diary?.avatar} onChange={(v) => update('diary.avatar', v)} type="image" token={token} fullWidth />
           <AdminField label="Bio" value={data.diary?.bio} onChange={(v) => update('diary.bio', v)} type="textarea" fullWidth />
+          <AdminField label="GitHub Profile URL" value={getSocialUrl('diary', 'GitHub')} onChange={(v) => updateSocialUrl('diary', 'GitHub', 'Github', v)} type="url" placeholder="https://github.com/..." />
+          <AdminField label="LinkedIn Profile URL" value={getSocialUrl('diary', 'LinkedIn')} onChange={(v) => updateSocialUrl('diary', 'LinkedIn', 'Linkedin', v)} type="url" placeholder="https://linkedin.com/in/..." />
+          <AdminField label="Email Address / Mailto" value={getSocialUrl('diary', 'Email')} onChange={(v) => updateSocialUrl('diary', 'Email', 'Mail', v)} type="url" placeholder="mailto:you@example.com" />
+          <AdminField label="Instagram Profile URL" value={getSocialUrl('diary', 'Instagram')} onChange={(v) => updateSocialUrl('diary', 'Instagram', 'Instagram', v)} type="url" placeholder="https://instagram.com/..." />
           <AdminField label="Pinned Quote" value={data.diary?.pinnedQuote} onChange={(v) => update('diary.pinnedQuote', v)} type="textarea" fullWidth />
         </div>
       </div>

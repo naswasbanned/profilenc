@@ -10,6 +10,11 @@ import {
   Eye,
   X,
   Play,
+  Github,
+  Linkedin,
+  Mail,
+  Instagram,
+  Globe,
 } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './DiarySide.css';
@@ -25,6 +30,14 @@ const containerVariants = {
 const itemVariants = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+};
+
+// Social icon mapping
+const socialIconMap = {
+  Github: <Github size={18} />,
+  Linkedin: <Linkedin size={18} />,
+  Mail: <Mail size={18} />,
+  Instagram: <Instagram size={18} />,
 };
 
 // Mood → emoji + color mapping
@@ -248,6 +261,23 @@ export default function DiarySide({ profile, visibility = null, entries }) {
               )}
               {visibility?.bio !== false && profile.bio && (
                 <p className="diary-bio">{profile.bio}</p>
+              )}
+              {visibility?.socials !== false && profile.socials && profile.socials.length > 0 && (
+                <div className="diary-socials">
+                  {profile.socials.map((social) => (
+                    <a
+                      key={social.platform}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="diary-social-link"
+                      aria-label={social.platform}
+                      title={social.platform}
+                    >
+                      {socialIconMap[social.icon] || socialIconMap[social.platform] || <Globe size={18} />}
+                    </a>
+                  ))}
+                </div>
               )}
               {visibility?.bio !== false && (
                 <div className="diary-stats-row">

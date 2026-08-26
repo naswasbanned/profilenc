@@ -9,7 +9,8 @@
     "socials": [
       { "platform": "GitHub", "url": "#", "icon": "Github" },
       { "platform": "LinkedIn", "url": "#", "icon": "Linkedin" },
-      { "platform": "Email", "url": "#", "icon": "Mail" }
+      { "platform": "Email", "url": "#", "icon": "Mail" },
+      { "platform": "Instagram", "url": "#", "icon": "Instagram" }
     ],
     "terminal": {
       "title": "aqil@portfolio:~",
@@ -38,6 +39,12 @@
     "name": "AQIL",
     "tagline": "Broadcasts",
     "bio": "Thoughts, updates, and random musings from my corner of the internet. Like a tiny window into what's going on in my world.",
+    "socials": [
+      { "platform": "GitHub", "url": "#", "icon": "Github" },
+      { "platform": "LinkedIn", "url": "#", "icon": "Linkedin" },
+      { "platform": "Email", "url": "#", "icon": "Mail" },
+      { "platform": "Instagram", "url": "#", "icon": "Instagram" }
+    ],
     "pinnedQuote": "\"Write it down. Even if no one reads it, you'll remember why it mattered.\""
   },
   "footer": {

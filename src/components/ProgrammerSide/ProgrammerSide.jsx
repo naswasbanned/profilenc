@@ -6,6 +6,7 @@ import {
   Github,
   Linkedin,
   Mail,
+  Instagram,
   ExternalLink,
   Star,
   Coffee,
@@ -105,6 +106,7 @@ const socialIconMap = {
   Github: <Github size={20} />,
   Linkedin: <Linkedin size={20} />,
   Mail: <Mail size={20} />,
+  Instagram: <Instagram size={20} />,
 };
 
 // Stacked Image Deck Component (looks like a book / stacked photo deck)
@@ -308,8 +310,16 @@ export default function ProgrammerSide({ profile, contact, visibility = null, sk
               {visibility?.socials !== false && profile.socials && profile.socials.length > 0 && (
                 <motion.div className="dev-socials" variants={itemVariants}>
                   {profile.socials.map((social) => (
-                    <a key={social.platform} href={social.url} className="dev-social-link" aria-label={social.platform}>
-                      {socialIconMap[social.icon] || <Globe size={20} />}
+                    <a
+                      key={social.platform}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="dev-social-link"
+                      aria-label={social.platform}
+                      title={social.platform}
+                    >
+                      {socialIconMap[social.icon] || socialIconMap[social.platform] || <Globe size={20} />}
                     </a>
                   ))}
                 </motion.div>
