@@ -8,9 +8,17 @@ const tabs = [
   { id: 'diary', label: 'Diary', icon: BookHeart },
 ];
 
-export default function SideToggle({ activeSide, onToggle }) {
+export default function SideToggle({ activeSide, onToggle, sidesVisibility = null }) {
   // Normalize legacy 'cs' value to 'hobbies'
   const active = activeSide === 'cs' ? 'hobbies' : activeSide;
+
+  const visibleTabs = tabs.filter((tab) => {
+    if (!sidesVisibility) return true;
+    return sidesVisibility[tab.id] !== false;
+  });
+
+  // If only 1 or 0 sides are visible, hide top switcher bar
+  if (visibleTabs.length <= 1) return null;
 
   return (
     <motion.div
@@ -19,7 +27,7 @@ export default function SideToggle({ activeSide, onToggle }) {
       animate={{ x: '-50%', y: 0, opacity: 1 }}
       transition={{ delay: 0.5, type: 'spring', stiffness: 120 }}
     >
-      {tabs.map((tab) => {
+      {visibleTabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = active === tab.id;
         return (

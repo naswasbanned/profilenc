@@ -41,6 +41,28 @@ export default function AdminField({
     );
   }
 
+  // Toggle switch
+  if (type === 'toggle') {
+    const isChecked = Boolean(value);
+    return (
+      <div className={`${cls} admin-field-toggle-wrapper`}>
+        <label className="admin-toggle-label">
+          <span className="admin-field-label" style={{ marginBottom: 0 }}>{label}</span>
+          <button
+            type="button"
+            className={`admin-toggle-btn ${isChecked ? 'active' : ''}`}
+            onClick={() => onChange(!isChecked)}
+            role="switch"
+            aria-checked={isChecked}
+          >
+            <span className="admin-toggle-slider" />
+          </button>
+        </label>
+        {placeholder && <span className="admin-toggle-desc">{placeholder}</span>}
+      </div>
+    );
+  }
+
   // Tags (array of strings)
   if (type === 'tags') {
     const tags = Array.isArray(value) ? value : [];

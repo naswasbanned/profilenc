@@ -82,6 +82,7 @@ const tabOrder = { games: 0, movies: 1, gears: 2 };
 
 export default function HobbiesSide({
   profile,
+  visibility = null,
   specs,
   setup,
   storyGames,
@@ -103,8 +104,6 @@ export default function HobbiesSide({
 
   // ⚠️ CRITICAL: Gate on ALL data props, not just profile.
   // Framer Motion's containerVariants (staggerChildren) fires once on mount.
-  // If any section data is still null, its <motion.section> won't exist in the DOM,
-  // and when the data arrives later the animation has already completed → sections stay invisible.
   // FIX: Block the entire animated tree until every data dependency is present.
   const isReady =
     profile &&
@@ -128,6 +127,15 @@ export default function HobbiesSide({
     );
   }
 
+  // Filter out hidden items
+  const activeSpecs = (specs || []).filter((s) => !s.hidden);
+  const activeSetup = (setup || []).filter((s) => !s.hidden);
+  const activeStoryGames = (storyGames || []).filter((g) => !g.hidden);
+  const activeCurrentlyPlaying = (currentlyPlaying || []).filter((g) => !g.hidden);
+  const activePhilosophy = (philosophy || []).filter((p) => !p.hidden);
+  const activeMovies = (movies || []).filter((m) => !m.hidden);
+  const activeMoviesWatching = (moviesWatching || []).filter((m) => !m.hidden);
+
   return (
     <motion.div
       key="hobbies-loaded"
@@ -142,45 +150,61 @@ export default function HobbiesSide({
       <div className="hobbies-bg-accent-glow" />
 
       {/* Hero Section */}
-      <motion.section className="hobbies-hero" variants={itemVariants}>
-        <div className="hobbies-hero-content">
-          <div className="hobbies-avatar-wrapper">
-            <div className="hobbies-avatar-placeholder">
-              <OptimizedImage src={profile.avatar} alt="Profile" className="hobbies-avatar-img" width={160} height={160} />
-            </div>
-            <div className="hobbies-rank-badge">
-              <Gamepad2 size={14} />
-              <span>{profile.rankBadge}</span>
-            </div>
-          </div>
-          <div className="hobbies-hero-text">
-            <motion.div className="hobbies-tag-line" variants={itemVariants}>
-              <Sparkles size={14} />
-              <span>{profile.tagline}</span>
-            </motion.div>
-            <motion.h1 className="hobbies-gamertag" variants={itemVariants}>
-              {profile.gamertag}
-            </motion.h1>
-            <motion.p className="hobbies-role" variants={itemVariants}>
-              {profile.role}
-            </motion.p>
-            <motion.p className="hobbies-bio" variants={itemVariants}>
-              {profile.bio}
-            </motion.p>
-            <motion.div className="hobbies-quick-stats" variants={itemVariants}>
-              {profile.quickStats?.map((qs) => (
-                <div key={qs.label} className="hobbies-quick-stat">
-                  {iconMap[qs.icon] || <Gamepad2 size={18} />}
-                  <div>
-                    <span className="hobbies-qs-value">{qs.value}</span>
-                    <span className="hobbies-qs-label">{qs.label}</span>
-                  </div>
+      {visibility?.hero !== false && (
+        <motion.section className="hobbies-hero" variants={itemVariants}>
+          <div className="hobbies-hero-content">
+            {visibility?.avatar !== false && profile.avatar && (
+              <div className="hobbies-avatar-wrapper">
+                <div className="hobbies-avatar-placeholder">
+                  <OptimizedImage src={profile.avatar} alt="Profile" className="hobbies-avatar-img" width={160} height={160} />
                 </div>
-              ))}
-            </motion.div>
+                {visibility?.rankBadge !== false && profile.rankBadge && (
+                  <div className="hobbies-rank-badge">
+                    <Gamepad2 size={14} />
+                    <span>{profile.rankBadge}</span>
+                  </div>
+                )}
+              </div>
+            )}
+            <div className="hobbies-hero-text">
+              {visibility?.tagline !== false && profile.tagline && (
+                <motion.div className="hobbies-tag-line" variants={itemVariants}>
+                  <Sparkles size={14} />
+                  <span>{profile.tagline}</span>
+                </motion.div>
+              )}
+              {visibility?.gamertag !== false && profile.gamertag && (
+                <motion.h1 className="hobbies-gamertag" variants={itemVariants}>
+                  {profile.gamertag}
+                </motion.h1>
+              )}
+              {visibility?.role !== false && profile.role && (
+                <motion.p className="hobbies-role" variants={itemVariants}>
+                  {profile.role}
+                </motion.p>
+              )}
+              {visibility?.bio !== false && profile.bio && (
+                <motion.p className="hobbies-bio" variants={itemVariants}>
+                  {profile.bio}
+                </motion.p>
+              )}
+              {visibility?.quickStats !== false && profile.quickStats && profile.quickStats.length > 0 && (
+                <motion.div className="hobbies-quick-stats" variants={itemVariants}>
+                  {profile.quickStats.map((qs) => (
+                    <div key={qs.label} className="hobbies-quick-stat">
+                      {iconMap[qs.icon] || <Gamepad2 size={18} />}
+                      <div>
+                        <span className="hobbies-qs-value">{qs.value}</span>
+                        <span className="hobbies-qs-label">{qs.label}</span>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </div>
           </div>
-        </div>
-      </motion.section>
+        </motion.section>
+      )}
 
       {/* Sub-side toggle: Games vs Movies & Series vs Gears */}
       <motion.div className="hobbies-sub-toggle" variants={itemVariants}>
@@ -225,14 +249,14 @@ export default function HobbiesSide({
             exit="exit"
           >
             {/* PC Rig Specifications Section */}
-            {specs && (
+            {visibility?.specs !== false && activeSpecs.length > 0 && (
               <section className="hobbies-section">
                 <h2 className="hobbies-section-title gears-title">
                   <Cpu size={24} />
                   <span>PC Hardware Specifications</span>
                 </h2>
                 <div className="hobbies-specs-grid">
-                  {specs.map((spec, i) => (
+                  {activeSpecs.map((spec, i) => (
                     <motion.div
                       key={i}
                       className="hobbies-spec-card"
@@ -253,14 +277,14 @@ export default function HobbiesSide({
             )}
 
             {/* Peripherals & Gears Section */}
-            {setup && (
+            {visibility?.setup !== false && activeSetup.length > 0 && (
               <section className="hobbies-section">
                 <h2 className="hobbies-section-title gears-title">
                   <Monitor size={24} />
                   <span>Peripherals & Battlestation Gears</span>
                 </h2>
                 <div className="hobbies-setup-grid">
-                  {setup.map((gear, i) => (
+                  {activeSetup.map((gear, i) => (
                     <motion.div
                       key={i}
                       className="hobbies-setup-card"
@@ -294,14 +318,14 @@ export default function HobbiesSide({
             exit="exit"
           >
             {/* Favorite Movies & Series */}
-            {movies && (
+            {visibility?.moviesList !== false && activeMovies.length > 0 && (
               <section className="hobbies-section">
                 <h2 className="hobbies-section-title movies-title">
                   <Film size={24} />
                   <span>Favorite Movies & Series</span>
                 </h2>
                 <div className="hobbies-story-games-grid">
-                  {movies.map((movie, i) => (
+                  {activeMovies.map((movie, i) => (
                     <motion.div
                       key={i}
                       className="hobbies-story-card hobbies-movie-card"
@@ -341,14 +365,14 @@ export default function HobbiesSide({
             )}
 
             {/* Currently Watching */}
-            {moviesWatching && (
+            {visibility?.moviesWatching !== false && activeMoviesWatching.length > 0 && (
               <section className="hobbies-section">
                 <h2 className="hobbies-section-title movies-title">
                   <Clock size={24} />
                   <span>Currently Watching</span>
                 </h2>
                 <div className="hobbies-currently-playing">
-                  {moviesWatching.map((item, i) => (
+                  {activeMoviesWatching.map((item, i) => (
                     <motion.div
                       key={i}
                       className="hobbies-playing-card hobbies-watching-card"
@@ -382,7 +406,7 @@ export default function HobbiesSide({
             )}
 
             {/* Movies & Series Watchlist / Backlog */}
-            {moviesBacklog && (
+            {visibility?.moviesBacklog !== false && moviesBacklog && moviesBacklog.length > 0 && (
               <section className="hobbies-section">
                 <h2 className="hobbies-section-title movies-title">
                   <Map size={24} />
@@ -416,14 +440,14 @@ export default function HobbiesSide({
             exit="exit"
           >
             {/* Favorite Story Games */}
-            {storyGames && (
+            {visibility?.storyGames !== false && activeStoryGames.length > 0 && (
               <section className="hobbies-section">
                 <h2 className="hobbies-section-title story-title">
                   <Heart size={24} />
                   <span>Favorite Story Games</span>
                 </h2>
                 <div className="hobbies-story-games-grid">
-                  {storyGames.map((game, i) => (
+                  {activeStoryGames.map((game, i) => (
                     <motion.div
                       key={i}
                       className="hobbies-story-card"
@@ -459,14 +483,14 @@ export default function HobbiesSide({
             )}
 
             {/* Currently Playing */}
-            {currentlyPlaying && (
+            {visibility?.currentlyPlaying !== false && activeCurrentlyPlaying.length > 0 && (
               <section className="hobbies-section">
                 <h2 className="hobbies-section-title story-title">
                   <Clock size={24} />
                   <span>Currently Playing</span>
                 </h2>
                 <div className="hobbies-currently-playing">
-                  {currentlyPlaying.map((game, i) => (
+                  {activeCurrentlyPlaying.map((game, i) => (
                     <motion.div
                       key={i}
                       className="hobbies-playing-card"
@@ -497,7 +521,7 @@ export default function HobbiesSide({
             )}
 
             {/* Backlog */}
-            {backlog && (
+            {visibility?.backlog !== false && backlog && backlog.length > 0 && (
               <section className="hobbies-section">
                 <h2 className="hobbies-section-title story-title">
                   <Map size={24} />
@@ -520,14 +544,14 @@ export default function HobbiesSide({
             )}
 
             {/* Gaming Philosophy */}
-            {philosophy && (
+            {visibility?.philosophy !== false && activePhilosophy.length > 0 && (
               <section className="hobbies-section">
                 <h2 className="hobbies-section-title story-title">
                   <BookOpen size={24} />
                   <span>Gaming Philosophy</span>
                 </h2>
                 <div className="hobbies-philosophy-grid">
-                  {philosophy.map((item, i) => (
+                  {activePhilosophy.map((item, i) => (
                     <div key={i} className="hobbies-philosophy-card">
                       <h4>{item.title}</h4>
                       <p>{item.text}</p>

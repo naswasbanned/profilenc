@@ -56,6 +56,8 @@ export default function MoviesEditor({
               key={i}
               title={movie.title || 'New Entry'}
               subtitle={`${movie.type || 'Movie'} • ★ ${movie.rating || 'N/A'}`}
+              hidden={Boolean(movie.hidden)}
+              onToggleHide={() => updateItem(movies, setMovies, i, 'hidden', !movie.hidden)}
               onDelete={() => deleteItem(movies, setMovies, i)}
             >
               <div className="admin-field-grid">
@@ -87,6 +89,7 @@ export default function MoviesEditor({
                   genre: '',
                   description: '',
                   image: '',
+                  hidden: false,
                 },
               ])
             }
@@ -104,6 +107,8 @@ export default function MoviesEditor({
               key={i}
               title={item.title || 'New Show'}
               subtitle={`${item.currentEpisode || ''} (${item.progress || 0}%)`}
+              hidden={Boolean(item.hidden)}
+              onToggleHide={() => updateItem(moviesWatching, setMoviesWatching, i, 'hidden', !item.hidden)}
               onDelete={() => deleteItem(moviesWatching, setMoviesWatching, i)}
             >
               <div className="admin-field-grid">
@@ -129,6 +134,7 @@ export default function MoviesEditor({
                   progress: 0,
                   genre: '',
                   image: '',
+                  hidden: false,
                 },
               ])
             }

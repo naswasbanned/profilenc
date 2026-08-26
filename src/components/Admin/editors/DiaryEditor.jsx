@@ -52,6 +52,8 @@ export default function DiaryEditor({ entries, setEntries, token }) {
           key={entry.id || i}
           title={entry.content?.slice(0, 50) || 'Empty broadcast'}
           subtitle={entry.date}
+          hidden={Boolean(entry.hidden)}
+          onToggleHide={() => updateItem(i, 'hidden', !entry.hidden)}
           onDelete={() => deleteItem(i)}
           defaultOpen={i === 0 && !entry.content}
         >

@@ -44,6 +44,8 @@ export default function HobbiesEditor({ specs, setSpecs, setup, setSetup, token 
               key={i}
               title={spec.name || 'New Component'}
               subtitle={spec.category}
+              hidden={Boolean(spec.hidden)}
+              onToggleHide={() => updateItem(specs, setSpecs, i, 'hidden', !spec.hidden)}
               onDelete={() => deleteItem(specs, setSpecs, i)}
             >
               <div className="admin-field-grid">
@@ -57,7 +59,7 @@ export default function HobbiesEditor({ specs, setSpecs, setup, setSetup, token 
           <button
             type="button"
             className="admin-add-btn"
-            onClick={() => setSpecs([...specs, { category: '', name: '', detail: '', icon: 'Box' }])}
+            onClick={() => setSpecs([...specs, { category: '', name: '', detail: '', icon: 'Box', hidden: false }])}
           >
             <Plus size={16} /> Add Component
           </button>
@@ -72,6 +74,8 @@ export default function HobbiesEditor({ specs, setSpecs, setup, setSetup, token 
               key={i}
               title={item.item || 'New Gear'}
               subtitle={item.category}
+              hidden={Boolean(item.hidden)}
+              onToggleHide={() => updateItem(setup, setSetup, i, 'hidden', !item.hidden)}
               onDelete={() => deleteItem(setup, setSetup, i)}
             >
               <div className="admin-field-grid">
@@ -85,7 +89,7 @@ export default function HobbiesEditor({ specs, setSpecs, setup, setSetup, token 
           <button
             type="button"
             className="admin-add-btn"
-            onClick={() => setSetup([...setup, { category: '', item: '', detail: '', image: '' }])}
+            onClick={() => setSetup([...setup, { category: '', item: '', detail: '', image: '', hidden: false }])}
           >
             <Plus size={16} /> Add Gear
           </button>

@@ -54,6 +54,8 @@ export default function GamesEditor({
               key={i}
               title={game.title || 'New Game'}
               subtitle={`${game.hours || 0}h — ${game.status || 'N/A'}`}
+              hidden={Boolean(game.hidden)}
+              onToggleHide={() => updateItem(storyGames, setStoryGames, i, 'hidden', !game.hidden)}
               onDelete={() => deleteItem(storyGames, setStoryGames, i)}
             >
               <div className="admin-field-grid">
@@ -70,7 +72,7 @@ export default function GamesEditor({
           <button
             type="button"
             className="admin-add-btn"
-            onClick={() => setStoryGames([...storyGames, { title: '', status: 'In Progress', hours: 0, rating: '', description: '', genre: '', image: '' }])}
+            onClick={() => setStoryGames([...storyGames, { title: '', status: 'In Progress', hours: 0, rating: '', description: '', genre: '', image: '', hidden: false }])}
           >
             <Plus size={16} /> Add Game
           </button>
@@ -85,6 +87,8 @@ export default function GamesEditor({
               key={i}
               title={game.title || 'New Game'}
               subtitle={`${game.progress || 0}%`}
+              hidden={Boolean(game.hidden)}
+              onToggleHide={() => updateItem(currentlyPlaying, setCurrentlyPlaying, i, 'hidden', !game.hidden)}
               onDelete={() => deleteItem(currentlyPlaying, setCurrentlyPlaying, i)}
             >
               <div className="admin-field-grid">
@@ -98,7 +102,7 @@ export default function GamesEditor({
           <button
             type="button"
             className="admin-add-btn"
-            onClick={() => setCurrentlyPlaying([...currentlyPlaying, { title: '', progress: 0, genre: '', image: '' }])}
+            onClick={() => setCurrentlyPlaying([...currentlyPlaying, { title: '', progress: 0, genre: '', image: '', hidden: false }])}
           >
             <Plus size={16} /> Add Game
           </button>
@@ -151,6 +155,8 @@ export default function GamesEditor({
             <AdminCard
               key={i}
               title={item.title || 'New Philosophy'}
+              hidden={Boolean(item.hidden)}
+              onToggleHide={() => updateItem(philosophy, setPhilosophy, i, 'hidden', !item.hidden)}
               onDelete={() => deleteItem(philosophy, setPhilosophy, i)}
             >
               <AdminField label="Title" value={item.title} onChange={(v) => updateItem(philosophy, setPhilosophy, i, 'title', v)} fullWidth />
@@ -160,7 +166,7 @@ export default function GamesEditor({
           <button
             type="button"
             className="admin-add-btn"
-            onClick={() => setPhilosophy([...philosophy, { title: '', text: '' }])}
+            onClick={() => setPhilosophy([...philosophy, { title: '', text: '', hidden: false }])}
           >
             <Plus size={16} /> Add Philosophy
           </button>

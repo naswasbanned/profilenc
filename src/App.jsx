@@ -103,7 +103,11 @@ function App() {
 
   return (
     <div className="app">
-      <SideToggle activeSide={activeSide} onToggle={handleToggle} />
+      <SideToggle
+        activeSide={activeSide}
+        onToggle={handleToggle}
+        sidesVisibility={profile?.visibility?.sides}
+      />
       <TransitionOverlay isActive={transitioning} targetSide={targetSide} />
 
       <AnimatePresence mode="wait">
@@ -118,6 +122,7 @@ function App() {
             <ProgrammerSide
               profile={profile?.dev}
               contact={profile?.contact}
+              visibility={profile?.visibility?.dev}
               skills={skills}
               projects={projects}
               experience={experience}
@@ -136,6 +141,7 @@ function App() {
           >
             <HobbiesSide
               profile={profile?.hobbies}
+              visibility={profile?.visibility?.hobbies}
               specs={specs}
               setup={setup}
               storyGames={storyGames}
@@ -159,6 +165,7 @@ function App() {
           >
             <DiarySide
               profile={profile?.diary}
+              visibility={profile?.visibility?.diary}
               entries={diaryEntries}
             />
           </motion.div>

@@ -180,7 +180,7 @@ function DiaryMediaAttachment({ entry, onOpenModal }) {
   );
 }
 
-export default function DiarySide({ profile, entries }) {
+export default function DiarySide({ profile, visibility = null, entries }) {
   const [selectedMedia, setSelectedMedia] = useState(null);
 
   // Close modal on Escape key press
@@ -212,6 +212,9 @@ export default function DiarySide({ profile, entries }) {
     );
   }
 
+  // Filter hidden entries
+  const activeEntries = (entries || []).filter((e) => !e.hidden);
+
   return (
     <motion.div
       key="diary-loaded"
@@ -225,44 +228,56 @@ export default function DiarySide({ profile, entries }) {
       <div className="diary-bg-glow" />
 
       {/* Hero Section */}
-      <motion.section className="diary-hero" variants={itemVariants}>
-        <div className="diary-hero-content">
-          <div className="diary-avatar-wrapper">
-            <div className="diary-avatar">
-              <OptimizedImage
-                src={profile.avatar}
-                alt="Profile"
-                className="diary-avatar-img"
-                width={120}
-                height={120}
-              />
+      {visibility?.hero !== false && (
+        <motion.section className="diary-hero" variants={itemVariants}>
+          <div className="diary-hero-content">
+            {visibility?.avatar !== false && profile.avatar && (
+              <div className="diary-avatar-wrapper">
+                <div className="diary-avatar">
+                  <OptimizedImage
+                    src={profile.avatar}
+                    alt="Profile"
+                    className="diary-avatar-img"
+                    width={120}
+                    height={120}
+                  />
+                </div>
+              </div>
+            )}
+            <div className="diary-hero-text">
+              {visibility?.name !== false && profile.name && (
+                <h1 className="diary-name">{profile.name}</h1>
+              )}
+              {visibility?.tagline !== false && profile.tagline && (
+                <p className="diary-tagline">
+                  <PenLine size={16} />
+                  <span>{profile.tagline}</span>
+                </p>
+              )}
+              {visibility?.bio !== false && profile.bio && (
+                <p className="diary-bio">{profile.bio}</p>
+              )}
+              {visibility?.bio !== false && (
+                <div className="diary-stats-row">
+                  <div className="diary-stat">
+                    <span className="diary-stat-value">{activeEntries.length}</span>
+                    <span className="diary-stat-label">posts</span>
+                  </div>
+                  <div className="diary-stat">
+                    <span className="diary-stat-value">
+                      {activeEntries.reduce((sum, e) => sum + (e.likes || 0), 0)}
+                    </span>
+                    <span className="diary-stat-label">likes</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-          <div className="diary-hero-text">
-            <h1 className="diary-name">{profile.name}</h1>
-            <p className="diary-tagline">
-              <PenLine size={16} />
-              <span>{profile.tagline}</span>
-            </p>
-            <p className="diary-bio">{profile.bio}</p>
-            <div className="diary-stats-row">
-              <div className="diary-stat">
-                <span className="diary-stat-value">{entries.length}</span>
-                <span className="diary-stat-label">posts</span>
-              </div>
-              <div className="diary-stat">
-                <span className="diary-stat-value">
-                  {entries.reduce((sum, e) => sum + (e.likes || 0), 0)}
-                </span>
-                <span className="diary-stat-label">likes</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.section>
+        </motion.section>
+      )}
 
       {/* Pinned Quote */}
-      {profile.pinnedQuote && (
+      {visibility?.pinnedQuote !== false && profile.pinnedQuote && (
         <motion.section className="diary-section diary-pinned" variants={itemVariants}>
           <div className="diary-pinned-card">
             <Quote size={24} className="diary-quote-icon" />
@@ -276,90 +291,92 @@ export default function DiarySide({ profile, entries }) {
       )}
 
       {/* Diary Feed */}
-      <motion.section className="diary-section" variants={itemVariants}>
-        <h2 className="diary-section-title">
-          <Sparkles size={20} />
-          <span>Recent Broadcasts</span>
-        </h2>
+      {visibility?.broadcasts !== false && activeEntries.length > 0 && (
+        <motion.section className="diary-section" variants={itemVariants}>
+          <h2 className="diary-section-title">
+            <Sparkles size={20} />
+            <span>Recent Broadcasts</span>
+          </h2>
 
-        <div className="diary-feed">
-          {entries.map((entry) => {
-            const mood = moodMap[entry.mood] || { emoji: '📝', color: '#f4a261' };
-            const hasMedia = Boolean(entry.image || entry.video);
+          <div className="diary-feed">
+            {activeEntries.map((entry) => {
+              const mood = moodMap[entry.mood] || { emoji: '📝', color: '#f4a261' };
+              const hasMedia = Boolean(entry.image || entry.video);
 
-            return (
-              <motion.article
-                key={entry.id}
-                className="diary-entry-card"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* Entry Header */}
-                <div className="diary-entry-header">
-                  <div className="diary-entry-avatar-mini">
-                    <OptimizedImage
-                      src={profile.avatar}
-                      alt="Profile"
-                      className="diary-avatar-img-mini"
-                      width={36}
-                      height={36}
+              return (
+                <motion.article
+                  key={entry.id}
+                  className="diary-entry-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {/* Entry Header */}
+                  <div className="diary-entry-header">
+                    <div className="diary-entry-avatar-mini">
+                      <OptimizedImage
+                        src={profile.avatar}
+                        alt="Profile"
+                        className="diary-avatar-img-mini"
+                        width={36}
+                        height={36}
+                      />
+                    </div>
+                    <div className="diary-entry-meta">
+                      <span className="diary-entry-author">{profile.name}</span>
+                      <span className="diary-entry-time">
+                        <Calendar size={12} />
+                        {timeAgo(entry.date)}
+                      </span>
+                    </div>
+                    <div
+                      className="diary-mood-badge"
+                      style={{ '--mood-color': mood.color }}
+                    >
+                      <span>{mood.emoji}</span>
+                      <span className="diary-mood-label">{entry.mood}</span>
+                    </div>
+                  </div>
+
+                  {/* Entry Content */}
+                  <p className="diary-entry-content">{entry.content}</p>
+
+                  {/* Media Attachment (16:9 direct or blurred with View Attachment button) */}
+                  {hasMedia && (
+                    <DiaryMediaAttachment
+                      entry={entry}
+                      onOpenModal={setSelectedMedia}
                     />
-                  </div>
-                  <div className="diary-entry-meta">
-                    <span className="diary-entry-author">{profile.name}</span>
-                    <span className="diary-entry-time">
-                      <Calendar size={12} />
-                      {timeAgo(entry.date)}
-                    </span>
-                  </div>
-                  <div
-                    className="diary-mood-badge"
-                    style={{ '--mood-color': mood.color }}
-                  >
-                    <span>{mood.emoji}</span>
-                    <span className="diary-mood-label">{entry.mood}</span>
-                  </div>
-                </div>
-
-                {/* Entry Content */}
-                <p className="diary-entry-content">{entry.content}</p>
-
-                {/* Media Attachment (16:9 direct or blurred with View Attachment button) */}
-                {hasMedia && (
-                  <DiaryMediaAttachment
-                    entry={entry}
-                    onOpenModal={setSelectedMedia}
-                  />
-                )}
-
-                {/* Entry Footer — social interaction bar */}
-                <div className="diary-entry-footer">
-                  <div className="diary-entry-actions">
-                    <button className="diary-action-btn" type="button" aria-label="Like post">
-                      <Heart size={18} />
-                    </button>
-                    <button className="diary-action-btn" type="button" aria-label="Comment on post">
-                      <MessageCircle size={18} />
-                    </button>
-                    <button className="diary-action-btn" type="button" aria-label="Share post">
-                      <Share2 size={18} />
-                    </button>
-                  </div>
-                  {entry.likes > 0 && (
-                    <span className="diary-likes-count">
-                      {entry.likes} likes
-                    </span>
                   )}
-                </div>
 
-                {/* Date line */}
-                <span className="diary-entry-date">{formatDate(entry.date)}</span>
-              </motion.article>
-            );
-          })}
-        </div>
-      </motion.section>
+                  {/* Entry Footer — social interaction bar */}
+                  <div className="diary-entry-footer">
+                    <div className="diary-entry-actions">
+                      <button className="diary-action-btn" type="button" aria-label="Like post">
+                        <Heart size={18} />
+                      </button>
+                      <button className="diary-action-btn" type="button" aria-label="Comment on post">
+                        <MessageCircle size={18} />
+                      </button>
+                      <button className="diary-action-btn" type="button" aria-label="Share post">
+                        <Share2 size={18} />
+                      </button>
+                    </div>
+                    {entry.likes > 0 && (
+                      <span className="diary-likes-count">
+                        {entry.likes} likes
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Date line */}
+                  <span className="diary-entry-date">{formatDate(entry.date)}</span>
+                </motion.article>
+              );
+            })}
+          </div>
+        </motion.section>
+      )}
 
       {/* Lightbox / Zoomed Singular Modal */}
       <AnimatePresence>

@@ -60,6 +60,8 @@ export default function DevEditor({
               key={i}
               title={skill.name || 'New Skill'}
               subtitle={skill.tier}
+              hidden={Boolean(skill.hidden)}
+              onToggleHide={() => updateItem(skills, setSkills, i, 'hidden', !skill.hidden)}
               onDelete={() => deleteItem(skills, setSkills, i)}
             >
               <div className="admin-field-grid">
@@ -75,7 +77,7 @@ export default function DevEditor({
           <button
             type="button"
             className="admin-add-btn"
-            onClick={() => setSkills([...skills, { name: '', tier: 'Beginner', category: 'Frontend', icon: '', color: '#ffffff', experience: '' }])}
+            onClick={() => setSkills([...skills, { name: '', tier: 'Beginner', category: 'Frontend', icon: '', color: '#ffffff', experience: '', hidden: false }])}
           >
             <Plus size={16} /> Add Skill
           </button>
@@ -90,6 +92,8 @@ export default function DevEditor({
               key={i}
               title={project.title || 'New Project'}
               subtitle={`★ ${project.stars || 0}`}
+              hidden={Boolean(project.hidden)}
+              onToggleHide={() => updateItem(projects, setProjects, i, 'hidden', !project.hidden)}
               onDelete={() => deleteItem(projects, setProjects, i)}
             >
               <div className="admin-field-grid">
@@ -104,7 +108,7 @@ export default function DevEditor({
           <button
             type="button"
             className="admin-add-btn"
-            onClick={() => setProjects([...projects, { title: '', description: '', tech: [], stars: 0, image: '' }])}
+            onClick={() => setProjects([...projects, { title: '', description: '', tech: [], stars: 0, image: '', hidden: false }])}
           >
             <Plus size={16} /> Add Project
           </button>
@@ -119,6 +123,8 @@ export default function DevEditor({
               key={i}
               title={exp.role || 'New Role'}
               subtitle={exp.company}
+              hidden={Boolean(exp.hidden)}
+              onToggleHide={() => updateItem(experience, setExperience, i, 'hidden', !exp.hidden)}
               onDelete={() => deleteItem(experience, setExperience, i)}
             >
               <div className="admin-field-grid">
@@ -133,7 +139,7 @@ export default function DevEditor({
           <button
             type="button"
             className="admin-add-btn"
-            onClick={() => setExperience([...experience, { role: '', company: '', period: '', description: '', images: [] }])}
+            onClick={() => setExperience([...experience, { role: '', company: '', period: '', description: '', images: [], hidden: false }])}
           >
             <Plus size={16} /> Add Experience
           </button>
@@ -148,6 +154,8 @@ export default function DevEditor({
               key={i}
               title={service.title || 'New Service'}
               subtitle={`${service.startingPrice || 'Price TBD'} • ${service.status || 'Available'}`}
+              hidden={Boolean(service.hidden)}
+              onToggleHide={() => updateItem(services, setServices, i, 'hidden', !service.hidden)}
               onDelete={() => deleteItem(services, setServices, i)}
             >
               <div className="admin-field-grid">

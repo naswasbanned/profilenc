@@ -215,14 +215,12 @@ function StackedImageDeck({ images, title, onOpenModal }) {
   );
 }
 
-export default function ProgrammerSide({ profile, contact, skills, projects, experience, services }) {
+export default function ProgrammerSide({ profile, contact, visibility = null, skills, projects, experience, services }) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [modalData, setModalData] = useState(null);
 
   // ⚠️ CRITICAL: Gate on ALL data props, not just profile.
   // Framer Motion's containerVariants (staggerChildren) fires once on mount.
-  // If any section data is still null, its <motion.section> won't exist in the DOM,
-  // and when the data arrives later the animation has already completed → sections stay invisible.
   // FIX: Block the entire animated tree until every data dependency is present.
   const isReady = profile && skills && projects && experience && services;
   if (!isReady) {
@@ -234,12 +232,18 @@ export default function ProgrammerSide({ profile, contact, skills, projects, exp
     );
   }
 
+  // Filter out hidden items
+  const activeSkills = (skills || []).filter((s) => !s.hidden);
+  const activeProjects = (projects || []).filter((p) => !p.hidden);
+  const activeExperience = (experience || []).filter((e) => !e.hidden);
+  const activeServices = (services || []).filter((s) => !s.hidden);
+
   // Extract categories for tech stack filter
-  const categories = ['All', ...new Set((skills || []).map((s) => s.category).filter(Boolean))];
+  const categories = ['All', ...new Set(activeSkills.map((s) => s.category).filter(Boolean))];
   const filteredSkills =
     selectedCategory === 'All'
-      ? skills || []
-      : (skills || []).filter((s) => s.category === selectedCategory);
+      ? activeSkills
+      : activeSkills.filter((s) => s.category === selectedCategory);
 
   const handleOpenModal = (images, index, title) => {
     setModalData({ images, index, title });
@@ -262,71 +266,87 @@ export default function ProgrammerSide({ profile, contact, skills, projects, exp
       <div className="dev-bg-glow" />
 
       {/* Hero Section */}
-      <motion.section className="dev-hero" variants={itemVariants}>
-        <div className="dev-hero-content">
-          <div className="dev-avatar-wrapper">
-            <div className="dev-avatar-placeholder">
-              <OptimizedImage src={profile.avatar} alt="Profile" className="dev-avatar-img" width={160} height={160} />
-            </div>
-            <div className="dev-status-indicator">
-              <span className="dev-status-dot" />
-              <span>{profile.status}</span>
-            </div>
-          </div>
-          <div className="dev-hero-text">
-            <motion.p className="dev-greeting" variants={itemVariants}>
-              <span className="dev-comment">{profile.greeting}</span>
-            </motion.p>
-            <motion.h1 className="dev-name" variants={itemVariants}>
-              <span className="dev-bracket">{'<'}</span>
-              {profile.name}
-              <span className="dev-bracket">{' />'}</span>
-            </motion.h1>
-            <motion.p className="dev-title" variants={itemVariants}>
-              {profile.title}
-            </motion.p>
-            <motion.p className="dev-bio" variants={itemVariants}>
-              {profile.bio}
-            </motion.p>
-            <motion.div className="dev-socials" variants={itemVariants}>
-              {profile.socials?.map((social) => (
-                <a key={social.platform} href={social.url} className="dev-social-link" aria-label={social.platform}>
-                  {socialIconMap[social.icon] || <Globe size={20} />}
-                </a>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-        {profile.terminal && (
-          <motion.div className="dev-terminal-widget" variants={itemVariants}>
-            <div className="terminal-header">
-              <span className="terminal-dot red" />
-              <span className="terminal-dot yellow" />
-              <span className="terminal-dot green" />
-              <span className="terminal-title">{profile.terminal.title}</span>
-            </div>
-            <div className="terminal-body">
-              {profile.terminal.lines.map((line, i) => (
-                <div key={i}>
-                  {line.command && (
-                    <p>
-                      <span className="terminal-prompt">$</span> {line.command}
-                    </p>
-                  )}
-                  <p className="terminal-output">{line.output}</p>
+      {visibility?.hero !== false && (
+        <motion.section className="dev-hero" variants={itemVariants}>
+          <div className="dev-hero-content">
+            {visibility?.avatar !== false && profile.avatar && (
+              <div className="dev-avatar-wrapper">
+                <div className="dev-avatar-placeholder">
+                  <OptimizedImage src={profile.avatar} alt="Profile" className="dev-avatar-img" width={160} height={160} />
                 </div>
-              ))}
-              <p>
-                <span className="terminal-prompt">$</span>
-                <span className="terminal-cursor">_</span>
-              </p>
+                {visibility?.status !== false && profile.status && (
+                  <div className="dev-status-indicator">
+                    <span className="dev-status-dot" />
+                    <span>{profile.status}</span>
+                  </div>
+                )}
+              </div>
+            )}
+            <div className="dev-hero-text">
+              {visibility?.greeting !== false && profile.greeting && (
+                <motion.p className="dev-greeting" variants={itemVariants}>
+                  <span className="dev-comment">{profile.greeting}</span>
+                </motion.p>
+              )}
+              {visibility?.name !== false && profile.name && (
+                <motion.h1 className="dev-name" variants={itemVariants}>
+                  <span className="dev-bracket">{'<'}</span>
+                  {profile.name}
+                  <span className="dev-bracket">{' />'}</span>
+                </motion.h1>
+              )}
+              {visibility?.title !== false && profile.title && (
+                <motion.p className="dev-title" variants={itemVariants}>
+                  {profile.title}
+                </motion.p>
+              )}
+              {visibility?.bio !== false && profile.bio && (
+                <motion.p className="dev-bio" variants={itemVariants}>
+                  {profile.bio}
+                </motion.p>
+              )}
+              {visibility?.socials !== false && profile.socials && profile.socials.length > 0 && (
+                <motion.div className="dev-socials" variants={itemVariants}>
+                  {profile.socials.map((social) => (
+                    <a key={social.platform} href={social.url} className="dev-social-link" aria-label={social.platform}>
+                      {socialIconMap[social.icon] || <Globe size={20} />}
+                    </a>
+                  ))}
+                </motion.div>
+              )}
             </div>
-          </motion.div>
-        )}
-      </motion.section>
+          </div>
+          {visibility?.terminal !== false && profile.terminal && (
+            <motion.div className="dev-terminal-widget" variants={itemVariants}>
+              <div className="terminal-header">
+                <span className="terminal-dot red" />
+                <span className="terminal-dot yellow" />
+                <span className="terminal-dot green" />
+                <span className="terminal-title">{profile.terminal.title}</span>
+              </div>
+              <div className="terminal-body">
+                {profile.terminal.lines?.map((line, i) => (
+                  <div key={i}>
+                    {line.command && (
+                      <p>
+                        <span className="terminal-prompt">$</span> {line.command}
+                      </p>
+                    )}
+                    <p className="terminal-output">{line.output}</p>
+                  </div>
+                ))}
+                <p>
+                  <span className="terminal-prompt">$</span>
+                  <span className="terminal-cursor">_</span>
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </motion.section>
+      )}
 
       {/* Tech Stack Section with Brand Logos & Enhanced Layout */}
-      {skills && (
+      {visibility?.skills !== false && activeSkills.length > 0 && (
         <motion.section className="dev-section" variants={itemVariants}>
           <div className="dev-section-header">
             <h2 className="dev-section-title">
@@ -393,14 +413,14 @@ export default function ProgrammerSide({ profile, contact, skills, projects, exp
       )}
 
       {/* Projects Section */}
-      {projects && (
+      {visibility?.projects !== false && activeProjects.length > 0 && (
         <motion.section className="dev-section" variants={itemVariants}>
           <h2 className="dev-section-title">
             <GitBranch size={24} />
             <span>Featured Projects</span>
           </h2>
           <div className="dev-projects-grid">
-            {projects.map((project) => (
+            {activeProjects.map((project) => (
               <motion.div
                 key={project.title}
                 className="dev-project-card"
@@ -439,14 +459,14 @@ export default function ProgrammerSide({ profile, contact, skills, projects, exp
       )}
 
       {/* Experience Section with Stacked Image Book Decks */}
-      {experience && (
+      {visibility?.experience !== false && activeExperience.length > 0 && (
         <motion.section className="dev-section" variants={itemVariants}>
           <h2 className="dev-section-title">
             <Coffee size={24} />
             <span>Experience & Career Journey</span>
           </h2>
           <div className="dev-timeline">
-            {experience.map((exp, i) => (
+            {activeExperience.map((exp, i) => (
               <motion.div
                 key={i}
                 className="dev-timeline-item"
@@ -479,7 +499,7 @@ export default function ProgrammerSide({ profile, contact, skills, projects, exp
       )}
 
       {/* Services & Commissions Section */}
-      {services && (
+      {visibility?.services !== false && activeServices.length > 0 && (
         <motion.section className="dev-section" variants={itemVariants}>
           <div className="dev-section-header">
             <h2 className="dev-section-title">
@@ -493,7 +513,7 @@ export default function ProgrammerSide({ profile, contact, skills, projects, exp
           </div>
 
           <div className="dev-services-grid">
-            {services.map((service, idx) => {
+            {activeServices.map((service, idx) => {
               const serviceImg = service.image || (service.images && service.images[0]);
               const allImages = service.images?.length ? service.images : (service.image ? [service.image] : []);
               return (
@@ -610,7 +630,7 @@ export default function ProgrammerSide({ profile, contact, skills, projects, exp
       )}
 
       {/* Contact Section */}
-      {contact && (
+      {visibility?.contact !== false && contact && (
         <motion.section className="dev-section dev-contact" variants={itemVariants}>
           <h2 className="dev-section-title">
             <Mail size={24} />

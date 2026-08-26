@@ -1,19 +1,23 @@
 import { useState } from 'react';
-import { ChevronDown, GripVertical, Trash2 } from 'lucide-react';
+import { ChevronDown, GripVertical, Trash2, Eye, EyeOff } from 'lucide-react';
 
 /**
- * AdminCard — Collapsible CRUD card wrapper.
+ * AdminCard — Collapsible CRUD card wrapper with visibility toggle.
  *
  * Props:
- *   title       — card header title
- *   subtitle    — optional subtext
- *   onDelete    — delete handler (shows delete button if provided)
- *   defaultOpen — start expanded
- *   children    — form content
+ *   title        — card header title
+ *   subtitle     — optional subtext
+ *   hidden       — boolean, whether the item is hidden/draft
+ *   onToggleHide — () => void, visibility toggle handler
+ *   onDelete     — delete handler (shows delete button if provided)
+ *   defaultOpen  — start expanded
+ *   children     — form content
  */
 export default function AdminCard({
   title,
   subtitle,
+  hidden = false,
+  onToggleHide,
   onDelete,
   defaultOpen = false,
   children,
@@ -21,14 +25,28 @@ export default function AdminCard({
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="admin-card">
+    <div className={`admin-card ${hidden ? 'is-hidden' : ''}`}>
       <div className="admin-card-header" onClick={() => setIsOpen((v) => !v)}>
         <div className="admin-card-header-left">
           <GripVertical size={14} className="admin-card-drag" />
           <span className="admin-card-title">{title || 'Untitled'}</span>
           {subtitle && <span className="admin-card-subtitle">{subtitle}</span>}
+          {hidden && <span className="admin-draft-badge">Draft / Hidden</span>}
         </div>
         <div className="admin-card-actions">
+          {onToggleHide && (
+            <button
+              type="button"
+              className={`admin-card-action-btn visibility ${hidden ? 'hidden-active' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleHide();
+              }}
+              title={hidden ? 'Hidden (Click to publish)' : 'Visible (Click to hide)'}
+            >
+              {hidden ? <EyeOff size={15} /> : <Eye size={15} />}
+            </button>
+          )}
           {onDelete && (
             <button
               type="button"

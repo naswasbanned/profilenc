@@ -225,6 +225,35 @@
   margin-left: 8px;
 }
 
+.admin-card.is-hidden {
+  border-color: rgba(245, 158, 11, 0.25);
+  background: #0d0d14;
+  opacity: 0.85;
+}
+
+.admin-card.is-hidden:hover {
+  border-color: rgba(245, 158, 11, 0.45);
+}
+
+.admin-card.is-hidden .admin-card-title {
+  color: #a0aec0;
+}
+
+.admin-draft-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
 .admin-card-actions {
   display: flex;
   align-items: center;
@@ -250,6 +279,24 @@
   background: rgba(100, 255, 218, 0.06);
   border-color: #64ffda33;
   color: #64ffda;
+}
+
+.admin-card-action-btn.visibility:hover {
+  background: rgba(100, 255, 218, 0.1);
+  border-color: #64ffda55;
+  color: #64ffda;
+}
+
+.admin-card-action-btn.visibility.hidden-active {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.admin-card-action-btn.visibility.hidden-active:hover {
+  color: #64ffda;
+  background: rgba(100, 255, 218, 0.12);
+  border-color: #64ffda55;
 }
 
 .admin-card-action-btn.delete:hover {
@@ -941,3 +988,80 @@ select.admin-field-input {
 .spin {
   animation: spin 1s linear infinite;
 }
+
+/* === Toggle Switch Field === */
+.admin-field-toggle-wrapper {
+  background: #0e0e16;
+  border: 1px solid #1d1d2e;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-toggle-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  width: 100%;
+}
+
+.admin-toggle-btn {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: #1d1d2e;
+  border: 1px solid #2a2a40;
+  border-radius: 12px;
+  cursor: pointer;
+  padding: 2px;
+  transition: all 0.25s ease;
+  outline: none;
+}
+
+.admin-toggle-btn.active {
+  background: #64ffda;
+  border-color: #64ffda;
+}
+
+.admin-toggle-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #8892b0;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s;
+}
+
+.admin-toggle-btn.active .admin-toggle-slider {
+  transform: translateX(20px);
+  background: #0a0a0f;
+}
+
+.admin-toggle-desc {
+  font-size: 0.68rem;
+  color: #8892b0;
+  margin-top: 2px;
+}
+
+/* Section visibility list inside ProfileEditor */
+.admin-visibility-section {
+  margin-bottom: 16px;
+}
+
+.admin-visibility-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64ffda;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
