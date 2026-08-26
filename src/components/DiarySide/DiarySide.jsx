@@ -164,13 +164,10 @@ function DiaryMediaAttachment({ entry, onOpenModal }) {
           <button
             type="button"
             className="diary-view-attachment-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleOpen();
-            }}
+            aria-label="View attachment in modal"
           >
-            {isVideo ? <Play size={16} /> : <Eye size={16} />}
-            <span>{isVideo ? 'View Video' : 'View Attachment'}</span>
+            <Eye size={16} />
+            <span>{isVideo ? 'Watch Video' : 'View Attachment'}</span>
           </button>
         </div>
       )}
@@ -261,12 +258,6 @@ export default function DiarySide({ profile, visibility = null, entries }) {
                     <span className="diary-stat-value">{activeEntries.length}</span>
                     <span className="diary-stat-label">posts</span>
                   </div>
-                  <div className="diary-stat">
-                    <span className="diary-stat-value">
-                      {activeEntries.reduce((sum, e) => sum + (e.likes || 0), 0)}
-                    </span>
-                    <span className="diary-stat-label">likes</span>
-                  </div>
                 </div>
               )}
             </div>
@@ -299,7 +290,7 @@ export default function DiarySide({ profile, visibility = null, entries }) {
           <div className="diary-feed">
             {activeEntries.map((entry) => {
               const mood = moodMap[entry.mood] || { emoji: '📝', color: '#f4a261' };
-              const hasMedia = Boolean(entry.image || entry.video);
+              const hasMedia = Boolean(entry.image);
 
               return (
                 <motion.article
@@ -348,20 +339,6 @@ export default function DiarySide({ profile, visibility = null, entries }) {
                       onOpenModal={setSelectedMedia}
                     />
                   )}
-
-                  {/* Entry Footer — social interaction bar */}
-                  <div className="diary-entry-footer">
-                    <div className="diary-entry-actions">
-                      <button className="diary-action-btn" type="button" aria-label="Like post">
-                        <Heart size={18} />
-                      </button>
-                    </div>
-                    {entry.likes > 0 && (
-                      <span className="diary-likes-count">
-                        {entry.likes} likes
-                      </span>
-                    )}
-                  </div>
 
                   {/* Date line */}
                   <span className="diary-entry-date">{formatDate(entry.date)}</span>

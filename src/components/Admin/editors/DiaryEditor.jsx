@@ -59,7 +59,6 @@ export default function DiaryEditor({ entries, setEntries, token }) {
         >
           <div className="admin-field-grid">
             <AdminField label="Date" value={entry.date} onChange={(v) => updateItem(i, 'date', v)} type="date" />
-            <AdminField label="Likes" value={entry.likes} onChange={(v) => updateItem(i, 'likes', v)} type="number" />
             <AdminField label="Content" value={entry.content} onChange={(v) => updateItem(i, 'content', v)} type="textarea" fullWidth />
             <AdminField label="Mood" value={entry.mood} onChange={(v) => updateItem(i, 'mood', v)} type="mood" moodMap={moodMap} fullWidth />
             <AdminField label="Image" value={entry.image || ''} onChange={(v) => updateItem(i, 'image', v || null)} type="image" token={token} fullWidth />
