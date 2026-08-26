@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Heart,
-  MessageCircle,
-  Share2,
   Bookmark,
   Quote,
   Calendar,
@@ -329,13 +327,15 @@ export default function DiarySide({ profile, visibility = null, entries }) {
                         {timeAgo(entry.date)}
                       </span>
                     </div>
-                    <div
-                      className="diary-mood-badge"
-                      style={{ '--mood-color': mood.color }}
-                    >
-                      <span>{mood.emoji}</span>
-                      <span className="diary-mood-label">{entry.mood}</span>
-                    </div>
+                    {entry.mood && mood && (
+                      <div
+                        className="diary-mood-badge"
+                        style={{ '--mood-color': mood.color }}
+                      >
+                        <span>{mood.emoji}</span>
+                        <span className="diary-mood-label">{entry.mood}</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Entry Content */}
@@ -354,12 +354,6 @@ export default function DiarySide({ profile, visibility = null, entries }) {
                     <div className="diary-entry-actions">
                       <button className="diary-action-btn" type="button" aria-label="Like post">
                         <Heart size={18} />
-                      </button>
-                      <button className="diary-action-btn" type="button" aria-label="Comment on post">
-                        <MessageCircle size={18} />
-                      </button>
-                      <button className="diary-action-btn" type="button" aria-label="Share post">
-                        <Share2 size={18} />
                       </button>
                     </div>
                     {entry.likes > 0 && (

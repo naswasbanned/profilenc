@@ -151,12 +151,19 @@ export default function AdminField({
       <div className={cls}>
         <label className="admin-field-label">{label}</label>
         <div className="admin-mood-grid">
+          <button
+            type="button"
+            className={`admin-mood-option ${!value ? 'selected' : ''}`}
+            onClick={() => onChange('')}
+          >
+            🚫 None
+          </button>
           {moods.map((mood) => (
             <button
               key={mood}
               type="button"
               className={`admin-mood-option ${value === mood ? 'selected' : ''}`}
-              onClick={() => onChange(mood)}
+              onClick={() => onChange(value === mood ? '' : mood)}
             >
               {moodMap?.[mood]?.emoji || '📝'} {mood}
             </button>
