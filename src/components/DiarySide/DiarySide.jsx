@@ -340,8 +340,10 @@ export default function DiarySide({ profile, visibility = null, entries }) {
                     />
                   )}
 
-                  {/* Date line */}
-                  <span className="diary-entry-date">{formatDate(entry.date)}</span>
+                  {/* Entry Footer line & Date */}
+                  <div className="diary-entry-footer">
+                    <span className="diary-entry-date">{formatDate(entry.date)}</span>
+                  </div>
                 </motion.article>
               );
             })}
