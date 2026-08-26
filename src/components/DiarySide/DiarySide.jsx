@@ -120,9 +120,8 @@ function DiaryMediaAttachment({ entry, onOpenModal }) {
 
   return (
     <div
-      className={`diary-entry-image-container ${
-        needsAttachmentOverlay ? 'is-attachment-blurred' : 'is-direct-169'
-      }`}
+      className={`diary-entry-image-container ${needsAttachmentOverlay ? 'is-attachment-blurred' : 'is-direct-169'
+        }`}
       onClick={handleOpen}
       role="button"
       tabIndex={0}
@@ -134,9 +133,8 @@ function DiaryMediaAttachment({ entry, onOpenModal }) {
       aria-label="View attached media"
     >
       <div
-        className={`diary-image-media-wrapper ${
-          needsAttachmentOverlay ? 'blurred-wrapper' : 'clean-wrapper'
-        }`}
+        className={`diary-image-media-wrapper ${needsAttachmentOverlay ? 'blurred-wrapper' : 'clean-wrapper'
+          }`}
       >
         {isVideo ? (
           <video
@@ -150,9 +148,8 @@ function DiaryMediaAttachment({ entry, onOpenModal }) {
           <img
             src={mediaSrc}
             alt={entry.title || 'Diary image'}
-            className={`diary-media-element ${
-              needsAttachmentOverlay ? 'blurred-element' : 'clean-element'
-            }`}
+            className={`diary-media-element ${needsAttachmentOverlay ? 'blurred-element' : 'clean-element'
+              }`}
             onLoad={handleImageLoad}
             loading="lazy"
           />
@@ -283,7 +280,6 @@ export default function DiarySide({ profile, visibility = null, entries }) {
       {visibility?.broadcasts !== false && activeEntries.length > 0 && (
         <motion.section className="diary-section" variants={itemVariants}>
           <h2 className="diary-section-title">
-            <Sparkles size={20} />
             <span>Recent Broadcasts</span>
           </h2>
 
