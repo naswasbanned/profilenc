@@ -13,7 +13,7 @@ function updateNested(obj, path, value) {
   return result;
 }
 
-export default function ProfileEditor({ data, setData }) {
+export default function ProfileEditor({ data, setData, token }) {
   if (!data) return null;
 
   const update = (path, value) => {
@@ -31,7 +31,7 @@ export default function ProfileEditor({ data, setData }) {
           <AdminField label="Name" value={data.dev?.name} onChange={(v) => update('dev.name', v)} />
           <AdminField label="Status" value={data.dev?.status} onChange={(v) => update('dev.status', v)} />
           <AdminField label="Greeting" value={data.dev?.greeting} onChange={(v) => update('dev.greeting', v)} />
-          <AdminField label="Avatar URL" value={data.dev?.avatar} onChange={(v) => update('dev.avatar', v)} type="url" />
+          <AdminField label="Avatar" value={data.dev?.avatar} onChange={(v) => update('dev.avatar', v)} type="image" token={token} fullWidth />
           <AdminField label="Title" value={data.dev?.title} onChange={(v) => update('dev.title', v)} fullWidth />
           <AdminField label="Bio" value={data.dev?.bio} onChange={(v) => update('dev.bio', v)} type="textarea" fullWidth />
         </div>
@@ -46,7 +46,7 @@ export default function ProfileEditor({ data, setData }) {
           <AdminField label="Gamertag" value={data.hobbies?.gamertag} onChange={(v) => update('hobbies.gamertag', v)} />
           <AdminField label="Rank Badge" value={data.hobbies?.rankBadge} onChange={(v) => update('hobbies.rankBadge', v)} />
           <AdminField label="Tagline" value={data.hobbies?.tagline} onChange={(v) => update('hobbies.tagline', v)} />
-          <AdminField label="Avatar URL" value={data.hobbies?.avatar} onChange={(v) => update('hobbies.avatar', v)} type="url" />
+          <AdminField label="Avatar" value={data.hobbies?.avatar} onChange={(v) => update('hobbies.avatar', v)} type="image" token={token} fullWidth />
           <AdminField label="Role" value={data.hobbies?.role} onChange={(v) => update('hobbies.role', v)} fullWidth />
           <AdminField label="Bio" value={data.hobbies?.bio} onChange={(v) => update('hobbies.bio', v)} type="textarea" fullWidth />
         </div>
@@ -60,7 +60,7 @@ export default function ProfileEditor({ data, setData }) {
         <div className="admin-field-grid">
           <AdminField label="Name" value={data.diary?.name} onChange={(v) => update('diary.name', v)} />
           <AdminField label="Tagline" value={data.diary?.tagline} onChange={(v) => update('diary.tagline', v)} />
-          <AdminField label="Avatar URL" value={data.diary?.avatar} onChange={(v) => update('diary.avatar', v)} type="url" />
+          <AdminField label="Avatar" value={data.diary?.avatar} onChange={(v) => update('diary.avatar', v)} type="image" token={token} fullWidth />
           <AdminField label="Bio" value={data.diary?.bio} onChange={(v) => update('diary.bio', v)} type="textarea" fullWidth />
           <AdminField label="Pinned Quote" value={data.diary?.pinnedQuote} onChange={(v) => update('diary.pinnedQuote', v)} type="textarea" fullWidth />
         </div>

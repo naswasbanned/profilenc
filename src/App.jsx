@@ -52,21 +52,21 @@ function App() {
   const [targetSide, setTargetSide] = useState(activeSide);
 
   // Lift ALL data fetching to App so it persists across AnimatePresence mount/unmount
-  const { data: profile } = useDataFetch('/data/profile.json');
-  const { data: skills } = useDataFetch('/data/dev-skills.json');
-  const { data: projects } = useDataFetch('/data/dev-projects.json');
-  const { data: experience } = useDataFetch('/data/dev-experience.json');
-  const { data: services } = useDataFetch('/data/dev-services.json');
-  const { data: specs } = useDataFetch('/data/hobbies-specs.json');
-  const { data: setup } = useDataFetch('/data/hobbies-setup.json');
-  const { data: storyGames } = useDataFetch('/data/hobbies-story-games.json');
-  const { data: currentlyPlaying } = useDataFetch('/data/hobbies-currently-playing.json');
-  const { data: backlog } = useDataFetch('/data/hobbies-backlog.json');
-  const { data: philosophy } = useDataFetch('/data/hobbies-philosophy.json');
-  const { data: movies } = useDataFetch('/data/hobbies-movies.json');
-  const { data: moviesWatching } = useDataFetch('/data/hobbies-movies-watching.json');
-  const { data: moviesBacklog } = useDataFetch('/data/hobbies-movies-backlog.json');
-  const { data: diaryEntries } = useDataFetch('/data/diary-entries.json');
+  const { data: profile } = useDataFetch('/api/content/profile');
+  const { data: skills } = useDataFetch('/api/content/dev-skills');
+  const { data: projects } = useDataFetch('/api/content/dev-projects');
+  const { data: experience } = useDataFetch('/api/content/dev-experience');
+  const { data: services } = useDataFetch('/api/content/dev-services');
+  const { data: specs } = useDataFetch('/api/content/hobbies-specs');
+  const { data: setup } = useDataFetch('/api/content/hobbies-setup');
+  const { data: storyGames } = useDataFetch('/api/content/hobbies-story-games');
+  const { data: currentlyPlaying } = useDataFetch('/api/content/hobbies-currently-playing');
+  const { data: backlog } = useDataFetch('/api/content/hobbies-backlog');
+  const { data: philosophy } = useDataFetch('/api/content/hobbies-philosophy');
+  const { data: movies } = useDataFetch('/api/content/hobbies-movies');
+  const { data: moviesWatching } = useDataFetch('/api/content/hobbies-movies-watching');
+  const { data: moviesBacklog } = useDataFetch('/api/content/hobbies-movies-backlog');
+  const { data: diaryEntries } = useDataFetch('/api/content/diary-entries');
 
   const footer = profile?.footer;
 

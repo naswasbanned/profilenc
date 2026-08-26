@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X, Plus } from 'lucide-react';
+import ImageUpload from './ImageUpload';
 
 /**
  * AdminField — Reusable form field component.
@@ -8,11 +9,12 @@ import { X, Plus } from 'lucide-react';
  *   label      — field label text
  *   value      — current value
  *   onChange   — (newValue) => void
- *   type       — 'text' | 'textarea' | 'number' | 'select' | 'color' | 'date' | 'url' | 'tags' | 'urls' | 'mood'
+ *   type       — 'text' | 'textarea' | 'number' | 'select' | 'color' | 'date' | 'url' | 'tags' | 'urls' | 'mood' | 'image'
  *   options    — array of { value, label } for select, or strings for mood
  *   placeholder
  *   fullWidth  — span both columns in grid
  *   moodMap    — { key: { emoji } } for mood selector
+ *   token      — JWT auth token (required for type="image")
  */
 export default function AdminField({
   label,
@@ -23,10 +25,21 @@ export default function AdminField({
   placeholder = '',
   fullWidth = false,
   moodMap = null,
+  token = null,
 }) {
   const [tagInput, setTagInput] = useState('');
 
   const cls = `admin-field${fullWidth ? ' full-width' : ''}`;
+
+  // Image upload
+  if (type === 'image') {
+    return (
+      <div className={cls}>
+        <label className="admin-field-label">{label}</label>
+        <ImageUpload value={value || ''} onChange={onChange} token={token} />
+      </div>
+    );
+  }
 
   // Tags (array of strings)
   if (type === 'tags') {

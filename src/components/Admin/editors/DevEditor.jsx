@@ -23,6 +23,7 @@ export default function DevEditor({
   setExperience,
   services,
   setServices,
+  token,
 }) {
   const [activeTab, setActiveTab] = useState('skills');
 
@@ -95,7 +96,7 @@ export default function DevEditor({
                 <AdminField label="Title" value={project.title} onChange={(v) => updateItem(projects, setProjects, i, 'title', v)} fullWidth />
                 <AdminField label="Description" value={project.description} onChange={(v) => updateItem(projects, setProjects, i, 'description', v)} type="textarea" fullWidth />
                 <AdminField label="Stars" value={project.stars} onChange={(v) => updateItem(projects, setProjects, i, 'stars', v)} type="number" />
-                <AdminField label="Image URL" value={project.image} onChange={(v) => updateItem(projects, setProjects, i, 'image', v)} type="url" />
+                <AdminField label="Image" value={project.image} onChange={(v) => updateItem(projects, setProjects, i, 'image', v)} type="image" token={token} fullWidth />
                 <AdminField label="Tech Stack" value={project.tech} onChange={(v) => updateItem(projects, setProjects, i, 'tech', v)} type="tags" fullWidth />
               </div>
             </AdminCard>
@@ -156,7 +157,7 @@ export default function DevEditor({
                 <AdminField label="Icon" value={service.icon} onChange={(v) => updateItem(services, setServices, i, 'icon', v)} placeholder="Globe, Terminal, Layers, Code2" />
                 <AdminField label="Starting Price" value={service.startingPrice} onChange={(v) => updateItem(services, setServices, i, 'startingPrice', v)} placeholder="e.g. $150" />
                 <AdminField label="Delivery Time" value={service.deliveryTime} onChange={(v) => updateItem(services, setServices, i, 'deliveryTime', v)} placeholder="e.g. 1 - 2 weeks" />
-                <AdminField label="Cover Image URL" value={service.image} onChange={(v) => updateItem(services, setServices, i, 'image', v)} type="url" fullWidth placeholder="/images/projects/template.png" />
+                <AdminField label="Cover Image" value={service.image} onChange={(v) => updateItem(services, setServices, i, 'image', v)} type="image" token={token} fullWidth />
                 <AdminField label="Gallery Images" value={service.images} onChange={(v) => updateItem(services, setServices, i, 'images', v)} type="urls" fullWidth />
                 <AdminField label="Action URL / Mailto" value={service.actionUrl} onChange={(v) => updateItem(services, setServices, i, 'actionUrl', v)} type="url" fullWidth placeholder="mailto:example@domain.com?subject=Commission" />
                 <AdminField label="Description" value={service.description} onChange={(v) => updateItem(services, setServices, i, 'description', v)} type="textarea" fullWidth />

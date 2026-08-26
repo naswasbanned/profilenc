@@ -8,7 +8,7 @@ const subtabs = [
   { id: 'setup', label: 'Gear / Setup' },
 ];
 
-export default function HobbiesEditor({ specs, setSpecs, setup, setSetup }) {
+export default function HobbiesEditor({ specs, setSpecs, setup, setSetup, token }) {
   const [activeTab, setActiveTab] = useState('specs');
 
   const updateItem = (list, setList, index, field, value) => {
@@ -78,7 +78,7 @@ export default function HobbiesEditor({ specs, setSpecs, setup, setSetup }) {
                 <AdminField label="Category" value={item.category} onChange={(v) => updateItem(setup, setSetup, i, 'category', v)} />
                 <AdminField label="Item Name" value={item.item} onChange={(v) => updateItem(setup, setSetup, i, 'item', v)} />
                 <AdminField label="Detail" value={item.detail} onChange={(v) => updateItem(setup, setSetup, i, 'detail', v)} fullWidth />
-                <AdminField label="Image URL" value={item.image} onChange={(v) => updateItem(setup, setSetup, i, 'image', v)} type="url" fullWidth />
+                <AdminField label="Image" value={item.image} onChange={(v) => updateItem(setup, setSetup, i, 'image', v)} type="image" token={token} fullWidth />
               </div>
             </AdminCard>
           ))}

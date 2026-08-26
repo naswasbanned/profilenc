@@ -1,0 +1,121 @@
+==============================================================================
+PROFILE PORTFOLIO & CMS - FULL DOCKER DEPLOYMENT INSTRUCTIONS
+==============================================================================
+
+[ PREREQUISITES ]
+- Docker and Docker Compose installed on your host/server.
+- Ensure ports 80 (HTTP) and 3001 (Backend, optional if proxied via nginx) are open.
+
+------------------------------------------------------------------------------
+STEP 1: CLONE THE REPOSITORY TO YOUR SERVER
+------------------------------------------------------------------------------
+On your server/home server:
+
+1. Clone your repo:
+   git clone <YOUR_GIT_REPOSITORY_URL> profile
+
+2. Navigate into the cloned folder:
+   cd profile
+
+(Note: You DO NOT need Node.js or npm installed on your server host machine.
+Docker builds all dependencies inside containers automatically).
+
+------------------------------------------------------------------------------
+STEP 2: CREATE AND CONFIGURE YOUR .env FILE
+------------------------------------------------------------------------------
+Copy the example environment file:
+  cp .env.example .env
+
+Edit the .env file with your preferred credentials:
+  nano .env
+
+Example .env configuration:
+----------------------------------------
+DB_PASSWORD=your_secure_db_password_here
+JWT_SECRET=your_super_secret_jwt_random_string_here
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=your_admin_login_password_here
+----------------------------------------
+
+----------------------------------------------
+STEP 3: START DOCKER CONTAINERS
+------------------------------------------------------------------------------
+Build and start the services (db, backend, frontend) in the background:
+  sudo docker compose up -d --build
+
+Verify that all 3 containers are running healthy:
+  sudo docker compose ps
+
+------------------------------------------------------------------------------
+STEP 4: RUN DATABASE MIGRATIONS
+------------------------------------------------------------------------------
+Create the required PostgreSQL tables (content, images, admin_user):
+  sudo docker compose exec backend node src/db/migrate.js
+
+Expected output:
+  ✓ content table
+  ✓ images table
+  ✓ admin_user table
+  Migrations complete.
+
+------------------------------------------------------------------------------
+STEP 5: SEED INITIAL DATA AND OPTIMIZE IMAGES
+------------------------------------------------------------------------------
+Populate all 15 JSON datasets and process/compress 27 images to WebP into DB:
+  sudo docker compose exec backend node src/db/seed.js
+
+Expected output:
+  === Seeding database ===
+  1. Loading JSON data...
+     ✓ profile.json
+     ✓ dev-skills.json
+     ... (all 15 datasets)
+  2. Collecting image paths...
+     Found 27 unique image paths
+  3. Processing images → WebP...
+     ✓ /images/... -> /uploads/xxxx.webp
+  4. Inserting content into database...
+  5. Creating admin user...
+     ✓ Admin user "admin" created
+  === Seed complete ===
+
+------------------------------------------------------------------------------
+STEP 6: ACCESS YOUR APPLICATION
+------------------------------------------------------------------------------
+- Main Portfolio Website:
+    http://YOUR_SERVER_IP/  (or http://localhost/ if local)
+
+- Admin CMS Dashboard:
+    http://YOUR_SERVER_IP/admin
+
+Log in using the ADMIN_USERNAME and ADMIN_PASSWORD configured in your .env.
+
+==============================================================================
+USEFUL MANAGEMENT COMMANDS
+==============================================================================
+
+View live logs from all containers:
+  sudo docker compose logs -f
+
+View logs from a specific container:
+  sudo docker compose logs -f backend
+  sudo docker compose logs -f frontend
+  sudo docker compose logs -f db
+
+Restart all containers:
+  sudo docker compose restart
+
+Stop all containers:
+  sudo docker compose down
+
+Update after git pull / code change:
+  sudo docker compose up -d --build
+
+Reset and re-seed database (WARNING: resets content to initial files):
+  sudo docker compose exec backend node src/db/migrate.js
+  sudo docker compose exec backend node src/db/seed.js
+
+Backup database to SQL file:
+  sudo docker compose exec db pg_dump -U profile profile > backup.sql
+
+==============================================================================

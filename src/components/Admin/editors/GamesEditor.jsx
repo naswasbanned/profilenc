@@ -17,6 +17,7 @@ export default function GamesEditor({
   currentlyPlaying, setCurrentlyPlaying,
   backlog, setBacklog,
   philosophy, setPhilosophy,
+  token,
 }) {
   const [activeTab, setActiveTab] = useState('story');
 
@@ -62,7 +63,7 @@ export default function GamesEditor({
                 <AdminField label="Rating" value={game.rating} onChange={(v) => updateItem(storyGames, setStoryGames, i, 'rating', v)} />
                 <AdminField label="Genre" value={game.genre} onChange={(v) => updateItem(storyGames, setStoryGames, i, 'genre', v)} />
                 <AdminField label="Description" value={game.description} onChange={(v) => updateItem(storyGames, setStoryGames, i, 'description', v)} type="textarea" fullWidth />
-                <AdminField label="Image URL" value={game.image} onChange={(v) => updateItem(storyGames, setStoryGames, i, 'image', v)} type="url" fullWidth />
+                <AdminField label="Image" value={game.image} onChange={(v) => updateItem(storyGames, setStoryGames, i, 'image', v)} type="image" token={token} fullWidth />
               </div>
             </AdminCard>
           ))}
@@ -90,7 +91,7 @@ export default function GamesEditor({
                 <AdminField label="Title" value={game.title} onChange={(v) => updateItem(currentlyPlaying, setCurrentlyPlaying, i, 'title', v)} fullWidth />
                 <AdminField label="Progress (%)" value={game.progress} onChange={(v) => updateItem(currentlyPlaying, setCurrentlyPlaying, i, 'progress', v)} type="number" />
                 <AdminField label="Genre" value={game.genre} onChange={(v) => updateItem(currentlyPlaying, setCurrentlyPlaying, i, 'genre', v)} />
-                <AdminField label="Image URL" value={game.image} onChange={(v) => updateItem(currentlyPlaying, setCurrentlyPlaying, i, 'image', v)} type="url" fullWidth />
+                <AdminField label="Image" value={game.image} onChange={(v) => updateItem(currentlyPlaying, setCurrentlyPlaying, i, 'image', v)} type="image" token={token} fullWidth />
               </div>
             </AdminCard>
           ))}

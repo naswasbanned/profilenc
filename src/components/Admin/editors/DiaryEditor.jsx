@@ -13,7 +13,7 @@ const moodMap = {
   reflective: { emoji: '🪞' },
 };
 
-export default function DiaryEditor({ entries, setEntries }) {
+export default function DiaryEditor({ entries, setEntries, token }) {
   if (!entries) return null;
 
   const updateItem = (index, field, value) => {
@@ -60,7 +60,7 @@ export default function DiaryEditor({ entries, setEntries }) {
             <AdminField label="Likes" value={entry.likes} onChange={(v) => updateItem(i, 'likes', v)} type="number" />
             <AdminField label="Content" value={entry.content} onChange={(v) => updateItem(i, 'content', v)} type="textarea" fullWidth />
             <AdminField label="Mood" value={entry.mood} onChange={(v) => updateItem(i, 'mood', v)} type="mood" moodMap={moodMap} fullWidth />
-            <AdminField label="Image URL" value={entry.image || ''} onChange={(v) => updateItem(i, 'image', v || null)} type="url" fullWidth />
+            <AdminField label="Image" value={entry.image || ''} onChange={(v) => updateItem(i, 'image', v || null)} type="image" token={token} fullWidth />
           </div>
         </AdminCard>
       ))}

@@ -19,6 +19,7 @@ export default function MoviesEditor({
   setMoviesWatching,
   moviesBacklog,
   setMoviesBacklog,
+  token,
 }) {
   const [activeTab, setActiveTab] = useState('movies');
 
@@ -66,7 +67,7 @@ export default function MoviesEditor({
                 <AdminField label="Genre" value={movie.genre} onChange={(v) => updateItem(movies, setMovies, i, 'genre', v)} placeholder="Sci-Fi / Drama" />
                 <AdminField label="Seasons / Episodes" value={movie.episodes} onChange={(v) => updateItem(movies, setMovies, i, 'episodes', v)} placeholder="e.g. 5 Seasons (62 eps)" />
                 <AdminField label="Director / Creator" value={movie.director} onChange={(v) => updateItem(movies, setMovies, i, 'director', v)} placeholder="e.g. Christopher Nolan" />
-                <AdminField label="Image URL" value={movie.image} onChange={(v) => updateItem(movies, setMovies, i, 'image', v)} type="url" fullWidth placeholder="/images/gaming/story-games/e33.jpg" />
+                <AdminField label="Image" value={movie.image} onChange={(v) => updateItem(movies, setMovies, i, 'image', v)} type="image" token={token} fullWidth />
                 <AdminField label="Review / Synopsis" value={movie.description} onChange={(v) => updateItem(movies, setMovies, i, 'description', v)} type="textarea" fullWidth />
               </div>
             </AdminCard>
@@ -111,7 +112,7 @@ export default function MoviesEditor({
                 <AdminField label="Current Episode / Season" value={item.currentEpisode} onChange={(v) => updateItem(moviesWatching, setMoviesWatching, i, 'currentEpisode', v)} placeholder="e.g. S2 E6" />
                 <AdminField label="Progress (%)" value={item.progress} onChange={(v) => updateItem(moviesWatching, setMoviesWatching, i, 'progress', v)} type="number" />
                 <AdminField label="Genre" value={item.genre} onChange={(v) => updateItem(moviesWatching, setMoviesWatching, i, 'genre', v)} />
-                <AdminField label="Image URL" value={item.image} onChange={(v) => updateItem(moviesWatching, setMoviesWatching, i, 'image', v)} type="url" fullWidth />
+                <AdminField label="Image" value={item.image} onChange={(v) => updateItem(moviesWatching, setMoviesWatching, i, 'image', v)} type="image" token={token} fullWidth />
               </div>
             </AdminCard>
           ))}
