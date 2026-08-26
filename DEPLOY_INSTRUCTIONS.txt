@@ -91,31 +91,65 @@ STEP 6: ACCESS YOUR APPLICATION
 Log in using the ADMIN_USERNAME and ADMIN_PASSWORD configured in your .env.
 
 ==============================================================================
-USEFUL MANAGEMENT COMMANDS
+SAFE UPDATES & MAINTENANCE (HOW NOT TO LOSE YOUR DATA)
 ==============================================================================
 
-View live logs from all containers:
-  sudo docker compose logs -f
+When you edit your portfolio via the /admin panel, your data is saved inside
+persistent Docker volumes:
+  - Database text/data -> "pgdata" volume
+  - Uploaded WebP images -> "uploads" volume
 
-View logs from a specific container:
-  sudo docker compose logs -f backend
-  sudo docker compose logs -f frontend
-  sudo docker compose logs -f db
+HOW TO SAFELY UPDATE YOUR CODE:
+--------------------------------
+1. Pull new code from git:
+     git pull
+
+2. Rebuild and restart containers:
+     sudo docker compose up -d --build
+
+3. If there are new database tables or structural schema changes:
+     sudo docker compose exec backend node src/db/migrate.js
+
+   (migrate.js uses "CREATE TABLE IF NOT EXISTS" - it is safe and will NEVER
+   wipe or overwrite your existing data!)
+
+   *** CRITICAL: DO NOT RUN seed.js AGAIN AFTER INITIAL SETUP ***
+   Running seed.js will overwrite your customized data with default JSONs.
+
+==============================================================================
+BACKUP & RESTORE PROCEDURES
+==============================================================================
+
+[ CREATING A BACKUP ]
+
+1. Backup PostgreSQL Database:
+     sudo docker compose exec db pg_dump -U profile profile > db_backup_$(date +%F).sql
+
+2. Backup Uploaded Images:
+     sudo docker compose cp backend:/app/uploads ./uploads_backup_$(date +%F)
+
+3. Backup Environment Credentials:
+     cp .env .env.backup
+
+[ RESTORING FROM BACKUP ]
+
+1. Restore Database:
+     cat db_backup_YYYY-MM-DD.sql | sudo docker compose exec -T db psql -U profile profile
+
+2. Restore Images:
+     sudo docker compose cp ./uploads_backup_YYYY-MM-DD/. backend:/app/uploads/
+
+==============================================================================
+OTHER USEFUL COMMANDS
+==============================================================================
+
+View live logs:
+  sudo docker compose logs -f
 
 Restart all containers:
   sudo docker compose restart
 
 Stop all containers:
   sudo docker compose down
-
-Update after git pull / code change:
-  sudo docker compose up -d --build
-
-Reset and re-seed database (WARNING: resets content to initial files):
-  sudo docker compose exec backend node src/db/migrate.js
-  sudo docker compose exec backend node src/db/seed.js
-
-Backup database to SQL file:
-  sudo docker compose exec db pg_dump -U profile profile > backup.sql
 
 ==============================================================================
