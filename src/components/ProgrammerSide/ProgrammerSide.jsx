@@ -475,7 +475,39 @@ export default function ProgrammerSide({ profile, contact, visibility = null, sk
                 <div className="dev-timeline-marker" />
                 <div className="dev-timeline-card">
                   <div className="dev-timeline-header-info">
-                    <span className="dev-timeline-period">{exp.period}</span>
+                    <div className="dev-timeline-header-top">
+                      <span className="dev-timeline-period">{exp.period}</span>
+                      {(exp.github || exp.link || exp.projectUrl) && (
+                        <div className="dev-timeline-links">
+                          {exp.github && (
+                            <a
+                              href={exp.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="dev-timeline-link-btn"
+                              title="GitHub Repository"
+                              aria-label="GitHub Repository"
+                            >
+                              <Github size={13} />
+                              <span>GitHub</span>
+                            </a>
+                          )}
+                          {(exp.link || exp.projectUrl) && (
+                            <a
+                              href={exp.link || exp.projectUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="dev-timeline-link-btn primary"
+                              title="Live Project / Organization Website"
+                              aria-label="Project Website"
+                            >
+                              <ExternalLink size={13} />
+                              <span>Project / Live</span>
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </div>
                     <h3 className="dev-timeline-role">{exp.role}</h3>
                     <p className="dev-timeline-company">{exp.company}</p>
                     <p className="dev-timeline-desc">{exp.description}</p>

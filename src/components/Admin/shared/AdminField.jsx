@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X, Plus } from 'lucide-react';
 import ImageUpload from './ImageUpload';
+import MultiImageUpload from './MultiImageUpload';
 
 /**
  * AdminField — Reusable form field component.
@@ -9,12 +10,12 @@ import ImageUpload from './ImageUpload';
  *   label      — field label text
  *   value      — current value
  *   onChange   — (newValue) => void
- *   type       — 'text' | 'textarea' | 'number' | 'select' | 'color' | 'date' | 'url' | 'tags' | 'urls' | 'mood' | 'image'
+ *   type       — 'text' | 'textarea' | 'number' | 'select' | 'color' | 'date' | 'url' | 'tags' | 'urls' | 'images' | 'mood' | 'image'
  *   options    — array of { value, label } for select, or strings for mood
  *   placeholder
  *   fullWidth  — span both columns in grid
  *   moodMap    — { key: { emoji } } for mood selector
- *   token      — JWT auth token (required for type="image")
+ *   token      — JWT auth token (required for type="image" or type="images")
  */
 export default function AdminField({
   label,
@@ -31,7 +32,17 @@ export default function AdminField({
 
   const cls = `admin-field${fullWidth ? ' full-width' : ''}`;
 
-  // Image upload
+  // Multiple Images upload & manager
+  if (type === 'images') {
+    return (
+      <div className={cls}>
+        <label className="admin-field-label">{label}</label>
+        <MultiImageUpload values={value || []} onChange={onChange} token={token} />
+      </div>
+    );
+  }
+
+  // Single Image upload
   if (type === 'image') {
     return (
       <div className={cls}>

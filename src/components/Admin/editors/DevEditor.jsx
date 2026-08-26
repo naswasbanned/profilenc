@@ -146,17 +146,19 @@ export default function DevEditor({
             >
               <div className="admin-field-grid">
                 <AdminField label="Role" value={exp.role} onChange={(v) => updateItem(experience, setExperience, i, 'role', v)} fullWidth />
-                <AdminField label="Company" value={exp.company} onChange={(v) => updateItem(experience, setExperience, i, 'company', v)} />
-                <AdminField label="Period" value={exp.period} onChange={(v) => updateItem(experience, setExperience, i, 'period', v)} />
+                <AdminField label="Company / Organization" value={exp.company} onChange={(v) => updateItem(experience, setExperience, i, 'company', v)} />
+                <AdminField label="Period" value={exp.period} onChange={(v) => updateItem(experience, setExperience, i, 'period', v)} placeholder="e.g. 2023 — Present" />
+                <AdminField label="Live / Project Link (Optional)" value={exp.link} onChange={(v) => updateItem(experience, setExperience, i, 'link', v)} type="url" placeholder="https://example.com" />
+                <AdminField label="GitHub Repository (Optional)" value={exp.github} onChange={(v) => updateItem(experience, setExperience, i, 'github', v)} type="url" placeholder="https://github.com/..." />
                 <AdminField label="Description" value={exp.description} onChange={(v) => updateItem(experience, setExperience, i, 'description', v)} type="textarea" fullWidth />
-                <AdminField label="Images" value={exp.images} onChange={(v) => updateItem(experience, setExperience, i, 'images', v)} type="urls" fullWidth />
+                <AdminField label="Experience Showcase Images" value={exp.images} onChange={(v) => updateItem(experience, setExperience, i, 'images', v)} type="images" token={token} fullWidth />
               </div>
             </AdminCard>
           ))}
           <button
             type="button"
             className="admin-add-btn"
-            onClick={() => setExperience([...experience, { role: '', company: '', period: '', description: '', images: [], hidden: false }])}
+            onClick={() => setExperience([...experience, { role: '', company: '', period: '', link: '', github: '', description: '', images: [], hidden: false }])}
           >
             <Plus size={16} /> Add Experience
           </button>
@@ -186,7 +188,7 @@ export default function DevEditor({
                 <AdminField label="Starting Price" value={service.startingPrice} onChange={(v) => updateItem(services, setServices, i, 'startingPrice', v)} placeholder="e.g. $150" />
                 <AdminField label="Delivery Time" value={service.deliveryTime} onChange={(v) => updateItem(services, setServices, i, 'deliveryTime', v)} placeholder="e.g. 1 - 2 weeks" />
                 <AdminField label="Cover Image" value={service.image} onChange={(v) => updateItem(services, setServices, i, 'image', v)} type="image" token={token} fullWidth />
-                <AdminField label="Gallery Images" value={service.images} onChange={(v) => updateItem(services, setServices, i, 'images', v)} type="urls" fullWidth />
+                <AdminField label="Gallery Images" value={service.images} onChange={(v) => updateItem(services, setServices, i, 'images', v)} type="images" token={token} fullWidth />
                 <AdminField label="Action URL / Mailto" value={service.actionUrl} onChange={(v) => updateItem(services, setServices, i, 'actionUrl', v)} type="url" fullWidth placeholder="mailto:example@domain.com?subject=Commission" />
                 <AdminField label="Description" value={service.description} onChange={(v) => updateItem(services, setServices, i, 'description', v)} type="textarea" fullWidth />
                 <AdminField label="Deliverables / Features" value={service.deliverables} onChange={(v) => updateItem(services, setServices, i, 'deliverables', v)} type="tags" fullWidth />
