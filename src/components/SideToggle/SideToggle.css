@@ -46,7 +46,7 @@
 }
 
 .toggle-option.hobbies-active {
-  color: #ff4655;
+  color: #a855f7;
 }
 
 .toggle-option.diary-active {
@@ -69,8 +69,8 @@
 }
 
 .hobbies-active .toggle-active-bar {
-  background: #ff4655;
-  box-shadow: 0 0 8px rgba(255, 70, 85, 0.5);
+  background: #a855f7;
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
 }
 
 .diary-active .toggle-active-bar {

@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Severance (Season 2)",
+    "type": "Series",
+    "genre": "Sci-Fi / Psychological Thriller",
+    "progress": 65,
+    "currentEpisode": "S2 E6",
+    "image": "/images/gaming/story-games/avowed.png"
+  },
+  {
+    "title": "Dune: Prophecy",
+    "type": "Series",
+    "genre": "Sci-Fi / Drama",
+    "progress": 40,
+    "currentEpisode": "S1 E3",
+    "image": "/images/gaming/story-games/ff16.png"
+  }
+]

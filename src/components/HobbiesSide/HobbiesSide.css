@@ -194,11 +194,11 @@
   padding: 60px 40px;
 }
 
-/* === Sub-Side Toggle (Games vs Gears) === */
+/* === Sub-Side Toggle (Games vs Movies vs Gears) === */
 .hobbies-sub-toggle {
   position: relative;
   display: flex;
-  max-width: 420px;
+  max-width: 580px;
   margin: 0 auto;
   background: var(--cs-surface);
   border: 1px solid var(--cs-border);
@@ -213,14 +213,14 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 14px 20px;
+  padding: 14px 16px;
   background: none;
   border: none;
   color: var(--cs-text-dim);
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   cursor: pointer;
   transition: color 0.3s;
   position: relative;
@@ -235,6 +235,10 @@
   color: #a855f7;
 }
 
+.hobbies-sub-btn.active.movies {
+  color: #f59e0b;
+}
+
 .hobbies-sub-btn.active.gears {
   color: #00e5ff;
 }
@@ -243,13 +247,22 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 50%;
+  width: 33.333%;
   height: 3px;
   background: linear-gradient(90deg, #a855f7, #ec4899);
   z-index: 0;
+  transition: background 0.3s ease;
 }
 
-.hobbies-sub-btn.active.gears ~ .hobbies-sub-indicator {
+.hobbies-sub-indicator.games {
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+}
+
+.hobbies-sub-indicator.movies {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+}
+
+.hobbies-sub-indicator.gears {
   background: linear-gradient(90deg, #00e5ff, #3b82f6);
 }
 
@@ -277,12 +290,90 @@
   color: #00e5ff;
 }
 
+.hobbies-section-title.movies-title {
+  border-bottom-color: #f59e0b;
+}
+
+.hobbies-section-title.movies-title svg {
+  color: #f59e0b;
+}
+
 .hobbies-section-title.story-title {
   border-bottom-color: #a855f7;
 }
 
 .hobbies-section-title.story-title svg {
   color: #a855f7;
+}
+
+/* Movies & Series Specific Styles */
+.hobbies-movie-card:hover {
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+}
+
+.hobbies-movie-image-cover {
+  position: relative;
+}
+
+.hobbies-movie-type-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 8px;
+  font-size: 0.6rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  z-index: 2;
+  border-radius: 2px;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(4px);
+  border: 1px solid #f59e0b;
+  color: #f59e0b;
+}
+
+.hobbies-story-rating.movies-rating {
+  color: #f59e0b;
+}
+
+.hobbies-story-rating.movies-rating svg {
+  color: #f59e0b;
+}
+
+.hobbies-movie-year-tag,
+.hobbies-movie-ep-tag,
+.hobbies-movie-dir-tag {
+  font-size: 0.68rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--cs-text-dim);
+}
+
+.hobbies-watching-card:hover {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+}
+
+.hobbies-watching-ep-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  padding: 2px 7px;
+  background: rgba(10, 10, 15, 0.9);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  color: #f59e0b;
+  font-size: 0.62rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  z-index: 2;
+  border-radius: 2px;
+}
+
+.movies-bar-fill {
+  background: linear-gradient(90deg, #f59e0b, #ef4444) !important;
+}
+
+.movies-backlog-num {
+  color: #f59e0b !important;
 }
 
 /* === PC Hardware Specs Grid === */

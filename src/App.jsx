@@ -6,6 +6,7 @@ import TransitionOverlay from './components/TransitionOverlay/TransitionOverlay'
 import ProgrammerSide from './components/ProgrammerSide/ProgrammerSide';
 import HobbiesSide from './components/HobbiesSide/HobbiesSide';
 import DiarySide from './components/DiarySide/DiarySide';
+import AdminPage from './components/Admin/AdminPage';
 import useDataFetch from './hooks/useDataFetch';
 import './App.css';
 
@@ -40,6 +41,10 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Admin route — render admin page without SideToggle/footer
+  const isAdmin = location.pathname.toLowerCase().startsWith('/admin');
+  if (isAdmin) return <AdminPage />;
+
   // Derive active section from URL
   const activeSide = useMemo(() => pathToSection(location.pathname), [location.pathname]);
 
@@ -51,12 +56,16 @@ function App() {
   const { data: skills } = useDataFetch('/data/dev-skills.json');
   const { data: projects } = useDataFetch('/data/dev-projects.json');
   const { data: experience } = useDataFetch('/data/dev-experience.json');
+  const { data: services } = useDataFetch('/data/dev-services.json');
   const { data: specs } = useDataFetch('/data/hobbies-specs.json');
   const { data: setup } = useDataFetch('/data/hobbies-setup.json');
   const { data: storyGames } = useDataFetch('/data/hobbies-story-games.json');
   const { data: currentlyPlaying } = useDataFetch('/data/hobbies-currently-playing.json');
   const { data: backlog } = useDataFetch('/data/hobbies-backlog.json');
   const { data: philosophy } = useDataFetch('/data/hobbies-philosophy.json');
+  const { data: movies } = useDataFetch('/data/hobbies-movies.json');
+  const { data: moviesWatching } = useDataFetch('/data/hobbies-movies-watching.json');
+  const { data: moviesBacklog } = useDataFetch('/data/hobbies-movies-backlog.json');
   const { data: diaryEntries } = useDataFetch('/data/diary-entries.json');
 
   const footer = profile?.footer;
@@ -112,6 +121,7 @@ function App() {
               skills={skills}
               projects={projects}
               experience={experience}
+              services={services}
             />
           </motion.div>
         )}
@@ -132,6 +142,9 @@ function App() {
               currentlyPlaying={currentlyPlaying}
               backlog={backlog}
               philosophy={philosophy}
+              movies={movies}
+              moviesWatching={moviesWatching}
+              moviesBacklog={moviesBacklog}
             />
           </motion.div>
         )}

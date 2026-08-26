@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Heart,
   MessageCircle,
@@ -8,6 +9,9 @@ import {
   Calendar,
   Sparkles,
   PenLine,
+  Eye,
+  X,
+  Play,
 } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './DiarySide.css';
@@ -56,7 +60,146 @@ function timeAgo(dateStr) {
   return `${Math.floor(days / 30)}mo ago`;
 }
 
+function isVideoUrl(url) {
+  if (!url) return false;
+  return /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(url);
+}
+
+function getUrlAspectRatio(url) {
+  if (!url) return null;
+  const match = url.match(/(\d+)x(\d+)/i);
+  if (match) {
+    const w = parseInt(match[1], 10);
+    const h = parseInt(match[2], 10);
+    if (w && h) return w / h;
+  }
+  return null;
+}
+
+// Media Attachment Component
+function DiaryMediaAttachment({ entry, onOpenModal }) {
+  const mediaSrc = entry.video || entry.image;
+  const isVideo = Boolean(
+    entry.video ||
+    entry.type === 'video' ||
+    entry.mediaType === 'video' ||
+    isVideoUrl(mediaSrc)
+  );
+
+  // Determine initial 16:9 state (from JSON config or URL dimensions)
+  const [is16By9, setIs16By9] = useState(() => {
+    if (isVideo) return false;
+    if (entry.aspectRatio === '16:9' || entry.aspectRatio === '16/9') return true;
+    if (entry.aspectRatio && entry.aspectRatio !== '16:9') return false;
+    const urlRatio = getUrlAspectRatio(mediaSrc);
+    if (urlRatio) {
+      return Math.abs(urlRatio - 16 / 9) < 0.08;
+    }
+    return false;
+  });
+
+  const handleImageLoad = (e) => {
+    if (!isVideo && e.target?.naturalWidth && e.target?.naturalHeight) {
+      const ratio = e.target.naturalWidth / e.target.naturalHeight;
+      const matches169 = Math.abs(ratio - 16 / 9) < 0.08;
+      setIs16By9(matches169);
+    }
+  };
+
+  const handleOpen = () => {
+    onOpenModal({
+      src: mediaSrc,
+      isVideo,
+      alt: entry.title || 'Diary attachment',
+      date: formatDate(entry.date),
+      caption: entry.content,
+    });
+  };
+
+  // Rule: View Attachment & blur ONLY when media is NOT 16:9 OR media is video.
+  // If 16:9 and not video -> show clean right away.
+  const needsAttachmentOverlay = isVideo || !is16By9;
+
+  return (
+    <div
+      className={`diary-entry-image-container ${
+        needsAttachmentOverlay ? 'is-attachment-blurred' : 'is-direct-169'
+      }`}
+      onClick={handleOpen}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleOpen();
+        }
+      }}
+      aria-label="View attached media"
+    >
+      <div
+        className={`diary-image-media-wrapper ${
+          needsAttachmentOverlay ? 'blurred-wrapper' : 'clean-wrapper'
+        }`}
+      >
+        {isVideo ? (
+          <video
+            src={mediaSrc}
+            className="diary-media-element blurred-element"
+            muted
+            playsInline
+            preload="metadata"
+          />
+        ) : (
+          <img
+            src={mediaSrc}
+            alt={entry.title || 'Diary image'}
+            className={`diary-media-element ${
+              needsAttachmentOverlay ? 'blurred-element' : 'clean-element'
+            }`}
+            onLoad={handleImageLoad}
+            loading="lazy"
+          />
+        )}
+      </div>
+
+      {needsAttachmentOverlay && (
+        <div className="diary-image-overlay">
+          <button
+            type="button"
+            className="diary-view-attachment-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpen();
+            }}
+          >
+            {isVideo ? <Play size={16} /> : <Eye size={16} />}
+            <span>{isVideo ? 'View Video' : 'View Attachment'}</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function DiarySide({ profile, entries }) {
+  const [selectedMedia, setSelectedMedia] = useState(null);
+
+  // Close modal on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setSelectedMedia(null);
+      }
+    };
+    if (selectedMedia) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [selectedMedia]);
+
   // ⚠️ CRITICAL: Gate on ALL data props before mounting animated container.
   // See AGENTS.md — Framer Motion Data-Gating Rule.
   const isReady = profile && entries;
@@ -142,6 +285,8 @@ export default function DiarySide({ profile, entries }) {
         <div className="diary-feed">
           {entries.map((entry) => {
             const mood = moodMap[entry.mood] || { emoji: '📝', color: '#f4a261' };
+            const hasMedia = Boolean(entry.image || entry.video);
+
             return (
               <motion.article
                 key={entry.id}
@@ -180,29 +325,24 @@ export default function DiarySide({ profile, entries }) {
                 {/* Entry Content */}
                 <p className="diary-entry-content">{entry.content}</p>
 
-                {/* Entry Image (optional) */}
-                {entry.image && (
-                  <div className="diary-entry-image">
-                    <OptimizedImage
-                      src={entry.image}
-                      alt={entry.title || 'Diary image'}
-                      className="diary-img"
-                      width={600}
-                      height={300}
-                    />
-                  </div>
+                {/* Media Attachment (16:9 direct or blurred with View Attachment button) */}
+                {hasMedia && (
+                  <DiaryMediaAttachment
+                    entry={entry}
+                    onOpenModal={setSelectedMedia}
+                  />
                 )}
 
                 {/* Entry Footer — social interaction bar */}
                 <div className="diary-entry-footer">
                   <div className="diary-entry-actions">
-                    <button className="diary-action-btn" type="button">
+                    <button className="diary-action-btn" type="button" aria-label="Like post">
                       <Heart size={18} />
                     </button>
-                    <button className="diary-action-btn" type="button">
+                    <button className="diary-action-btn" type="button" aria-label="Comment on post">
                       <MessageCircle size={18} />
                     </button>
-                    <button className="diary-action-btn" type="button">
+                    <button className="diary-action-btn" type="button" aria-label="Share post">
                       <Share2 size={18} />
                     </button>
                   </div>
@@ -220,6 +360,70 @@ export default function DiarySide({ profile, entries }) {
           })}
         </div>
       </motion.section>
+
+      {/* Lightbox / Zoomed Singular Modal */}
+      <AnimatePresence>
+        {selectedMedia && (
+          <motion.div
+            className="diary-modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedMedia(null)}
+          >
+            <motion.div
+              className="diary-modal-wrapper"
+              initial={{ scale: 0.92, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 10 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="diary-modal-header">
+                <div className="diary-modal-meta">
+                  <span className="diary-modal-title">
+                    {selectedMedia.isVideo ? 'Video Preview' : 'Attachment View'}
+                  </span>
+                  {selectedMedia.date && (
+                    <span className="diary-modal-date">{selectedMedia.date}</span>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  className="diary-modal-close-btn"
+                  onClick={() => setSelectedMedia(null)}
+                  aria-label="Close media preview"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="diary-modal-image-box">
+                {selectedMedia.isVideo ? (
+                  <video
+                    src={selectedMedia.src}
+                    controls
+                    autoPlay
+                    className="diary-modal-video"
+                  />
+                ) : (
+                  <img
+                    src={selectedMedia.src}
+                    alt={selectedMedia.alt}
+                    className="diary-modal-img"
+                  />
+                )}
+              </div>
+
+              {selectedMedia.caption && (
+                <div className="diary-modal-caption">
+                  <p>{selectedMedia.caption}</p>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

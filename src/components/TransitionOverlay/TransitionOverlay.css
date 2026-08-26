@@ -9,7 +9,7 @@
 }
 
 .transition-overlay.to-cs {
-  background: radial-gradient(ellipse at center, #1a0a0a, #0d0d0d);
+  background: radial-gradient(ellipse at center, #170b24, #0d0d0d);
 }
 
 .transition-overlay.to-dev {
@@ -22,8 +22,8 @@
 }
 
 .to-cs .transition-icon {
-  color: #ff4655;
-  filter: drop-shadow(0 0 40px rgba(255, 70, 85, 0.6));
+  color: #a855f7;
+  filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6));
 }
 
 .to-dev .transition-icon {
@@ -47,7 +47,7 @@
 }
 
 .to-cs .glitch-line {
-  background: linear-gradient(90deg, transparent 5%, #ff4655 20%, #ff465588 50%, transparent 95%);
+  background: linear-gradient(90deg, transparent 5%, #a855f7 20%, #a855f788 50%, transparent 95%);
 }
 
 .to-dev .glitch-line {
@@ -68,8 +68,8 @@
 }
 
 .to-cs .t-particle {
-  background: #ff4655;
-  box-shadow: 0 0 10px #ff4655;
+  background: #a855f7;
+  box-shadow: 0 0 10px #a855f7;
 }
 
 .to-dev .t-particle {

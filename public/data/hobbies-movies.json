@@ -1,0 +1,67 @@
+[
+  {
+    "title": "Interstellar",
+    "type": "Movie",
+    "status": "Completed",
+    "year": "2014",
+    "rating": "MASTERPIECE",
+    "genre": "Sci-Fi / Drama",
+    "director": "Christopher Nolan",
+    "description": "A breathtaking cinematic journey across space and time. The visual design, soundtrack by Hans Zimmer, and the father-daughter emotional anchor make it an unforgettable masterpiece.",
+    "image": "/images/gaming/story-games/e33.jpg"
+  },
+  {
+    "title": "Breaking Bad",
+    "type": "Series",
+    "status": "Completed",
+    "year": "2008 - 2013",
+    "rating": 10,
+    "genre": "Crime / Drama / Thriller",
+    "episodes": "5 Seasons (62 eps)",
+    "description": "The golden standard of television drama. Walter White's descent from sympathetic chemistry teacher to ruthless kingpin is the greatest written character transformation.",
+    "image": "/images/gaming/story-games/rdr2.png"
+  },
+  {
+    "title": "Spider-Man: Across the Spider-Verse",
+    "type": "Movie",
+    "status": "Completed",
+    "year": "2023",
+    "rating": 10,
+    "genre": "Animation / Action / Sci-Fi",
+    "description": "Revolutionary animation craft, unmatched visual storytelling, and high-stakes multi-dimensional drama. Every single frame belongs in a modern art museum.",
+    "image": "/images/gaming/story-games/spiderman.jpg"
+  },
+  {
+    "title": "Arcane",
+    "type": "Series",
+    "status": "Completed",
+    "year": "2021 - 2024",
+    "rating": 10,
+    "genre": "Animation / Action / Drama",
+    "episodes": "2 Seasons (18 eps)",
+    "description": "Fortiche and Riot achieved cinematic perfection. Complex character motivations, heart-wrenching emotional beats, and unmatched sound design.",
+    "image": "/images/gaming/story-games/metaphor.jpg"
+  },
+  {
+    "title": "Oppenheimer",
+    "type": "Movie",
+    "status": "Completed",
+    "year": "2023",
+    "rating": 9,
+    "genre": "Biography / Drama / History",
+    "director": "Christopher Nolan",
+    "description": "A relentless 3-hour biographical thriller with incredible practical effects, haunting sound design, and Cillian Murphy's career-defining performance.",
+    "image": "/images/gaming/story-games/ff7.jpg"
+  },
+  {
+    "title": "Attack on Titan",
+    "type": "Anime / Series",
+    "status": "Completed",
+    "year": "2013 - 2023",
+    "rating": 9,
+    "genre": "Dark Fantasy / Action",
+    "episodes": "4 Seasons (89 eps)",
+    "description": "A masterclass in foreshadowing and narrative tension. A story about the devastating cycle of war, freedom, and human sacrifice.",
+    "image": "/images/gaming/story-games/p3r.png"
+  }
+]

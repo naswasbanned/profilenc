@@ -21,6 +21,8 @@ import {
   Keyboard,
   Sliders,
   Sparkles,
+  Film,
+  Clapperboard,
 } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './HobbiesSide.css';
@@ -28,6 +30,7 @@ import './HobbiesSide.css';
 // Map icon string names from JSON to Lucide components
 const iconMap = {
   Gamepad2: <Gamepad2 size={18} />,
+  Film: <Film size={18} />,
   BookOpen: <BookOpen size={18} />,
   Heart: <Heart size={18} />,
   Cpu: <Cpu size={20} />,
@@ -75,6 +78,8 @@ const subPageVariants = {
   }),
 };
 
+const tabOrder = { games: 0, movies: 1, gears: 2 };
+
 export default function HobbiesSide({
   profile,
   specs,
@@ -83,13 +88,16 @@ export default function HobbiesSide({
   currentlyPlaying,
   backlog,
   philosophy,
+  movies,
+  moviesWatching,
+  moviesBacklog,
 }) {
   const [subSide, setSubSide] = useState('games');
   const [direction, setDirection] = useState(1);
 
   const handleSubToggle = (side) => {
     if (side === subSide) return;
-    setDirection(side === 'gears' ? 1 : -1);
+    setDirection(tabOrder[side] > tabOrder[subSide] ? 1 : -1);
     setSubSide(side);
   };
 
@@ -98,7 +106,18 @@ export default function HobbiesSide({
   // If any section data is still null, its <motion.section> won't exist in the DOM,
   // and when the data arrives later the animation has already completed → sections stay invisible.
   // FIX: Block the entire animated tree until every data dependency is present.
-  const isReady = profile && specs && setup && storyGames && currentlyPlaying && backlog && philosophy;
+  const isReady =
+    profile &&
+    specs &&
+    setup &&
+    storyGames &&
+    currentlyPlaying &&
+    backlog &&
+    philosophy &&
+    movies &&
+    moviesWatching &&
+    moviesBacklog;
+
   if (!isReady) {
     return (
       <div className="hobbies-side">
@@ -163,7 +182,7 @@ export default function HobbiesSide({
         </div>
       </motion.section>
 
-      {/* Sub-side toggle: Games vs Gears */}
+      {/* Sub-side toggle: Games vs Movies & Series vs Gears */}
       <motion.div className="hobbies-sub-toggle" variants={itemVariants}>
         <button
           className={`hobbies-sub-btn ${subSide === 'games' ? 'active games' : ''}`}
@@ -173,23 +192,30 @@ export default function HobbiesSide({
           <span>Games</span>
         </button>
         <button
+          className={`hobbies-sub-btn ${subSide === 'movies' ? 'active movies' : ''}`}
+          onClick={() => handleSubToggle('movies')}
+        >
+          <Film size={16} />
+          <span>Movies & Series</span>
+        </button>
+        <button
           className={`hobbies-sub-btn ${subSide === 'gears' ? 'active gears' : ''}`}
           onClick={() => handleSubToggle('gears')}
         >
           <Cpu size={16} />
-          <span>Gears & Specs</span>
+          <span>Gears</span>
         </button>
         {/* Animated underline */}
         <motion.div
-          className="hobbies-sub-indicator"
-          animate={{ x: subSide === 'games' ? 0 : '100%' }}
+          className={`hobbies-sub-indicator ${subSide}`}
+          animate={{ x: `${tabOrder[subSide] * 100}%` }}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         />
       </motion.div>
 
       {/* Animated sub-content */}
       <AnimatePresence mode="wait" custom={direction}>
-        {subSide === 'gears' ? (
+        {subSide === 'gears' && (
           <motion.div
             key="gears"
             custom={direction}
@@ -256,7 +282,131 @@ export default function HobbiesSide({
               </section>
             )}
           </motion.div>
-        ) : (
+        )}
+
+        {subSide === 'movies' && (
+          <motion.div
+            key="movies"
+            custom={direction}
+            variants={subPageVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+          >
+            {/* Favorite Movies & Series */}
+            {movies && (
+              <section className="hobbies-section">
+                <h2 className="hobbies-section-title movies-title">
+                  <Film size={24} />
+                  <span>Favorite Movies & Series</span>
+                </h2>
+                <div className="hobbies-story-games-grid">
+                  {movies.map((movie, i) => (
+                    <motion.div
+                      key={i}
+                      className="hobbies-story-card hobbies-movie-card"
+                      whileHover={{ y: -6, borderColor: '#f59e0b' }}
+                    >
+                      <div className="hobbies-story-image-placeholder hobbies-movie-image-cover">
+                        <OptimizedImage src={movie.image} alt={movie.title} className="hobbies-story-img" width={560} height={180} />
+                        {movie.type && (
+                          <span className={`hobbies-movie-type-badge type-${movie.type.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}>
+                            {movie.type}
+                          </span>
+                        )}
+                      </div>
+                      <div className="hobbies-story-body">
+                        <div className="hobbies-story-header">
+                          <h3>{movie.title}</h3>
+                          <div className="hobbies-story-rating movies-rating">
+                            <Star size={14} />
+                            <span>{movie.rating}{typeof movie.rating === 'number' ? '/10' : ''}</span>
+                          </div>
+                        </div>
+                        <div className="hobbies-story-meta">
+                          <span className="hobbies-story-genre-tag">{movie.genre}</span>
+                          {movie.year && <span className="hobbies-movie-year-tag">{movie.year}</span>}
+                          {movie.episodes && <span className="hobbies-movie-ep-tag">{movie.episodes}</span>}
+                          {movie.director && <span className="hobbies-movie-dir-tag">Dir. {movie.director}</span>}
+                          <span className={`hobbies-story-status-badge ${(movie.status || 'completed').toLowerCase().replace(/\s+/g, '-')}`}>
+                            {movie.status || 'Completed'}
+                          </span>
+                        </div>
+                        <p className="hobbies-story-desc">{movie.description}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Currently Watching */}
+            {moviesWatching && (
+              <section className="hobbies-section">
+                <h2 className="hobbies-section-title movies-title">
+                  <Clock size={24} />
+                  <span>Currently Watching</span>
+                </h2>
+                <div className="hobbies-currently-playing">
+                  {moviesWatching.map((item, i) => (
+                    <motion.div
+                      key={i}
+                      className="hobbies-playing-card hobbies-watching-card"
+                      whileHover={{ y: -4, borderColor: '#f59e0b' }}
+                    >
+                      <div className="hobbies-playing-image-placeholder">
+                        <OptimizedImage src={item.image} alt={item.title} className="hobbies-playing-img" width={380} height={122} />
+                        {item.currentEpisode && (
+                          <span className="hobbies-watching-ep-badge">{item.currentEpisode}</span>
+                        )}
+                      </div>
+                      <div className="hobbies-playing-info">
+                        <h4>{item.title}</h4>
+                        <span className="hobbies-playing-genre">{item.genre}</span>
+                        <div className="hobbies-playing-progress">
+                          <div className="hobbies-playing-bar-track">
+                            <motion.div
+                              className="hobbies-playing-bar-fill movies-bar-fill"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${item.progress}%` }}
+                              transition={{ duration: 1, delay: 0.2 + i * 0.15 }}
+                            />
+                          </div>
+                          <span className="hobbies-playing-pct">{item.progress}%</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Movies & Series Watchlist / Backlog */}
+            {moviesBacklog && (
+              <section className="hobbies-section">
+                <h2 className="hobbies-section-title movies-title">
+                  <Map size={24} />
+                  <span>The Cinema & Series Watchlist</span>
+                </h2>
+                <p className="hobbies-backlog-subtitle">Films and shows queued up for movie nights and weekend binges.</p>
+                <div className="hobbies-backlog-grid">
+                  {moviesBacklog.map((title, i) => (
+                    <motion.div
+                      key={i}
+                      className="hobbies-backlog-item hobbies-movie-backlog-item"
+                      whileHover={{ scale: 1.05, borderColor: '#f59e0b' }}
+                    >
+                      <div className="hobbies-backlog-number movies-backlog-num">#{i + 1}</div>
+                      <span>{title}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </section>
+            )}
+          </motion.div>
+        )}
+
+        {subSide === 'games' && (
           <motion.div
             key="games"
             custom={direction}

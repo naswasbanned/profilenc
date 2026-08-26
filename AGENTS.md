@@ -16,7 +16,7 @@ why it "works the second time".
 ### Fix Pattern
 ```jsx
 // ✅ CORRECT – gate on ALL data dependencies
-const isReady = profile && skills && projects && experience;
+const isReady = profile && skills && projects && experience && services;
 if (!isReady) {
   return <div className="page-shell">/* bg effects only */</div>;
 }
@@ -34,8 +34,8 @@ if (!profile) { return <shell /> }
 ```
 
 ### Affected Files
-- `src/components/ProgrammerSide/ProgrammerSide.jsx` — gate: `profile && skills && projects && experience`
-- `src/components/HobbiesSide/HobbiesSide.jsx` — gate: `profile && specs && setup && storyGames && currentlyPlaying && backlog && philosophy`
+- `src/components/ProgrammerSide/ProgrammerSide.jsx` — gate: `profile && skills && projects && experience && services`
+- `src/components/HobbiesSide/HobbiesSide.jsx` — gate: `profile && specs && setup && storyGames && currentlyPlaying && backlog && philosophy && movies && moviesWatching && moviesBacklog`
 - `src/components/DiarySide/DiarySide.jsx` — gate: `profile && entries`
 
 ### When Adding New Sections

@@ -1,0 +1,83 @@
+[
+  {
+    "id": "fullstack-web",
+    "title": "Full-Stack Web Application",
+    "icon": "Globe",
+    "badge": "Popular",
+    "description": "End-to-end custom web applications built with modern frontend frameworks, robust backend architecture, scalable database design, and clean RESTful APIs.",
+    "deliverables": [
+      "Responsive, mobile-first UI with React / Vue",
+      "Robust backend API with Laravel / Node.js",
+      "Database schema design & query optimization",
+      "Authentication & Role-Based Access Control (RBAC)",
+      "Production deployment & CI/CD setup"
+    ],
+    "startingPrice": "$150",
+    "deliveryTime": "1 - 2 weeks",
+    "tech": ["React", "Laravel", "MySQL", "Tailwind CSS"],
+    "image": "/images/projects/template.png",
+    "images": ["/images/projects/template.png"],
+    "status": "Available",
+    "actionUrl": "mailto:nas@example.com?subject=Commission%20Inquiry%20-%20Full-Stack%20Web%20Application"
+  },
+  {
+    "id": "backend-api",
+    "title": "Backend Architecture & REST API",
+    "icon": "Terminal",
+    "badge": "High Performance",
+    "description": "High-performance server-side systems, custom API endpoints, payment gateways, webhook handlers, and database migrations tailored for scale.",
+    "deliverables": [
+      "RESTful API design & Swagger/OpenAPI docs",
+      "Database indexing & query optimization",
+      "Payment gateway & webhook integration",
+      "Docker containerization & security hardening"
+    ],
+    "startingPrice": "$100",
+    "deliveryTime": "3 - 7 days",
+    "tech": ["Laravel", "Node.js", "MySQL", "Docker"],
+    "image": "/images/projects/competitive-programming-module.png",
+    "images": ["/images/projects/competitive-programming-module.png"],
+    "status": "Available",
+    "actionUrl": "mailto:nas@example.com?subject=Commission%20Inquiry%20-%20Backend%20Architecture"
+  },
+  {
+    "id": "frontend-ui",
+    "title": "Modern Frontend & UI Engineering",
+    "icon": "Layers",
+    "badge": "Fast Turnaround",
+    "description": "Pixel-perfect, ultra-smooth web interfaces with dynamic animations, responsive mobile-first layouts, and seamless API integrations.",
+    "deliverables": [
+      "Framer Motion & interactive micro-animations",
+      "Mobile-first, responsive & accessible layout",
+      "Clean component architecture & state management",
+      "Performance optimization & Lighthouse 95+"
+    ],
+    "startingPrice": "$80",
+    "deliveryTime": "3 - 5 days",
+    "tech": ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    "image": "/images/projects/advance-quiz-platform.png",
+    "images": ["/images/projects/advance-quiz-platform.png"],
+    "status": "Available",
+    "actionUrl": "mailto:nas@example.com?subject=Commission%20Inquiry%20-%20Frontend%20UI"
+  },
+  {
+    "id": "code-consultation",
+    "title": "Code Review, Bug Fixes & Optimization",
+    "icon": "Code2",
+    "badge": "Consultation",
+    "description": "In-depth code reviews, bug hunting, debugging complex memory or performance bottlenecks, and architectural guidance for existing codebases.",
+    "deliverables": [
+      "Detailed code audit & vulnerability report",
+      "Performance profiling & query optimization",
+      "Refactoring roadmap & pull request fixes",
+      "Direct 1-on-1 technical consultation"
+    ],
+    "startingPrice": "$50",
+    "deliveryTime": "1 - 3 days",
+    "tech": ["Laravel", "PHP", "React", "JavaScript"],
+    "image": "/images/projects/halalcraft.png",
+    "images": ["/images/projects/halalcraft.png"],
+    "status": "Available",
+    "actionUrl": "mailto:nas@example.com?subject=Commission%20Inquiry%20-%20Code%20Review%20%26%20Fixes"
+  }
+]

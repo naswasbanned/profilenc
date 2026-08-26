@@ -16,6 +16,11 @@ import {
   Maximize2,
   X,
   Code2,
+  Briefcase,
+  Sparkles,
+  CheckCircle2,
+  Clock,
+  ArrowUpRight,
 } from 'lucide-react';
 import {
   SiLaravel,
@@ -210,7 +215,7 @@ function StackedImageDeck({ images, title, onOpenModal }) {
   );
 }
 
-export default function ProgrammerSide({ profile, contact, skills, projects, experience }) {
+export default function ProgrammerSide({ profile, contact, skills, projects, experience, services }) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [modalData, setModalData] = useState(null);
 
@@ -219,7 +224,7 @@ export default function ProgrammerSide({ profile, contact, skills, projects, exp
   // If any section data is still null, its <motion.section> won't exist in the DOM,
   // and when the data arrives later the animation has already completed → sections stay invisible.
   // FIX: Block the entire animated tree until every data dependency is present.
-  const isReady = profile && skills && projects && experience;
+  const isReady = profile && skills && projects && experience && services;
   if (!isReady) {
     return (
       <div className="programmer-side">
@@ -469,6 +474,137 @@ export default function ProgrammerSide({ profile, contact, skills, projects, exp
                 </div>
               </motion.div>
             ))}
+          </div>
+        </motion.section>
+      )}
+
+      {/* Services & Commissions Section */}
+      {services && (
+        <motion.section className="dev-section" variants={itemVariants}>
+          <div className="dev-section-header">
+            <h2 className="dev-section-title">
+              <Briefcase size={24} />
+              <span>Services & Commissions</span>
+            </h2>
+            <div className="dev-section-tagline">
+              <Sparkles size={14} />
+              <span>Available for Freelance & Custom Projects</span>
+            </div>
+          </div>
+
+          <div className="dev-services-grid">
+            {services.map((service, idx) => {
+              const serviceImg = service.image || (service.images && service.images[0]);
+              const allImages = service.images?.length ? service.images : (service.image ? [service.image] : []);
+              return (
+                <motion.div
+                  key={service.id || service.title || idx}
+                  className="dev-service-card"
+                  variants={itemVariants}
+                  whileHover={{ y: -6, borderColor: '#64ffda66' }}
+                >
+                  {serviceImg && (
+                    <div
+                      className="dev-service-image-cover"
+                      onClick={() => allImages.length > 0 && handleOpenModal(allImages, 0, service.title)}
+                      title={allImages.length > 0 ? "Click to view image" : ""}
+                    >
+                      <OptimizedImage
+                        src={serviceImg}
+                        alt={service.title}
+                        className="dev-service-img"
+                        width={480}
+                        height={190}
+                      />
+                      <div className="service-image-overlay" />
+                      {allImages.length > 1 && (
+                        <div className="service-img-count-badge">
+                          <Layers size={12} />
+                          <span>{allImages.length} Photos</span>
+                        </div>
+                      )}
+                      <div className="image-expand-overlay">
+                        <Maximize2 size={16} />
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="dev-service-body">
+                    <div className="dev-service-top">
+                      <div className="dev-service-icon-row">
+                        <div className="dev-service-icon-wrap">
+                          {brandIconMap[service.icon] || <Code2 size={22} />}
+                        </div>
+                        <div className="dev-service-badges">
+                          {service.badge && (
+                            <span className="dev-service-highlight-badge">{service.badge}</span>
+                          )}
+                          <span className={`dev-service-status-pill status-${(service.status || 'available').toLowerCase().replace(/\s+/g, '-')}`}>
+                            <span className="service-status-dot" />
+                            {service.status || 'Available'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <h3 className="dev-service-title">{service.title}</h3>
+                      <p className="dev-service-desc">{service.description}</p>
+                    </div>
+
+                    {/* Deliverables / Features */}
+                    {service.deliverables && service.deliverables.length > 0 && (
+                      <div className="dev-service-deliverables">
+                        <h4 className="deliverables-heading">Deliverables & Features</h4>
+                        <ul className="deliverables-list">
+                          {service.deliverables.map((item, dIdx) => (
+                            <li key={dIdx} className="deliverable-item">
+                              <CheckCircle2 size={15} className="deliverable-check" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Tech Stack */}
+                    {service.tech && service.tech.length > 0 && (
+                      <div className="dev-service-tech">
+                        {service.tech.map((t) => (
+                          <span key={t} className="dev-tech-tag">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Pricing & CTA Action Footer */}
+                    <div className="dev-service-footer">
+                      <div className="dev-service-price-block">
+                        <span className="price-label">Starting From</span>
+                        <div className="price-value-row">
+                          <span className="price-amount">{service.startingPrice || 'Contact'}</span>
+                          {service.deliveryTime && (
+                            <span className="price-time">
+                              <Clock size={12} />
+                              {service.deliveryTime}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <a
+                        href={service.actionUrl || `mailto:${contact?.email || ''}?subject=Commission%20Inquiry%20-%20${encodeURIComponent(service.title)}`}
+                        className="dev-service-cta-btn"
+                        target={service.actionUrl?.startsWith('http') ? '_blank' : undefined}
+                        rel={service.actionUrl?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      >
+                        <span>Commission</span>
+                        <ArrowUpRight size={15} />
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </motion.section>
       )}
