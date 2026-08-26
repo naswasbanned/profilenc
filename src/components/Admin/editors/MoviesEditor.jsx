@@ -33,6 +33,14 @@ export default function MoviesEditor({
     setList(list.filter((_, i) => i !== index));
   };
 
+  const moveItem = (list, setList, fromIndex, toIndex) => {
+    if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || fromIndex >= list.length || toIndex >= list.length) return;
+    const updated = [...list];
+    const [moved] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, moved);
+    setList(updated);
+  };
+
   return (
     <div>
       <div className="admin-subtabs">
@@ -54,6 +62,9 @@ export default function MoviesEditor({
           {movies.map((movie, i) => (
             <AdminCard
               key={i}
+              index={i}
+              totalCount={movies.length}
+              onMove={(from, to) => moveItem(movies, setMovies, from, to)}
               title={movie.title || 'New Entry'}
               subtitle={`${movie.type || 'Movie'} • ★ ${movie.rating || 'N/A'}`}
               hidden={Boolean(movie.hidden)}
@@ -105,6 +116,9 @@ export default function MoviesEditor({
           {moviesWatching.map((item, i) => (
             <AdminCard
               key={i}
+              index={i}
+              totalCount={moviesWatching.length}
+              onMove={(from, to) => moveItem(moviesWatching, setMoviesWatching, from, to)}
               title={item.title || 'New Show'}
               subtitle={`${item.currentEpisode || ''} (${item.progress || 0}%)`}
               hidden={Boolean(item.hidden)}

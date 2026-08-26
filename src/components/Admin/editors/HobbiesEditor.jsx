@@ -21,6 +21,14 @@ export default function HobbiesEditor({ specs, setSpecs, setup, setSetup, token 
     setList(list.filter((_, i) => i !== index));
   };
 
+  const moveItem = (list, setList, fromIndex, toIndex) => {
+    if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || fromIndex >= list.length || toIndex >= list.length) return;
+    const updated = [...list];
+    const [moved] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, moved);
+    setList(updated);
+  };
+
   return (
     <div>
       <div className="admin-subtabs">
@@ -42,6 +50,9 @@ export default function HobbiesEditor({ specs, setSpecs, setup, setSetup, token 
           {specs.map((spec, i) => (
             <AdminCard
               key={i}
+              index={i}
+              totalCount={specs.length}
+              onMove={(from, to) => moveItem(specs, setSpecs, from, to)}
               title={spec.name || 'New Component'}
               subtitle={spec.category}
               hidden={Boolean(spec.hidden)}
@@ -72,6 +83,9 @@ export default function HobbiesEditor({ specs, setSpecs, setup, setSetup, token 
           {setup.map((item, i) => (
             <AdminCard
               key={i}
+              index={i}
+              totalCount={setup.length}
+              onMove={(from, to) => moveItem(setup, setSetup, from, to)}
               title={item.item || 'New Gear'}
               subtitle={item.category}
               hidden={Boolean(item.hidden)}

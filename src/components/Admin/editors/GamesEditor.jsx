@@ -31,6 +31,14 @@ export default function GamesEditor({
     setList(list.filter((_, i) => i !== index));
   };
 
+  const moveItem = (list, setList, fromIndex, toIndex) => {
+    if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || fromIndex >= list.length || toIndex >= list.length) return;
+    const updated = [...list];
+    const [moved] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, moved);
+    setList(updated);
+  };
+
   return (
     <div>
       <div className="admin-subtabs">
@@ -52,6 +60,9 @@ export default function GamesEditor({
           {storyGames.map((game, i) => (
             <AdminCard
               key={i}
+              index={i}
+              totalCount={storyGames.length}
+              onMove={(from, to) => moveItem(storyGames, setStoryGames, from, to)}
               title={game.title || 'New Game'}
               subtitle={`${game.hours || 0}h — ${game.status || 'N/A'}`}
               hidden={Boolean(game.hidden)}
@@ -85,6 +96,9 @@ export default function GamesEditor({
           {currentlyPlaying.map((game, i) => (
             <AdminCard
               key={i}
+              index={i}
+              totalCount={currentlyPlaying.length}
+              onMove={(from, to) => moveItem(currentlyPlaying, setCurrentlyPlaying, from, to)}
               title={game.title || 'New Game'}
               subtitle={`${game.progress || 0}%`}
               hidden={Boolean(game.hidden)}
@@ -154,6 +168,9 @@ export default function GamesEditor({
           {philosophy.map((item, i) => (
             <AdminCard
               key={i}
+              index={i}
+              totalCount={philosophy.length}
+              onMove={(from, to) => moveItem(philosophy, setPhilosophy, from, to)}
               title={item.title || 'New Philosophy'}
               hidden={Boolean(item.hidden)}
               onToggleHide={() => updateItem(philosophy, setPhilosophy, i, 'hidden', !item.hidden)}

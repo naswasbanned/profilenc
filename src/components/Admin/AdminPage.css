@@ -187,6 +187,26 @@
   border-color: #64ffda22;
 }
 
+.admin-card.is-dragging {
+  opacity: 0.35;
+  border-style: dashed;
+  border-color: #64ffda88;
+}
+
+.admin-card.drag-over-top {
+  border-top: 2px solid #64ffda !important;
+  box-shadow: 0 -4px 14px rgba(100, 255, 218, 0.35);
+  transform: translateY(-2px);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.admin-card.drag-over-bottom {
+  border-bottom: 2px solid #64ffda !important;
+  box-shadow: 0 4px 14px rgba(100, 255, 218, 0.35);
+  transform: translateY(2px);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
 .admin-card-header {
   display: flex;
   align-items: center;
@@ -199,15 +219,66 @@
 .admin-card-header-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex: 1;
   min-width: 0;
 }
 
-.admin-card-drag {
-  color: #333;
-  flex-shrink: 0;
+.admin-card-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 26px;
   cursor: grab;
+  color: #555;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.admin-card-drag-handle:hover {
+  color: #64ffda;
+  background: rgba(100, 255, 218, 0.08);
+}
+
+.admin-card-drag-handle:active {
+  cursor: grabbing;
+}
+
+.admin-card-drag {
+  flex-shrink: 0;
+}
+
+.admin-card-reorder-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-card-reorder-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  color: #8892b0;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s;
+}
+
+.admin-card-reorder-btn:hover:not(:disabled) {
+  background: rgba(100, 255, 218, 0.15);
+  border-color: #64ffda55;
+  color: #64ffda;
+}
+
+.admin-card-reorder-btn:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
 }
 
 .admin-card-title {
@@ -222,7 +293,7 @@
 .admin-card-subtitle {
   font-size: 0.65rem;
   color: #8892b0;
-  margin-left: 8px;
+  margin-left: 6px;
 }
 
 .admin-card.is-hidden {

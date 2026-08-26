@@ -26,6 +26,14 @@ export default function DiaryEditor({ entries, setEntries, token }) {
     setEntries(entries.filter((_, i) => i !== index));
   };
 
+  const moveItem = (fromIndex, toIndex) => {
+    if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || fromIndex >= entries.length || toIndex >= entries.length) return;
+    const updated = [...entries];
+    const [moved] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, moved);
+    setEntries(updated);
+  };
+
   const addEntry = () => {
     const newId = entries.length ? Math.max(...entries.map((e) => e.id || 0)) + 1 : 1;
     setEntries([
@@ -50,6 +58,9 @@ export default function DiaryEditor({ entries, setEntries, token }) {
       {entries.map((entry, i) => (
         <AdminCard
           key={entry.id || i}
+          index={i}
+          totalCount={entries.length}
+          onMove={(from, to) => moveItem(from, to)}
           title={entry.content?.slice(0, 50) || 'Empty broadcast'}
           subtitle={entry.date}
           hidden={Boolean(entry.hidden)}

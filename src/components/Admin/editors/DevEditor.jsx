@@ -37,6 +37,14 @@ export default function DevEditor({
     setList(list.filter((_, i) => i !== index));
   };
 
+  const moveItem = (list, setList, fromIndex, toIndex) => {
+    if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || fromIndex >= list.length || toIndex >= list.length) return;
+    const updated = [...list];
+    const [moved] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, moved);
+    setList(updated);
+  };
+
   return (
     <div>
       <div className="admin-subtabs">
@@ -58,6 +66,9 @@ export default function DevEditor({
           {skills.map((skill, i) => (
             <AdminCard
               key={i}
+              index={i}
+              totalCount={skills.length}
+              onMove={(from, to) => moveItem(skills, setSkills, from, to)}
               title={skill.name || 'New Skill'}
               subtitle={skill.tier}
               hidden={Boolean(skill.hidden)}
@@ -90,6 +101,9 @@ export default function DevEditor({
           {projects.map((project, i) => (
             <AdminCard
               key={i}
+              index={i}
+              totalCount={projects.length}
+              onMove={(from, to) => moveItem(projects, setProjects, from, to)}
               title={project.title || 'New Project'}
               subtitle={`★ ${project.stars || 0}`}
               hidden={Boolean(project.hidden)}
@@ -121,6 +135,9 @@ export default function DevEditor({
           {experience.map((exp, i) => (
             <AdminCard
               key={i}
+              index={i}
+              totalCount={experience.length}
+              onMove={(from, to) => moveItem(experience, setExperience, from, to)}
               title={exp.role || 'New Role'}
               subtitle={exp.company}
               hidden={Boolean(exp.hidden)}
@@ -152,6 +169,9 @@ export default function DevEditor({
           {services.map((service, i) => (
             <AdminCard
               key={i}
+              index={i}
+              totalCount={services.length}
+              onMove={(from, to) => moveItem(services, setServices, from, to)}
               title={service.title || 'New Service'}
               subtitle={`${service.startingPrice || 'Price TBD'} • ${service.status || 'Available'}`}
               hidden={Boolean(service.hidden)}
