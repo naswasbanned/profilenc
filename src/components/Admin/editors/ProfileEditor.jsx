@@ -1,4 +1,20 @@
-import { User, Code2, Gamepad2, BookHeart, Globe, Mail, Eye, Sliders } from 'lucide-react';
+import { useState } from 'react';
+import {
+  User,
+  Code2,
+  Gamepad2,
+  BookHeart,
+  Globe,
+  Mail,
+  Eye,
+  Sliders,
+  Film,
+  Cpu,
+  Layers,
+  Search,
+  Sparkles,
+  CheckCircle2,
+} from 'lucide-react';
 import AdminField from '../shared/AdminField';
 
 function updateNested(obj, path, value) {
@@ -13,7 +29,145 @@ function updateNested(obj, path, value) {
   return result;
 }
 
+const VISIBILITY_GROUPS = [
+  {
+    id: 'sides',
+    title: 'Top Navigation Sides',
+    subtitle: 'Global switcher bar at the top of the website',
+    icon: Sliders,
+    color: '#64ffda',
+    subgroups: [
+      {
+        name: 'Main Website Sides',
+        icon: Sliders,
+        items: [
+          { key: 'sides.dev', label: 'Developer Side', desc: 'Main Developer view & navigation tab' },
+          { key: 'sides.hobbies', label: 'Hobbies Side', desc: 'Main Hobbies view & navigation tab' },
+          { key: 'sides.diary', label: 'Diary Side', desc: 'Main Diary view & navigation tab' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'dev',
+    title: 'Developer Side',
+    subtitle: 'Hero banner, identity info, and portfolio sections',
+    icon: Code2,
+    color: '#64ffda',
+    subgroups: [
+      {
+        name: 'Profile & Hero Identity',
+        icon: User,
+        items: [
+          { key: 'dev.hero', label: 'Developer Hero Banner', desc: 'Full top hero container' },
+          { key: 'dev.name', label: 'Display Name (Aqil)', desc: 'Greeting, name and developer title' },
+          { key: 'dev.avatar', label: 'Avatar & Status Pill', desc: 'Profile photo and online status indicator' },
+          { key: 'dev.bio', label: 'Developer Bio', desc: 'About summary paragraph' },
+          { key: 'dev.terminal', label: 'Interactive Terminal', desc: 'Terminal window widget' },
+        ],
+      },
+      {
+        name: 'Portfolio & Content Sections',
+        icon: Layers,
+        items: [
+          { key: 'dev.skills', label: 'Tech Stack Section', desc: 'Skills & expertise grid' },
+          { key: 'dev.projects', label: 'Featured Projects Section', desc: 'Showcase projects with stars' },
+          { key: 'dev.experience', label: 'Career Experience Section', desc: 'Work history timeline' },
+          { key: 'dev.services', label: 'Services & Commissions Section', desc: 'Offerings with pricing' },
+          { key: 'dev.contact', label: 'Contact Section', desc: 'Get in touch footer section' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'hobbies',
+    title: 'Hobbies Side',
+    subtitle: 'Hero identity, sub-tab bar, games, movies, and hardware gear',
+    icon: Gamepad2,
+    color: '#a855f7',
+    subgroups: [
+      {
+        name: 'Profile & Hero Identity',
+        icon: User,
+        items: [
+          { key: 'hobbies.hero', label: 'Hobbies Hero Banner', desc: 'Full hobbies hero container' },
+          { key: 'hobbies.gamertag', label: 'Gamertag & Role (NAS)', desc: 'Main gamer alias and subtitle' },
+          { key: 'hobbies.avatar', label: 'Avatar & Rank Badge', desc: 'Gamer avatar and rank pill' },
+          { key: 'hobbies.bio', label: 'Bio & Tagline', desc: 'Gamer tagline and bio text' },
+          { key: 'hobbies.quickStats', label: 'Quick Stats Bar', desc: 'Gaming summary stats row' },
+        ],
+      },
+      {
+        name: 'Navigation Sub-Tabs (Select Bar)',
+        icon: Sliders,
+        items: [
+          { key: 'hobbies.gamesTab', label: 'Games Tab (Select Bar)', desc: 'Show or hide Games in Hobbies tab bar' },
+          { key: 'hobbies.moviesTab', label: 'Movies & Series Tab (Select Bar)', desc: 'Show or hide Movies & Series in Hobbies tab bar' },
+          { key: 'hobbies.gearsTab', label: 'Gears Tab (Select Bar)', desc: 'Show or hide Gears in Hobbies tab bar' },
+        ],
+      },
+      {
+        name: 'Gaming Content Sections',
+        icon: Gamepad2,
+        items: [
+          { key: 'hobbies.storyGames', label: 'Story Games Section', desc: 'Favorite narrative games' },
+          { key: 'hobbies.currentlyPlaying', label: 'Currently Playing Section', desc: 'Active games with progress bar' },
+          { key: 'hobbies.backlog', label: 'Game Backlog Section', desc: 'Games queue watchlist' },
+          { key: 'hobbies.philosophy', label: 'Gaming Philosophy Section', desc: 'Playstyle principles' },
+        ],
+      },
+      {
+        name: 'Movies & Series Content Sections',
+        icon: Film,
+        items: [
+          { key: 'hobbies.moviesList', label: 'Favorite Movies & Series Section', desc: 'Ranked films & shows' },
+          { key: 'hobbies.moviesWatching', label: 'Currently Watching Section', desc: 'Active shows with progress' },
+          { key: 'hobbies.moviesBacklog', label: 'Cinema Watchlist Backlog', desc: 'Queued films & series' },
+        ],
+      },
+      {
+        name: 'Hardware & Battlestation Sections',
+        icon: Cpu,
+        items: [
+          { key: 'hobbies.specs', label: 'PC Hardware Specs Section', desc: 'System specs list' },
+          { key: 'hobbies.setup', label: 'Peripherals & Gear Section', desc: 'Desk setup and accessories' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'diary',
+    title: 'Diary Side',
+    subtitle: 'Journal header, author bio, and broadcasts feed',
+    icon: BookHeart,
+    color: '#f43f5e',
+    subgroups: [
+      {
+        name: 'Profile & Hero Identity',
+        icon: User,
+        items: [
+          { key: 'diary.hero', label: 'Diary Hero Banner', desc: 'Full journal header container' },
+          { key: 'diary.name', label: 'Author Name & Tagline', desc: 'Journalist display name and subtitle' },
+          { key: 'diary.avatar', label: 'Diary Avatar', desc: 'Profile photo' },
+          { key: 'diary.bio', label: 'Diary Bio & Stats Row', desc: 'Journal overview and counter pills' },
+        ],
+      },
+      {
+        name: 'Journal Content Sections',
+        icon: Layers,
+        items: [
+          { key: 'diary.pinnedQuote', label: 'Pinned Quote Block', desc: 'Featured thought block' },
+          { key: 'diary.broadcasts', label: 'Recent Broadcasts Feed', desc: 'Chronological journal posts' },
+        ],
+      },
+    ],
+  },
+];
+
 export default function ProfileEditor({ data, setData, token }) {
+  const [activeVisTab, setActiveVisTab] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
   if (!data) return null;
 
   const update = (path, value) => {
@@ -30,6 +184,26 @@ export default function ProfileEditor({ data, setData, token }) {
     return cur !== false;
   };
 
+  // Filter groups based on active category tab & search query
+  const query = searchQuery.trim().toLowerCase();
+
+  const filteredGroups = VISIBILITY_GROUPS.filter((group) => {
+    if (activeVisTab !== 'all' && group.id !== activeVisTab) return false;
+    return true;
+  }).map((group) => {
+    if (!query) return group;
+    const matchingSubgroups = group.subgroups.map((sub) => {
+      const matchingItems = sub.items.filter((item) =>
+        item.label.toLowerCase().includes(query) ||
+        (item.desc && item.desc.toLowerCase().includes(query)) ||
+        sub.name.toLowerCase().includes(query)
+      );
+      return { ...sub, items: matchingItems };
+    }).filter((sub) => sub.items.length > 0);
+
+    return { ...group, subgroups: matchingSubgroups };
+  }).filter((group) => group.subgroups.length > 0);
+
   return (
     <div>
       {/* Section & Navigation Visibility Controls */}
@@ -37,271 +211,128 @@ export default function ProfileEditor({ data, setData, token }) {
         <div className="admin-form-group-title">
           <Eye size={16} /> Section Visibility & Publishing Controls
         </div>
-        <p style={{ fontSize: '0.72rem', color: '#8892b0', marginTop: '-8px', marginBottom: '16px' }}>
-          Instantly publish or hide entire sections, tabs, or whole website sides. Hidden sections will not be rendered on the public website.
-        </p>
 
-        {/* Top-level Side Toggles */}
-        <div className="admin-visibility-section">
-          <div className="admin-visibility-section-title">
-            <Sliders size={14} /> Main Side Toggles (Top Switcher)
-          </div>
-          <div className="admin-field-grid">
-            <AdminField
-              label="Developer Side"
-              value={getVisibility('sides.dev', true)}
-              onChange={(v) => update('visibility.sides.dev', v)}
-              type="toggle"
-              placeholder="Show or hide Developer side in top navigation"
-            />
-            <AdminField
-              label="Hobbies Side"
-              value={getVisibility('sides.hobbies', true)}
-              onChange={(v) => update('visibility.sides.hobbies', v)}
-              type="toggle"
-              placeholder="Show or hide Hobbies side in top navigation"
-            />
-            <AdminField
-              label="Diary Side"
-              value={getVisibility('sides.diary', true)}
-              onChange={(v) => update('visibility.sides.diary', v)}
-              type="toggle"
-              placeholder="Show or hide Diary side in top navigation"
-            />
+        <div className="admin-vis-header">
+          <p style={{ fontSize: '0.72rem', color: '#8892b0', marginTop: '-8px', marginBottom: '14px' }}>
+            Instantly publish or hide entire sections, tabs, or whole website sides. Hidden items are never rendered on the public website.
+          </p>
+
+          {/* Category Tabs & Search Bar */}
+          <div className="admin-vis-nav">
+            <div className="admin-vis-tabs">
+              <button
+                type="button"
+                className={`admin-vis-tab-btn ${activeVisTab === 'all' ? 'active' : ''}`}
+                onClick={() => setActiveVisTab('all')}
+              >
+                <Sparkles size={13} />
+                <span>All Sections</span>
+              </button>
+              <button
+                type="button"
+                className={`admin-vis-tab-btn ${activeVisTab === 'sides' ? 'active' : ''}`}
+                onClick={() => setActiveVisTab('sides')}
+              >
+                <Sliders size={13} />
+                <span>Top Sides</span>
+              </button>
+              <button
+                type="button"
+                className={`admin-vis-tab-btn ${activeVisTab === 'dev' ? 'active' : ''}`}
+                onClick={() => setActiveVisTab('dev')}
+              >
+                <Code2 size={13} />
+                <span>Developer</span>
+              </button>
+              <button
+                type="button"
+                className={`admin-vis-tab-btn ${activeVisTab === 'hobbies' ? 'active' : ''}`}
+                onClick={() => setActiveVisTab('hobbies')}
+              >
+                <Gamepad2 size={13} />
+                <span>Hobbies</span>
+              </button>
+              <button
+                type="button"
+                className={`admin-vis-tab-btn ${activeVisTab === 'diary' ? 'active' : ''}`}
+                onClick={() => setActiveVisTab('diary')}
+              >
+                <BookHeart size={13} />
+                <span>Diary</span>
+              </button>
+            </div>
+
+            <div className="admin-vis-search">
+              <Search size={14} />
+              <input
+                type="text"
+                placeholder="Search visibility (e.g. movies, hero)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  style={{ background: 'none', border: 'none', color: '#8892b0', cursor: 'pointer', padding: 0 }}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Developer Side Section Toggles */}
-        <div className="admin-visibility-section">
-          <div className="admin-visibility-section-title">
-            <Code2 size={14} /> Developer Side Elements
+        {/* Categorized Visibility Cards */}
+        {filteredGroups.length === 0 ? (
+          <div className="admin-empty" style={{ padding: '32px 16px' }}>
+            <Search size={24} style={{ opacity: 0.3, marginBottom: 8 }} />
+            <p>No visibility settings match &quot;{searchQuery}&quot;</p>
           </div>
-          <div className="admin-field-grid">
-            <AdminField
-              label="Developer Hero (Header Block)"
-              value={getVisibility('dev.hero', true)}
-              onChange={(v) => update('visibility.dev.hero', v)}
-              type="toggle"
-              placeholder="Full developer hero / banner"
-            />
-            <AdminField
-              label="Name & Identity (Aqil)"
-              value={getVisibility('dev.name', true)}
-              onChange={(v) => update('visibility.dev.name', v)}
-              type="toggle"
-              placeholder="Developer display name & title"
-            />
-            <AdminField
-              label="Developer Avatar & Status"
-              value={getVisibility('dev.avatar', true)}
-              onChange={(v) => update('visibility.dev.avatar', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Developer Bio"
-              value={getVisibility('dev.bio', true)}
-              onChange={(v) => update('visibility.dev.bio', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Interactive Terminal Widget"
-              value={getVisibility('dev.terminal', true)}
-              onChange={(v) => update('visibility.dev.terminal', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Tech Stack Section"
-              value={getVisibility('dev.skills', true)}
-              onChange={(v) => update('visibility.dev.skills', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Featured Projects Section"
-              value={getVisibility('dev.projects', true)}
-              onChange={(v) => update('visibility.dev.projects', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Career Experience Section"
-              value={getVisibility('dev.experience', true)}
-              onChange={(v) => update('visibility.dev.experience', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Services & Commissions Section"
-              value={getVisibility('dev.services', true)}
-              onChange={(v) => update('visibility.dev.services', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Contact Section"
-              value={getVisibility('dev.contact', true)}
-              onChange={(v) => update('visibility.dev.contact', v)}
-              type="toggle"
-            />
-          </div>
-        </div>
+        ) : (
+          filteredGroups.map((group) => {
+            const GroupIcon = group.icon;
+            return (
+              <div key={group.id} className="admin-vis-group-card">
+                <div className="admin-vis-group-header">
+                  <div className="admin-vis-group-title-wrapper">
+                    <div className="admin-vis-group-icon" style={{ color: group.color }}>
+                      <GroupIcon size={16} />
+                    </div>
+                    <div>
+                      <div className="admin-vis-group-title">{group.title}</div>
+                      <div className="admin-vis-group-sub">{group.subtitle}</div>
+                    </div>
+                  </div>
+                </div>
 
-        {/* Hobbies Side Section Toggles */}
-        <div className="admin-visibility-section">
-          <div className="admin-visibility-section-title">
-            <Gamepad2 size={14} /> Hobbies & Gear Elements
-          </div>
-          <div className="admin-field-grid">
-            <AdminField
-              label="Hobbies Hero (Header Block)"
-              value={getVisibility('hobbies.hero', true)}
-              onChange={(v) => update('visibility.hobbies.hero', v)}
-              type="toggle"
-              placeholder="Full hobbies hero / banner"
-            />
-            <AdminField
-              label="Gamertag & Role (NAS)"
-              value={getVisibility('hobbies.gamertag', true)}
-              onChange={(v) => update('visibility.hobbies.gamertag', v)}
-              type="toggle"
-              placeholder="Gamertag & game role"
-            />
-            <AdminField
-              label="Hobbies Avatar & Rank Badge"
-              value={getVisibility('hobbies.avatar', true)}
-              onChange={(v) => update('visibility.hobbies.avatar', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Hobbies Bio & Tagline"
-              value={getVisibility('hobbies.bio', true)}
-              onChange={(v) => update('visibility.hobbies.bio', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Quick Stats Bar"
-              value={getVisibility('hobbies.quickStats', true)}
-              onChange={(v) => update('visibility.hobbies.quickStats', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Games Tab (Select Bar)"
-              value={getVisibility('hobbies.gamesTab', true)}
-              onChange={(v) => update('visibility.hobbies.gamesTab', v)}
-              type="toggle"
-              placeholder="Show or hide Games in Hobbies tab bar"
-            />
-            <AdminField
-              label="Movies & Series Tab (Select Bar)"
-              value={getVisibility('hobbies.moviesTab', true)}
-              onChange={(v) => update('visibility.hobbies.moviesTab', v)}
-              type="toggle"
-              placeholder="Show or hide Movies & Series in Hobbies tab bar"
-            />
-            <AdminField
-              label="Gears Tab (Select Bar)"
-              value={getVisibility('hobbies.gearsTab', true)}
-              onChange={(v) => update('visibility.hobbies.gearsTab', v)}
-              type="toggle"
-              placeholder="Show or hide Gears in Hobbies tab bar"
-            />
-            <AdminField
-              label="Story Games Section"
-              value={getVisibility('hobbies.storyGames', true)}
-              onChange={(v) => update('visibility.hobbies.storyGames', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Currently Playing Section (Games)"
-              value={getVisibility('hobbies.currentlyPlaying', true)}
-              onChange={(v) => update('visibility.hobbies.currentlyPlaying', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Game Backlog Section"
-              value={getVisibility('hobbies.backlog', true)}
-              onChange={(v) => update('visibility.hobbies.backlog', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Gaming Philosophy Section"
-              value={getVisibility('hobbies.philosophy', true)}
-              onChange={(v) => update('visibility.hobbies.philosophy', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Favorite Movies & Series Section"
-              value={getVisibility('hobbies.moviesList', true)}
-              onChange={(v) => update('visibility.hobbies.moviesList', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Currently Watching Section (Movies)"
-              value={getVisibility('hobbies.moviesWatching', true)}
-              onChange={(v) => update('visibility.hobbies.moviesWatching', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Movies Watchlist Backlog Section"
-              value={getVisibility('hobbies.moviesBacklog', true)}
-              onChange={(v) => update('visibility.hobbies.moviesBacklog', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="PC Hardware Specs Section"
-              value={getVisibility('hobbies.specs', true)}
-              onChange={(v) => update('visibility.hobbies.specs', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Battlestation Peripherals & Gear Section"
-              value={getVisibility('hobbies.setup', true)}
-              onChange={(v) => update('visibility.hobbies.setup', v)}
-              type="toggle"
-            />
-          </div>
-        </div>
-
-        {/* Diary Side Section Toggles */}
-        <div className="admin-visibility-section">
-          <div className="admin-visibility-section-title">
-            <BookHeart size={14} /> Diary Elements
-          </div>
-          <div className="admin-field-grid">
-            <AdminField
-              label="Diary Hero (Header Block)"
-              value={getVisibility('diary.hero', true)}
-              onChange={(v) => update('visibility.diary.hero', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Diary Profile Name & Tagline"
-              value={getVisibility('diary.name', true)}
-              onChange={(v) => update('visibility.diary.name', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Diary Avatar"
-              value={getVisibility('diary.avatar', true)}
-              onChange={(v) => update('visibility.diary.avatar', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Diary Bio & Stats Row"
-              value={getVisibility('diary.bio', true)}
-              onChange={(v) => update('visibility.diary.bio', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Pinned Quote"
-              value={getVisibility('diary.pinnedQuote', true)}
-              onChange={(v) => update('visibility.diary.pinnedQuote', v)}
-              type="toggle"
-            />
-            <AdminField
-              label="Recent Broadcasts Feed"
-              value={getVisibility('diary.broadcasts', true)}
-              onChange={(v) => update('visibility.diary.broadcasts', v)}
-              type="toggle"
-            />
-          </div>
-        </div>
+                {group.subgroups.map((sub, sIdx) => {
+                  const SubIcon = sub.icon || Layers;
+                  return (
+                    <div key={sIdx} className="admin-vis-subgroup">
+                      <div className="admin-vis-subgroup-title">
+                        <SubIcon size={12} />
+                        <span>{sub.name}</span>
+                      </div>
+                      <div className="admin-field-grid">
+                        {sub.items.map((item) => (
+                          <AdminField
+                            key={item.key}
+                            label={item.label}
+                            value={getVisibility(item.key, true)}
+                            onChange={(v) => update(`visibility.${item.key}`, v)}
+                            type="toggle"
+                            placeholder={item.desc}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })
+        )}
       </div>
       {/* Dev Profile */}
       <div className="admin-form-group">

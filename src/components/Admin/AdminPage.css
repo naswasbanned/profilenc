@@ -1136,3 +1136,149 @@ select.admin-field-input {
   letter-spacing: 0.05em;
 }
 
+/* === Visibility Categorized Controls === */
+.admin-vis-header {
+  margin-bottom: 16px;
+}
+
+.admin-vis-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-vis-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.admin-vis-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid #1d1d2e;
+  background: #0a0a0f;
+  color: #8892b0;
+  font-family: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-vis-tab-btn:hover {
+  border-color: #64ffda33;
+  color: #ccd6f6;
+}
+
+.admin-vis-tab-btn.active {
+  background: rgba(100, 255, 218, 0.1);
+  border-color: #64ffda;
+  color: #64ffda;
+  font-weight: 700;
+}
+
+.admin-vis-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #0a0a0f;
+  border: 1px solid #1d1d2e;
+  border-radius: 8px;
+  padding: 6px 12px;
+  min-width: 220px;
+}
+
+.admin-vis-search input {
+  background: none;
+  border: none;
+  outline: none;
+  color: #ccd6f6;
+  font-family: inherit;
+  font-size: 0.72rem;
+  width: 100%;
+}
+
+.admin-vis-search svg {
+  color: #555;
+  flex-shrink: 0;
+}
+
+.admin-vis-group-card {
+  background: #0e0e16;
+  border: 1px solid #1d1d2e;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  transition: border-color 0.2s;
+}
+
+.admin-vis-group-card:hover {
+  border-color: #2a2a40;
+}
+
+.admin-vis-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #1a1a28;
+}
+
+.admin-vis-group-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-vis-group-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.admin-vis-group-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ccd6f6;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-vis-group-sub {
+  font-size: 0.65rem;
+  color: #8892b0;
+  margin-top: 1px;
+}
+
+.admin-vis-subgroup {
+  margin-top: 16px;
+}
+
+.admin-vis-subgroup:first-of-type {
+  margin-top: 0;
+}
+
+.admin-vis-subgroup-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #a0aec0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+  padding-bottom: 4px;
+}
+
