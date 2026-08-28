@@ -204,7 +204,7 @@ export default function JournalBlock({ data = {} }) {
                   </span>
                   {entry.mood && (
                     <span className="journal-mood-badge">
-                      {entry.moodEmoji || '✨'} {entry.mood}
+                      {entry.moodEmoji ? `${entry.moodEmoji} ` : ''}{entry.mood}
                     </span>
                   )}
                 </div>
@@ -288,7 +288,7 @@ export default function JournalBlock({ data = {} }) {
                 <span className="journal-date">{activeArticle.date}</span>
                 {activeArticle.mood && (
                   <span className="journal-mood-badge">
-                    {activeArticle.moodEmoji || '✨'} {activeArticle.mood}
+                    {activeArticle.moodEmoji ? `${activeArticle.moodEmoji} ` : ''}{activeArticle.mood}
                   </span>
                 )}
                 <span style={{ fontSize: '0.75rem', color: 'var(--card-text-muted, #8b949e)', display: 'flex', alignItems: 'center', gap: '4px', fontFamily: 'var(--font-mono)' }}>

@@ -34,6 +34,18 @@ function EditorCanvasInner({
 
   const hasChanges = isContentDirty || isThemeDirty;
 
+  // Warn user if closing or reloading the browser tab with unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (hasChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasChanges]);
+
   const tabs = content?.tabs || [];
   const currentTab = tabs.find((t) => t.id === activeTabId) || tabs[0];
 

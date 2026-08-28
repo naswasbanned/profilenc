@@ -27,6 +27,7 @@ import {
 import ImageUploadPicker from './ImageUploadPicker';
 
 const MOOD_OPTIONS = [
+  { emoji: '', label: '🚫 None', isNone: true },
   { emoji: '💡', label: 'Inspired' },
   { emoji: '🎯', label: 'Focused' },
   { emoji: '☕', label: 'Relaxed' },
@@ -187,9 +188,11 @@ function JournalItemEditor({ entry, idx, onChange, onRemove }) {
           <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc' }}>
             Entry #{idx + 1}: {entry.title || 'Untitled Entry'}
           </span>
-          <span style={{ fontSize: '0.72rem', padding: '2px 8px', borderRadius: '9999px', background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa' }}>
-            {entry.moodEmoji || '✨'} {entry.mood || 'Reflection'}
-          </span>
+          {entry.mood && (
+            <span style={{ fontSize: '0.72rem', padding: '2px 8px', borderRadius: '9999px', background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa' }}>
+              {entry.moodEmoji ? `${entry.moodEmoji} ` : ''}{entry.mood}
+            </span>
+          )}
         </div>
         <button
           type="button"
@@ -235,19 +238,37 @@ function JournalItemEditor({ entry, idx, onChange, onRemove }) {
 
       {/* Quick Mood & Reflection Tag Selector */}
       <div>
-        <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
-          Mood / Reflection Theme
-        </label>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+          <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8' }}>
+            Mood / Reflection Theme
+          </label>
+          {entry.mood && (
+            <button
+              type="button"
+              onClick={() => onChange(idx, 'moodEmoji', entry.moodEmoji ? '' : '✨')}
+              className={`editor-btn ${!entry.moodEmoji ? 'editor-btn-save' : 'editor-btn-ghost'}`}
+              style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: '4px' }}
+              title={entry.moodEmoji ? 'Hide emoji from mood tag' : 'Show emoji with mood tag'}
+            >
+              {entry.moodEmoji ? '🚫 No Emoji' : '✨ Show Emoji'}
+            </button>
+          )}
+        </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
           {MOOD_OPTIONS.map((m) => {
-            const isSelected = entry.mood === m.label;
+            const isSelected = m.isNone ? (!entry.mood || entry.mood === 'None') : (entry.mood === m.label);
             return (
               <button
                 key={m.label}
                 type="button"
                 onClick={() => {
-                  onChange(idx, 'mood', m.label);
-                  onChange(idx, 'moodEmoji', m.emoji);
+                  if (m.isNone || isSelected) {
+                    onChange(idx, 'mood', '');
+                    onChange(idx, 'moodEmoji', '');
+                  } else {
+                    onChange(idx, 'mood', m.label);
+                    onChange(idx, 'moodEmoji', entry.moodEmoji === '' ? '' : m.emoji);
+                  }
                 }}
                 style={{
                   padding: '4px 9px',
@@ -263,7 +284,7 @@ function JournalItemEditor({ entry, idx, onChange, onRemove }) {
                   gap: '4px',
                 }}
               >
-                <span>{m.emoji}</span>
+                {m.emoji && <span>{m.emoji}</span>}
                 <span>{m.label}</span>
               </button>
             );

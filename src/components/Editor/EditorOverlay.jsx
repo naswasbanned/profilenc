@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -14,6 +14,8 @@ import {
   Undo2,
   FolderKanban,
   Loader2,
+  AlertCircle,
+  AlertTriangle,
 } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import ThemePanel from './panels/ThemePanel';
@@ -43,15 +45,25 @@ export default function EditorOverlay({
   const [showThemeDrawer, setShowThemeDrawer] = useState(false);
   const [showAddBlockModal, setShowAddBlockModal] = useState(false);
   const [showTabManager, setShowTabManager] = useState(false);
+  const [showExitModal, setShowExitModal] = useState(false);
+  const [dismissedToast, setDismissedToast] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const isDirty = hasChanges || isThemeDirty;
+
+  // Whenever user makes new unsaved edits, un-dismiss the reminder toast
+  useEffect(() => {
+    if (isDirty) {
+      setDismissedToast(false);
+    }
+  }, [isDirty]);
 
   const handleSave = useCallback(async () => {
     if (!isDirty || saving) return;
     setSaving(true);
     try {
       await onSaveAll();
+      setDismissedToast(true);
     } catch (err) {
       console.error('Save failed:', err);
     } finally {
@@ -60,7 +72,11 @@ export default function EditorOverlay({
   }, [onSaveAll, isDirty, saving]);
 
   const handleExit = () => {
-    navigate(`/@${username}`);
+    if (isDirty) {
+      setShowExitModal(true);
+    } else {
+      navigate(`/@${username}`);
+    }
   };
 
   return (
@@ -255,6 +271,138 @@ export default function EditorOverlay({
             onSaveTabs={(newTabs) => onUpdateTabs(newTabs)}
             onClose={() => setShowTabManager(false)}
           />
+        )}
+      </AnimatePresence>
+
+      {/* Floating Unsaved Changes Notification Toast */}
+      <AnimatePresence>
+        {isDirty && !dismissedToast && (
+          <motion.div
+            className="editor-unsaved-banner"
+            initial={{ y: 50, opacity: 0, scale: 0.95 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 50, opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="editor-unsaved-banner-content">
+              <div className="editor-unsaved-indicator" />
+              <div className="editor-unsaved-text">
+                <strong>Unsaved Changes</strong>
+                <span>Remember to save to publish your layout!</span>
+              </div>
+            </div>
+
+            <div className="editor-unsaved-banner-actions">
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={saving}
+                className="editor-btn editor-btn-save active-dirty"
+                style={{ padding: '6px 14px', fontSize: '0.78rem' }}
+              >
+                {saving ? (
+                  <>
+                    <Loader2 size={13} className="spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save size={13} />
+                    <span>Save Now</span>
+                  </>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => setDismissedToast(true)}
+                className="editor-unsaved-dismiss"
+                title="Dismiss reminder"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Unsaved Changes Exit Confirmation Guard Modal */}
+      <AnimatePresence>
+        {showExitModal && (
+          <div className="editor-modal-backdrop" onClick={() => setShowExitModal(false)}>
+            <motion.div
+              className="editor-modal-dialog modal-sm"
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{ maxWidth: '480px' }}
+            >
+              <div className="editor-modal-header">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <AlertTriangle size={18} />
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#fff' }}>Unsaved Changes</h3>
+                    <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>You have unsaved edits on your profile</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowExitModal(false)}
+                  style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="editor-modal-body" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <p style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: '1.6', margin: 0 }}>
+                  You have made changes that haven't been saved yet. If you exit now, your recent edits will be lost.
+                </p>
+              </div>
+
+              <div className="editor-modal-footer" style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+                <button
+                  type="button"
+                  onClick={() => navigate(`/@${username}`)}
+                  className="editor-btn editor-btn-close"
+                  style={{ fontSize: '0.78rem', padding: '8px 14px' }}
+                >
+                  Discard & Exit
+                </button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setShowExitModal(false)}
+                    className="editor-btn editor-btn-ghost"
+                    style={{ fontSize: '0.78rem', padding: '8px 14px' }}
+                  >
+                    Keep Editing
+                  </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      setSaving(true);
+                      try {
+                        await onSaveAll();
+                        navigate(`/@${username}`);
+                      } catch (err) {
+                        console.error('Save failed:', err);
+                      } finally {
+                        setSaving(false);
+                      }
+                    }}
+                    disabled={saving}
+                    className="editor-btn editor-btn-save active-dirty"
+                    style={{ fontSize: '0.78rem', padding: '8px 16px' }}
+                  >
+                    {saving ? 'Saving...' : 'Save & Exit'}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>
