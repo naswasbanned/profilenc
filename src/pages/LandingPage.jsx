@@ -381,30 +381,59 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="patch-timeline-ledger">
-            {ENGINE_PATCH_NOTES.map((patch, pIdx) => (
-              <div key={patch.version} className={`patch-node-card ${pIdx === 0 ? 'is-current' : ''}`}>
-                <div className="patch-node-sidebar">
-                  <div className="patch-ver-box">
-                    <span className="patch-ver-num">{patch.version}</span>
-                    <span className="patch-ver-tag">{patch.status}</span>
+          {/* 1. DESKTOP VIEW (Shown on > 860px, Hidden on Mobile) */}
+          <div className="patch-desktop-view">
+            <div className="patch-timeline-ledger">
+              {ENGINE_PATCH_NOTES.map((patch, pIdx) => (
+                <div key={patch.version} className={`patch-node-card ${pIdx === 0 ? 'is-current' : ''}`}>
+                  <div className="patch-node-sidebar">
+                    <div className="patch-ver-box">
+                      <span className="patch-ver-num">{patch.version}</span>
+                      <span className="patch-ver-tag">{patch.status}</span>
+                    </div>
+                    <div className="patch-timestamp">
+                      <span>RELEASE: {patch.date}</span>
+                      <span>TITLE: {patch.codename}</span>
+                    </div>
                   </div>
-                  <div className="patch-timestamp">
-                    <span>RELEASE: {patch.date}</span>
-                    <span>TITLE: {patch.codename}</span>
+
+                  <div className="patch-node-content">
+                    <h3 className="patch-node-headline">{patch.title}</h3>
+                    <div className="patch-changes-list">
+                      {patch.changes.map((c, cIdx) => (
+                        <div key={cIdx} className="patch-change-item">
+                          <span className={`change-tag ${c.type.toLowerCase()}`}>[{c.type}]</span>
+                          <span className="change-text">{c.text}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                <div className="patch-node-content">
-                  <h3 className="patch-node-headline">{patch.title}</h3>
-                  <div className="patch-changes-list">
-                    {patch.changes.map((c, cIdx) => (
-                      <div key={cIdx} className="patch-change-item">
-                        <span className={`change-tag ${c.type.toLowerCase()}`}>[{c.type}]</span>
-                        <span className="change-text">{c.text}</span>
-                      </div>
-                    ))}
+          {/* 2. MOBILE VIEW (Shown on <= 860px, Hidden on Desktop) */}
+          <div className="patch-mobile-view">
+            {ENGINE_PATCH_NOTES.map((patch, pIdx) => (
+              <div key={patch.version} className={`patch-mobile-card ${pIdx === 0 ? 'is-current' : ''}`}>
+                <div className="patch-mobile-card-top">
+                  <div className="patch-mobile-ver-wrap">
+                    <span className="patch-mobile-ver">{patch.version}</span>
+                    <span className="patch-mobile-badge">{patch.status}</span>
                   </div>
+                  <span className="patch-mobile-date">{patch.date}</span>
+                </div>
+
+                <h3 className="patch-mobile-title">{patch.title}</h3>
+
+                <div className="patch-mobile-list">
+                  {patch.changes.map((c, cIdx) => (
+                    <div key={cIdx} className="patch-mobile-item">
+                      <span className={`change-tag ${c.type.toLowerCase()}`}>[{c.type}]</span>
+                      <span className="patch-mobile-item-text">{c.text}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}

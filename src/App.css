@@ -48,3 +48,78 @@
     font-size: var(--text-2xs);
   }
 }
+
+/* --- Profile Tabs Navigation Bar (Update 1.1 Mobile Ready) --- */
+.profile-tabs-nav {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  background: rgba(10, 10, 15, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: top var(--transition-fast);
+}
+
+.profile-tabs-scroll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 100%;
+}
+
+.profile-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: var(--radius-full, 9999px);
+  border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.08));
+  background: var(--color-surface-raised, rgba(255, 255, 255, 0.03));
+  color: var(--color-text-muted, #aaa);
+  font-family: var(--font-family, var(--font-body));
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.profile-tab-btn.active {
+  border-color: var(--accent-color, var(--color-accent-primary));
+  background: color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 14%, transparent);
+  color: var(--accent-color, var(--color-accent-primary));
+}
+
+@media (max-width: 768px) {
+  .profile-tabs-nav {
+    padding: 10px 14px;
+    justify-content: flex-start;
+  }
+
+  .profile-tabs-scroll {
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .profile-tabs-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .profile-tab-btn {
+    padding: 6px 14px;
+    font-size: 0.76rem;
+    gap: 6px;
+  }
+}
+

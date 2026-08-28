@@ -271,50 +271,26 @@ export function ProfileCanvas({
       {/* Dynamic Tab Navigation Bar (if more than 1 tab) */}
       {tabs.length > 1 && (
         <nav
-          style={{
-            position: 'sticky',
-            top: isEditing ? '52px' : 0,
-            zIndex: 80,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            padding: '16px 20px',
-            background: 'rgba(10, 10, 15, 0.75)',
-            backdropFilter: 'blur(16px)',
-            borderBottom: '1px solid rgba(255,255,255,0.05)',
-          }}
+          className="profile-tabs-nav"
+          style={{ top: isEditing ? '52px' : 0 }}
         >
-          {tabs.map((tab) => {
-            const isActive = tab.id === currentTab?.id;
-            const tabIcon = renderTabIcon(tab.icon);
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveTabId(tab.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '8px 18px',
-                  borderRadius: 'var(--radius-full, 9999px)',
-                  border: '1px solid',
-                  borderColor: isActive ? 'var(--accent-color, var(--color-accent-primary))' : 'var(--color-border-subtle, rgba(255,255,255,0.08))',
-                  background: isActive ? 'color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 14%, transparent)' : 'var(--color-surface-raised, rgba(255,255,255,0.03))',
-                  color: isActive ? 'var(--accent-color, var(--color-accent-primary))' : 'var(--color-text-muted, #aaa)',
-                  fontFamily: 'var(--font-family, var(--font-body))',
-                  fontSize: '0.84rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast)',
-                }}
-              >
-                {tabIcon}
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
+          <div className="profile-tabs-scroll">
+            {tabs.map((tab) => {
+              const isActive = tab.id === currentTab?.id;
+              const tabIcon = renderTabIcon(tab.icon);
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTabId(tab.id)}
+                  className={`profile-tab-btn ${isActive ? 'active' : ''}`}
+                >
+                  {tabIcon}
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </nav>
       )}
 
