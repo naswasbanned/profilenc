@@ -27,6 +27,7 @@ export default function DashboardPage() {
   const { user, isAuthenticated, loading, logout } = useAuth();
 
   useEffect(() => {
+    document.title = 'Profilenc — Dashboard';
     if (!loading && !isAuthenticated) {
       navigate('/login');
     }
@@ -55,7 +56,7 @@ export default function DashboardPage() {
       <nav className="dashboard-nav">
         <Link to="/" className="dashboard-logo">
           <Sparkles size={18} />
-          <span>GNC</span>
+          <span>Profilenc</span>
         </Link>
         <div className="dashboard-nav-right">
           <Link to={`/@${user.username}`} className="dashboard-nav-link">

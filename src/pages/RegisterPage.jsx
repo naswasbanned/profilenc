@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -7,7 +7,6 @@ import {
   EyeOff,
   ArrowLeft,
   ArrowRight,
-  Sparkles,
   Check,
   X,
   Code2,
@@ -19,14 +18,12 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import './AuthPages.css';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
-
 const TEMPLATE_OPTIONS = [
-  { slug: 'developer', name: 'Developer', icon: <Code2 size={24} />, color: '#64ffda', desc: 'Portfolio for devs' },
-  { slug: 'designer', name: 'Designer', icon: <Palette size={24} />, color: '#f472b6', desc: 'Visual-first portfolio' },
-  { slug: 'gamer', name: 'Gamer', icon: <Gamepad2 size={24} />, color: '#a855f7', desc: 'Gaming profile & setup' },
-  { slug: 'minimal', name: 'Minimal', icon: <Layout size={24} />, color: '#fbbf24', desc: 'Clean single-page' },
-  { slug: 'creative', name: 'Creative', icon: <PenLine size={24} />, color: '#34d399', desc: 'Artistic & vibrant' },
+  { slug: 'developer', name: 'Developer', icon: <Code2 size={20} />, color: '#00f0aa', desc: 'Code stack, work experience & repositories' },
+  { slug: 'designer', name: 'Designer', icon: <Palette size={20} />, color: '#ff5500', desc: 'Visual portfolio, services & rate cards' },
+  { slug: 'gamer', name: 'Gamer / Streamer', icon: <Gamepad2 size={20} />, color: '#ff2a5f', desc: 'Streaming schedule, game reviews & gear setup' },
+  { slug: 'minimal', name: 'Minimal Writer', icon: <PenLine size={20} />, color: '#e8e6df', desc: 'Editorial essays, reading notes & focus reader' },
+  { slug: 'creative', name: 'Creative Multi-Hyphenate', icon: <Layout size={20} />, color: '#00d4ff', desc: 'Modular canvas mixing all available blocks' },
 ];
 
 export default function RegisterPage() {
@@ -42,7 +39,11 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [usernameStatus, setUsernameStatus] = useState(null); // null, 'checking', 'available', 'taken', 'invalid'
+  const [usernameStatus, setUsernameStatus] = useState(null); // null, 'checking', 'available', 'taken'
+
+  useEffect(() => {
+    document.title = 'Profilenc — Create Account';
+  }, []);
 
   // Debounced username check
   useEffect(() => {
@@ -59,29 +60,26 @@ export default function RegisterPage() {
       } catch {
         setUsernameStatus(null);
       }
-    }, 500);
+    }, 400);
 
     return () => clearTimeout(timer);
   }, [form.username, checkUsername]);
 
   const handleStep1 = (e) => {
     e.preventDefault();
-    setError('');
-
+    if (usernameStatus === 'taken') {
+      setError('Username is already taken');
+      return;
+    }
     if (form.password.length < 6) {
       setError('Password must be at least 6 characters');
       return;
     }
-
-    if (usernameStatus === 'taken') {
-      setError('Username already taken');
-      return;
-    }
-
+    setError('');
     setStep(2);
   };
 
-  const handleSubmit = async () => {
+  const handleRegister = async () => {
     setError('');
     setLoading(true);
 
@@ -95,60 +93,77 @@ export default function RegisterPage() {
       navigate(`/@${user.username}/edit`);
     } catch (err) {
       setError(err.message);
+      setStep(1);
+    } finally {
       setLoading(false);
     }
   };
 
   return (
     <div className="auth-page">
-      <div className="auth-bg-effects">
-        <div className="auth-orb auth-orb-1" />
-        <div className="auth-orb auth-orb-2" />
-      </div>
+      {/* Background Matrix Grid */}
+      <div className="raw-grid-matrix" aria-hidden="true" />
 
       <motion.div
-        className="auth-card auth-card-wide"
-        initial={{ opacity: 0, y: 20, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.5 }}
+        className={`auth-card ${step === 2 ? 'auth-card-wide' : ''}`}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
       >
         <Link to="/" className="auth-back">
-          <ArrowLeft size={16} /> Back
+          <ArrowLeft size={14} /> <span>BACK TO HOME</span>
         </Link>
 
         <div className="auth-header">
-          <div className="auth-logo">
-            <Sparkles size={20} />
-            <span>GNC</span>
-          </div>
-          <h1>{step === 1 ? 'Create Your Account' : 'Choose a Template'}</h1>
-          <p>{step === 1 ? 'Start building your profile in seconds' : 'Pick a starting point — you can change everything later'}</p>
+          <Link to="/" className="auth-brand">
+            <span className="brand-bracket">[</span>
+            <span className="brand-name">PROFILENC</span>
+            <span className="brand-bracket">]</span>
+          </Link>
+          <h1 className="auth-title">
+            {step === 1 ? 'CREATE YOUR PROFILE' : 'PICK A STARTER TEMPLATE'}
+          </h1>
+          <p className="auth-sub">
+            {step === 1
+              ? 'Claim your personal link and start building your modular page.'
+              : 'Choose a foundation — you can customize all blocks and colors anytime in the editor.'}
+          </p>
         </div>
 
-        {/* Step indicator */}
+        {/* Step Indicator */}
         <div className="auth-steps">
           <div className={`auth-step ${step >= 1 ? 'active' : ''}`}>
-            <span>1</span> Account
+            <span>01</span> ACCOUNT
           </div>
           <div className="auth-step-line" />
           <div className={`auth-step ${step >= 2 ? 'active' : ''}`}>
-            <span>2</span> Template
+            <span>02</span> TEMPLATE
           </div>
         </div>
 
-        {error && <div className="auth-error">{error}</div>}
+        {error && (
+          <div className="auth-error">
+            <span className="error-tag">[ERROR]</span>
+            <span>{error}</span>
+          </div>
+        )}
 
-        {/* Step 1: Account details */}
+        {/* Step 1: Account Details */}
         {step === 1 && (
           <form onSubmit={handleStep1} className="auth-form">
             <div className="auth-field">
-              <label>Username</label>
+              <label>CLAIM USERNAME</label>
               <div className="auth-username-wrap">
                 <span className="auth-username-prefix">gnc.web.id/@</span>
                 <input
                   type="text"
                   value={form.username}
-                  onChange={(e) => setForm((p) => ({ ...p, username: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') }))}
+                  onChange={(e) =>
+                    setForm((p) => ({
+                      ...p,
+                      username: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''),
+                    }))
+                  }
                   placeholder="yourname"
                   required
                   autoFocus
@@ -158,15 +173,15 @@ export default function RegisterPage() {
                 {usernameStatus && (
                   <span className={`username-status ${usernameStatus}`}>
                     {usernameStatus === 'checking' && '...'}
-                    {usernameStatus === 'available' && <Check size={16} />}
-                    {usernameStatus === 'taken' && <X size={16} />}
+                    {usernameStatus === 'available' && <Check size={14} />}
+                    {usernameStatus === 'taken' && <X size={14} />}
                   </span>
                 )}
               </div>
             </div>
 
             <div className="auth-field">
-              <label>Email</label>
+              <label>EMAIL ADDRESS</label>
               <input
                 type="email"
                 value={form.email}
@@ -177,7 +192,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="auth-field">
-              <label>Password</label>
+              <label>PASSWORD</label>
               <div className="auth-password-wrap">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -191,63 +206,71 @@ export default function RegisterPage() {
                   type="button"
                   className="auth-toggle-pw"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
             </div>
 
             <button type="submit" className="auth-submit">
-              Continue <ArrowRight size={16} />
+              <span>CONTINUE TO TEMPLATES</span>
+              <ArrowRight size={15} />
             </button>
           </form>
         )}
 
-        {/* Step 2: Template selection */}
+        {/* Step 2: Template Selection */}
         {step === 2 && (
           <div className="template-selection">
             <div className="template-options">
               {TEMPLATE_OPTIONS.map((t) => (
-                <motion.button
+                <button
                   key={t.slug}
+                  type="button"
                   className={`template-option ${form.templateSlug === t.slug ? 'selected' : ''}`}
                   style={{ '--tmpl-color': t.color }}
                   onClick={() => setForm((p) => ({ ...p, templateSlug: t.slug }))}
-                  whileHover={{ y: -4 }}
-                  whileTap={{ scale: 0.98 }}
                 >
-                  <div className="tmpl-icon">{t.icon}</div>
+                  <div className="tmpl-top">
+                    <div className="tmpl-icon">{t.icon}</div>
+                    {form.templateSlug === t.slug && (
+                      <span className="tmpl-active-badge">SELECTED</span>
+                    )}
+                  </div>
                   <h4>{t.name}</h4>
                   <p>{t.desc}</p>
-                  {form.templateSlug === t.slug && (
-                    <div className="tmpl-check"><Check size={16} /></div>
-                  )}
-                </motion.button>
+                </button>
               ))}
             </div>
 
             <div className="template-actions">
               <button
+                type="button"
                 className="auth-submit auth-submit-secondary"
                 onClick={() => setStep(1)}
               >
-                <ArrowLeft size={16} /> Back
+                <ArrowLeft size={15} />
+                <span>BACK</span>
               </button>
               <button
+                type="button"
                 className="auth-submit"
-                onClick={handleSubmit}
+                onClick={handleRegister}
                 disabled={loading}
               >
-                {loading ? 'Creating...' : <>Create Profile <UserPlus size={16} /></>}
+                <span>{loading ? 'CREATING PROFILE...' : 'INITIALIZE PROFILE'}</span>
+                <UserPlus size={15} />
               </button>
             </div>
           </div>
         )}
 
         {step === 1 && (
-          <p className="auth-switch">
-            Already have an account? <Link to="/login">Log in</Link>
-          </p>
+          <div className="auth-switch">
+            <span>ALREADY HAVE AN ACCOUNT?</span>
+            <Link to="/login">LOG IN →</Link>
+          </div>
         )}
       </motion.div>
     </div>

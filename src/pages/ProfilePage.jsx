@@ -357,7 +357,7 @@ export function ProfileCanvas({
 
       {/* Global Profile Footer */}
       <footer className="app-footer dev">
-        <p>© {new Date().getFullYear()} {username} • Built with GNC Engine</p>
+        <p>© {new Date().getFullYear()} {username} • Built with Profilenc</p>
       </footer>
     </div>
   );
@@ -375,6 +375,9 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!username) return;
+
+    // Set page title for user profile page
+    document.title = `Profilenc, @${username}`;
 
     async function load() {
       try {
@@ -406,6 +409,10 @@ export default function ProfilePage() {
     }
 
     load();
+
+    return () => {
+      document.title = 'Profilenc';
+    };
   }, [username]);
 
   if (loading) {

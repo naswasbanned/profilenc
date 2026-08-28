@@ -154,6 +154,10 @@ export default function EditorPage() {
 
   // Load all data
   useEffect(() => {
+    if (username) {
+      document.title = `Profilenc Studio — @${username}`;
+    }
+
     if (authLoading) return;
     if (!token || !username || !isOwner) {
       setDataLoaded(true);

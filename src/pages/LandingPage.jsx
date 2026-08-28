@@ -200,6 +200,9 @@ export default function LandingPage() {
   const marquee1Ref = useRef(null);
 
   useEffect(() => {
+    // Set document title
+    document.title = 'Profilenc';
+
     // 1. Lenis Smooth Scroll Integration
     const lenis = new Lenis({
       duration: 1.1,
@@ -273,7 +276,7 @@ export default function LandingPage() {
         <div className="raw-header-container">
           <Link to="/" className="raw-brand">
             <span className="brand-bracket">[</span>
-            <span className="brand-name">GNC.PROFILER</span>
+            <span className="brand-name">PROFILENC</span>
             <span className="brand-bracket">]</span>
           </Link>
 
@@ -372,7 +375,7 @@ export default function LandingPage() {
         <div className="patch-notes-container">
           <div className="patch-notes-header">
             <div className="patch-badge">[ENGINE_UPDATES]</div>
-            <h2 className="patch-title">WHAT'S NEW IN GNC PROFILER</h2>
+            <h2 className="patch-title">WHAT'S NEW IN PROFILENC</h2>
             <p className="patch-desc">
               Changelog and latest features added to the profile builder.
             </p>
@@ -647,11 +650,11 @@ export default function LandingPage() {
       <footer className="raw-footer">
         <div className="raw-footer-container">
           <div className="footer-left">
-            <span className="footer-logo">GNC.PROFILER</span>
+            <span className="footer-logo">PROFILENC</span>
             <span className="footer-copy">// SIMPLE & MODULAR PERSONAL PROFILES</span>
           </div>
           <div className="footer-right">
-            <span>© 2026 GNC — FREE & OPEN.</span>
+            <span>© 2026 Profilenc — FREE & OPEN.</span>
           </div>
         </div>
       </footer>

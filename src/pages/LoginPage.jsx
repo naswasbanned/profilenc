@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LogIn, Eye, EyeOff, ArrowLeft, Sparkles } from 'lucide-react';
+import { LogIn, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import './AuthPages.css';
 
@@ -12,6 +12,10 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    document.title = 'Profilenc — Log In';
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,35 +34,39 @@ export default function LoginPage() {
 
   return (
     <div className="auth-page">
-      <div className="auth-bg-effects">
-        <div className="auth-orb auth-orb-1" />
-        <div className="auth-orb auth-orb-2" />
-      </div>
+      {/* Background Matrix Grid */}
+      <div className="raw-grid-matrix" aria-hidden="true" />
 
       <motion.div
         className="auth-card"
-        initial={{ opacity: 0, y: 20, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.5 }}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
       >
         <Link to="/" className="auth-back">
-          <ArrowLeft size={16} /> Back
+          <ArrowLeft size={14} /> <span>BACK TO HOME</span>
         </Link>
 
         <div className="auth-header">
-          <div className="auth-logo">
-            <Sparkles size={20} />
-            <span>GNC</span>
-          </div>
-          <h1>Welcome Back</h1>
-          <p>Log in to manage your profile</p>
+          <Link to="/" className="auth-brand">
+            <span className="brand-bracket">[</span>
+            <span className="brand-name">PROFILENC</span>
+            <span className="brand-bracket">]</span>
+          </Link>
+          <h1 className="auth-title">LOG IN</h1>
+          <p className="auth-sub">Access your personal profile and studio editor.</p>
         </div>
 
-        {error && <div className="auth-error">{error}</div>}
+        {error && (
+          <div className="auth-error">
+            <span className="error-tag">[ERROR]</span>
+            <span>{error}</span>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="auth-field">
-            <label>Username or Email</label>
+            <label>USERNAME OR EMAIL</label>
             <input
               type="text"
               value={form.login}
@@ -70,7 +78,7 @@ export default function LoginPage() {
           </div>
 
           <div className="auth-field">
-            <label>Password</label>
+            <label>PASSWORD</label>
             <div className="auth-password-wrap">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -83,8 +91,9 @@ export default function LoginPage() {
                 type="button"
                 className="auth-toggle-pw"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
-                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
               </button>
             </div>
           </div>
@@ -94,13 +103,15 @@ export default function LoginPage() {
             className="auth-submit"
             disabled={loading}
           >
-            {loading ? 'Logging in...' : <>Log In <LogIn size={16} /></>}
+            <span>{loading ? 'LOGGING IN...' : 'LOG IN TO PROFILE'}</span>
+            <LogIn size={15} />
           </button>
         </form>
 
-        <p className="auth-switch">
-          Don't have an account? <Link to="/register">Create one</Link>
-        </p>
+        <div className="auth-switch">
+          <span>DON'T HAVE AN ACCOUNT?</span>
+          <Link to="/register">CREATE PROFILE →</Link>
+        </div>
       </motion.div>
     </div>
   );
