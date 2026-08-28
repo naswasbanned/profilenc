@@ -1,6 +1,9 @@
+name: profilenc
+
 services:
   db:
     image: postgres:16-alpine
+    container_name: profilenc_db
     restart: unless-stopped
     volumes:
       - profilenc_pgdata:/var/lib/postgresql/data
@@ -9,12 +12,15 @@ services:
       POSTGRES_USER: profilenc
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U profilenc"]
-      interval: 5s
-      retries: 5
+      test: ["CMD-SHELL", "pg_isready -U profilenc -d profilenc || pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
 
   backend:
     build: ./server
+    container_name: profilenc_backend
     restart: unless-stopped
     depends_on:
       db:
@@ -28,11 +34,10 @@ services:
       ADMIN_USERNAME: ${ADMIN_USERNAME}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       PORT: 3001
-    ports:
-      - "3001:3001"
 
   frontend:
     build: .
+    container_name: profilenc_frontend
     restart: unless-stopped
     depends_on:
       - backend
