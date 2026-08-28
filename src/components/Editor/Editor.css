@@ -974,22 +974,22 @@
   }
 }
 
-/* Floating Unsaved Changes Notification Toast (Middle Top, Clean Dark Glass) */
+/* Floating Unsaved Changes Notification Toast (Top Right, Clean Dark Glass) */
 .editor-unsaved-banner {
   position: fixed;
-  top: 60px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 58px;
+  right: 20px;
+  left: auto;
+  transform: none;
   z-index: 500;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 8px 18px;
+  gap: 12px;
+  padding: 8px 14px;
   background: rgba(14, 16, 24, 0.94);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 9999px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
   max-width: 90vw;
@@ -999,7 +999,7 @@
 .editor-unsaved-banner-content {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .editor-unsaved-indicator {
@@ -1015,7 +1015,7 @@
 .editor-unsaved-text {
   display: flex;
   flex-direction: column;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 .editor-unsaved-text strong {
@@ -1027,12 +1027,6 @@
 .editor-unsaved-text span {
   color: #94a3b8;
   font-size: 0.7rem;
-}
-
-.editor-unsaved-banner-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .editor-unsaved-dismiss {
@@ -1054,8 +1048,9 @@
 
 @media (max-width: 768px) {
   .editor-unsaved-banner {
-    top: 56px;
-    bottom: auto;
+    top: 54px;
+    right: 10px;
+    left: auto;
     padding: 6px 12px;
     border-radius: 9999px;
     width: auto;

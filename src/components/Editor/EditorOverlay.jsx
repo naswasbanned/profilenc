@@ -274,53 +274,32 @@ export default function EditorOverlay({
         )}
       </AnimatePresence>
 
-      {/* Floating Unsaved Changes Notification Toast */}
+      {/* Floating Unsaved Changes Notification Toast (Top Right) */}
       <AnimatePresence>
         {isDirty && !dismissedToast && (
           <motion.div
             className="editor-unsaved-banner"
-            initial={{ y: -20, opacity: 0, scale: 0.96 }}
+            initial={{ y: -15, opacity: 0, scale: 0.96 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: -20, opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+            exit={{ y: -15, opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
           >
             <div className="editor-unsaved-banner-content">
               <div className="editor-unsaved-indicator" />
               <div className="editor-unsaved-text">
-                <strong>Unsaved Changes</strong>
-                <span>Remember to save to publish your layout!</span>
+                <strong>Unsaved changes</strong>
+                <span>Click Save above to publish</span>
               </div>
             </div>
 
-            <div className="editor-unsaved-banner-actions">
-              <button
-                type="button"
-                onClick={handleSave}
-                disabled={saving}
-                className="editor-btn editor-btn-save active-dirty"
-                style={{ padding: '6px 14px', fontSize: '0.78rem' }}
-              >
-                {saving ? (
-                  <>
-                    <Loader2 size={13} className="spin" />
-                    <span>Saving...</span>
-                  </>
-                ) : (
-                  <>
-                    <Save size={13} />
-                    <span>Save Now</span>
-                  </>
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={() => setDismissedToast(true)}
-                className="editor-unsaved-dismiss"
-                title="Dismiss reminder"
-              >
-                <X size={14} />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setDismissedToast(true)}
+              className="editor-unsaved-dismiss"
+              title="Dismiss reminder"
+            >
+              <X size={14} />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

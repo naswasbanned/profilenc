@@ -20,31 +20,19 @@ function EditorCanvasInner({
   const [activeTabId, setActiveTabId] = useState(() => content?.tabs?.[0]?.id || 'tab-main');
   const [editingBlock, setEditingBlock] = useState(null);
 
-  // Snapshot references for dirty state tracking
-  const initialContentStr = useRef(JSON.stringify(content));
-  const initialThemeStr = useRef(JSON.stringify(currentTheme));
+  // State snapshots for real-time dirty state tracking with reactive re-render
+  const [savedContentStr, setSavedContentStr] = useState(() => JSON.stringify(content));
+  const [savedThemeStr, setSavedThemeStr] = useState(() => JSON.stringify(currentTheme));
 
   const isContentDirty = useMemo(() => {
-    return JSON.stringify(content) !== initialContentStr.current;
-  }, [content]);
+    return JSON.stringify(content) !== savedContentStr;
+  }, [content, savedContentStr]);
 
   const isThemeDirty = useMemo(() => {
-    return JSON.stringify(currentTheme) !== initialThemeStr.current;
-  }, [currentTheme]);
+    return JSON.stringify(currentTheme) !== savedThemeStr;
+  }, [currentTheme, savedThemeStr]);
 
   const hasChanges = isContentDirty || isThemeDirty;
-
-  // Warn user if closing or reloading the browser tab with unsaved changes
-  useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      if (hasChanges) {
-        e.preventDefault();
-        e.returnValue = '';
-      }
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [hasChanges]);
 
   const tabs = content?.tabs || [];
   const currentTab = tabs.find((t) => t.id === activeTabId) || tabs[0];
@@ -134,9 +122,9 @@ function EditorCanvasInner({
 
     if (!themeRes.ok) throw new Error('Failed to save theme');
 
-    // Update snapshots to mark as clean & saved
-    initialContentStr.current = JSON.stringify(content);
-    initialThemeStr.current = JSON.stringify(currentTheme);
+    // Update reactive snapshots to immediately mark as clean & saved
+    setSavedContentStr(JSON.stringify(content));
+    setSavedThemeStr(JSON.stringify(currentTheme));
     if (setThemeIsDirty) setThemeIsDirty(false);
   }, [username, token, content, currentTheme, setThemeIsDirty]);
 
