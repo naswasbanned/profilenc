@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { motion, Reorder } from 'framer-motion';
 import { X, Plus, Trash2, GripVertical, Save, Eye, EyeOff } from 'lucide-react';
+import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 
 export default function TabManagerModal({ tabs = [], onSaveTabs, onClose }) {
   const [tabList, setTabList] = useState(() => JSON.parse(JSON.stringify(tabs || [])));
+  const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(onClose);
 
   const handleAddTab = () => {
     const newId = `tab-${Date.now()}`;
@@ -52,7 +54,12 @@ export default function TabManagerModal({ tabs = [], onSaveTabs, onClose }) {
   };
 
   return (
-    <div className="editor-modal-backdrop" onClick={onClose}>
+    <div className="editor-modal-backdrop" onClick={handleBackdropClick}>
+      {hintVisible && (
+        <div className="modal-double-click-hint">
+          <span>Click once more outside to close (or use ✕)</span>
+        </div>
+      )}
       <motion.div
         className="editor-modal-dialog modal-sm"
         initial={{ opacity: 0, scale: 0.95, y: 15 }}

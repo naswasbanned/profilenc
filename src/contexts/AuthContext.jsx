@@ -79,6 +79,54 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
+  const updateProfile = useCallback(async (profileData) => {
+    if (!token) throw new Error('Not authenticated');
+
+    const res = await fetch(`${API_BASE}/api/auth/profile`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(profileData),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Failed to update profile');
+    }
+
+    const data = await res.json();
+    if (data.token) {
+      localStorage.setItem('auth_token', data.token);
+      setToken(data.token);
+    }
+    if (data.user) {
+      setUser(data.user);
+    }
+    return data;
+  }, [token]);
+
+  const changePassword = useCallback(async ({ currentPassword, newPassword }) => {
+    if (!token) throw new Error('Not authenticated');
+
+    const res = await fetch(`${API_BASE}/api/auth/change-password`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Failed to change password');
+    }
+
+    return await res.json();
+  }, [token]);
+
   const checkUsername = useCallback(async (username) => {
     const res = await fetch(`${API_BASE}/api/auth/check-username`, {
       method: 'POST',
@@ -96,6 +144,8 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
+    updateProfile,
+    changePassword,
     checkUsername,
   };
 

@@ -239,3 +239,39 @@ img {
     text-size-adjust: 100%;
   }
 }
+
+/* === Double-Click Backdrop Close Toast Hint === */
+.modal-double-click-hint {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 14, 23, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #f1f5f9;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.65);
+  pointer-events: none;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: modalHintPop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalHintPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 12px) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+

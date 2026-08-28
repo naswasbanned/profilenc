@@ -48,6 +48,68 @@
   border: 1px solid var(--color-border-subtle);
 }
 
+.editor-user-profile-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 10px 3px 4px;
+  border-radius: var(--radius-full, 9999px);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.08));
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--color-text-primary, #fff);
+  user-select: none;
+}
+
+.editor-user-profile-pill:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.editor-user-avatar-mini {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-accent-dim, rgba(0, 240, 170, 0.15));
+  border: 1px solid var(--color-accent-primary, #00f0aa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.editor-user-avatar-mini img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.editor-user-avatar-mini span {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--color-accent-primary, #00f0aa);
+}
+
+.editor-user-handle {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs, 0.72rem);
+  font-weight: 600;
+  color: var(--color-text-primary, #f1f5f9);
+}
+
+.editor-user-gear {
+  color: var(--color-text-muted, #94a3b8);
+  transition: transform var(--transition-fast), color var(--transition-fast);
+}
+
+.editor-user-profile-pill:hover .editor-user-gear {
+  color: var(--color-accent-primary, #00f0aa);
+  transform: rotate(45deg);
+}
+
 .editor-toolbar-center {
   display: flex;
   gap: 4px;

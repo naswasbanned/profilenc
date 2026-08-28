@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Maximize2, X } from 'lucide-react';
+import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 
 export default function CardsGridBlock({ data = {} }) {
@@ -10,6 +11,7 @@ export default function CardsGridBlock({ data = {} }) {
   } = data;
 
   const [activeModalImage, setActiveModalImage] = useState(null);
+  const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(() => setActiveModalImage(null));
 
   const cardList = Array.isArray(items) ? items : [];
 
@@ -101,7 +103,7 @@ export default function CardsGridBlock({ data = {} }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setActiveModalImage(null)}
+            onClick={handleBackdropClick}
             style={{
               position: 'fixed',
               inset: 0,
@@ -114,6 +116,11 @@ export default function CardsGridBlock({ data = {} }) {
               padding: '24px',
             }}
           >
+            {hintVisible && (
+              <div className="modal-double-click-hint">
+                <span>Click once more outside to close (or use ✕)</span>
+              </div>
+            )}
             <div style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh' }}>
               <img
                 src={activeModalImage.src}

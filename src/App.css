@@ -58,10 +58,10 @@
   align-items: center;
   justify-content: center;
   padding: 10px 16px;
-  background: rgba(10, 10, 15, 0.82);
+  background: var(--tabs-nav-bg, rgba(10, 10, 15, 0.82));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--tabs-nav-border, rgba(255, 255, 255, 0.06));
   transition: top var(--transition-fast);
   width: 100%;
   box-sizing: border-box;
@@ -103,9 +103,9 @@
   gap: 8px;
   padding: 8px 18px;
   border-radius: var(--radius-full, 9999px);
-  border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.08));
-  background: var(--color-surface-raised, rgba(255, 255, 255, 0.03));
-  color: var(--color-text-muted, #aaa);
+  border: 1px solid var(--tab-btn-border, var(--color-border-subtle, rgba(255, 255, 255, 0.08)));
+  background: var(--tab-btn-bg, var(--color-surface-raised, rgba(255, 255, 255, 0.03)));
+  color: var(--tab-btn-text, var(--color-text-muted, #aaa));
   font-family: var(--font-family, var(--font-body));
   font-size: 0.84rem;
   font-weight: 600;
@@ -122,9 +122,9 @@
 }
 
 .profile-tab-btn.active {
-  border-color: var(--accent-color, var(--color-accent-primary));
-  background: color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 15%, rgba(0,0,0,0.4));
-  color: var(--accent-color, var(--color-accent-primary));
+  border-color: var(--tab-btn-active-border, var(--accent-color, var(--color-accent-primary)));
+  background: var(--tab-btn-active-bg, color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 15%, rgba(0,0,0,0.4)));
+  color: var(--tab-btn-active-text, var(--accent-color, var(--color-accent-primary)));
   box-shadow: 0 0 16px color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 20%, transparent);
 }
 

@@ -276,4 +276,142 @@ router.post('/check-username', async (req, res) => {
   }
 });
 
+/**
+ * PUT /api/auth/profile
+ * Auth required. Updates user profile info (avatar, display name, username, bio, visibility).
+ */
+router.put('/profile', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { displayName, avatarUrl, bio, isPublic, username: newUsername } = req.body;
+
+    let updatedUsername = req.user.username;
+
+    // Handle username update if provided and different
+    if (newUsername && newUsername.toLowerCase().trim() !== req.user.username) {
+      const normalizedUsername = newUsername.toLowerCase().trim();
+
+      if (!USERNAME_REGEX.test(normalizedUsername)) {
+        return res.status(400).json({
+          error: 'Username must be 3-30 characters, lowercase letters, numbers, and hyphens only',
+        });
+      }
+
+      if (RESERVED_USERNAMES.has(normalizedUsername)) {
+        return res.status(400).json({ error: 'This username is reserved' });
+      }
+
+      // Check collision
+      const { rows: collision } = await query(
+        'SELECT id FROM users WHERE username = $1 AND id != $2',
+        [normalizedUsername, userId]
+      );
+      if (collision.length > 0) {
+        return res.status(409).json({ error: 'Username is already taken by another user' });
+      }
+
+      updatedUsername = normalizedUsername;
+    }
+
+    const { rows: updatedRows } = await query(
+      `UPDATE users SET
+        username = COALESCE($1, username),
+        display_name = COALESCE($2, display_name),
+        avatar_url = $3,
+        bio = $4,
+        is_public = COALESCE($5, is_public),
+        updated_at = NOW()
+       WHERE id = $6
+       RETURNING id, username, email, display_name, avatar_url, bio, is_public, is_admin, template_slug, created_at`,
+      [
+        updatedUsername,
+        displayName !== undefined ? displayName : null,
+        avatarUrl !== undefined ? avatarUrl : null,
+        bio !== undefined ? bio : null,
+        isPublic !== undefined ? isPublic : null,
+        userId,
+      ]
+    );
+
+    if (updatedRows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const user = updatedRows[0];
+
+    // Issue refreshed token with potentially new username
+    const token = jwt.sign(
+      { id: user.id, username: user.username, email: user.email, isAdmin: !!user.is_admin },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        displayName: user.display_name,
+        avatarUrl: user.avatar_url,
+        bio: user.bio,
+        isPublic: user.is_public,
+        isAdmin: !!user.is_admin,
+        templateSlug: user.template_slug,
+        createdAt: user.created_at,
+      },
+    });
+  } catch (err) {
+    console.error('Profile update error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
+ * PUT /api/auth/change-password
+ * Auth required. Verifies current password and updates to new password.
+ */
+router.put('/change-password', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: 'Current password and new password are required' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ error: 'New password must be at least 6 characters' });
+    }
+
+    // Fetch user password hash
+    const { rows } = await query(
+      'SELECT password_hash FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const valid = await bcrypt.compare(currentPassword, rows[0].password_hash);
+    if (!valid) {
+      return res.status(401).json({ error: 'Incorrect current password' });
+    }
+
+    const newHash = await bcrypt.hash(newPassword, 12);
+
+    await query(
+      'UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2',
+      [newHash, userId]
+    );
+
+    res.json({ success: true, message: 'Password updated successfully' });
+  } catch (err) {
+    console.error('Change password error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;

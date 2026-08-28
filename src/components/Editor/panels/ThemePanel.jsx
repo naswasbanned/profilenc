@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTheme } from '../../../contexts/ThemeContext';
-import { Sparkles, Type, Check, Layers, Palette, Square } from 'lucide-react';
+import { Sparkles, Type, Check, Layers, Palette, Square, FolderKanban } from 'lucide-react';
 
 const HEADING_FONT_GROUPS = {
   'Tech & Modern Display': [
@@ -396,6 +396,13 @@ export default function ThemePanel({ tabs = [] }) {
   const liveRadius = getNestedValue('global.borderRadius') ?? 10;
   const liveGlassBlur = getNestedValue('global.glassBlur') ?? 12;
   const liveSpeed = getNestedValue('global.animationSpeed') ?? 1;
+  const liveTabNavBg = getNestedValue('global.tabNavBackground') || 'rgba(10, 10, 15, 0.82)';
+  const liveTabNavBorder = getNestedValue('global.tabNavBorder') || 'rgba(255, 255, 255, 0.06)';
+  const liveTabBtnBg = getNestedValue('global.tabButtonBackground') || 'rgba(255, 255, 255, 0.03)';
+  const liveTabBtnText = getNestedValue('global.tabButtonTextColor') || '#aaaaaa';
+  const liveTabBtnBorder = getNestedValue('global.tabButtonBorder') || 'rgba(255, 255, 255, 0.08)';
+  const liveTabActiveBg = getNestedValue('global.tabButtonActiveBackground') || `color-mix(in srgb, ${liveAccentColor} 15%, rgba(0,0,0,0.4))`;
+  const liveTabActiveText = getNestedValue('global.tabButtonActiveTextColor') || liveAccentColor;
 
   return (
     <div className="theme-panel">
@@ -945,6 +952,115 @@ export default function ThemePanel({ tabs = [] }) {
                   className="editor-text-input full-width"
                   style={{ color: '#f1f5f9', background: '#06070a', border: '1px solid rgba(255,255,255,0.12)' }}
                 />
+              </div>
+            </div>
+
+            <hr style={{ border: 'none', borderTop: '1px solid rgba(255, 255, 255, 0.08)', margin: 0 }} />
+
+            {/* Tab Navigation Bar Background & Buttons */}
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+                <FolderKanban size={14} color="#00f0aa" />
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                  Tab Navigation Bar & Button Colors
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <ColorInput
+                  label="Tab Navigation Bar Background"
+                  value={getNestedValue('global.tabNavBackground') || 'rgba(10, 10, 15, 0.82)'}
+                  onChange={(v) => updateTheme('global.tabNavBackground', v)}
+                />
+                <ColorInput
+                  label="Tab Navigation Bottom Border Line"
+                  value={getNestedValue('global.tabNavBorder') || 'rgba(255, 255, 255, 0.06)'}
+                  onChange={(v) => updateTheme('global.tabNavBorder', v)}
+                />
+                <ColorInput
+                  label="Inactive Tab Button Background"
+                  value={getNestedValue('global.tabButtonBackground') || 'rgba(255, 255, 255, 0.03)'}
+                  onChange={(v) => updateTheme('global.tabButtonBackground', v)}
+                />
+                <ColorInput
+                  label="Inactive Tab Button Text Color"
+                  value={getNestedValue('global.tabButtonTextColor') || '#aaaaaa'}
+                  onChange={(v) => updateTheme('global.tabButtonTextColor', v)}
+                />
+                <ColorInput
+                  label="Inactive Tab Button Border Color"
+                  value={getNestedValue('global.tabButtonBorder') || 'rgba(255, 255, 255, 0.08)'}
+                  onChange={(v) => updateTheme('global.tabButtonBorder', v)}
+                />
+                <ColorInput
+                  label="Active Tab Button Background Highlight (Optional)"
+                  value={getNestedValue('global.tabButtonActiveBackground') || ''}
+                  onChange={(v) => updateTheme('global.tabButtonActiveBackground', v || null)}
+                />
+                <ColorInput
+                  label="Active Tab Text & Border Color (Optional)"
+                  value={getNestedValue('global.tabButtonActiveTextColor') || getNestedValue('global.accentColor') || '#00f0aa'}
+                  onChange={(v) => updateTheme('global.tabButtonActiveTextColor', v || null)}
+                />
+              </div>
+
+              {/* Live Interactive Tab Bar Preview */}
+              <div
+                style={{
+                  marginTop: '14px',
+                  padding: '12px 14px',
+                  borderRadius: '8px',
+                  background: liveTabNavBg,
+                  border: `1px solid ${liveTabNavBorder}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  overflowX: 'auto',
+                }}
+              >
+                <div
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '9999px',
+                    background: liveTabActiveBg,
+                    color: liveTabActiveText,
+                    border: `1px solid ${liveTabActiveText}`,
+                    fontSize: '0.76rem',
+                    fontWeight: 700,
+                    whiteSpace: 'nowrap',
+                    boxShadow: `0 0 12px color-mix(in srgb, ${liveTabActiveText} 25%, transparent)`,
+                  }}
+                >
+                  Active Tab
+                </div>
+                <div
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '9999px',
+                    background: liveTabBtnBg,
+                    color: liveTabBtnText,
+                    border: `1px solid ${liveTabBtnBorder}`,
+                    fontSize: '0.76rem',
+                    fontWeight: 600,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Inactive Tab
+                </div>
+                <div
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '9999px',
+                    background: liveTabBtnBg,
+                    color: liveTabBtnText,
+                    border: `1px solid ${liveTabBtnBorder}`,
+                    fontSize: '0.76rem',
+                    fontWeight: 600,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Projects
+                </div>
               </div>
             </div>
 

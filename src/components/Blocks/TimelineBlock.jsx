@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Calendar, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 
 export default function TimelineBlock({ data = {} }) {
@@ -8,6 +9,7 @@ export default function TimelineBlock({ data = {} }) {
   const list = Array.isArray(items) ? items : [];
 
   const [previewImage, setPreviewImage] = useState(null);
+  const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(() => setPreviewImage(null));
 
   if (list.length === 0) {
     return (
@@ -104,7 +106,7 @@ export default function TimelineBlock({ data = {} }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setPreviewImage(null)}
+            onClick={handleBackdropClick}
             style={{
               position: 'fixed',
               inset: 0,
@@ -117,6 +119,11 @@ export default function TimelineBlock({ data = {} }) {
               padding: '24px',
             }}
           >
+            {hintVisible && (
+              <div className="modal-double-click-hint">
+                <span>Click once more outside to close (or use ✕)</span>
+              </div>
+            )}
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}

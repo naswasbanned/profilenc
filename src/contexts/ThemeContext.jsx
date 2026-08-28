@@ -28,6 +28,12 @@ const DEFAULT_THEME = {
     cardHeadingColor: null,
     cardTextColor: null,
     cardTextMuted: null,
+    tabNavBackground: null,
+    tabNavBorder: null,
+    tabButtonBackground: null,
+    tabButtonTextColor: null,
+    tabButtonActiveBackground: null,
+    tabButtonActiveTextColor: null,
     glassBlur: 12,
     animationSpeed: 1,
   },
@@ -138,6 +144,20 @@ function themeToCSSVars(theme) {
   vars['--radius-lg'] = `${Math.round(radius * 1.5)}px`;
   vars['--radius-xs'] = `${Math.max(0, Math.round(radius * 0.4))}px`;
   vars['--btn-radius'] = `${radius}px`;
+
+  // Tab Navigation Bar & Options
+  vars['--tabs-nav-bg'] = g.tabNavBackground || 'rgba(10, 10, 15, 0.82)';
+  vars['--tabs-nav-border'] = g.tabNavBorder || 'rgba(255, 255, 255, 0.06)';
+  vars['--tab-btn-bg'] = g.tabButtonBackground || 'rgba(255, 255, 255, 0.03)';
+  vars['--tab-btn-text'] = g.tabButtonTextColor || '#aaaaaa';
+  vars['--tab-btn-border'] = g.tabButtonBorder || 'rgba(255, 255, 255, 0.08)';
+  if (g.tabButtonActiveBackground) {
+    vars['--tab-btn-active-bg'] = g.tabButtonActiveBackground;
+  }
+  if (g.tabButtonActiveTextColor) {
+    vars['--tab-btn-active-text'] = g.tabButtonActiveTextColor;
+    vars['--tab-btn-active-border'] = g.tabButtonActiveTextColor;
+  }
 
   // Glass & Animation
   vars['--glass-blur'] = `${blur}px`;

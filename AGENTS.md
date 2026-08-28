@@ -43,3 +43,15 @@ If you add a new data-fetched section to either side:
 1. Add the new data prop to the component signature.
 2. Add it to the `isReady` guard.
 3. Never wrap `<motion.*>` children in `{data && ...}` — rely on `isReady` instead.
+
+---
+
+## 🚫 No Unnecessary Emojis Rule (CRITICAL)
+
+**DO NOT use ANY unnecessary emojis in UI text, notifications, alerts, buttons, badges, toast messages, or labels unless the USER explicitly requests an emoji.**
+
+### Guidelines:
+- Prefer clean, professional typography and Lucide SVG icons instead of raw unicode emojis (e.g., use `<Zap size={14} />`, `<X size={14} />`, `<Check size={14} />`, or plain text).
+- Do not prepend emojis (such as ⚡, ✨, 🚀, 💡, ⚠️, ❌) to UI banners, double-click hints, notifications, or modal messages.
+- Only render emojis where user-configured content specifically contains emojis (such as user-selected mood tags or user journal content).
+

@@ -10,6 +10,7 @@ import {
   Tag,
   ExternalLink,
 } from 'lucide-react';
+import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 
 export default function GalleryBlock({ data = {} }) {
@@ -20,8 +21,9 @@ export default function GalleryBlock({ data = {} }) {
     showCaptions = true,
   } = data;
 
-  const photos = Array.isArray(items) ? items.filter(Boolean) : [];
+  const photos = Array.isArray(items) ? items : [];
   const [activeIdx, setActiveIdx] = useState(null);
+  const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(() => setActiveIdx(null));
 
   // Keyboard navigation for lightbox
   useEffect(() => {
@@ -122,8 +124,13 @@ export default function GalleryBlock({ data = {} }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setActiveIdx(null)}
+            onClick={handleBackdropClick}
           >
+            {hintVisible && (
+              <div className="modal-double-click-hint">
+                <span>Click once more outside to close (or use ✕)</span>
+              </div>
+            )}
             <div className="gallery-lightbox-container" onClick={(e) => e.stopPropagation()}>
               {/* Top Controls */}
               <div className="gallery-lightbox-header">

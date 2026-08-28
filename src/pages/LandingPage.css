@@ -1021,8 +1021,8 @@
 }
 
 .profile-num-col {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   background: #181920;
   border: 1px solid rgba(255, 255, 255, 0.15);
   font-family: var(--font-mono, monospace);
@@ -1032,6 +1032,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 0;
 }
 
 .profile-detail-col {

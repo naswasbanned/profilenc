@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, X, BookOpen, Clock } from 'lucide-react';
+import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 
 function renderJournalMarkdown(content) {
@@ -161,6 +162,7 @@ export default function JournalBlock({ data = {} }) {
   const list = Array.isArray(items) ? items : [];
 
   const [activeArticle, setActiveArticle] = useState(null);
+  const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(() => setActiveArticle(null));
 
   if (list.length === 0) {
     return (
@@ -225,7 +227,7 @@ export default function JournalBlock({ data = {} }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setActiveArticle(null)}
+            onClick={handleBackdropClick}
             style={{
               position: 'fixed',
               inset: 0,
@@ -238,6 +240,11 @@ export default function JournalBlock({ data = {} }) {
               padding: '24px',
             }}
           >
+            {hintVisible && (
+              <div className="modal-double-click-hint">
+                <span>Click once more outside to close (or use ✕)</span>
+              </div>
+            )}
             <motion.div
               className="article-modal"
               initial={{ scale: 0.95, y: 20 }}

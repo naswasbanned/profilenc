@@ -769,7 +769,16 @@ export default function LandingPage() {
                   className="raw-profile-link-card"
                 >
                   <div className="profile-num-col">
-                    <span className="avatar-init">{(p.displayName || p.username)[0].toUpperCase()}</span>
+                    {p.avatarUrl ? (
+                      <img
+                        src={p.avatarUrl}
+                        alt={p.displayName || p.username}
+                        style={{ width: '100%', height: '100%', borderRadius: '0px', objectFit: 'cover', display: 'block' }}
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                    ) : (
+                      <span className="avatar-init">{(p.displayName || p.username)[0].toUpperCase()}</span>
+                    )}
                   </div>
                   <div className="profile-detail-col">
                     <div className="profile-p-name">{p.displayName || p.username}</div>

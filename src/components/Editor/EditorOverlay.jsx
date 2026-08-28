@@ -16,12 +16,16 @@ import {
   Loader2,
   AlertCircle,
   AlertTriangle,
+  Settings,
 } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import ThemePanel from './panels/ThemePanel';
 import BlockEditorModal from './BlockEditorModal';
 import AddBlockModal from './AddBlockModal';
 import TabManagerModal from './TabManagerModal';
+import AccountSettingsModal from './AccountSettingsModal';
+import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import './Editor.css';
 
 export default function EditorOverlay({
@@ -40,14 +44,20 @@ export default function EditorOverlay({
   setEditingBlock,
 }) {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { theme, isDirty: isThemeDirty, resetTheme } = useTheme();
 
   const [showThemeDrawer, setShowThemeDrawer] = useState(false);
   const [showAddBlockModal, setShowAddBlockModal] = useState(false);
   const [showTabManager, setShowTabManager] = useState(false);
+  const [showAccountSettings, setShowAccountSettings] = useState(false);
   const [showExitModal, setShowExitModal] = useState(false);
   const [dismissedToast, setDismissedToast] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  const { handleBackdropClick: handleExitBackdropClick, hintVisible: exitHintVisible } = useDoubleBackdropClose(
+    () => setShowExitModal(false)
+  );
 
   const isDirty = hasChanges;
 
@@ -92,7 +102,22 @@ export default function EditorOverlay({
           <span className="editor-label">
             <Palette size={16} /> Visual Editor
           </span>
-          <span className="editor-editing-tag">@{username}</span>
+          <button
+            type="button"
+            onClick={() => setShowAccountSettings(true)}
+            className="editor-user-profile-pill"
+            title="Account & Profile Settings (Picture, Username, Password, Logout)"
+          >
+            <div className="editor-user-avatar-mini">
+              {user?.avatarUrl ? (
+                <img src={user.avatarUrl} alt={username} />
+              ) : (
+                <span>{(user?.displayName || username || 'U')[0].toUpperCase()}</span>
+              )}
+            </div>
+            <span className="editor-user-handle">@{username}</span>
+            <Settings size={13} className="editor-user-gear" />
+          </button>
         </div>
 
         {/* Center Quick Actions */}
@@ -213,6 +238,15 @@ export default function EditorOverlay({
             <Palette size={15} />
             <span>Theme</span>
           </button>
+
+          <button
+            type="button"
+            className={`editor-mobile-btn ${showAccountSettings ? 'active' : ''}`}
+            onClick={() => setShowAccountSettings(true)}
+          >
+            <Settings size={15} />
+            <span>Profile</span>
+          </button>
         </div>
       </motion.div>
 
@@ -274,6 +308,14 @@ export default function EditorOverlay({
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {showAccountSettings && (
+          <AccountSettingsModal
+            onClose={() => setShowAccountSettings(false)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Floating Unsaved Changes Notification Toast (Top Right) */}
       <AnimatePresence>
         {isDirty && !dismissedToast && (
@@ -307,7 +349,12 @@ export default function EditorOverlay({
       {/* Unsaved Changes Exit Confirmation Guard Modal */}
       <AnimatePresence>
         {showExitModal && (
-          <div className="editor-modal-backdrop" onClick={() => setShowExitModal(false)}>
+          <div className="editor-modal-backdrop" onClick={handleExitBackdropClick}>
+            {exitHintVisible && (
+              <div className="modal-double-click-hint">
+                <span>Click once more outside to close (or use ✕)</span>
+              </div>
+            )}
             <motion.div
               className="editor-modal-dialog modal-sm"
               initial={{ opacity: 0, scale: 0.95, y: 15 }}

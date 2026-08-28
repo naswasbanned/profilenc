@@ -182,7 +182,7 @@ export default function EventsBlock({ data = {} }) {
               className={`events-filter-pill ${filter === 'upcoming' ? 'active' : ''}`}
               onClick={() => { setFilter('upcoming'); setSelectedCalendarDate(null); }}
             >
-              ⚡ Upcoming
+              Upcoming
             </button>
             <button
               type="button"

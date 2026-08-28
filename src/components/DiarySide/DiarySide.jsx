@@ -16,6 +16,7 @@ import {
   Instagram,
   Globe,
 } from 'lucide-react';
+import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './DiarySide.css';
 
@@ -187,6 +188,7 @@ function DiaryMediaAttachment({ entry, onOpenModal }) {
 
 export default function DiarySide({ profile, visibility = null, entries }) {
   const [selectedMedia, setSelectedMedia] = useState(null);
+  const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(() => setSelectedMedia(null));
 
   // Close modal on Escape key press
   useEffect(() => {
@@ -386,8 +388,13 @@ export default function DiarySide({ profile, visibility = null, entries }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedMedia(null)}
+            onClick={handleBackdropClick}
           >
+            {hintVisible && (
+              <div className="modal-double-click-hint">
+                <span>Click once more outside to close (or use ✕)</span>
+              </div>
+            )}
             <motion.div
               className="diary-modal-wrapper"
               initial={{ scale: 0.92, opacity: 0, y: 20 }}

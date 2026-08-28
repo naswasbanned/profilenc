@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import {
   X,
   Layers,
@@ -328,8 +329,15 @@ export default function AddBlockModal({ onAddBlock, onClose }) {
     onClose();
   };
 
+  const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(onClose);
+
   return (
-    <div className="editor-modal-backdrop" onClick={onClose}>
+    <div className="editor-modal-backdrop" onClick={handleBackdropClick}>
+      {hintVisible && (
+        <div className="modal-double-click-hint">
+          <span>Click once more outside to close (or use ✕)</span>
+        </div>
+      )}
       <motion.div
         className="editor-modal-dialog modal-md"
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
