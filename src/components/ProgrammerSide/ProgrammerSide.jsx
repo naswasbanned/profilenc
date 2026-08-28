@@ -235,17 +235,22 @@ export default function ProgrammerSide({ profile, contact, visibility = null, sk
   }
 
   // Filter out hidden items
-  const activeSkills = (skills || []).filter((s) => !s.hidden);
-  const activeProjects = (projects || []).filter((p) => !p.hidden);
-  const activeExperience = (experience || []).filter((e) => !e.hidden);
-  const activeServices = (services || []).filter((s) => !s.hidden);
+  const skillsList = Array.isArray(skills) ? skills : [];
+  const projectsList = Array.isArray(projects) ? projects : [];
+  const experienceList = Array.isArray(experience) ? experience : [];
+  const servicesList = Array.isArray(services) ? services : [];
+
+  const activeSkills = skillsList.filter((s) => !s?.hidden);
+  const activeProjects = projectsList.filter((p) => !p?.hidden);
+  const activeExperience = experienceList.filter((e) => !e?.hidden);
+  const activeServices = servicesList.filter((s) => !s?.hidden);
 
   // Extract categories for tech stack filter
-  const categories = ['All', ...new Set(activeSkills.map((s) => s.category).filter(Boolean))];
+  const categories = ['All', ...new Set(activeSkills.map((s) => s?.category).filter(Boolean))];
   const filteredSkills =
     selectedCategory === 'All'
       ? activeSkills
-      : activeSkills.filter((s) => s.category === selectedCategory);
+      : activeSkills.filter((s) => s?.category === selectedCategory);
 
   const handleOpenModal = (images, index, title) => {
     setModalData({ images, index, title });
@@ -521,6 +526,13 @@ export default function ProgrammerSide({ profile, contact, visibility = null, sk
                     <h3 className="dev-timeline-role">{exp.role}</h3>
                     <p className="dev-timeline-company">{exp.company}</p>
                     <p className="dev-timeline-desc">{exp.description}</p>
+                    {((exp.tags && exp.tags.length > 0) || (exp.tech && exp.tech.length > 0)) && (
+                      <div className="dev-project-tech" style={{ marginTop: '12px' }}>
+                        {(exp.tags || exp.tech).map((tag, tIdx) => (
+                          <span key={tIdx} className="dev-tech-tag">{tag}</span>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   {/* Multi-Image Stacked Book Deck */}
@@ -678,10 +690,20 @@ export default function ProgrammerSide({ profile, contact, visibility = null, sk
             <Mail size={24} />
             <span>{contact.heading}</span>
           </h2>
-          <p className="dev-contact-text">{contact.text}</p>
-          <a href={`mailto:${contact.email}`} className="dev-contact-btn">
+          {contact.text && <p className="dev-contact-text">{contact.text}</p>}
+          <a
+            href={
+              contact.url ||
+              contact.link ||
+              (contact.email?.includes('@') && !contact.email.startsWith('mailto:') ? `mailto:${contact.email}` : contact.email) ||
+              'mailto:hello@example.com'
+            }
+            target={contact.url?.startsWith('http') || contact.link?.startsWith('http') ? '_blank' : undefined}
+            rel={contact.url?.startsWith('http') || contact.link?.startsWith('http') ? 'noopener noreferrer' : undefined}
+            className="dev-contact-btn"
+          >
             <Mail size={18} />
-            {contact.buttonText}
+            {contact.buttonText || 'Say Hello'}
           </a>
         </motion.section>
       )}

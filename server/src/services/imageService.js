@@ -13,14 +13,14 @@ const uploadsDir = path.join(__dirname, '..', '..', 'uploads');
  *  2. Resize if wider than maxWidth (keep aspect ratio, never enlarge)
  *  3. Convert to WebP (quality 80)
  *  4. Strip all metadata
- *  5. Save to uploads/ with UUID filename
+ *  5. Save to outputDir (or uploads/) with UUID filename
  *
  * Returns { filename, path, width, height, sizeBytes }
  */
 export async function processImage(inputPath, options = {}) {
-  const { maxWidth = 1920, quality = 80 } = options;
+  const { maxWidth = 1920, quality = 80, outputDir = uploadsDir } = options;
   const filename = `${uuidv4()}.webp`;
-  const outputPath = path.join(uploadsDir, filename);
+  const outputPath = path.join(outputDir, filename);
 
   const result = await sharp(inputPath)
     .rotate()

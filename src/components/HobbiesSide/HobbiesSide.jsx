@@ -143,13 +143,25 @@ export default function HobbiesSide({
   };
 
   // Filter out hidden items
-  const activeSpecs = (specs || []).filter((s) => !s.hidden);
-  const activeSetup = (setup || []).filter((s) => !s.hidden);
-  const activeStoryGames = (storyGames || []).filter((g) => !g.hidden);
-  const activeCurrentlyPlaying = (currentlyPlaying || []).filter((g) => !g.hidden);
-  const activePhilosophy = (philosophy || []).filter((p) => !p.hidden);
-  const activeMovies = (movies || []).filter((m) => !m.hidden);
-  const activeMoviesWatching = (moviesWatching || []).filter((m) => !m.hidden);
+  const specsList = Array.isArray(specs) ? specs : [];
+  const setupList = Array.isArray(setup) ? setup : [];
+  const storyGamesList = Array.isArray(storyGames) ? storyGames : [];
+  const currentlyPlayingList = Array.isArray(currentlyPlaying) ? currentlyPlaying : [];
+  const backlogList = Array.isArray(backlog) ? backlog : [];
+  const philosophyList = Array.isArray(philosophy) ? philosophy : [];
+  const moviesList = Array.isArray(movies) ? movies : [];
+  const moviesWatchingList = Array.isArray(moviesWatching) ? moviesWatching : [];
+  const moviesBacklogList = Array.isArray(moviesBacklog) ? moviesBacklog : [];
+
+  const activeSpecs = specsList.filter((s) => !s?.hidden);
+  const activeSetup = setupList.filter((s) => !s?.hidden);
+  const activeStoryGames = storyGamesList.filter((g) => !g?.hidden);
+  const activeCurrentlyPlaying = currentlyPlayingList.filter((g) => !g?.hidden);
+  const activeBacklog = backlogList.filter((g) => !g?.hidden);
+  const activePhilosophy = philosophyList.filter((p) => !p?.hidden);
+  const activeMovies = moviesList.filter((m) => !m?.hidden);
+  const activeMoviesWatching = moviesWatchingList.filter((m) => !m?.hidden);
+  const activeMoviesBacklog = moviesBacklogList.filter((m) => !m?.hidden);
 
   return (
     <motion.div

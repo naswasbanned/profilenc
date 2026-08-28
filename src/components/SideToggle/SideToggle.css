@@ -1,18 +1,24 @@
+/* ==========================================================================
+   Side Mode Toggle Component
+   Theme: Technical Obsidian & Precision Luminescence
+   ========================================================================== */
+
 .side-toggle-wrapper {
   position: fixed;
-  top: 24px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 6px 8px;
-  background: rgba(10, 10, 15, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 50px;
+  padding: 4px 6px;
+  background: rgba(9, 10, 15, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-border-normal);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
 }
 
 .toggle-option {
@@ -22,60 +28,68 @@
   gap: 7px;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.35);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
   cursor: pointer;
-  padding: 8px 14px;
-  border-radius: 24px;
-  transition: color 0.3s;
-  letter-spacing: 0.03em;
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  letter-spacing: 0.02em;
 }
 
 .toggle-option:hover {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.toggle-option:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 1px;
 }
 
 /* Active states per section */
 .toggle-option.active {
   color: #fff;
+  font-weight: 700;
 }
 
 .toggle-option.dev-active {
-  color: #64ffda;
+  color: var(--dev-accent);
 }
 
 .toggle-option.hobbies-active {
-  color: #a855f7;
+  color: var(--cs-accent);
 }
 
 .toggle-option.diary-active {
-  color: #f4a261;
+  color: var(--diary-accent);
 }
 
-/* Animated underline bar */
+/* Precision active indicator underline */
 .toggle-active-bar {
   position: absolute;
   bottom: 2px;
-  left: 12px;
-  right: 12px;
+  left: 10px;
+  right: 10px;
   height: 2px;
   border-radius: 1px;
 }
 
 .dev-active .toggle-active-bar {
-  background: #64ffda;
-  box-shadow: 0 0 8px rgba(100, 255, 218, 0.5);
+  background: var(--dev-accent);
+  box-shadow: 0 0 6px var(--dev-accent);
 }
 
 .hobbies-active .toggle-active-bar {
-  background: #a855f7;
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
+  background: var(--cs-accent);
+  box-shadow: 0 0 6px var(--cs-accent);
 }
 
 .diary-active .toggle-active-bar {
-  background: #f4a261;
-  box-shadow: 0 0 8px rgba(244, 162, 97, 0.5);
+  background: var(--diary-accent);
+  box-shadow: 0 0 6px var(--diary-accent);
 }
 
 /* === Mobile Responsive === */
@@ -83,14 +97,14 @@
   .side-toggle-wrapper {
     top: 12px;
     gap: 2px;
-    padding: 5px 6px;
+    padding: 3px 4px;
     max-width: calc(100vw - 24px);
   }
 
   .toggle-option {
-    gap: 5px;
-    padding: 6px 8px;
-    font-size: 0.62rem;
+    gap: 4px;
+    padding: 5px 8px;
+    font-size: var(--text-2xs);
   }
 
   .toggle-label {
@@ -102,10 +116,10 @@
   .side-toggle-wrapper {
     top: 8px;
     gap: 2px;
-    padding: 4px 6px;
+    padding: 3px 4px;
   }
 
   .toggle-option {
-    padding: 6px 8px;
+    padding: 5px 8px;
   }
 }

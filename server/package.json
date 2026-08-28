@@ -7,7 +7,10 @@
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
     "migrate": "node src/db/migrate.js",
-    "seed": "node src/db/seed.js"
+    "migrate:multi-user": "node src/db/migrations/001_multi_user.js",
+    "migrate:existing": "node src/db/migrations/002_migrate_existing.js",
+    "seed": "node src/db/seed.js",
+    "seed:templates": "node src/db/seeds/templates.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

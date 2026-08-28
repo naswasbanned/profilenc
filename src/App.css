@@ -1,3 +1,7 @@
+/* ==========================================================================
+   App Layout & Global Footer
+   ========================================================================== */
+
 .app {
   position: relative;
   min-height: 100vh;
@@ -7,15 +11,16 @@
   position: relative;
   z-index: 1;
   text-align: center;
-  padding: 40px 20px;
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
+  padding: 48px 24px;
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
 }
 
 .app-footer.dev {
   color: var(--dev-text-dim);
   border-top: 1px solid var(--dev-border);
   background: var(--dev-bg);
+  font-family: var(--font-mono);
 }
 
 .app-footer.cs,
@@ -23,19 +28,23 @@
   color: var(--cs-text-dim);
   border-top: 1px solid var(--cs-border);
   background: var(--cs-bg);
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0.06em;
 }
 
 .app-footer.diary {
   color: var(--diary-text-dim);
   border-top: 1px solid var(--diary-border);
   background: var(--diary-bg);
-  font-family: 'Crimson Text', serif;
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
+  font-style: italic;
 }
 
 @media (max-width: 768px) {
   .app-footer {
-    padding: 24px 16px;
-    font-size: 0.6rem;
+    padding: 32px 16px;
+    font-size: var(--text-2xs);
   }
 }

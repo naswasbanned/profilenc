@@ -37,7 +37,7 @@ export default function SideToggle({ activeSide, onToggle, sidesVisibility = nul
             className={`toggle-option ${isActive ? `active ${tab.id}-active` : ''}`}
             onClick={() => onToggle(tab.id)}
           >
-            <Icon size={16} className="toggle-icon" />
+            {Icon && <Icon size={16} className="toggle-icon" />}
             <span className="toggle-label">{tab.label}</span>
             {isActive && (
               <motion.div

@@ -1,3 +1,8 @@
+/* ==========================================================================
+   Transition Overlay Component
+   Theme: Technical Obsidian & Precision Luminescence
+   ========================================================================== */
+
 .transition-overlay {
   position: fixed;
   inset: 0;
@@ -9,11 +14,15 @@
 }
 
 .transition-overlay.to-cs {
-  background: radial-gradient(ellipse at center, #170b24, #0d0d0d);
+  background: radial-gradient(ellipse at center, #141120, #08080c);
 }
 
 .transition-overlay.to-dev {
-  background: radial-gradient(ellipse at center, #0a0f14, #0a0a0f);
+  background: radial-gradient(ellipse at center, #0c1514, #090a0f);
+}
+
+.transition-overlay.to-diary {
+  background: radial-gradient(ellipse at center, #1a1410, #0c0b0e);
 }
 
 .transition-icon {
@@ -22,13 +31,18 @@
 }
 
 .to-cs .transition-icon {
-  color: #a855f7;
-  filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6));
+  color: var(--cs-accent);
+  filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.4));
 }
 
 .to-dev .transition-icon {
-  color: #64ffda;
-  filter: drop-shadow(0 0 40px rgba(100, 255, 218, 0.6));
+  color: var(--dev-accent);
+  filter: drop-shadow(0 0 30px rgba(0, 240, 170, 0.4));
+}
+
+.to-diary .transition-icon {
+  color: var(--diary-accent);
+  filter: drop-shadow(0 0 30px rgba(224, 159, 103, 0.4));
 }
 
 /* Glitch lines */
@@ -47,11 +61,15 @@
 }
 
 .to-cs .glitch-line {
-  background: linear-gradient(90deg, transparent 5%, #a855f7 20%, #a855f788 50%, transparent 95%);
+  background: linear-gradient(90deg, transparent 5%, var(--cs-accent) 20%, rgba(139, 92, 246, 0.5) 50%, transparent 95%);
 }
 
 .to-dev .glitch-line {
-  background: linear-gradient(90deg, transparent 5%, #64ffda 20%, #64ffda88 50%, transparent 95%);
+  background: linear-gradient(90deg, transparent 5%, var(--dev-accent) 20%, rgba(0, 240, 170, 0.5) 50%, transparent 95%);
+}
+
+.to-diary .glitch-line {
+  background: linear-gradient(90deg, transparent 5%, var(--diary-accent) 20%, rgba(224, 159, 103, 0.5) 50%, transparent 95%);
 }
 
 /* Particles */
@@ -68,30 +86,23 @@
 }
 
 .to-cs .t-particle {
-  background: #a855f7;
-  box-shadow: 0 0 10px #a855f7;
+  background: var(--cs-accent);
+  box-shadow: 0 0 8px var(--cs-accent);
 }
 
 .to-dev .t-particle {
-  background: #64ffda;
-  box-shadow: 0 0 10px #64ffda;
-}
-
-/* Diary transition */
-.transition-overlay.to-diary {
-  background: radial-gradient(ellipse at center, #1a1008, #0d0b0f);
-}
-
-.to-diary .transition-icon {
-  color: #f4a261;
-  filter: drop-shadow(0 0 40px rgba(244, 162, 97, 0.6));
-}
-
-.to-diary .glitch-line {
-  background: linear-gradient(90deg, transparent 5%, #f4a261 20%, #f4a26188 50%, transparent 95%);
+  background: var(--dev-accent);
+  box-shadow: 0 0 8px var(--dev-accent);
 }
 
 .to-diary .t-particle {
-  background: #f4a261;
-  box-shadow: 0 0 10px #f4a261;
+  background: var(--diary-accent);
+  box-shadow: 0 0 8px var(--diary-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch-line,
+  .t-particle {
+    display: none;
+  }
 }

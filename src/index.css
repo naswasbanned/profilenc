@@ -1,41 +1,152 @@
+/* ==========================================================================
+   Design System Core Tokens & Global Baseline
+   Theme: Technical Obsidian & Precision Luminescence
+   ========================================================================== */
+
+/* Font imports: Local Fontsource + Paired Webfonts */
 @import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
 @import '@fontsource/jetbrains-mono/700.css';
 @import '@fontsource/orbitron/400.css';
 @import '@fontsource/orbitron/700.css';
 @import '@fontsource/orbitron/900.css';
 @import '@fontsource/crimson-text/400.css';
 @import '@fontsource/crimson-text/700.css';
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Programmer side (dark elegant) */
-  --dev-bg: #0a0a0f;
-  --dev-surface: #12121a;
-  --dev-accent: #64ffda;
-  --dev-accent-dim: #64ffda33;
-  --dev-text: #ccd6f6;
-  --dev-text-dim: #8892b0;
-  --dev-border: #1d1d2e;
-  
-  /* CS / Hobbies side (purple cyberpunk neon) */
-  --cs-bg: #0d0d0d;
-  --cs-surface: #1a1a1a;
-  --cs-accent: #a855f7;
-  --cs-accent-secondary: #ec4899;
-  --cs-text: #efefef;
-  --cs-text-dim: #999999;
-  --cs-border: #2a2a2a;
+  /* === 1. Typography Tokens === */
+  /* Display font: Space Grotesk (geometric, technical character for headers) */
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Body font: Plus Jakarta Sans (refined neo-grotesque, high legibility) */
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Monospace font: JetBrains Mono (high-precision tabular & code face) */
+  --font-mono: 'JetBrains Mono', monospace;
+  /* Serif font: Crimson Text (literary editorial warmth for journal/diary) */
+  --font-serif: 'Crimson Text', Georgia, serif;
 
-  /* Diary side (warm, journal-like) */
-  --diary-bg: #0d0b0f;
-  --diary-surface: #1a1520;
-  --diary-accent: #f4a261;
-  --diary-accent-dim: #f4a26133;
-  --diary-text: #e8ddd3;
-  --diary-text-dim: #9a8e82;
-  --diary-border: #2a2230;
+  /* Type Scale Tokens */
+  --text-2xs: 0.6875rem; /* 11px */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+  --text-5xl: 3rem;      /* 48px */
+
+  /* Legacy theme aliases for ThemeContext compatibility */
+  --font-family: var(--font-body);
+  --heading-font: var(--font-display);
+  --base-font-size: 16px;
+
+  /* === 2. Color System & Surfaces === */
+  --color-bg-base: #090a0f;
+  --color-surface-sunken: #050608;
+  --color-surface-base: #0c0e14;
+  --color-surface-raised: #12151e;
+  --color-surface-overlay: #181c28;
+  --color-surface-elevated: #202534;
+
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-normal: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.18);
+
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-text-dim: #475569;
+
+  /* Primary Accent: Signal Mint (sharp, high-contrast, technical) */
+  --color-accent-primary: #00f0aa;
+  --color-accent-hover: #00d296;
+  --color-accent-dim: rgba(0, 240, 170, 0.12);
+  --color-accent-glow: rgba(0, 240, 170, 0.25);
+
+  /* Secondary Accent: Solar Amber */
+  --color-accent-secondary: #f59e0b;
+  --color-accent-secondary-dim: rgba(245, 158, 11, 0.12);
+
+  /* Semantic Feedback */
+  --color-danger: #f43f5e;
+  --color-danger-dim: rgba(244, 63, 94, 0.12);
+  --color-success: #10b981;
+  --color-success-dim: rgba(16, 185, 129, 0.12);
+  --color-info: #0284c7;
+
+  /* ThemeContext Global Default Aliases */
+  --bg-color: var(--color-bg-base);
+  --accent-color: var(--color-accent-primary);
+  --accent-secondary: var(--color-accent-secondary);
+  --text-color: var(--color-text-primary);
+  --text-muted: var(--color-text-secondary);
+  --card-bg: var(--color-surface-raised);
+  --card-border: var(--color-border-subtle);
+  --glass-blur: 12px;
+  --animation-speed: 1;
+
+  /* === 3. Surface & Depth Tokens === */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.6), 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 24px 48px -8px rgba(0, 0, 0, 0.7), 0 8px 20px -4px rgba(0, 0, 0, 0.5);
+
+  /* Radius Scale: Proportionate & Functional */
+  --border-radius: 10px;
+  --radius-xs: calc(var(--border-radius, 10px) * 0.4);
+  --radius-sm: calc(var(--border-radius, 10px) * 0.6);
+  --radius-md: var(--border-radius, 10px);
+  --radius-lg: calc(var(--border-radius, 10px) * 1.5);
+  --radius-full: 9999px;
+  --btn-radius: var(--border-radius, 10px);
+
+  /* === 4. Timing & Motion Tokens === */
+  --animation-speed: 1;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: calc(150ms / var(--animation-speed, 1)) cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: calc(220ms / var(--animation-speed, 1)) cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: calc(350ms / var(--animation-speed, 1)) cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* === 5. Per-Mode Sub-Themes === */
+  /* Programmer Mode: Technical Slate & Signal Mint */
+  --dev-bg: #090a0f;
+  --dev-surface: #10131b;
+  --dev-surface-raised: #171b26;
+  --dev-accent: #00f0aa;
+  --dev-accent-dim: rgba(0, 240, 170, 0.12);
+  --dev-text: #e2e8f0;
+  --dev-text-dim: #94a3b8;
+  --dev-border: #1e2433;
+  --dev-border-subtle: rgba(255, 255, 255, 0.07);
+
+  /* Hobbies Mode: Dark Carbon & Luminescent Violet */
+  --cs-bg: #08080c;
+  --cs-surface: #111118;
+  --cs-surface-raised: #181822;
+  --cs-accent: #8b5cf6;
+  --cs-accent-secondary: #00e5ff;
+  --cs-text: #f8fafc;
+  --cs-text-dim: #94a3b8;
+  --cs-border: #222230;
+
+  /* Diary Mode: Warm Espresso Obsidian & Ochre */
+  --diary-bg: #0c0b0e;
+  --diary-surface: #15131a;
+  --diary-surface-raised: #1e1b24;
+  --diary-accent: #e09f67;
+  --diary-accent-dim: rgba(224, 159, 103, 0.15);
+  --diary-text: #ece3da;
+  --diary-text-dim: #9e9285;
+  --diary-border: #2c2533;
 }
 
-* {
+/* === Global Reset & Box Model === */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -43,40 +154,61 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: var(--base-font-size, 16px);
 }
 
 body {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  background: #0a0a0f;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
 }
 
+/* Accessible Focus Rings */
+:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--color-surface-sunken);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 3px;
+  background: #272a38;
+  border-radius: var(--radius-xs);
 }
 
+::-webkit-scrollbar-thumb:hover {
+  background: #393e50;
+}
+
+/* High-Contrast Text Selection */
 ::selection {
-  background: #64ffda33;
-  color: #64ffda;
+  background: var(--color-accent-dim);
+  color: var(--color-accent-primary);
 }
 
 a {
   text-decoration: none;
   color: inherit;
+  transition: color var(--transition-fast);
 }
 
-/* === Global Image Optimizations === */
+button {
+  font-family: inherit;
+}
+
 img {
   image-rendering: auto;
   -webkit-image-rendering: auto;
@@ -88,7 +220,19 @@ img {
   min-height: 100vh;
 }
 
-/* === Global Mobile Adjustments === */
+/* === Reduced Motion Fallback for Accessibility === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* === Responsive Adjustments === */
 @media (max-width: 768px) {
   body {
     -webkit-text-size-adjust: 100%;

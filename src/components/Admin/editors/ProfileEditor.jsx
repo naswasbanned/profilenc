@@ -369,10 +369,10 @@ export default function ProfileEditor({ data, setData, token }) {
           <AdminField label="Avatar" value={data.dev?.avatar} onChange={(v) => update('dev.avatar', v)} type="image" token={token} fullWidth />
           <AdminField label="Title" value={data.dev?.title} onChange={(v) => update('dev.title', v)} fullWidth />
           <AdminField label="Bio" value={data.dev?.bio} onChange={(v) => update('dev.bio', v)} type="textarea" fullWidth />
-          <AdminField label="GitHub Profile URL" value={getSocialUrl('dev', 'GitHub')} onChange={(v) => updateSocialUrl('dev', 'GitHub', 'Github', v)} type="url" placeholder="https://github.com/..." />
-          <AdminField label="LinkedIn Profile URL" value={getSocialUrl('dev', 'LinkedIn')} onChange={(v) => updateSocialUrl('dev', 'LinkedIn', 'Linkedin', v)} type="url" placeholder="https://linkedin.com/in/..." />
-          <AdminField label="Email Address / Mailto" value={getSocialUrl('dev', 'Email')} onChange={(v) => updateSocialUrl('dev', 'Email', 'Mail', v)} type="url" placeholder="mailto:you@example.com" />
-          <AdminField label="Instagram Profile URL" value={getSocialUrl('dev', 'Instagram')} onChange={(v) => updateSocialUrl('dev', 'Instagram', 'Instagram', v)} type="url" placeholder="https://instagram.com/..." />
+          <AdminField label="GitHub Profile URL" value={getSocialUrl('dev', 'GitHub')} onChange={(v) => updateSocialUrl('dev', 'GitHub', 'Github', v)} placeholder="https://github.com/..." />
+          <AdminField label="LinkedIn Profile URL" value={getSocialUrl('dev', 'LinkedIn')} onChange={(v) => updateSocialUrl('dev', 'LinkedIn', 'Linkedin', v)} placeholder="https://linkedin.com/in/..." />
+          <AdminField label="Email Address / Mailto" value={getSocialUrl('dev', 'Email')} onChange={(v) => updateSocialUrl('dev', 'Email', 'Mail', v)} placeholder="e.g. you@example.com or mailto:you@example.com" />
+          <AdminField label="Instagram Profile URL" value={getSocialUrl('dev', 'Instagram')} onChange={(v) => updateSocialUrl('dev', 'Instagram', 'Instagram', v)} placeholder="https://instagram.com/..." />
         </div>
       </div>
 
@@ -401,10 +401,10 @@ export default function ProfileEditor({ data, setData, token }) {
           <AdminField label="Tagline" value={data.diary?.tagline} onChange={(v) => update('diary.tagline', v)} />
           <AdminField label="Avatar" value={data.diary?.avatar} onChange={(v) => update('diary.avatar', v)} type="image" token={token} fullWidth />
           <AdminField label="Bio" value={data.diary?.bio} onChange={(v) => update('diary.bio', v)} type="textarea" fullWidth />
-          <AdminField label="GitHub Profile URL" value={getSocialUrl('diary', 'GitHub')} onChange={(v) => updateSocialUrl('diary', 'GitHub', 'Github', v)} type="url" placeholder="https://github.com/..." />
-          <AdminField label="LinkedIn Profile URL" value={getSocialUrl('diary', 'LinkedIn')} onChange={(v) => updateSocialUrl('diary', 'LinkedIn', 'Linkedin', v)} type="url" placeholder="https://linkedin.com/in/..." />
-          <AdminField label="Email Address / Mailto" value={getSocialUrl('diary', 'Email')} onChange={(v) => updateSocialUrl('diary', 'Email', 'Mail', v)} type="url" placeholder="mailto:you@example.com" />
-          <AdminField label="Instagram Profile URL" value={getSocialUrl('diary', 'Instagram')} onChange={(v) => updateSocialUrl('diary', 'Instagram', 'Instagram', v)} type="url" placeholder="https://instagram.com/..." />
+          <AdminField label="GitHub Profile URL" value={getSocialUrl('diary', 'GitHub')} onChange={(v) => updateSocialUrl('diary', 'GitHub', 'Github', v)} placeholder="https://github.com/..." />
+          <AdminField label="LinkedIn Profile URL" value={getSocialUrl('diary', 'LinkedIn')} onChange={(v) => updateSocialUrl('diary', 'LinkedIn', 'Linkedin', v)} placeholder="https://linkedin.com/in/..." />
+          <AdminField label="Email Address / Mailto" value={getSocialUrl('diary', 'Email')} onChange={(v) => updateSocialUrl('diary', 'Email', 'Mail', v)} placeholder="e.g. you@example.com or mailto:you@example.com" />
+          <AdminField label="Instagram Profile URL" value={getSocialUrl('diary', 'Instagram')} onChange={(v) => updateSocialUrl('diary', 'Instagram', 'Instagram', v)} placeholder="https://instagram.com/..." />
           <AdminField label="Pinned Quote" value={data.diary?.pinnedQuote} onChange={(v) => update('diary.pinnedQuote', v)} type="textarea" fullWidth />
         </div>
       </div>
@@ -429,8 +429,8 @@ export default function ProfileEditor({ data, setData, token }) {
         </div>
         <div className="admin-field-grid">
           <AdminField label="Heading" value={data.contact?.heading} onChange={(v) => update('contact.heading', v)} />
-          <AdminField label="Email" value={data.contact?.email} onChange={(v) => update('contact.email', v)} type="url" />
-          <AdminField label="Button Text" value={data.contact?.buttonText} onChange={(v) => update('contact.buttonText', v)} />
+          <AdminField label="Email / Contact Link" value={data.contact?.email || data.contact?.url || ''} onChange={(v) => { update('contact.email', v); update('contact.url', v); }} placeholder="e.g. you@example.com or https://cal.com/..." />
+          <AdminField label="Button Text" value={data.contact?.buttonText} onChange={(v) => update('contact.buttonText', v)} placeholder="e.g. Get in Touch" />
           <AdminField label="Description" value={data.contact?.text} onChange={(v) => update('contact.text', v)} type="textarea" fullWidth />
         </div>
       </div>

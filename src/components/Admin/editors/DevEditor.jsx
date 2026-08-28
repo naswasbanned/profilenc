@@ -151,6 +151,7 @@ export default function DevEditor({
                 <AdminField label="Live / Project Link (Optional)" value={exp.link} onChange={(v) => updateItem(experience, setExperience, i, 'link', v)} type="url" placeholder="https://example.com" />
                 <AdminField label="GitHub Repository (Optional)" value={exp.github} onChange={(v) => updateItem(experience, setExperience, i, 'github', v)} type="url" placeholder="https://github.com/..." />
                 <AdminField label="Description" value={exp.description} onChange={(v) => updateItem(experience, setExperience, i, 'description', v)} type="textarea" fullWidth />
+                <AdminField label="Tech Stack / Tags" value={exp.tags || exp.tech} onChange={(v) => updateItem(experience, setExperience, i, 'tags', v)} type="tags" fullWidth />
                 <AdminField label="Experience Showcase Images" value={exp.images} onChange={(v) => updateItem(experience, setExperience, i, 'images', v)} type="images" token={token} fullWidth />
               </div>
             </AdminCard>
@@ -158,7 +159,7 @@ export default function DevEditor({
           <button
             type="button"
             className="admin-add-btn"
-            onClick={() => setExperience([...experience, { role: '', company: '', period: '', link: '', github: '', description: '', images: [], hidden: false }])}
+            onClick={() => setExperience([...experience, { role: '', company: '', period: '', link: '', github: '', description: '', tags: [], images: [], hidden: false }])}
           >
             <Plus size={16} /> Add Experience
           </button>

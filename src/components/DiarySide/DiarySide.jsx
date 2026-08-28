@@ -218,7 +218,8 @@ export default function DiarySide({ profile, visibility = null, entries }) {
   }
 
   // Filter hidden entries
-  const activeEntries = (entries || []).filter((e) => !e.hidden);
+  const entriesList = Array.isArray(entries) ? entries : [];
+  const activeEntries = entriesList.filter((e) => !e?.hidden);
 
   return (
     <motion.div

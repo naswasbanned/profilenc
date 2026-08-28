@@ -1,18 +1,23 @@
+/* ==========================================================================
+   Diary & Journal Side Styles
+   Theme: Warm Espresso Obsidian & Ochre
+   ========================================================================== */
+
 .diary-side {
   position: relative;
   min-height: 100vh;
-  background: var(--diary-bg);
+  background-color: var(--diary-bg);
   color: var(--diary-text);
   padding: 0 0 80px;
   overflow: hidden;
-  font-family: 'Crimson Text', serif;
+  font-family: var(--font-serif);
 }
 
-/* === Background Effects === */
+/* === Background Texture === */
 .diary-bg-grain {
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 0;
 }
@@ -22,9 +27,9 @@
   top: -150px;
   left: 50%;
   transform: translateX(-50%);
-  width: 700px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(244, 162, 97, 0.06) 0%, transparent 70%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(224, 159, 103, 0.04) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -33,7 +38,7 @@
 .diary-hero {
   position: relative;
   z-index: 1;
-  max-width: 640px;
+  max-width: 680px;
   margin: 0 auto;
   padding: 80px 24px 40px;
   text-align: center;
@@ -51,9 +56,9 @@
 }
 
 .diary-avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-full);
   border: 2px solid var(--diary-accent);
   padding: 3px;
   background: var(--diary-surface);
@@ -63,7 +68,7 @@
 .diary-avatar-img {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   object-fit: cover;
 }
 
@@ -72,11 +77,11 @@
 }
 
 .diary-name {
-  font-size: 1.6rem;
+  font-size: var(--text-2xl);
   font-weight: 700;
   color: var(--diary-text);
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
   margin-bottom: 6px;
 }
 
@@ -85,16 +90,17 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   color: var(--diary-accent);
   margin-bottom: 12px;
+  font-style: italic;
 }
 
 .diary-bio {
-  font-size: 1rem;
+  font-size: var(--text-base);
   color: var(--diary-text-dim);
   line-height: 1.7;
-  max-width: 460px;
+  max-width: 500px;
   margin: 0 auto 16px;
 }
 
@@ -109,23 +115,26 @@
 .diary-social-link {
   width: 38px;
   height: 38px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   border: 1px solid var(--diary-border);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--diary-text-dim);
   background: var(--diary-surface);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
   text-decoration: none;
 }
 
 .diary-social-link:hover {
   color: var(--diary-accent);
   border-color: var(--diary-accent);
-  background: rgba(244, 63, 94, 0.12);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.25);
+  background: var(--diary-accent-dim);
+}
+
+.diary-social-link:focus-visible {
+  outline: 2px solid var(--diary-accent);
+  outline-offset: 2px;
 }
 
 .diary-stats-row {
@@ -142,22 +151,23 @@
 }
 
 .diary-stat-value {
-  font-size: 1.1rem;
+  font-size: var(--text-lg);
   font-weight: 700;
   color: var(--diary-text);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 
 .diary-stat-label {
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   color: var(--diary-text-dim);
+  font-style: italic;
 }
 
 /* === Sections === */
 .diary-section {
   position: relative;
   z-index: 1;
-  max-width: 640px;
+  max-width: 680px;
   margin: 0 auto;
   padding: 20px 24px;
 }
@@ -166,8 +176,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 1.1rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--text-base);
+  font-family: var(--font-mono);
+  font-weight: 700;
   color: var(--diary-text);
   margin-bottom: 24px;
   padding-bottom: 12px;
@@ -183,22 +194,22 @@
   background: var(--diary-surface);
   border: 1px solid var(--diary-border);
   border-left: 3px solid var(--diary-accent);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: 24px 28px;
   position: relative;
 }
 
 .diary-quote-icon {
   color: var(--diary-accent);
-  opacity: 0.5;
+  opacity: 0.6;
   margin-bottom: 12px;
 }
 
 .diary-pinned-text {
-  font-size: 1.1rem;
+  font-size: var(--text-lg);
   font-style: italic;
   color: var(--diary-text);
-  line-height: 1.8;
+  line-height: 1.7;
 }
 
 .diary-pinned-label {
@@ -206,11 +217,12 @@
   align-items: center;
   gap: 5px;
   margin-top: 16px;
-  font-size: 0.7rem;
+  font-size: var(--text-2xs);
   color: var(--diary-accent);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
+  font-weight: 700;
 }
 
 /* === Feed === */
@@ -224,13 +236,13 @@
 .diary-entry-card {
   background: var(--diary-surface);
   border: 1px solid var(--diary-border);
-  border-radius: 14px;
-  padding: 20px;
-  transition: border-color 0.3s;
+  border-radius: var(--radius-md);
+  padding: 22px;
+  transition: border-color var(--transition-fast);
 }
 
 .diary-entry-card:hover {
-  border-color: rgba(244, 162, 97, 0.3);
+  border-color: rgba(224, 159, 103, 0.35);
 }
 
 /* Entry Header */
@@ -244,7 +256,7 @@
 .diary-entry-avatar-mini {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   overflow: hidden;
   border: 1px solid var(--diary-border);
   flex-shrink: 0;
@@ -264,19 +276,19 @@
 }
 
 .diary-entry-author {
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   font-weight: 700;
   color: var(--diary-text);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 
 .diary-entry-time {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
   color: var(--diary-text-dim);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 
 /* Mood Badge */
@@ -284,23 +296,24 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: color-mix(in srgb, var(--mood-color, #f4a261) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--mood-color, #f4a261) 30%, transparent);
-  font-size: 0.65rem;
-  font-family: 'JetBrains Mono', monospace;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--mood-color, var(--diary-accent)) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mood-color, var(--diary-accent)) 25%, transparent);
+  font-size: var(--text-2xs);
+  font-family: var(--font-mono);
 }
 
 .diary-mood-label {
   color: var(--mood-color, var(--diary-accent));
   text-transform: capitalize;
+  font-weight: 600;
 }
 
 /* Entry Content */
 .diary-entry-content {
-  font-size: 1.05rem;
-  line-height: 1.8;
+  font-size: var(--text-base);
+  line-height: 1.75;
   color: var(--diary-text);
   margin-bottom: 14px;
 }
@@ -310,17 +323,17 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   margin-bottom: 14px;
   border: 1px solid var(--diary-border);
-  background: #120e17;
+  background: #0d0b0f;
   cursor: pointer;
-  transition: border-color 0.3s;
+  transition: border-color var(--transition-fast);
 }
 
 .diary-entry-image-container:hover {
-  border-color: rgba(244, 162, 97, 0.4);
+  border-color: rgba(224, 159, 103, 0.4);
 }
 
 .diary-image-media-wrapper {
@@ -342,23 +355,23 @@
 .clean-element {
   filter: none;
   transform: scale(1);
-  transition: transform 0.35s ease;
+  transition: transform var(--transition-slow);
 }
 
 .diary-entry-image-container.is-direct-169:hover .clean-element {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 /* Non-16:9 or Video Blurred View */
 .blurred-element {
-  filter: blur(14px) brightness(0.65);
-  transform: scale(1.12);
-  transition: transform 0.4s ease, filter 0.4s ease;
+  filter: blur(12px) brightness(0.65);
+  transform: scale(1.1);
+  transition: transform var(--transition-slow), filter var(--transition-slow);
 }
 
 .diary-entry-image-container.is-attachment-blurred:hover .blurred-element {
-  filter: blur(10px) brightness(0.75);
-  transform: scale(1.15);
+  filter: blur(8px) brightness(0.75);
+  transform: scale(1.12);
 }
 
 /* Overlay with View Attachment Button */
@@ -369,31 +382,27 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
-  background: radial-gradient(circle, rgba(13, 11, 15, 0.35) 0%, rgba(13, 11, 15, 0.75) 100%);
-  transition: background 0.3s;
-}
-
-.diary-entry-image-container.is-attachment-blurred:hover .diary-image-overlay {
-  background: radial-gradient(circle, rgba(13, 11, 15, 0.2) 0%, rgba(13, 11, 15, 0.65) 100%);
+  background: radial-gradient(circle, rgba(12, 11, 14, 0.3) 0%, rgba(12, 11, 14, 0.7) 100%);
+  transition: background-color var(--transition-fast);
 }
 
 .diary-view-attachment-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
-  border-radius: 30px;
-  background: rgba(26, 21, 32, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(244, 162, 97, 0.4);
+  padding: 9px 18px;
+  border-radius: var(--radius-full);
+  background: rgba(21, 19, 26, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(224, 159, 103, 0.4);
   color: #fff;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 15px rgba(244, 162, 97, 0.2);
-  transition: all 0.25s ease;
+  box-shadow: var(--shadow-md);
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .diary-view-attachment-btn svg {
@@ -403,15 +412,13 @@
 .diary-entry-image-container.is-attachment-blurred:hover .diary-view-attachment-btn,
 .diary-view-attachment-btn:hover {
   background: var(--diary-accent);
-  color: #0d0b0f;
+  color: #0c0b0e;
   border-color: var(--diary-accent);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(244, 162, 97, 0.4);
 }
 
 .diary-entry-image-container.is-attachment-blurred:hover .diary-view-attachment-btn svg,
 .diary-view-attachment-btn:hover svg {
-  color: #0d0b0f;
+  color: #0c0b0e;
 }
 
 /* Entry Footer */
@@ -427,20 +434,20 @@
 /* Date */
 .diary-entry-date {
   display: block;
-  font-size: 0.68rem;
+  font-size: var(--text-2xs);
   color: var(--diary-text-dim);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
-/* === Lightbox / Zoom Modal === */
+/* === Lightbox Modal === */
 .diary-modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(5, 4, 7, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 2000;
   display: flex;
   align-items: center;
@@ -455,9 +462,9 @@
   max-height: 90vh;
   background: var(--diary-surface);
   border: 1px solid var(--diary-border);
-  border-radius: 18px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(244, 162, 97, 0.15);
+  box-shadow: var(--shadow-xl);
   display: flex;
   flex-direction: column;
 }
@@ -466,8 +473,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 22px;
-  background: rgba(13, 11, 15, 0.6);
+  padding: 14px 20px;
+  background: rgba(12, 11, 14, 0.7);
   border-bottom: 1px solid var(--diary-border);
 }
 
@@ -478,37 +485,36 @@
 }
 
 .diary-modal-title {
-  font-size: 0.88rem;
+  font-size: var(--text-sm);
   font-weight: 700;
   color: var(--diary-text);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 
 .diary-modal-date {
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   color: var(--diary-accent);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 
 .diary-modal-close-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--diary-border);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color var(--transition-fast);
 }
 
 .diary-modal-close-btn:hover {
-  background: #ff4655;
-  border-color: #ff4655;
+  background: var(--color-danger);
+  border-color: var(--color-danger);
   color: #fff;
-  transform: rotate(90deg);
 }
 
 .diary-modal-image-box {
@@ -536,13 +542,13 @@
 }
 
 .diary-modal-caption {
-  padding: 16px 22px;
+  padding: 14px 20px;
   background: var(--diary-surface);
   border-top: 1px solid var(--diary-border);
 }
 
 .diary-modal-caption p {
-  font-size: 1rem;
+  font-size: var(--text-sm);
   line-height: 1.6;
   color: var(--diary-text);
   margin: 0;
@@ -559,7 +565,7 @@
   }
 
   .diary-entry-content {
-    font-size: 0.95rem;
+    font-size: var(--text-sm);
   }
 
   .diary-modal-backdrop {

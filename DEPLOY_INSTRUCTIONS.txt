@@ -1,35 +1,22 @@
 ==============================================================================
-PROFILE PORTFOLIO & CMS - FULL DOCKER DEPLOYMENT INSTRUCTIONS
+PROFILE & CMS PLATFORM - FULL DOCKER DEPLOYMENT INSTRUCTIONS (MULTI-USER)
 ==============================================================================
 
 [ PREREQUISITES ]
 - Docker and Docker Compose installed on your host/server.
-- Ensure ports 80 (HTTP) and 3001 (Backend, optional if proxied via nginx) are open.
+- WSL (if developing on Windows) or native Linux/macOS terminal.
+- Ensure port 80 (HTTP) or your custom port is open.
 
 ------------------------------------------------------------------------------
-STEP 1: CLONE THE REPOSITORY TO YOUR SERVER
+STEP 1: CONFIGURE YOUR .env FILE
 ------------------------------------------------------------------------------
-On your server/home server:
-
-1. Clone your repo:
-   git clone <YOUR_GIT_REPOSITORY_URL> profile
-
-2. Navigate into the cloned folder:
-   cd profile
-
-(Note: You DO NOT need Node.js or npm installed on your server host machine.
-Docker builds all dependencies inside containers automatically).
-
-------------------------------------------------------------------------------
-STEP 2: CREATE AND CONFIGURE YOUR .env FILE
-------------------------------------------------------------------------------
-Copy the example environment file:
+Copy example environment file (if not created):
   cp .env.example .env
 
-Edit the .env file with your preferred credentials:
+Edit .env file:
   nano .env
 
-Example .env configuration:
+Configuration keys:
 ----------------------------------------
 DB_PASSWORD=your_secure_db_password_here
 JWT_SECRET=your_super_secret_jwt_random_string_here
@@ -37,102 +24,88 @@ ADMIN_USERNAME=admin
 ADMIN_PASSWORD=your_admin_login_password_here
 ----------------------------------------
 
-----------------------------------------------
-STEP 3: START DOCKER CONTAINERS
 ------------------------------------------------------------------------------
-Build and start the services (db, backend, frontend) in the background:
+STEP 2: START DOCKER CONTAINERS
+------------------------------------------------------------------------------
+Build and start services (db, backend, frontend):
   sudo docker compose up -d --build
 
-Verify that all 3 containers are running healthy:
+(Note: Database migrations and template seeding run AUTOMATICALLY on startup
+with built-in retry mechanism).
+
+Check container status:
   sudo docker compose ps
 
-------------------------------------------------------------------------------
-STEP 4: RUN DATABASE MIGRATIONS
-------------------------------------------------------------------------------
-Create the required PostgreSQL tables (content, images, admin_user):
-  sudo docker compose exec backend node src/db/migrate.js
+Check backend logs to verify database init:
+  sudo docker compose logs backend
 
-Expected output:
-  ✓ content table
-  ✓ images table
-  ✓ admin_user table
-  Migrations complete.
+Expected log output:
+  Running database migrations...
+    ✓ All database tables and indexes verified.
+  Seeding templates...
+    ✓ 5 template presets seeded.
+  Checking legacy data migration to multi-user...
+    ✓ Data migration check complete.
+  Backend running on http://localhost:3001
 
 ------------------------------------------------------------------------------
-STEP 5: SEED INITIAL DATA AND OPTIMIZE IMAGES
+STEP 3: (OPTIONAL) INITIAL SEED OF SAMPLE CONTENT / IMAGES
 ------------------------------------------------------------------------------
-Populate all 15 JSON datasets and process/compress 27 images to WebP into DB:
+If you want to populate the database with default showcase data and optimize
+sample images into WebP for user @nas:
   sudo docker compose exec backend node src/db/seed.js
 
-Expected output:
-  === Seeding database ===
-  1. Loading JSON data...
-     ✓ profile.json
-     ✓ dev-skills.json
-     ... (all 15 datasets)
-  2. Collecting image paths...
-     Found 27 unique image paths
-  3. Processing images → WebP...
-     ✓ /images/... -> /uploads/xxxx.webp
-  4. Inserting content into database...
-  5. Creating admin user...
-     ✓ Admin user "admin" created
-  === Seed complete ===
-
 ------------------------------------------------------------------------------
-STEP 6: ACCESS YOUR APPLICATION
+STEP 4: ACCESS YOUR APPLICATION
 ------------------------------------------------------------------------------
-- Main Portfolio Website:
-    http://YOUR_SERVER_IP/  (or http://localhost/ if local)
+- Landing Page (Create Profile, Templates, Featured Profiles):
+    http://YOUR_SERVER_IP/  (or http://localhost:8080/ if local docker-compose default)
 
-- Admin CMS Dashboard:
-    http://YOUR_SERVER_IP/admin
+- User Profile URL:
+    http://YOUR_SERVER_IP/@nas
+    http://YOUR_SERVER_IP/@username
 
-Log in using the ADMIN_USERNAME and ADMIN_PASSWORD configured in your .env.
+- Visual WYSIWYG Editor:
+    http://YOUR_SERVER_IP/@username/edit
+
+- User Login & Registration:
+    http://YOUR_SERVER_IP/login
+    http://YOUR_SERVER_IP/register
+    http://YOUR_SERVER_IP/dashboard
 
 ==============================================================================
-SAFE UPDATES & MAINTENANCE (HOW NOT TO LOSE YOUR DATA)
+SAFE UPDATES & MAINTENANCE (HOW NOT TO LOSE DATA)
 ==============================================================================
 
-When you edit your portfolio via the /admin panel, your data is saved inside
-persistent Docker volumes:
-  - Database text/data -> "pgdata" volume
-  - Uploaded WebP images -> "uploads" volume
+Data is persisted in named Docker volumes:
+  - Database data -> "pgdata" volume
+  - Uploaded images -> "uploads" volume
 
 HOW TO SAFELY UPDATE YOUR CODE:
 --------------------------------
-1. Pull new code from git:
+1. Pull new code:
      git pull
 
 2. Rebuild and restart containers:
      sudo docker compose up -d --build
 
-3. If there are new database tables or structural schema changes:
-     sudo docker compose exec backend node src/db/migrate.js
-
-   (migrate.js uses "CREATE TABLE IF NOT EXISTS" - it is safe and will NEVER
-   wipe or overwrite your existing data!)
-
-   *** CRITICAL: DO NOT RUN seed.js AGAIN AFTER INITIAL SETUP ***
-   Running seed.js will overwrite your customized data with default JSONs.
+(Migrations run automatically on container boot and will NEVER wipe existing data).
 
 ==============================================================================
 BACKUP & RESTORE PROCEDURES
 ==============================================================================
 
 [ CREATING A BACKUP ]
-
-1. Backup PostgreSQL Database:
+1. Database backup:
      sudo docker compose exec db pg_dump -U profile profile > db_backup_$(date +%F).sql
 
-2. Backup Uploaded Images:
+2. Images backup:
      sudo docker compose cp backend:/app/uploads ./uploads_backup_$(date +%F)
 
-3. Backup Environment Credentials:
+3. Environment file backup:
      cp .env .env.backup
 
 [ RESTORING FROM BACKUP ]
-
 1. Restore Database:
      cat db_backup_YYYY-MM-DD.sql | sudo docker compose exec -T db psql -U profile profile
 
@@ -140,16 +113,16 @@ BACKUP & RESTORE PROCEDURES
      sudo docker compose cp ./uploads_backup_YYYY-MM-DD/. backend:/app/uploads/
 
 ==============================================================================
-OTHER USEFUL COMMANDS
+TROUBLESHOOTING
 ==============================================================================
 
-View live logs:
-  sudo docker compose logs -f
+1. Check logs if any container fails:
+     sudo docker compose logs -f backend
 
-Restart all containers:
-  sudo docker compose restart
+2. Restart containers:
+     sudo docker compose restart
 
-Stop all containers:
-  sudo docker compose down
-
+3. Reset completely (WARNING: Deletes DB volume):
+     sudo docker compose down -v
+     sudo docker compose up -d --build
 ==============================================================================
