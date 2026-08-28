@@ -4,6 +4,7 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import EditorPage from './pages/EditorPage';
 import './App.css';
@@ -17,8 +18,9 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Authenticated Dashboard */}
+        {/* Authenticated Dashboard & Admin */}
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/admin" element={<AdminDashboardPage />} />
 
         {/* Profile & Editor routes - accepts both /username and /@username */}
         <Route path="/:username/edit" element={<EditorPage />} />

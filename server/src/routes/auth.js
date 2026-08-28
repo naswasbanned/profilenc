@@ -132,7 +132,7 @@ router.post('/register', async (req, res) => {
     );
 
     const token = jwt.sign(
-      { id: user.id, username: user.username, email: user.email },
+      { id: user.id, username: user.username, email: user.email, isAdmin: !!user.is_admin },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
@@ -145,6 +145,7 @@ router.post('/register', async (req, res) => {
         username: user.username,
         email: user.email,
         displayName: user.display_name,
+        isAdmin: !!user.is_admin,
       },
     });
   } catch (err) {
@@ -169,7 +170,7 @@ router.post('/login', async (req, res) => {
 
     // Try users table first (multi-user)
     const { rows } = await query(
-      'SELECT id, username, email, password_hash, display_name, avatar_url FROM users WHERE username = $1 OR email = $1',
+      'SELECT id, username, email, password_hash, display_name, avatar_url, is_admin FROM users WHERE username = $1 OR email = $1',
       [identifier.toLowerCase().trim()]
     );
 
@@ -184,7 +185,7 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, username: user.username, email: user.email },
+      { id: user.id, username: user.username, email: user.email, isAdmin: !!user.is_admin },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
@@ -198,6 +199,7 @@ router.post('/login', async (req, res) => {
         email: user.email,
         displayName: user.display_name,
         avatarUrl: user.avatar_url,
+        isAdmin: !!user.is_admin,
       },
     });
   } catch (err) {
@@ -213,7 +215,7 @@ router.post('/login', async (req, res) => {
 router.get('/me', auth, async (req, res) => {
   try {
     const { rows } = await query(
-      'SELECT id, username, email, display_name, avatar_url, bio, is_public, template_slug, created_at FROM users WHERE id = $1',
+      'SELECT id, username, email, display_name, avatar_url, bio, is_public, is_admin, template_slug, created_at FROM users WHERE id = $1',
       [req.user.id]
     );
 
@@ -230,6 +232,7 @@ router.get('/me', auth, async (req, res) => {
       avatarUrl: user.avatar_url,
       bio: user.bio,
       isPublic: user.is_public,
+      isAdmin: !!user.is_admin,
       templateSlug: user.template_slug,
       createdAt: user.created_at,
     });

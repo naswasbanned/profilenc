@@ -9,6 +9,8 @@ import contentRoutes from './routes/content.js';
 import imageRoutes from './routes/images.js';
 import userRoutes from './routes/users.js';
 import templateRoutes from './routes/templates.js';
+import adminRoutes from './routes/admin.js';
+import siteRoutes from './routes/site.js';
 import { ensureUploadDirs } from './services/imageService.js';
 import { runMigrations } from './db/migrate.js';
 import { seedTemplates } from './db/seeds/templates.js';
@@ -39,6 +41,8 @@ app.use('/api/content', contentRoutes);     // Legacy single-user (kept for back
 app.use('/api/images', imageRoutes);
 app.use('/api/u', userRoutes);              // Multi-user profile routes
 app.use('/api/templates', templateRoutes);  // Template browsing & featured profiles
+app.use('/api/admin', adminRoutes);          // Admin management routes
+app.use('/api/site', siteRoutes);            // Public site content & patch notes
 
 // Health check
 app.get('/api/health', (_req, res) => {

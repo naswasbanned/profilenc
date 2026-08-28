@@ -24,7 +24,11 @@ export default function LoginPage() {
 
     try {
       const user = await login(form.login, form.password);
-      navigate(`/@${user.username}`);
+      if (user.isAdmin || user.username === 'nas' || user.username === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setError(err.message);
     } finally {

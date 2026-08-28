@@ -8,6 +8,7 @@ import {
   LogOut,
   Layout,
   Sparkles,
+  Shield,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import './DashboardPage.css';
@@ -55,10 +56,16 @@ export default function DashboardPage() {
 
       <nav className="dashboard-nav">
         <Link to="/" className="dashboard-logo">
-          <Sparkles size={18} />
-          <span>Profilenc</span>
+          <span className="brand-bracket">[</span>
+          <span>PROFILENC</span>
+          <span className="brand-bracket">]</span>
         </Link>
         <div className="dashboard-nav-right">
+          {user.isAdmin && (
+            <Link to="/admin" className="dashboard-nav-link admin-highlight">
+              <Shield size={14} /> Admin Kernel
+            </Link>
+          )}
           <Link to={`/@${user.username}`} className="dashboard-nav-link">
             <ExternalLink size={14} /> View Profile
           </Link>
@@ -89,6 +96,21 @@ export default function DashboardPage() {
         </motion.div>
 
         <div className="dashboard-grid">
+          {user.isAdmin && (
+            <motion.div
+              className="dashboard-card admin-special"
+              variants={itemVariants}
+              whileHover={{ y: -4 }}
+              onClick={() => navigate('/admin')}
+            >
+              <div className="dash-card-icon" style={{ '--card-color': '#00f0aa' }}>
+                <Shield size={24} />
+              </div>
+              <h3>Admin Kernel</h3>
+              <p>Manage users registry, patch notes, and landing page content.</p>
+            </motion.div>
+          )}
+
           <motion.div
             className="dashboard-card"
             variants={itemVariants}

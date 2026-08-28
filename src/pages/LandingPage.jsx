@@ -19,6 +19,14 @@ import {
   Briefcase,
   ArrowUpRight,
   Plus,
+  Send,
+  Upload,
+  Image as ImageIcon,
+  MessageSquare,
+  CheckCircle2,
+  AlertCircle,
+  X,
+  Sparkles,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import OptimizedImage from '../components/OptimizedImage/OptimizedImage';
@@ -27,6 +35,7 @@ import './LandingPage.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
+
 
 // Clean, friendly showcase personas
 const SHOWCASE_PERSONAS = [
@@ -194,6 +203,99 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const [featuredProfiles, setFeaturedProfiles] = useState([]);
+  const [patchNotesList, setPatchNotesList] = useState(ENGINE_PATCH_NOTES);
+  const [landingData, setLandingData] = useState({
+    hero: {
+      badge: 'PROFILENC // PERSONAL PROFILE BUILDER',
+      mastheadTop: 'CREATE YOUR',
+      mastheadMid: 'PERSONAL PAGE.',
+      manifestoLead: 'The easiest way to build a clean, customizable profile website. Choose your blocks, customize colors and fonts, and share your link with the world.',
+      claimLabel: 'YOUR PERSONAL LINK',
+    },
+    marquee: {
+      text: 'CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //',
+    },
+    cta: {
+      badge: '[GET_STARTED]',
+      title: 'READY TO BUILD YOUR PAGE?',
+      text: "Create a clean, customizable personal page in minutes. It's free and easy to set up.",
+      btnLabel: 'START BUILDING NOW',
+    },
+  });
+
+  // Open Suggestion Box Form State
+  const [suggestionForm, setSuggestionForm] = useState({
+    name: '',
+    email: '',
+    category: 'DESIGN',
+    title: '',
+    message: '',
+  });
+  const [suggestionFile, setSuggestionFile] = useState(null);
+  const [suggestionPreview, setSuggestionPreview] = useState(null);
+  const [suggestionSubmitting, setSuggestionSubmitting] = useState(false);
+  const [suggestionSuccess, setSuggestionSuccess] = useState(false);
+  const [suggestionError, setSuggestionError] = useState('');
+
+  const handleSuggestionImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        setSuggestionError('Image file is too large (max 10MB)');
+        return;
+      }
+      setSuggestionFile(file);
+      setSuggestionPreview(URL.createObjectURL(file));
+      setSuggestionError('');
+    }
+  };
+
+  const handleRemoveSuggestionImage = () => {
+    setSuggestionFile(null);
+    if (suggestionPreview) URL.revokeObjectURL(suggestionPreview);
+    setSuggestionPreview(null);
+  };
+
+  const handleSuggestionSubmit = async (e) => {
+    e.preventDefault();
+    if (!suggestionForm.title.trim() || !suggestionForm.message.trim()) {
+      setSuggestionError('Please enter a title and description for your suggestion');
+      return;
+    }
+
+    setSuggestionSubmitting(true);
+    setSuggestionError('');
+
+    try {
+      const formData = new FormData();
+      formData.append('name', suggestionForm.name);
+      formData.append('email', suggestionForm.email);
+      formData.append('category', suggestionForm.category);
+      formData.append('title', suggestionForm.title);
+      formData.append('message', suggestionForm.message);
+      if (suggestionFile) {
+        formData.append('image', suggestionFile);
+      }
+
+      const res = await fetch(`${API_BASE}/api/site/suggestions`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to submit suggestion');
+      }
+
+      setSuggestionSuccess(true);
+      setSuggestionForm({ name: '', email: '', category: 'DESIGN', title: '', message: '' });
+      handleRemoveSuggestionImage();
+    } catch (err) {
+      setSuggestionError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setSuggestionSubmitting(false);
+    }
+  };
 
   const horizontalSectionRef = useRef(null);
   const horizontalTrackRef = useRef(null);
@@ -259,10 +361,36 @@ export default function LandingPage() {
     };
   }, []);
 
+  // Fetch Live Site Data (Landing Config & Patch Notes & Featured Profiles)
   useEffect(() => {
+    // Featured Profiles
     fetch(`${API_BASE}/api/templates/featured/profiles`)
       .then((r) => (r.ok ? r.json() : []))
       .then(setFeaturedProfiles)
+      .catch(() => {});
+
+    // Patch Notes
+    fetch(`${API_BASE}/api/site/patch-notes`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.patchNotes && data.patchNotes.length > 0) {
+          setPatchNotesList(data.patchNotes);
+        }
+      })
+      .catch(() => {});
+
+    // Landing CMS Settings
+    fetch(`${API_BASE}/api/site/landing`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.config) {
+          setLandingData((prev) => ({
+            hero: { ...prev.hero, ...(data.config.hero || {}) },
+            marquee: { ...prev.marquee, ...(data.config.marquee || {}) },
+            cta: { ...prev.cta, ...(data.config.cta || {}) },
+          }));
+        }
+      })
       .catch(() => {});
   }, []);
 
@@ -281,6 +409,11 @@ export default function LandingPage() {
           </Link>
 
           <div className="raw-nav-actions">
+            {user?.isAdmin && (
+              <Link to="/admin" className="raw-btn-outline admin-badge-btn" style={{ borderColor: '#00f0aa', color: '#00f0aa' }}>
+                ADMIN KERNEL
+              </Link>
+            )}
             {isAuthenticated ? (
               <>
                 <Link to={`/@${user.username}`} className="raw-btn-outline">
@@ -310,7 +443,7 @@ export default function LandingPage() {
         <div className="raw-hero-meta-bar">
           <div className="meta-col">
             <span className="meta-num">01</span>
-            <span className="meta-txt">SIMPLE PERSONAL WEBSITE BUILDER</span>
+            <span className="meta-txt">{landingData.hero?.badge || 'SIMPLE PERSONAL WEBSITE BUILDER'}</span>
           </div>
           <div className="meta-col right">
             <span className="meta-txt">EASY • MODULAR • NO CODE REQUIRED</span>
@@ -320,10 +453,10 @@ export default function LandingPage() {
         {/* Masthead */}
         <div className="raw-masthead">
           <div className="masthead-line-wrap">
-            <h1 className="masthead-title">CREATE YOUR</h1>
+            <h1 className="masthead-title">{landingData.hero?.mastheadTop || 'CREATE YOUR'}</h1>
           </div>
           <div className="masthead-line-wrap">
-            <h1 className="masthead-title outline-text">PERSONAL PAGE.</h1>
+            <h1 className="masthead-title outline-text">{landingData.hero?.mastheadMid || 'PERSONAL PAGE.'}</h1>
           </div>
         </div>
 
@@ -331,8 +464,7 @@ export default function LandingPage() {
         <div className="raw-hero-manifesto-grid">
           <div className="manifesto-left">
             <p className="manifesto-lead">
-              The easiest way to build a clean, customizable profile website.
-              Choose your blocks, customize colors and fonts, and share your link with the world.
+              {landingData.hero?.manifestoLead || 'The easiest way to build a clean, customizable profile website. Choose your blocks, customize colors and fonts, and share your link with the world.'}
             </p>
             <div className="manifesto-actions">
               <button
@@ -354,7 +486,7 @@ export default function LandingPage() {
           <div className="manifesto-right">
             <div className="spec-dossier-box">
               <div className="dossier-header">
-                <span className="dossier-tag">YOUR PERSONAL LINK</span>
+                <span className="dossier-tag">{landingData.hero?.claimLabel || 'YOUR PERSONAL LINK'}</span>
                 <span className="dossier-indicator">FREE</span>
               </div>
               <div className="dossier-url-row">
@@ -384,8 +516,8 @@ export default function LandingPage() {
           {/* 1. DESKTOP VIEW (Shown on > 860px, Hidden on Mobile) */}
           <div className="patch-desktop-view">
             <div className="patch-timeline-ledger">
-              {ENGINE_PATCH_NOTES.map((patch, pIdx) => (
-                <div key={patch.version} className={`patch-node-card ${pIdx === 0 ? 'is-current' : ''}`}>
+              {patchNotesList.map((patch, pIdx) => (
+                <div key={patch.version} className={`patch-node-card ${patch.is_current || pIdx === 0 ? 'is-current' : ''}`}>
                   <div className="patch-node-sidebar">
                     <div className="patch-ver-box">
                       <span className="patch-ver-num">{patch.version}</span>
@@ -393,16 +525,16 @@ export default function LandingPage() {
                     </div>
                     <div className="patch-timestamp">
                       <span>RELEASE: {patch.date}</span>
-                      <span>TITLE: {patch.codename}</span>
+                      {patch.codename && <span>TITLE: {patch.codename}</span>}
                     </div>
                   </div>
 
                   <div className="patch-node-content">
                     <h3 className="patch-node-headline">{patch.title}</h3>
                     <div className="patch-changes-list">
-                      {patch.changes.map((c, cIdx) => (
+                      {Array.isArray(patch.changes) && patch.changes.map((c, cIdx) => (
                         <div key={cIdx} className="patch-change-item">
-                          <span className={`change-tag ${c.type.toLowerCase()}`}>[{c.type}]</span>
+                          <span className={`change-tag ${(c.type || 'new').toLowerCase()}`}>[{c.type || 'NEW'}]</span>
                           <span className="change-text">{c.text}</span>
                         </div>
                       ))}
@@ -415,8 +547,8 @@ export default function LandingPage() {
 
           {/* 2. MOBILE VIEW (Shown on <= 860px, Hidden on Desktop) */}
           <div className="patch-mobile-view">
-            {ENGINE_PATCH_NOTES.map((patch, pIdx) => (
-              <div key={patch.version} className={`patch-mobile-card ${pIdx === 0 ? 'is-current' : ''}`}>
+            {patchNotesList.map((patch, pIdx) => (
+              <div key={patch.version} className={`patch-mobile-card ${patch.is_current || pIdx === 0 ? 'is-current' : ''}`}>
                 <div className="patch-mobile-card-top">
                   <div className="patch-mobile-ver-wrap">
                     <span className="patch-mobile-ver">{patch.version}</span>
@@ -428,9 +560,9 @@ export default function LandingPage() {
                 <h3 className="patch-mobile-title">{patch.title}</h3>
 
                 <div className="patch-mobile-list">
-                  {patch.changes.map((c, cIdx) => (
+                  {Array.isArray(patch.changes) && patch.changes.map((c, cIdx) => (
                     <div key={cIdx} className="patch-mobile-item">
-                      <span className={`change-tag ${c.type.toLowerCase()}`}>[{c.type}]</span>
+                      <span className={`change-tag ${(c.type || 'new').toLowerCase()}`}>[{c.type || 'NEW'}]</span>
                       <span className="patch-mobile-item-text">{c.text}</span>
                     </div>
                   ))}
@@ -445,8 +577,8 @@ export default function LandingPage() {
       <section className="raw-marquee-section">
         <div className="marquee-track-wrap">
           <div ref={marquee1Ref} className="marquee-track left-stream">
-            <span>CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //</span>
-            <span>CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //</span>
+            <span>{landingData.marquee?.text || 'CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //'}</span>
+            <span>{landingData.marquee?.text || 'CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //'}</span>
           </div>
         </div>
       </section>
@@ -652,14 +784,211 @@ export default function LandingPage() {
         </section>
       )}
 
+      {/* OPEN SUGGESTION BOX SECTION */}
+      <section className="raw-suggestion-section" id="suggestions">
+        <div className="raw-suggestion-container">
+          <div className="suggestion-box-card">
+            <div className="suggestion-card-header">
+              <div className="suggestion-badge-row">
+                <span className="suggestion-badge">[COMMUNITY_INPUT]</span>
+                <span className="suggestion-live-indicator">LIVE FEEDBACK CHANNEL</span>
+              </div>
+              <h2 className="suggestion-title">OPEN SUGGESTION BOX</h2>
+              <p className="suggestion-desc">
+                Help us shape the future of Profilenc. Share design ideas, request new modular blocks, or report technical improvements with screenshots.
+              </p>
+            </div>
+
+            {suggestionSuccess ? (
+              <div className="suggestion-success-box">
+                <div className="success-icon-wrap">
+                  <CheckCircle2 size={36} />
+                </div>
+                <h3>SUGGESTION DISPATCHED</h3>
+                <p>
+                  Thank you! Your feedback has been sent directly to the Profilenc admin dashboard.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSuggestionSuccess(false)}
+                  className="raw-btn-outline"
+                >
+                  <Plus size={14} /> Submit Another Suggestion
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSuggestionSubmit} className="suggestion-form">
+                {suggestionError && (
+                  <div className="suggestion-error-alert">
+                    <AlertCircle size={16} />
+                    <span>{suggestionError}</span>
+                  </div>
+                )}
+
+                {/* Category Selector */}
+                <div className="form-group">
+                  <label className="suggestion-field-label">SELECT CATEGORY</label>
+                  <div className="category-pills-grid">
+                    {[
+                      { id: 'DESIGN', label: 'DESIGN & UI/UX', desc: 'Aesthetics, layouts, animations, typography' },
+                      { id: 'TECHNICALITY', label: 'TECHNICALITY & PERFORMANCE', desc: 'Core engine, speed, editor mechanics' },
+                      { id: 'FEATURE', label: 'NEW FEATURE / BLOCK', desc: 'Ideas for new blocks or custom widgets' },
+                      { id: 'BUG', label: 'BUG / ISSUE REPORT', desc: 'Unexpected behavior or glitches' },
+                    ].map((cat) => (
+                      <button
+                        type="button"
+                        key={cat.id}
+                        onClick={() => setSuggestionForm({ ...suggestionForm, category: cat.id })}
+                        className={`cat-pill-btn ${suggestionForm.category === cat.id ? 'active' : ''}`}
+                      >
+                        <div className="cat-pill-top">
+                          <span className="cat-pill-tag">[{cat.id}]</span>
+                          {suggestionForm.category === cat.id && <Check size={14} className="cat-check" />}
+                        </div>
+                        <span className="cat-pill-title">{cat.label}</span>
+                        <span className="cat-pill-desc">{cat.desc}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Title */}
+                <div className="form-group">
+                  <label className="suggestion-field-label" htmlFor="sug-title">
+                    SUGGESTION HEADLINE <span className="req">*</span>
+                  </label>
+                  <input
+                    id="sug-title"
+                    type="text"
+                    required
+                    placeholder="e.g. Add Spotify player embed block / Mobile navigation glitch"
+                    value={suggestionForm.title}
+                    onChange={(e) => setSuggestionForm({ ...suggestionForm, title: e.target.value })}
+                    className="suggestion-input"
+                  />
+                </div>
+
+                {/* Message */}
+                <div className="form-group">
+                  <label className="suggestion-field-label" htmlFor="sug-msg">
+                    DETAILS & EXPLANATION <span className="req">*</span>
+                  </label>
+                  <textarea
+                    id="sug-msg"
+                    rows={4}
+                    required
+                    placeholder="Describe your suggestion in detail. What problem does it solve? How should it look or behave?"
+                    value={suggestionForm.message}
+                    onChange={(e) => setSuggestionForm({ ...suggestionForm, message: e.target.value })}
+                    className="suggestion-textarea"
+                  />
+                </div>
+
+                {/* Screenshot Upload */}
+                <div className="form-group">
+                  <label className="suggestion-field-label">
+                    ATTACH SCREENSHOT / MOCKUP <span className="opt">(OPTIONAL, MAX 10MB)</span>
+                  </label>
+                  
+                  {suggestionPreview ? (
+                    <div className="suggestion-preview-box">
+                      <div className="preview-thumb-wrap">
+                        <img src={suggestionPreview} alt="Upload preview" className="preview-img" />
+                      </div>
+                      <div className="preview-info">
+                        <span className="preview-filename">{suggestionFile?.name}</span>
+                        <span className="preview-filesize">
+                          {(suggestionFile?.size / 1024 / 1024).toFixed(2)} MB
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleRemoveSuggestionImage}
+                        className="preview-remove-btn"
+                        title="Remove image"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="suggestion-upload-dropzone">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleSuggestionImageChange}
+                        className="hidden-file-input"
+                      />
+                      <Upload size={20} className="upload-icon" />
+                      <div className="upload-text">
+                        <span className="upload-main-txt">Click or drag image file here</span>
+                        <span className="upload-sub-txt">PNG, JPG, WEBP, GIF up to 10MB</span>
+                      </div>
+                    </label>
+                  )}
+                </div>
+
+                {/* Submitter Info (Optional) */}
+                <div className="form-row-2">
+                  <div className="form-group">
+                    <label className="suggestion-field-label" htmlFor="sug-name">
+                      YOUR NAME OR @HANDLE <span className="opt">(OPTIONAL)</span>
+                    </label>
+                    <input
+                      id="sug-name"
+                      type="text"
+                      placeholder="e.g. Alex or @alexcreator"
+                      value={suggestionForm.name}
+                      onChange={(e) => setSuggestionForm({ ...suggestionForm, name: e.target.value })}
+                      className="suggestion-input"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="suggestion-field-label" htmlFor="sug-email">
+                      EMAIL ADDRESS <span className="opt">(OPTIONAL, FOR UPDATES)</span>
+                    </label>
+                    <input
+                      id="sug-email"
+                      type="email"
+                      placeholder="e.g. alex@example.com"
+                      value={suggestionForm.email}
+                      onChange={(e) => setSuggestionForm({ ...suggestionForm, email: e.target.value })}
+                      className="suggestion-input"
+                    />
+                  </div>
+                </div>
+
+                {/* Submit button */}
+                <div className="suggestion-submit-wrap">
+                  <button
+                    type="submit"
+                    disabled={suggestionSubmitting}
+                    className="raw-cta-btn-primary big full-width-btn"
+                  >
+                    {suggestionSubmitting ? (
+                      <span>DISPATCHING SUGGESTION...</span>
+                    ) : (
+                      <>
+                        <Send size={18} />
+                        <span>SUBMIT SUGGESTION</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* CTA SECTION */}
       <section className="raw-cta-section">
         <div className="raw-cta-container">
           <div className="raw-cta-box">
-            <div className="cta-meta-tag">[GET_STARTED]</div>
-            <h2 className="cta-big-title">READY TO BUILD YOUR PAGE?</h2>
+            <div className="cta-meta-tag">{landingData.cta?.badge || '[GET_STARTED]'}</div>
+            <h2 className="cta-big-title">{landingData.cta?.title || 'READY TO BUILD YOUR PAGE?'}</h2>
             <p className="cta-text">
-              Create a clean, customizable personal page in minutes. It's free and easy to set up.
+              {landingData.cta?.text || "Create a clean, customizable personal page in minutes. It's free and easy to set up."}
             </p>
             <div className="cta-action-wrap">
               <button
@@ -667,7 +996,7 @@ export default function LandingPage() {
                 className="raw-cta-btn-primary big"
                 onClick={() => navigate(isAuthenticated ? `/@${user.username}/edit` : '/register')}
               >
-                <span>{isAuthenticated ? 'OPEN STUDIO EDITOR' : 'START BUILDING NOW'}</span>
+                <span>{isAuthenticated ? 'OPEN STUDIO EDITOR' : (landingData.cta?.btnLabel || 'START BUILDING NOW')}</span>
                 <ArrowRight size={20} />
               </button>
             </div>

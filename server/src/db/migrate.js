@@ -101,12 +101,65 @@ export async function runMigrations() {
     ALTER TABLE images ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
   `);
 
+  // Add is_admin to users
+  await query(`
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false
+  `);
+
+  // Patch notes table
+  await query(`
+    CREATE TABLE IF NOT EXISTS patch_notes (
+      id          SERIAL PRIMARY KEY,
+      version     TEXT NOT NULL UNIQUE,
+      status      TEXT NOT NULL DEFAULT 'UPDATE',
+      date        TEXT NOT NULL,
+      codename    TEXT,
+      title       TEXT NOT NULL,
+      changes     JSONB NOT NULL DEFAULT '[]',
+      order_num   INTEGER DEFAULT 0,
+      is_current  BOOLEAN DEFAULT false,
+      created_at  TIMESTAMPTZ DEFAULT NOW(),
+      updated_at  TIMESTAMPTZ DEFAULT NOW()
+    )
+  `);
+
+  // Global site settings / Landing CMS table
+  await query(`
+    CREATE TABLE IF NOT EXISTS site_settings (
+      key         TEXT PRIMARY KEY,
+      data        JSONB NOT NULL,
+      updated_at  TIMESTAMPTZ DEFAULT NOW()
+    )
+  `);
+
+  // Open community suggestions table
+  await query(`
+    CREATE TABLE IF NOT EXISTS suggestions (
+      id          SERIAL PRIMARY KEY,
+      name        TEXT,
+      email       TEXT,
+      category    TEXT NOT NULL DEFAULT 'DESIGN',
+      title       TEXT NOT NULL,
+      message     TEXT NOT NULL,
+      image_url   TEXT,
+      status      TEXT NOT NULL DEFAULT 'NEW',
+      created_at  TIMESTAMPTZ DEFAULT NOW(),
+      updated_at  TIMESTAMPTZ DEFAULT NOW()
+    )
+  `);
+
   // Indexes
   await query(`
     CREATE INDEX IF NOT EXISTS idx_user_content_user_key ON user_content(user_id, key)
   `);
   await query(`
     CREATE INDEX IF NOT EXISTS idx_images_user_id ON images(user_id)
+  `);
+  await query(`
+    CREATE INDEX IF NOT EXISTS idx_patch_notes_order ON patch_notes(order_num, created_at DESC)
+  `);
+  await query(`
+    CREATE INDEX IF NOT EXISTS idx_suggestions_created ON suggestions(created_at DESC)
   `);
 
   console.log('  ✓ All database tables and indexes verified.');
