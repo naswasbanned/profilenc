@@ -529,6 +529,37 @@ export default function BlockEditorModal({
     });
   };
 
+  const handleAddBullet = (itemIdx) => {
+    setFormData((prev) => {
+      const items = [...(prev.items || [])];
+      const item = { ...(items[itemIdx] || {}) };
+      const bullets = [...(item.bullets || []), ''];
+      items[itemIdx] = { ...item, bullets };
+      return { ...prev, items };
+    });
+  };
+
+  const handleBulletChange = (itemIdx, bulletIdx, val) => {
+    setFormData((prev) => {
+      const items = [...(prev.items || [])];
+      const item = { ...(items[itemIdx] || {}) };
+      const bullets = [...(item.bullets || [])];
+      bullets[bulletIdx] = val;
+      items[itemIdx] = { ...item, bullets };
+      return { ...prev, items };
+    });
+  };
+
+  const handleRemoveBullet = (itemIdx, bulletIdx) => {
+    setFormData((prev) => {
+      const items = [...(prev.items || [])];
+      const item = { ...(items[itemIdx] || {}) };
+      const bullets = (item.bullets || []).filter((_, bIdx) => bIdx !== bulletIdx);
+      items[itemIdx] = { ...item, bullets };
+      return { ...prev, items };
+    });
+  };
+
   const handleAddAction = () => {
     setFormData((prev) => {
       const actions = [...(prev.actions || []), { label: 'Get in Touch', url: 'mailto:hello@example.com', primary: true }];
@@ -1304,7 +1335,21 @@ export default function BlockEditorModal({
                   <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>Timeline Items ({(formData.items || []).length})</h4>
                   <button
                     type="button"
-                    onClick={() => handleAddItem({ id: `item-${Date.now()}`, role: 'Role Title', company: 'Company', period: '2023 - Present', description: '', bullets: [], tags: [] })}
+                    onClick={() =>
+                      handleAddItem({
+                        id: `item-${Date.now()}`,
+                        role: 'Role / Milestone Title',
+                        company: 'Company or Institution',
+                        location: 'Remote',
+                        period: '2023 - Present',
+                        description: 'Summary of the role, project, or milestone.',
+                        bullets: [
+                          'Key achievement or responsibility point',
+                        ],
+                        images: [],
+                        tags: [],
+                      })
+                    }
                     className="editor-btn"
                     style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
                   >
@@ -1312,7 +1357,43 @@ export default function BlockEditorModal({
                   </button>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {(formData.items || []).length === 0 && (
+                  <div
+                    style={{
+                      padding: '36px 20px',
+                      textAlign: 'center',
+                      background: '#06070a',
+                      borderRadius: '10px',
+                      border: '1px dashed rgba(255,255,255,0.12)',
+                    }}
+                  >
+                    <p style={{ fontSize: '0.85rem', color: '#94a3b8', margin: '0 0 14px' }}>
+                      No timeline entries yet. Add your first career, project, or education milestone.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleAddItem({
+                          id: `item-${Date.now()}`,
+                          role: 'Software Engineer',
+                          company: 'Company / Project',
+                          location: 'Remote',
+                          period: '2023 - Present',
+                          description: 'Description of key deliverables and milestones.',
+                          bullets: ['Built core features', 'Improved performance'],
+                          images: [],
+                          tags: ['React'],
+                        })
+                      }
+                      className="editor-btn editor-btn-save"
+                      style={{ padding: '8px 18px', margin: '0 auto' }}
+                    >
+                      <Plus size={15} /> Add First Timeline Entry
+                    </button>
+                  </div>
+                )}
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   {(formData.items || []).map((item, idx) => (
                     <div
                       key={item.id || idx}
@@ -1320,60 +1401,163 @@ export default function BlockEditorModal({
                         borderRadius: '10px',
                         background: '#06070a',
                         border: '1px solid rgba(255,255,255,0.08)',
-                        padding: '14px',
+                        padding: '16px',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '10px',
+                        gap: '12px',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
-                          Item #{idx + 1}: {item.role || 'Untitled Role'}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '10px' }}>
+                        <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc' }}>
+                          Timeline Entry #{idx + 1}: {item.role || item.title || 'Untitled'}
                         </span>
                         <button
                           type="button"
                           onClick={() => handleRemoveItem(idx)}
                           style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                          title="Delete timeline item"
                         >
                           <Trash2 size={16} />
                         </button>
                       </div>
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '8px' }}>
-                        <input
-                          type="text"
-                          value={item.role || ''}
-                          onChange={(e) => handleItemChange(idx, 'role', e.target.value)}
-                          placeholder="Role (e.g. Lead Engineer)"
-                          className="editor-text-input"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
-                        />
-                        <input
-                          type="text"
-                          value={item.company || ''}
-                          onChange={(e) => handleItemChange(idx, 'company', e.target.value)}
-                          placeholder="Company / School"
-                          className="editor-text-input"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
-                        />
-                        <input
-                          type="text"
-                          value={item.period || ''}
-                          onChange={(e) => handleItemChange(idx, 'period', e.target.value)}
-                          placeholder="Period (e.g. 2022 - 2024)"
-                          className="editor-text-input"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                      {/* Role & Company Inputs */}
+                      <div className="editor-form-row-2">
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Role / Milestone Title</label>
+                          <input
+                            type="text"
+                            value={item.role || item.title || ''}
+                            onChange={(e) => {
+                              handleItemChange(idx, 'role', e.target.value);
+                              handleItemChange(idx, 'title', e.target.value);
+                            }}
+                            placeholder="e.g. Senior Software Engineer"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#090a0f' }}
+                          />
+                        </div>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Company / Organization</label>
+                          <input
+                            type="text"
+                            value={item.company || ''}
+                            onChange={(e) => handleItemChange(idx, 'company', e.target.value)}
+                            placeholder="e.g. Acme Labs"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#090a0f' }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Period & Location Inputs */}
+                      <div className="editor-form-row-2">
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Period / Date</label>
+                          <input
+                            type="text"
+                            value={item.period || ''}
+                            onChange={(e) => handleItemChange(idx, 'period', e.target.value)}
+                            placeholder="e.g. 2022 - Present / Oct 2023"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#090a0f' }}
+                          />
+                        </div>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Location / Mode (optional)</label>
+                          <input
+                            type="text"
+                            value={item.location || ''}
+                            onChange={(e) => handleItemChange(idx, 'location', e.target.value)}
+                            placeholder="e.g. Remote / New York, NY"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#090a0f' }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Summary Description */}
+                      <div className="editor-control" style={{ margin: 0 }}>
+                        <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Overview Description</label>
+                        <textarea
+                          value={item.description || ''}
+                          onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
+                          placeholder="Brief summary of your responsibilities or milestone context..."
+                          className="editor-text-input full-width"
+                          style={{ color: '#f1f5f9', background: '#090a0f' }}
+                          rows={2}
                         />
                       </div>
 
-                      <textarea
-                        value={item.description || ''}
-                        onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
-                        placeholder="Description..."
-                        className="editor-text-input full-width"
-                        style={{ color: '#f1f5f9', background: '#06070a' }}
-                        rows={2}
-                      />
+                      {/* --- TIMELINE POINTS / BULLETS LIST --- */}
+                      <div
+                        style={{
+                          padding: '12px',
+                          borderRadius: '8px',
+                          background: 'rgba(255,255,255,0.02)',
+                          border: '1px solid rgba(255,255,255,0.06)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '10px',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#00f0aa' }}>
+                            Timeline Points & Key Achievements ({(item.bullets || []).length})
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => handleAddBullet(idx)}
+                            className="editor-btn"
+                            style={{
+                              background: 'rgba(0, 240, 170, 0.12)',
+                              color: '#00f0aa',
+                              border: '1px solid rgba(0,240,170,0.3)',
+                              padding: '4px 10px',
+                              fontSize: '0.75rem',
+                            }}
+                          >
+                            <Plus size={13} /> Add Point
+                          </button>
+                        </div>
+
+                        {(item.bullets || []).length === 0 ? (
+                          <div style={{ fontSize: '0.76rem', color: '#64748b', fontStyle: 'italic', padding: '4px 0' }}>
+                            No bullet points yet. Click "+ Add Point" to add specific responsibilities or achievements.
+                          </div>
+                        ) : (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            {(item.bullets || []).map((bullet, bIdx) => (
+                              <div
+                                key={bIdx}
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '8px',
+                                }}
+                              >
+                                <span style={{ color: '#00f0aa', fontWeight: 800, fontSize: '0.9rem', userSelect: 'none' }}>•</span>
+                                <input
+                                  type="text"
+                                  value={typeof bullet === 'string' ? bullet : ''}
+                                  onChange={(e) => handleBulletChange(idx, bIdx, e.target.value)}
+                                  placeholder={`Achievement / Timeline Point #${bIdx + 1}`}
+                                  className="editor-text-input full-width"
+                                  style={{ color: '#f1f5f9', background: '#090a0f', fontSize: '0.82rem' }}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveBullet(idx, bIdx)}
+                                  style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                                  title="Delete point"
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
 
                       {/* Multiple Milestone Photos / Work Samples */}
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -1385,7 +1569,7 @@ export default function BlockEditorModal({
                             type="button"
                             onClick={() => {
                               const currentImages = Array.isArray(item.images) ? [...item.images] : item.imageUrl ? [item.imageUrl] : [];
-                              handleItemChange(idx, 'images', [...currentImages, '/images/projects/template.png']);
+                              handleItemChange(idx, 'images', [...currentImages, '']);
                             }}
                             className="editor-btn"
                             style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '3px 8px', fontSize: '0.72rem' }}
@@ -1403,7 +1587,7 @@ export default function BlockEditorModal({
                               gap: '8px',
                               padding: '8px',
                               borderRadius: '6px',
-                              background: '#06070a',
+                              background: '#090a0f',
                               border: '1px solid rgba(255,255,255,0.06)',
                             }}
                           >
@@ -1430,14 +1614,18 @@ export default function BlockEditorModal({
                         ))}
                       </div>
 
-                      <input
-                        type="text"
-                        value={Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || ''}
-                        onChange={(e) => handleItemChange(idx, 'tags', e.target.value.split(',').map((t) => t.trim()).filter(Boolean))}
-                        placeholder="Tags (comma separated, e.g. React, Docker)"
-                        className="editor-text-input full-width"
-                        style={{ color: '#f1f5f9', background: '#06070a' }}
-                      />
+                      {/* Tags */}
+                      <div className="editor-control" style={{ margin: 0 }}>
+                        <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Tags / Tech Used</label>
+                        <input
+                          type="text"
+                          value={Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || ''}
+                          onChange={(e) => handleItemChange(idx, 'tags', e.target.value.split(',').map((t) => t.trim()).filter(Boolean))}
+                          placeholder="Tags (comma separated, e.g. React, TypeScript, Docker)"
+                          className="editor-text-input full-width"
+                          style={{ color: '#f1f5f9', background: '#090a0f' }}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
