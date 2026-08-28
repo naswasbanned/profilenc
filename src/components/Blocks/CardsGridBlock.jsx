@@ -24,35 +24,37 @@ export default function CardsGridBlock({ data = {} }) {
   return (
     <>
       <div className={`cards-grid cols-${columns}`}>
-        {cardList.map((item, idx) => (
-          <motion.div
-            key={item.id || idx}
-            className="card-item"
-            whileHover={{ y: -4 }}
-            transition={{ duration: 0.2 }}
-          >
-            {item.image && (
-              <div
-                className="card-media"
-                onClick={() => setActiveModalImage({ src: item.image, title: item.title })}
-                style={{ cursor: 'pointer' }}
-              >
-                <OptimizedImage
-                  src={item.image}
-                  alt={item.title}
-                  className="card-img"
-                  width={400}
-                  height={220}
-                />
-                {item.badge && <span className="card-badge">{item.badge}</span>}
-              </div>
-            )}
-
-            <div className="card-content">
-              {item.category && !item.image && (
-                <span className="spec-category">{item.category}</span>
+        {cardList.map((item, idx) => {
+          const img = item.image || item.imageUrl || item.coverImage;
+          return (
+            <motion.div
+              key={item.id || idx}
+              className="card-item"
+              whileHover={{ y: -4 }}
+              transition={{ duration: 0.2 }}
+            >
+              {img && (
+                <div
+                  className="card-media"
+                  onClick={() => setActiveModalImage({ src: img, title: item.title })}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <OptimizedImage
+                    src={img}
+                    alt={item.title}
+                    className="card-img"
+                    width={400}
+                    height={220}
+                  />
+                  {item.badge && <span className="card-badge">{item.badge}</span>}
+                </div>
               )}
-              <h3 className="card-title">{item.title}</h3>
+
+              <div className="card-content">
+                {item.category && !img && (
+                  <span className="spec-category">{item.category}</span>
+                )}
+                <h3 className="card-title">{item.title}</h3>
               {item.description && <p className="card-desc">{item.description}</p>}
 
               {item.tags && item.tags.length > 0 && (
@@ -87,8 +89,9 @@ export default function CardsGridBlock({ data = {} }) {
               )}
             </div>
           </motion.div>
-        ))}
-      </div>
+        );
+      })}
+    </div>
 
       {/* Image Zoom Modal */}
       <AnimatePresence>

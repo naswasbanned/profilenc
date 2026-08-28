@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -22,6 +22,8 @@ import {
   Rocket,
   Shield,
   Flame,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import BlockRenderer from '../components/Blocks/BlockRenderer';
 import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
@@ -224,6 +226,108 @@ export function normalizeModularContent(rawContent, username = 'User') {
   return { tabs };
 }
 
+function ProfileTabsNav({ tabs, currentTabId, onSelectTab, isEditing }) {
+  const scrollRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 6);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 6);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    el.addEventListener('scroll', checkScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('resize', checkScroll);
+      el.removeEventListener('scroll', checkScroll);
+    };
+  }, [checkScroll, tabs]);
+
+  // Center active tab on mount or change
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const activeBtn = el.querySelector('.profile-tab-btn.active');
+    if (activeBtn) {
+      activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  }, [currentTabId]);
+
+  const handleScroll = (direction) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: direction * 220, behavior: 'smooth' });
+  };
+
+  const handleWheel = (e) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      el.scrollLeft += e.deltaY;
+    }
+  };
+
+  return (
+    <nav className="profile-tabs-nav" style={{ top: isEditing ? '52px' : 0 }}>
+      <div className="profile-tabs-nav-container">
+        {canScrollLeft && (
+          <button
+            type="button"
+            className="profile-tab-arrow profile-tab-arrow-left"
+            onClick={() => handleScroll(-1)}
+            aria-label="Scroll tabs left"
+          >
+            <ChevronLeft size={16} />
+          </button>
+        )}
+
+        <div
+          ref={scrollRef}
+          className={`profile-tabs-scroll ${canScrollLeft ? 'has-scroll-left' : ''} ${canScrollRight ? 'has-scroll-right' : ''}`}
+          onWheel={handleWheel}
+        >
+          {tabs.map((tab) => {
+            const isActive = tab.id === currentTabId;
+            const tabIcon = renderTabIcon(tab.icon);
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => onSelectTab(tab.id)}
+                className={`profile-tab-btn ${isActive ? 'active' : ''}`}
+              >
+                {tabIcon}
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {canScrollRight && (
+          <button
+            type="button"
+            className="profile-tab-arrow profile-tab-arrow-right"
+            onClick={() => handleScroll(1)}
+            aria-label="Scroll tabs right"
+          >
+            <ChevronRight size={16} />
+          </button>
+        )}
+      </div>
+    </nav>
+  );
+}
+
 export function ProfileCanvas({
   username,
   content,
@@ -270,28 +374,12 @@ export function ProfileCanvas({
 
       {/* Dynamic Tab Navigation Bar (if more than 1 tab) */}
       {tabs.length > 1 && (
-        <nav
-          className="profile-tabs-nav"
-          style={{ top: isEditing ? '52px' : 0 }}
-        >
-          <div className="profile-tabs-scroll">
-            {tabs.map((tab) => {
-              const isActive = tab.id === currentTab?.id;
-              const tabIcon = renderTabIcon(tab.icon);
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveTabId(tab.id)}
-                  className={`profile-tab-btn ${isActive ? 'active' : ''}`}
-                >
-                  {tabIcon}
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </nav>
+        <ProfileTabsNav
+          tabs={tabs}
+          currentTabId={currentTab?.id}
+          onSelectTab={setActiveTabId}
+          isEditing={isEditing}
+        />
       )}
 
       {/* Blocks Canvas */}

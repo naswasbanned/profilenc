@@ -20,6 +20,20 @@ function EditorCanvasInner({
   const [activeTabId, setActiveTabId] = useState(() => content?.tabs?.[0]?.id || 'tab-main');
   const [editingBlock, setEditingBlock] = useState(null);
 
+  // Snapshot references for dirty state tracking
+  const initialContentStr = useRef(JSON.stringify(content));
+  const initialThemeStr = useRef(JSON.stringify(currentTheme));
+
+  const isContentDirty = useMemo(() => {
+    return JSON.stringify(content) !== initialContentStr.current;
+  }, [content]);
+
+  const isThemeDirty = useMemo(() => {
+    return JSON.stringify(currentTheme) !== initialThemeStr.current;
+  }, [currentTheme]);
+
+  const hasChanges = isContentDirty || isThemeDirty;
+
   const tabs = content?.tabs || [];
   const currentTab = tabs.find((t) => t.id === activeTabId) || tabs[0];
 
@@ -107,10 +121,14 @@ function EditorCanvasInner({
     });
 
     if (!themeRes.ok) throw new Error('Failed to save theme');
+
+    // Update snapshots to mark as clean & saved
+    initialContentStr.current = JSON.stringify(content);
+    initialThemeStr.current = JSON.stringify(currentTheme);
   }, [username, token, content, currentTheme]);
 
   return (
-    <div className="editor-page" style={{ paddingTop: '52px' }}>
+    <div className="editor-page" style={{ paddingTop: '52px', paddingBottom: '90px' }}>
       <ProfileCanvas
         username={username}
         content={content}
@@ -126,6 +144,7 @@ function EditorCanvasInner({
         username={username}
         tabs={tabs}
         activeTabId={activeTabId}
+        hasChanges={hasChanges}
         onSelectTab={setActiveTabId}
         onUpdateTabs={handleUpdateTabs}
         onAddBlock={handleAddBlock}

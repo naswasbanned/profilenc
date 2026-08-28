@@ -564,48 +564,16 @@ export default function BlockEditorModal({
   };
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 900,
-        background: 'rgba(5,5,8,0.85)',
-        backdropFilter: 'blur(16px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '20px',
-      }}
-      onClick={onClose}
-    >
+    <div className="editor-modal-backdrop" onClick={onClose}>
       <motion.div
+        className="editor-modal-dialog modal-lg"
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         onClick={(e) => e.stopPropagation()}
-        style={{
-          width: '100%',
-          maxWidth: '820px',
-          maxHeight: '90vh',
-          background: '#0e0e14',
-          border: '1px solid rgba(255,255,255,0.09)',
-          borderRadius: '18px',
-          boxShadow: '0 24px 64px rgba(0,0,0,0.8)',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
       >
         {/* Modal Header */}
-        <div
-          style={{
-            padding: '20px 24px',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
+        <div className="editor-modal-header">
           <div>
             <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#fff', textTransform: 'capitalize' }}>
               Edit {block.type?.replace('_', ' ')} Block
@@ -625,11 +593,11 @@ export default function BlockEditorModal({
 
         {/* Form Body */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-          <div style={{ padding: '24px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div className="editor-modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             
             {/* Common Section Header (for non-hero blocks) */}
             {block.type !== 'hero' && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '14px' }}>
+              <div className="editor-form-grid-3">
                 <div className="editor-control">
                   <label style={{ color: '#e2e8f0' }}>Section Title</label>
                   <input
@@ -1188,8 +1156,11 @@ export default function BlockEditorModal({
 
                       <ImageUploadPicker
                         label="Card Thumbnail Image"
-                        value={item.imageUrl || ''}
-                        onChange={(url) => handleItemChange(idx, 'imageUrl', url)}
+                        value={item.image || item.imageUrl || item.coverImage || ''}
+                        onChange={(url) => {
+                          handleItemChange(idx, 'image', url);
+                          handleItemChange(idx, 'imageUrl', url);
+                        }}
                       />
 
                       <textarea
@@ -1499,12 +1470,20 @@ export default function BlockEditorModal({
                         </button>
                       </div>
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '8px' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1.2fr 1fr 1fr', gap: '8px' }}>
                         <input
                           type="text"
                           value={rev.title || ''}
                           onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
-                          placeholder="Title"
+                          placeholder="Title (e.g. Cyberpunk 2077)"
+                          className="editor-text-input"
+                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                        />
+                        <input
+                          type="text"
+                          value={Array.isArray(rev.genre) ? rev.genre.join(', ') : rev.genre || ''}
+                          onChange={(e) => handleItemChange(idx, 'genre', e.target.value)}
+                          placeholder="Genre / Badge (e.g. Action RPG)"
                           className="editor-text-input"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />
@@ -1530,8 +1509,12 @@ export default function BlockEditorModal({
 
                       <ImageUploadPicker
                         label="Media Cover Image"
-                        value={rev.imageUrl || ''}
-                        onChange={(url) => handleItemChange(idx, 'imageUrl', url)}
+                        value={rev.coverImage || rev.imageUrl || rev.image || ''}
+                        onChange={(url) => {
+                          handleItemChange(idx, 'coverImage', url);
+                          handleItemChange(idx, 'imageUrl', url);
+                          handleItemChange(idx, 'image', url);
+                        }}
                       />
 
                       <textarea
@@ -2134,17 +2117,7 @@ export default function BlockEditorModal({
           </div>
 
           {/* Footer Save Button */}
-          <div
-            style={{
-              padding: '16px 24px',
-              borderTop: '1px solid rgba(255,255,255,0.08)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              gap: '12px',
-              background: '#06070a',
-            }}
-          >
+          <div className="editor-modal-footer">
             <button
               type="button"
               onClick={onClose}

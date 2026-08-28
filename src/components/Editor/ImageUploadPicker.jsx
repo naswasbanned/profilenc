@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Upload, Image as ImageIcon, Check, Loader2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -9,6 +9,10 @@ export default function ImageUploadPicker({ value, onChange, label = 'Image' }) 
   const fileInputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [urlInput, setUrlInput] = useState(value || '');
+
+  useEffect(() => {
+    setUrlInput(value || '');
+  }, [value]);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];

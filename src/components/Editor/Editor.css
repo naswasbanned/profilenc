@@ -114,29 +114,55 @@
 }
 
 .editor-btn-save {
-  background: var(--color-accent-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: var(--radius-sm, 8px);
+  font-size: var(--text-xs, 0.8rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.2s ease);
+  user-select: none;
+}
+
+/* Active Unsaved Changes State (Glowing Emerald/Cyan) */
+.editor-btn-save.active-dirty {
+  background: var(--color-accent-primary, #00f0aa);
   color: #090a0f;
-  border: 1px solid var(--color-accent-primary);
+  border: 1px solid var(--color-accent-primary, #00f0aa);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--color-accent-primary, #00f0aa) 35%, transparent);
 }
 
-.editor-btn-save:hover:not(:disabled) {
-  background: var(--color-accent-hover);
-  border-color: var(--color-accent-hover);
+.editor-btn-save.active-dirty:hover:not(:disabled) {
+  background: var(--color-accent-hover, #34d399);
+  border-color: var(--color-accent-hover, #34d399);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent-primary, #00f0aa) 50%, transparent);
+  transform: translateY(-1px);
 }
 
-.editor-btn-save:active:not(:disabled) {
-  transform: scale(0.98);
+.editor-btn-save.active-dirty:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
-.editor-btn-save.saved {
-  background: var(--color-success);
-  border-color: var(--color-success);
-  color: #090a0f;
+/* Saved & Clean State (Muted Glass / Inactive) */
+.editor-btn-save.muted,
+.editor-btn-save:disabled:not(.is-saving) {
+  background: rgba(255, 255, 255, 0.04);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: default;
+  box-shadow: none;
+  opacity: 0.85;
 }
 
-.editor-btn-save:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+/* Saving in-flight State */
+.editor-btn-save.is-saving {
+  background: rgba(0, 240, 170, 0.16);
+  color: var(--color-accent-primary, #00f0aa);
+  border: 1px solid var(--color-accent-primary, #00f0aa);
+  cursor: wait;
+  opacity: 0.9;
 }
 
 .editor-btn-close {
@@ -605,27 +631,287 @@
   font-style: italic;
 }
 
-/* === Mobile Adjustments === */
+/* ==========================================================================
+   Responsive Modal Framework for Editor
+   ========================================================================== */
+
+.editor-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(5, 5, 8, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.editor-modal-dialog {
+  width: 100%;
+  background: #0e0e14;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 18px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 88vh;
+  box-sizing: border-box;
+}
+
+.editor-modal-dialog.modal-lg {
+  max-width: 820px;
+}
+
+.editor-modal-dialog.modal-md {
+  max-width: 720px;
+}
+
+.editor-modal-dialog.modal-sm {
+  max-width: 600px;
+}
+
+.editor-modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.015);
+  flex-shrink: 0;
+}
+
+.editor-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.editor-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  background: #06070a;
+  flex-shrink: 0;
+}
+
+/* Add Block Modal Grid */
+.add-block-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.add-block-card {
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+}
+
+.add-block-card:hover {
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Tab Manager Rows */
+.tab-manager-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-sizing: border-box;
+}
+
+.tab-manager-main-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.tab-manager-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.tab-manager-sub-row {
+  width: 100%;
+}
+
+.tab-manager-select {
+  width: 100%;
+  font-size: 0.82rem;
+  padding: 7px 10px;
+}
+
+.tab-manager-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* Form Grids */
+.editor-form-grid-4 {
+  display: grid;
+  grid-template-columns: 1.5fr 1.2fr 1fr 1fr;
+  gap: 8px;
+}
+
+.editor-form-grid-3 {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 12px;
+}
+
+.editor-form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Mobile Floating Dock */
+.editor-mobile-dock-wrap {
+  display: none;
+}
+
+/* === Mobile Adjustments (Phones & Small Tablets) === */
 @media (max-width: 768px) {
   .editor-toolbar {
-    padding: 0 8px;
-    height: 48px;
+    padding: 0 12px;
+    height: 50px;
   }
 
   .editor-toolbar-center {
-    display: none;
+    display: none; /* Replaced by Floating Bottom Dock on mobile */
   }
 
   .editor-editing-tag {
     display: none;
   }
 
-  .editor-panel {
-    width: 100%;
-    top: 48px;
+  .editor-toolbar-left .editor-label {
+    font-size: 0.85rem;
   }
 
-  .editor-tab span {
-    display: none;
+  /* Floating Bottom Action Dock on Mobile */
+  .editor-mobile-dock-wrap {
+    display: flex;
+    position: fixed;
+    bottom: 16px;
+    left: 0;
+    right: 0;
+    justify-content: center;
+    z-index: 210;
+    pointer-events: none;
+  }
+
+  .editor-mobile-dock {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: rgba(12, 14, 20, 0.94);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9999px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
+    pointer-events: auto;
+  }
+
+  .editor-mobile-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    color: #e2e8f0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+  }
+
+  .editor-mobile-btn:active {
+    transform: scale(0.96);
+  }
+
+  .editor-mobile-btn.primary {
+    background: var(--color-accent-primary, #00f0aa);
+    color: #090a0f;
+    border-color: var(--color-accent-primary, #00f0aa);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--color-accent-primary, #00f0aa) 30%, transparent);
+  }
+
+  .editor-mobile-btn.active {
+    color: var(--color-accent-primary, #00f0aa);
+    border-color: var(--color-accent-primary, #00f0aa);
+    background: rgba(0, 240, 170, 0.14);
+  }
+
+  /* Responsive Modal Layout */
+  .editor-modal-backdrop {
+    padding: 12px 8px;
+  }
+
+  .editor-modal-dialog {
+    max-height: 92vh;
+    border-radius: 14px;
+  }
+
+  .editor-modal-header {
+    padding: 14px 16px;
+  }
+
+  .editor-modal-header h3 {
+    font-size: 1rem !important;
+  }
+
+  .editor-modal-body {
+    padding: 16px 14px;
+  }
+
+  .editor-modal-footer {
+    padding: 12px 16px;
+  }
+
+  .add-block-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .add-block-card {
+    padding: 14px;
+  }
+
+  .editor-form-grid-4,
+  .editor-form-grid-3,
+  .editor-form-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .editor-panel {
+    width: 100%;
+    top: 50px;
   }
 }

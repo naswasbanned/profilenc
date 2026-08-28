@@ -13,6 +13,7 @@ import {
   Check,
   Undo2,
   FolderKanban,
+  Loader2,
 } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import ThemePanel from './panels/ThemePanel';
@@ -25,6 +26,7 @@ export default function EditorOverlay({
   username,
   tabs = [],
   activeTabId,
+  hasChanges = false,
   onSelectTab,
   onUpdateTabs,
   onAddBlock,
@@ -36,26 +38,26 @@ export default function EditorOverlay({
   setEditingBlock,
 }) {
   const navigate = useNavigate();
-  const { theme, isDirty, resetTheme } = useTheme();
+  const { theme, isDirty: isThemeDirty, resetTheme } = useTheme();
 
   const [showThemeDrawer, setShowThemeDrawer] = useState(false);
   const [showAddBlockModal, setShowAddBlockModal] = useState(false);
   const [showTabManager, setShowTabManager] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+
+  const isDirty = hasChanges || isThemeDirty;
 
   const handleSave = useCallback(async () => {
+    if (!isDirty || saving) return;
     setSaving(true);
     try {
       await onSaveAll();
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
     } catch (err) {
       console.error('Save failed:', err);
     } finally {
       setSaving(false);
     }
-  }, [onSaveAll]);
+  }, [onSaveAll, isDirty, saving]);
 
   const handleExit = () => {
     navigate(`/@${username}`);
@@ -127,16 +129,26 @@ export default function EditorOverlay({
 
           <button
             type="button"
-            className={`editor-btn editor-btn-save ${saved ? 'saved' : ''}`}
+            className={`editor-btn editor-btn-save ${isDirty ? 'active-dirty' : 'muted'} ${saving ? 'is-saving' : ''}`}
             onClick={handleSave}
-            disabled={saving}
+            disabled={!isDirty || saving}
+            title={isDirty ? 'Save changes to live profile' : 'No unsaved changes (Saved)'}
           >
-            {saved ? (
-              <><Check size={16} /> Saved</>
-            ) : saving ? (
-              'Saving...'
+            {saving ? (
+              <>
+                <Loader2 size={15} className="spin" />
+                <span>Saving...</span>
+              </>
+            ) : isDirty ? (
+              <>
+                <Save size={15} />
+                <span>Save</span>
+              </>
             ) : (
-              <><Save size={16} /> Save</>
+              <>
+                <Check size={14} color="#00f0aa" />
+                <span>Saved</span>
+              </>
             )}
           </button>
 
@@ -147,6 +159,43 @@ export default function EditorOverlay({
             title="Exit editor"
           >
             <X size={16} />
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Mobile Floating Action Dock (Always visible & accessible on phone) */}
+      <motion.div
+        className="editor-mobile-dock-wrap"
+        initial={{ y: 60, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.35, ease: 'easeOut', delay: 0.1 }}
+      >
+        <div className="editor-mobile-dock">
+          <button
+            type="button"
+            className="editor-mobile-btn primary"
+            onClick={() => setShowAddBlockModal(true)}
+          >
+            <Plus size={16} />
+            <span>Add Block</span>
+          </button>
+
+          <button
+            type="button"
+            className="editor-mobile-btn"
+            onClick={() => setShowTabManager(true)}
+          >
+            <FolderKanban size={15} />
+            <span>Tabs</span>
+          </button>
+
+          <button
+            type="button"
+            className={`editor-mobile-btn ${showThemeDrawer ? 'active' : ''}`}
+            onClick={() => setShowThemeDrawer(!showThemeDrawer)}
+          >
+            <Palette size={15} />
+            <span>Theme</span>
           </button>
         </div>
       </motion.div>

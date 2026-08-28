@@ -49,7 +49,7 @@
   }
 }
 
-/* --- Profile Tabs Navigation Bar (Update 1.1 Mobile Ready) --- */
+/* --- Profile Tabs Navigation Bar (Safe Overflow & Multi-Tab Support) --- */
 .profile-tabs-nav {
   position: sticky;
   top: 0;
@@ -57,20 +57,44 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 20px;
-  background: rgba(10, 10, 15, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 16px;
+  background: rgba(10, 10, 15, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   transition: top var(--transition-fast);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.profile-tabs-nav-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  width: 100%;
 }
 
 .profile-tabs-scroll {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
   max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 4px 12px;
+  box-sizing: border-box;
+  /* Safe alignment ensures 1st tab is NEVER cut off in negative space */
+  justify-content: flex-start;
+  margin: 0 auto;
+}
+
+.profile-tabs-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 .profile-tab-btn {
@@ -91,35 +115,73 @@
   transition: all var(--transition-fast);
 }
 
+.profile-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
 .profile-tab-btn.active {
   border-color: var(--accent-color, var(--color-accent-primary));
-  background: color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 14%, transparent);
+  background: color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 15%, rgba(0,0,0,0.4));
   color: var(--accent-color, var(--color-accent-primary));
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 20%, transparent);
+}
+
+/* Scroll Arrows for Multi-Tab Navigation */
+.profile-tab-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(18, 20, 28, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #cbd5e1;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all var(--transition-fast);
+}
+
+.profile-tab-arrow:hover {
+  background: rgba(28, 32, 45, 1);
+  color: #fff;
+  border-color: var(--accent-color, #00f0aa);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.profile-tab-arrow-left {
+  left: 0;
+}
+
+.profile-tab-arrow-right {
+  right: 0;
 }
 
 @media (max-width: 768px) {
   .profile-tabs-nav {
-    padding: 10px 14px;
-    justify-content: flex-start;
+    padding: 8px 10px;
   }
 
   .profile-tabs-scroll {
-    justify-content: flex-start;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-    scrollbar-width: none;
-    padding-bottom: 2px;
-  }
-
-  .profile-tabs-scroll::-webkit-scrollbar {
-    display: none;
+    padding: 4px 8px;
+    gap: 6px;
   }
 
   .profile-tab-btn {
     padding: 6px 14px;
     font-size: 0.76rem;
     gap: 6px;
+  }
+
+  .profile-tab-arrow {
+    display: none; /* Mobile uses natural touch swiping */
   }
 }
 

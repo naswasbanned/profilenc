@@ -329,96 +329,47 @@ export default function AddBlockModal({ onAddBlock, onClose }) {
   };
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 900,
-        background: 'rgba(5,5,8,0.85)',
-        backdropFilter: 'blur(16px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '20px',
-      }}
-      onClick={onClose}
-    >
+    <div className="editor-modal-backdrop" onClick={onClose}>
       <motion.div
+        className="editor-modal-dialog modal-md"
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         onClick={(e) => e.stopPropagation()}
-        style={{
-          width: '100%',
-          maxWidth: '720px',
-          maxHeight: '85vh',
-          background: '#0e0e14',
-          border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: '18px',
-          boxShadow: '0 24px 64px rgba(0,0,0,0.8)',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
       >
-        <div
-          style={{
-            padding: '20px 24px',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
+        <div className="editor-modal-header">
           <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff' }}>Block Library</h3>
-            <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '2px' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#fff' }}>Block Library</h3>
+            <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '2px' }}>
               Choose a block to add to your current tab
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            style={{ background: 'none', border: 'none', color: '#888', cursor: 'pointer', padding: '4px' }}
+            style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
           >
             <X size={20} />
           </button>
         </div>
 
-        <div
-          style={{
-            padding: '24px',
-            overflowY: 'auto',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '16px',
-          }}
-        >
+        <div className="editor-modal-body add-block-grid">
           {BLOCK_PRESETS.map((preset) => (
             <motion.div
               key={preset.type}
               onClick={() => handleSelect(preset)}
-              whileHover={{ y: -4, scale: 1.02 }}
+              whileHover={{ y: -3, scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
-              style={{
-                padding: '20px',
-                borderRadius: '14px',
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.06)',
-                cursor: 'pointer',
-                transition: 'border-color 0.2s',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
+              className="add-block-card"
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-                <div style={{ padding: '10px', borderRadius: '10px', background: 'rgba(255,255,255,0.04)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                <div style={{ padding: '8px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {preset.icon}
                 </div>
-                <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#eee' }}>{preset.title}</h4>
+                <h4 style={{ fontSize: '0.96rem', fontWeight: 700, color: '#f1f5f9' }}>{preset.title}</h4>
               </div>
-              <p style={{ fontSize: '0.8rem', color: '#888', lineHeight: '1.5', flex: 1 }}>{preset.desc}</p>
-              <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent-color, #00d4ff)', fontSize: '0.78rem', fontWeight: 600 }}>
+              <p style={{ fontSize: '0.8rem', color: '#94a3b8', lineHeight: '1.5', flex: 1 }}>{preset.desc}</p>
+              <div style={{ marginTop: '14px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent-color, #00f0aa)', fontSize: '0.78rem', fontWeight: 600 }}>
                 <Plus size={14} /> Add to Tab
               </div>
             </motion.div>
