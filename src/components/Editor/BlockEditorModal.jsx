@@ -751,11 +751,8 @@ export default function BlockEditorModal({
                     {(formData.actions || []).map((act, aIdx) => (
                       <div
                         key={aIdx}
+                        className="editor-form-row-action"
                         style={{
-                          display: 'grid',
-                          gridTemplateColumns: '1.2fr 2fr auto auto',
-                          gap: '8px',
-                          alignItems: 'center',
                           padding: '10px 12px',
                           borderRadius: '8px',
                           background: '#06070a',
@@ -767,22 +764,22 @@ export default function BlockEditorModal({
                           value={act.label || ''}
                           onChange={(e) => handleActionChange(aIdx, 'label', e.target.value)}
                           placeholder="Button Label (e.g. Get in Touch)"
-                          className="editor-text-input"
+                          className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />
                         <input
                           type="text"
                           value={act.url || ''}
                           onChange={(e) => handleActionChange(aIdx, 'url', e.target.value)}
-                          placeholder="URL / Email (e.g. mailto:you@example.com or https://...)"
-                          className="editor-text-input"
+                          placeholder="URL / Email (e.g. mailto:...)"
+                          className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />
                         <button
                           type="button"
                           onClick={() => handleActionChange(aIdx, 'primary', !act.primary)}
                           className={`editor-btn ${act.primary ? 'editor-btn-save' : 'editor-btn-ghost'}`}
-                          style={{ fontSize: '0.75rem', padding: '6px 10px' }}
+                          style={{ fontSize: '0.75rem', padding: '6px 10px', whiteSpace: 'nowrap' }}
                           title="Toggle highlighted primary button styling"
                         >
                           {act.primary ? 'Primary' : 'Secondary'}
@@ -820,11 +817,8 @@ export default function BlockEditorModal({
                     {(formData.socials || []).map((soc, sIdx) => (
                       <div
                         key={sIdx}
+                        className="editor-form-row-social"
                         style={{
-                          display: 'grid',
-                          gridTemplateColumns: '130px 1.2fr 2fr auto',
-                          gap: '8px',
-                          alignItems: 'center',
                           padding: '10px 12px',
                           borderRadius: '8px',
                           background: '#06070a',
@@ -834,7 +828,7 @@ export default function BlockEditorModal({
                         <select
                           value={soc.platform || 'Github'}
                           onChange={(e) => handleSocialChange(sIdx, 'platform', e.target.value)}
-                          className="editor-select"
+                          className="editor-select full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         >
                           <option value="Github">GitHub</option>
@@ -850,7 +844,7 @@ export default function BlockEditorModal({
                           value={soc.label || ''}
                           onChange={(e) => handleSocialChange(sIdx, 'label', e.target.value)}
                           placeholder="Label (e.g. GitHub)"
-                          className="editor-text-input"
+                          className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />
                         <input
@@ -858,7 +852,7 @@ export default function BlockEditorModal({
                           value={soc.url || ''}
                           onChange={(e) => handleSocialChange(sIdx, 'url', e.target.value)}
                           placeholder="https://..."
-                          className="editor-text-input"
+                          className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />
                         <button
@@ -1112,17 +1106,9 @@ export default function BlockEditorModal({
                   {(formData.items || []).map((item, idx) => (
                     <div
                       key={item.id || idx}
-                      style={{
-                        borderRadius: '10px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        padding: '14px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '10px',
-                      }}
+                      className="editor-item-card"
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div className="editor-item-card-header">
                         <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
                           Card #{idx + 1}: {item.title || 'Untitled'}
                         </span>
@@ -1130,18 +1116,19 @@ export default function BlockEditorModal({
                           type="button"
                           onClick={() => handleRemoveItem(idx)}
                           style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                          title="Delete card"
                         >
                           <Trash2 size={16} />
                         </button>
                       </div>
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '10px' }}>
+                      <div className="editor-form-row-2">
                         <input
                           type="text"
                           value={item.title || ''}
                           onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
                           placeholder="Card Title"
-                          className="editor-text-input"
+                          className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />
                         <input
@@ -1149,7 +1136,7 @@ export default function BlockEditorModal({
                           value={item.badge || ''}
                           onChange={(e) => handleItemChange(idx, 'badge', e.target.value)}
                           placeholder="Badge (e.g. Featured)"
-                          className="editor-text-input"
+                          className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />
                       </div>
@@ -1181,13 +1168,13 @@ export default function BlockEditorModal({
                         style={{ color: '#f1f5f9', background: '#06070a' }}
                       />
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '10px' }}>
+                      <div className="editor-form-row-2">
                         <input
                           type="text"
                           value={item.linkUrl || ''}
                           onChange={(e) => handleItemChange(idx, 'linkUrl', e.target.value)}
                           placeholder="Link URL (https://...)"
-                          className="editor-text-input"
+                          className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />
                         <input
@@ -1195,7 +1182,7 @@ export default function BlockEditorModal({
                           value={item.actionLabel || ''}
                           onChange={(e) => handleItemChange(idx, 'actionLabel', e.target.value)}
                           placeholder="Button Label (e.g. View Project)"
-                          className="editor-text-input"
+                          className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />
                       </div>
@@ -1446,18 +1433,10 @@ export default function BlockEditorModal({
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {(formData.items || []).map((rev, idx) => (
                     <div
-                      key={rev.id || idx}
-                      style={{
-                        borderRadius: '10px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        padding: '14px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '10px',
-                      }}
+                      key={idx}
+                      className="editor-item-card"
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div className="editor-item-card-header">
                         <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
                           Review #{idx + 1}: {rev.title || 'Untitled'}
                         </span>
@@ -1465,46 +1444,60 @@ export default function BlockEditorModal({
                           type="button"
                           onClick={() => handleRemoveItem(idx)}
                           style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                          title="Delete review"
                         >
                           <Trash2 size={16} />
                         </button>
                       </div>
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1.2fr 1fr 1fr', gap: '8px' }}>
+                      <div className="editor-control" style={{ margin: 0 }}>
+                        <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Media Title</label>
                         <input
                           type="text"
                           value={rev.title || ''}
                           onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
-                          placeholder="Title (e.g. Cyberpunk 2077)"
-                          className="editor-text-input"
+                          placeholder="e.g. Cyberpunk 2077 / Interstellar"
+                          className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />
-                        <input
-                          type="text"
-                          value={Array.isArray(rev.genre) ? rev.genre.join(', ') : rev.genre || ''}
-                          onChange={(e) => handleItemChange(idx, 'genre', e.target.value)}
-                          placeholder="Genre / Badge (e.g. Action RPG)"
-                          className="editor-text-input"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
-                        />
-                        <select
-                          value={rev.rating || 5}
-                          onChange={(e) => handleItemChange(idx, 'rating', Number(e.target.value))}
-                          className="editor-select"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
-                        >
-                          {[5, 4, 3, 2, 1].map((r) => (
-                            <option key={r} value={r}>{'★'.repeat(r)} ({r} Stars)</option>
-                          ))}
-                        </select>
-                        <input
-                          type="text"
-                          value={rev.status || ''}
-                          onChange={(e) => handleItemChange(idx, 'status', e.target.value)}
-                          placeholder="Status (e.g. Completed)"
-                          className="editor-text-input"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
-                        />
+                      </div>
+
+                      <div className="editor-form-row-3">
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Genre / Badge</label>
+                          <input
+                            type="text"
+                            value={Array.isArray(rev.genre) ? rev.genre.join(', ') : rev.genre || ''}
+                            onChange={(e) => handleItemChange(idx, 'genre', e.target.value)}
+                            placeholder="e.g. Action RPG"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          />
+                        </div>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Rating</label>
+                          <select
+                            value={rev.rating || 5}
+                            onChange={(e) => handleItemChange(idx, 'rating', Number(e.target.value))}
+                            className="editor-select full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          >
+                            {[5, 4, 3, 2, 1].map((r) => (
+                              <option key={r} value={r}>{'★'.repeat(r)} ({r} Stars)</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Status</label>
+                          <input
+                            type="text"
+                            value={rev.status || ''}
+                            onChange={(e) => handleItemChange(idx, 'status', e.target.value)}
+                            placeholder="e.g. Completed"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          />
+                        </div>
                       </div>
 
                       <ImageUploadPicker
@@ -1517,14 +1510,17 @@ export default function BlockEditorModal({
                         }}
                       />
 
-                      <textarea
-                        value={rev.notes || ''}
-                        onChange={(e) => handleItemChange(idx, 'notes', e.target.value)}
-                        placeholder="Review / Notes..."
-                        className="editor-text-input full-width"
-                        style={{ color: '#f1f5f9', background: '#06070a' }}
-                        rows={2}
-                      />
+                      <div className="editor-control" style={{ margin: 0 }}>
+                        <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Review Notes</label>
+                        <textarea
+                          value={rev.notes || ''}
+                          onChange={(e) => handleItemChange(idx, 'notes', e.target.value)}
+                          placeholder="Review / Notes..."
+                          className="editor-text-input full-width"
+                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          rows={2}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1546,52 +1542,52 @@ export default function BlockEditorModal({
                   </button>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {(formData.items || []).map((item, idx) => (
                     <div
                       key={idx}
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1.2fr 1.5fr auto',
-                        gap: '8px',
-                        alignItems: 'center',
-                        padding: '10px 12px',
-                        borderRadius: '8px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                      }}
+                      className="editor-item-card"
                     >
-                      <input
-                        type="text"
-                        value={item.category || ''}
-                        onChange={(e) => handleItemChange(idx, 'category', e.target.value)}
-                        placeholder="Category (e.g. GPU)"
-                        className="editor-text-input"
-                        style={{ color: '#f1f5f9', background: '#06070a' }}
-                      />
-                      <input
-                        type="text"
-                        value={item.name || ''}
-                        onChange={(e) => handleItemChange(idx, 'name', e.target.value)}
-                        placeholder="Name (e.g. RTX 4060)"
-                        className="editor-text-input"
-                        style={{ color: '#f1f5f9', background: '#06070a' }}
-                      />
-                      <input
-                        type="text"
-                        value={item.detail || ''}
-                        onChange={(e) => handleItemChange(idx, 'detail', e.target.value)}
-                        placeholder="Detail (e.g. 8GB GDDR6)"
-                        className="editor-text-input"
-                        style={{ color: '#f1f5f9', background: '#06070a' }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveItem(idx)}
-                        style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      <div className="editor-item-card-header">
+                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>
+                          Spec #{idx + 1}: {item.category || 'Hardware'} - {item.name || 'Component'}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveItem(idx)}
+                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                          title="Delete spec item"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+
+                      <div className="editor-form-row-3">
+                        <input
+                          type="text"
+                          value={item.category || ''}
+                          onChange={(e) => handleItemChange(idx, 'category', e.target.value)}
+                          placeholder="Category (e.g. GPU)"
+                          className="editor-text-input full-width"
+                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                        />
+                        <input
+                          type="text"
+                          value={item.name || ''}
+                          onChange={(e) => handleItemChange(idx, 'name', e.target.value)}
+                          placeholder="Name (e.g. RTX 4060)"
+                          className="editor-text-input full-width"
+                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                        />
+                        <input
+                          type="text"
+                          value={item.detail || ''}
+                          onChange={(e) => handleItemChange(idx, 'detail', e.target.value)}
+                          placeholder="Detail (e.g. 8GB GDDR6)"
+                          className="editor-text-input full-width"
+                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
