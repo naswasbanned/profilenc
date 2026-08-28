@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Check,
   Undo2,
+  Redo2,
   FolderKanban,
   Loader2,
   AlertCircle,
@@ -39,6 +40,10 @@ export default function EditorOverlay({
   onEditBlock,
   onMoveBlock,
   onDeleteBlock,
+  onUndo,
+  onRedo,
+  canUndo = false,
+  canRedo = false,
   onSaveAll,
   editingBlock,
   setEditingBlock,
@@ -153,11 +158,33 @@ export default function EditorOverlay({
 
         {/* Right Tools */}
         <div className="editor-toolbar-right">
-          {isDirty && (
-            <button className="editor-btn editor-btn-ghost" onClick={resetTheme} title="Reset theme changes">
-              <Undo2 size={16} />
-            </button>
-          )}
+          <button
+            type="button"
+            className="editor-btn editor-btn-ghost"
+            onClick={onUndo}
+            disabled={!canUndo}
+            title={canUndo ? 'Undo change (Ctrl+Z)' : 'Nothing to undo'}
+            style={{
+              opacity: canUndo ? 1 : 0.4,
+              cursor: canUndo ? 'pointer' : 'not-allowed',
+            }}
+          >
+            <Undo2 size={16} />
+          </button>
+
+          <button
+            type="button"
+            className="editor-btn editor-btn-ghost"
+            onClick={onRedo}
+            disabled={!canRedo}
+            title={canRedo ? 'Redo change (Ctrl+Y)' : 'Nothing to redo'}
+            style={{
+              opacity: canRedo ? 1 : 0.4,
+              cursor: canRedo ? 'pointer' : 'not-allowed',
+            }}
+          >
+            <Redo2 size={16} />
+          </button>
 
           <button
             type="button"
