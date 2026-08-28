@@ -974,10 +974,10 @@
   }
 }
 
-/* Floating Unsaved Changes Notification Toast */
+/* Floating Unsaved Changes Notification Toast (Middle Top, Clean Dark Glass) */
 .editor-unsaved-banner {
   position: fixed;
-  bottom: 24px;
+  top: 60px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 500;
@@ -985,13 +985,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 10px 18px;
-  background: rgba(12, 14, 22, 0.96);
+  padding: 8px 18px;
+  background: rgba(14, 16, 24, 0.94);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 240, 170, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 9999px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(0, 240, 170, 0.15);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
   max-width: 90vw;
   box-sizing: border-box;
 }
@@ -1003,11 +1003,11 @@
 }
 
 .editor-unsaved-indicator {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--color-accent-primary, #00f0aa);
-  box-shadow: 0 0 10px var(--color-accent-primary, #00f0aa);
+  box-shadow: 0 0 8px var(--color-accent-primary, #00f0aa);
   animation: savePulse 1.8s infinite ease-in-out;
   flex-shrink: 0;
 }
@@ -1020,13 +1020,13 @@
 
 .editor-unsaved-text strong {
   color: #ffffff;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
 }
 
 .editor-unsaved-text span {
   color: #94a3b8;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
 }
 
 .editor-unsaved-banner-actions {
@@ -1054,10 +1054,12 @@
 
 @media (max-width: 768px) {
   .editor-unsaved-banner {
-    bottom: 74px; /* Sits cleanly above the mobile dock */
-    padding: 8px 12px;
-    border-radius: 12px;
-    width: calc(100vw - 24px);
+    top: 56px;
+    bottom: auto;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    width: auto;
+    max-width: calc(100vw - 20px);
   }
 
   .editor-unsaved-text span {

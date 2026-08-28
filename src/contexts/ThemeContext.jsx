@@ -310,6 +310,7 @@ export function ThemeProvider({ children, username, initialTheme }) {
   const value = {
     theme,
     isDirty,
+    setIsDirty,
     updateTheme,
     setFullTheme,
     resetTheme,

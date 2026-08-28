@@ -16,7 +16,7 @@ function EditorCanvasInner({
   setContent,
   token,
 }) {
-  const { theme: currentTheme } = useTheme();
+  const { theme: currentTheme, setIsDirty: setThemeIsDirty } = useTheme();
   const [activeTabId, setActiveTabId] = useState(() => content?.tabs?.[0]?.id || 'tab-main');
   const [editingBlock, setEditingBlock] = useState(null);
 
@@ -137,7 +137,8 @@ function EditorCanvasInner({
     // Update snapshots to mark as clean & saved
     initialContentStr.current = JSON.stringify(content);
     initialThemeStr.current = JSON.stringify(currentTheme);
-  }, [username, token, content, currentTheme]);
+    if (setThemeIsDirty) setThemeIsDirty(false);
+  }, [username, token, content, currentTheme, setThemeIsDirty]);
 
   return (
     <div className="editor-page" style={{ paddingTop: '52px', paddingBottom: '90px' }}>

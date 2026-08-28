@@ -49,7 +49,7 @@ export default function EditorOverlay({
   const [dismissedToast, setDismissedToast] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const isDirty = hasChanges || isThemeDirty;
+  const isDirty = hasChanges;
 
   // Whenever user makes new unsaved edits, un-dismiss the reminder toast
   useEffect(() => {
@@ -279,10 +279,10 @@ export default function EditorOverlay({
         {isDirty && !dismissedToast && (
           <motion.div
             className="editor-unsaved-banner"
-            initial={{ y: 50, opacity: 0, scale: 0.95 }}
+            initial={{ y: -20, opacity: 0, scale: 0.96 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: 50, opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3 }}
+            exit={{ y: -20, opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
           >
             <div className="editor-unsaved-banner-content">
               <div className="editor-unsaved-indicator" />
