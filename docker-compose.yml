@@ -3,13 +3,13 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - profilenc_pgdata:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: profile
-      POSTGRES_USER: profile
+      POSTGRES_DB: profilenc
+      POSTGRES_USER: profilenc
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U profile"]
+      test: ["CMD-SHELL", "pg_isready -U profilenc"]
       interval: 5s
       retries: 5
 
@@ -20,10 +20,10 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - uploads:/app/uploads
+      - profilenc_uploads:/app/uploads
       - ./public:/app/public:ro
     environment:
-      DATABASE_URL: postgres://profile:${DB_PASSWORD}@db:5432/profile
+      DATABASE_URL: postgres://profilenc:${DB_PASSWORD}@db:5432/profilenc
       JWT_SECRET: ${JWT_SECRET}
       ADMIN_USERNAME: ${ADMIN_USERNAME}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
@@ -37,8 +37,8 @@ services:
     depends_on:
       - backend
     ports:
-      - "8080:80"
+      - "8081:80"
 
 volumes:
-  pgdata:
-  uploads:
+  profilenc_pgdata:
+  profilenc_uploads:

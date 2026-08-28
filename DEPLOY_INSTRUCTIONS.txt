@@ -57,9 +57,9 @@ sample images into WebP for user @nas:
 
 ------------------------------------------------------------------------------
 STEP 4: ACCESS YOUR APPLICATION
-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 - Landing Page (Create Profile, Templates, Featured Profiles):
-    http://YOUR_SERVER_IP/  (or http://localhost:8080/ if local docker-compose default)
+    http://YOUR_SERVER_IP/  (or http://localhost:8081/ if local docker-compose default)
 
 - User Profile URL:
     http://YOUR_SERVER_IP/@nas
@@ -78,8 +78,8 @@ SAFE UPDATES & MAINTENANCE (HOW NOT TO LOSE DATA)
 ==============================================================================
 
 Data is persisted in named Docker volumes:
-  - Database data -> "pgdata" volume
-  - Uploaded images -> "uploads" volume
+  - Database data -> "profilenc_pgdata" volume
+  - Uploaded images -> "profilenc_uploads" volume
 
 HOW TO SAFELY UPDATE YOUR CODE:
 --------------------------------
@@ -97,7 +97,7 @@ BACKUP & RESTORE PROCEDURES
 
 [ CREATING A BACKUP ]
 1. Database backup:
-     sudo docker compose exec db pg_dump -U profile profile > db_backup_$(date +%F).sql
+     sudo docker compose exec db pg_dump -U profilenc profilenc > db_backup_$(date +%F).sql
 
 2. Images backup:
      sudo docker compose cp backend:/app/uploads ./uploads_backup_$(date +%F)
@@ -107,7 +107,7 @@ BACKUP & RESTORE PROCEDURES
 
 [ RESTORING FROM BACKUP ]
 1. Restore Database:
-     cat db_backup_YYYY-MM-DD.sql | sudo docker compose exec -T db psql -U profile profile
+     cat db_backup_YYYY-MM-DD.sql | sudo docker compose exec -T db psql -U profilenc profilenc
 
 2. Restore Images:
      sudo docker compose cp ./uploads_backup_YYYY-MM-DD/. backend:/app/uploads/
