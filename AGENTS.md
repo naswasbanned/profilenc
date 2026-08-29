@@ -55,3 +55,15 @@ If you add a new data-fetched section to either side:
 - Do not prepend emojis (such as ⚡, ✨, 🚀, 💡, ⚠️, ❌) to UI banners, double-click hints, notifications, or modal messages.
 - Only render emojis where user-configured content specifically contains emojis (such as user-selected mood tags or user journal content).
 
+---
+
+## 🔍 Strict Import & Dependency Verification Rule (CRITICAL)
+
+**ALWAYS check and verify that EVERY dependency, library, utility, hook, and Lucide SVG icon used in any component is explicitly and correctly imported.**
+
+### Guidelines:
+- Whenever adding, editing, or refactoring JSX code, check that all referenced icons (e.g., `<BookOpen />`, `<Calendar />`, `<Plus />`, `<Edit3 />`, `<Trash2 />`, `<Link2 />`, `<Code2 />`, etc.) are present in the `import { ... } from 'lucide-react'` header of that specific file.
+- Verify all component function parameters and props destructuring to prevent `Uncaught ReferenceError: variable is not defined`.
+- Run a build test (`npm run build`) to ensure all import references compile cleanly before reporting completion.
+
+

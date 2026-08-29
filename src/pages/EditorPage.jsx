@@ -243,6 +243,7 @@ function EditorCanvasInner({
         onEditBlock={(block) => setEditingBlock(block)}
         onMoveBlock={handleMoveBlock}
         onDeleteBlock={handleDeleteBlock}
+        onUpdateBlock={handleEditBlock}
       />
 
       <EditorOverlay

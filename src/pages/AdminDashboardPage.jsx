@@ -33,6 +33,27 @@ import './AdminDashboardPage.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
+function formatLastChange(dateStr) {
+  if (!dateStr) return 'Never';
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSec = Math.max(0, Math.floor(diffMs / 1000));
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHours = Math.floor(diffMin / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffSec < 60) return 'Just now';
+  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 30) return `${diffDays}d ago`;
+
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
 export default function AdminDashboardPage() {
   const { user, token, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -626,6 +647,7 @@ export default function AdminDashboardPage() {
                       <th>EMAIL</th>
                       <th>TEMPLATE</th>
                       <th>BLOCKS</th>
+                      <th>RECENT CHANGE</th>
                       <th>JOINED</th>
                       <th>VISIBILITY</th>
                       <th>ROLE</th>
@@ -659,7 +681,23 @@ export default function AdminDashboardPage() {
                           <span className="template-tag">[{u.template_slug || 'CUSTOM'}]</span>
                         </td>
                         <td>
-                          <span className="monospace-cell">{u.block_count || 0} blocks</span>
+                          <span className="monospace-cell" style={{ fontWeight: 600, color: '#f1f5f9' }}>
+                            {u.block_count || 0} {u.block_count === 1 ? 'block' : 'blocks'}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                            <span className="monospace-cell" style={{ color: '#00f0aa', fontSize: '0.82rem', fontWeight: 600 }}>
+                              {formatLastChange(u.last_changed_at || u.updated_at || u.created_at)}
+                            </span>
+                            <span style={{ fontSize: '0.7rem', color: '#64748b' }}>
+                              {new Date(u.last_changed_at || u.updated_at || u.created_at).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric',
+                              })}
+                            </span>
+                          </div>
                         </td>
                         <td>
                           <span className="monospace-cell">

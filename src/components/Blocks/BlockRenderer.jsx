@@ -122,6 +122,7 @@ export default function BlockRenderer({
   onEditBlock,
   onMoveBlock,
   onDeleteBlock,
+  onUpdateBlock,
 }) {
   if (!block || block.hidden) return null;
 
@@ -211,7 +212,23 @@ export default function BlockRenderer({
       )}
 
       {/* Render Component */}
-      <BlockComponent data={block.data || {}} />
+      <BlockComponent
+        data={block.data || {}}
+        block={block}
+        isEditing={isEditing}
+        onUpdateData={(newData) => {
+          if (onUpdateBlock) {
+            onUpdateBlock({
+              ...block,
+              data: {
+                ...(block.data || {}),
+                ...newData,
+              },
+            });
+          }
+        }}
+        onUpdateBlock={onUpdateBlock}
+      />
     </motion.section>
   );
 }

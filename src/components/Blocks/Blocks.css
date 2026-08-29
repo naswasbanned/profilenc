@@ -1018,6 +1018,183 @@
   font-family: var(--font-serif);
 }
 
+/* --- Journal Toolbar & Filter Controls --- */
+.journal-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.journal-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.journal-count-badge {
+  font-size: var(--text-2xs);
+  font-family: var(--font-mono);
+  color: var(--card-text-muted, #8b949e);
+  background: var(--color-surface-sunken, rgba(255, 255, 255, 0.04));
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+}
+
+.journal-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
+  color: var(--card-text-muted, #94a3b8);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.journal-sort-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--card-heading-color, #ffffff);
+  border-color: var(--color-accent-primary, #00f0aa);
+}
+
+.journal-sort-btn.active {
+  background: rgba(0, 240, 170, 0.12);
+  color: var(--color-accent-primary, #00f0aa);
+  border-color: var(--color-accent-primary, #00f0aa);
+  font-weight: 600;
+}
+
+.journal-quick-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-primary, #00f0aa);
+  color: #06070a;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 10px rgba(0, 240, 170, 0.2);
+}
+
+.journal-quick-add-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+  box-shadow: 0 4px 14px rgba(0, 240, 170, 0.35);
+}
+
+/* --- Inline Quick Entry Editor Form --- */
+.journal-quick-form {
+  border-radius: var(--radius-md);
+  background: var(--color-surface-sunken, #080a10);
+  border: 1px solid var(--color-accent-primary, rgba(0, 240, 170, 0.3));
+  padding: 22px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.journal-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 12px;
+}
+
+.journal-form-title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--card-heading-color, #ffffff);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.journal-form-row-2 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .journal-form-row-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.journal-input-label {
+  display: block;
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  color: var(--card-text-muted, #94a3b8);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.journal-form-input {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  background: #030407;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+  font-size: var(--text-sm);
+  font-family: inherit;
+  transition: border-color var(--transition-fast);
+}
+
+.journal-form-input:focus {
+  outline: none;
+  border-color: var(--color-accent-primary, #00f0aa);
+}
+
+.journal-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.journal-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  font-size: var(--text-2xs);
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--card-text-muted, #94a3b8);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.journal-card-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.journal-card-btn.btn-del:hover {
+  background: rgba(239, 68, 68, 0.18);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
 /* ==========================================================================
    9. SERVICES & COMMISSION BLOCK
    ========================================================================== */

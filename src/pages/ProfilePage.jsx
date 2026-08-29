@@ -337,6 +337,7 @@ export function ProfileCanvas({
   onEditBlock,
   onMoveBlock,
   onDeleteBlock,
+  onUpdateBlock,
 }) {
   const navigate = useNavigate();
   const { user: authUser } = useAuth();
@@ -412,6 +413,7 @@ export function ProfileCanvas({
                   onEditBlock={onEditBlock}
                   onMoveBlock={onMoveBlock}
                   onDeleteBlock={onDeleteBlock}
+                  onUpdateBlock={onUpdateBlock}
                 />
               ))
             )}

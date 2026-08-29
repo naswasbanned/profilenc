@@ -17,16 +17,42 @@ router.get('/stats', async (_req, res) => {
     const { rows: userCount } = await query('SELECT COUNT(*) FROM users');
     const { rows: publicCount } = await query('SELECT COUNT(*) FROM users WHERE is_public = true');
     const { rows: adminCount } = await query('SELECT COUNT(*) FROM users WHERE is_admin = true');
-    const { rows: blockCount } = await query('SELECT COUNT(*) FROM user_content');
     const { rows: patchCount } = await query('SELECT COUNT(*) FROM patch_notes');
     const { rows: suggestionCount } = await query('SELECT COUNT(*) FROM suggestions');
     const { rows: newSuggestionCount } = await query("SELECT COUNT(*) FROM suggestions WHERE status = 'NEW'");
+
+    // Sum all blocks across all user_content modular profiles
+    const { rows: modularRows } = await query(
+      "SELECT data FROM user_content WHERE key = 'modular_profile'"
+    );
+
+    let totalBlocks = 0;
+    for (const row of modularRows) {
+      const data = typeof row.data === 'string' ? JSON.parse(row.data) : row.data;
+      if (Array.isArray(data?.tabs)) {
+        for (const tab of data.tabs) {
+          if (Array.isArray(tab.blocks)) {
+            totalBlocks += tab.blocks.length;
+          }
+        }
+      }
+    }
+
+    // Add legacy blocks for users without a modular profile
+    const { rows: legacyBlockCount } = await query(`
+      SELECT COUNT(*) FROM user_content uc
+      WHERE uc.key != 'modular_profile'
+        AND NOT EXISTS (
+          SELECT 1 FROM user_content m WHERE m.user_id = uc.user_id AND m.key = 'modular_profile'
+        )
+    `);
+    totalBlocks += parseInt(legacyBlockCount[0]?.count || 0, 10);
 
     res.json({
       totalUsers: parseInt(userCount[0].count, 10),
       publicUsers: parseInt(publicCount[0].count, 10),
       adminUsers: parseInt(adminCount[0].count, 10),
-      totalBlocks: parseInt(blockCount[0].count, 10),
+      totalBlocks,
       totalPatches: parseInt(patchCount[0].count, 10),
       totalSuggestions: parseInt(suggestionCount[0].count, 10),
       newSuggestions: parseInt(newSuggestionCount[0].count, 10),
@@ -39,12 +65,20 @@ router.get('/stats', async (_req, res) => {
 
 /**
  * GET /api/admin/users
- * Search and list all registered users.
+ * Search and list all registered users with accurate block count and recent change time.
  */
 router.get('/users', async (req, res) => {
   try {
     const { search = '' } = req.query;
-    let sql = `
+    let whereClause = '';
+    const params = [];
+
+    if (search.trim()) {
+      whereClause = `WHERE u.username ILIKE $1 OR u.email ILIKE $1 OR u.display_name ILIKE $1`;
+      params.push(`%${search.trim()}%`);
+    }
+
+    const sql = `
       SELECT 
         u.id, 
         u.username, 
@@ -55,21 +89,97 @@ router.get('/users', async (req, res) => {
         u.is_admin, 
         u.template_slug, 
         u.created_at,
-        COUNT(uc.id)::int AS block_count
+        u.updated_at AS user_updated_at,
+        COALESCE(
+          (
+            SELECT json_agg(json_build_object('key', uc.key, 'data', uc.data, 'updated_at', uc.updated_at))
+            FROM user_content uc 
+            WHERE uc.user_id = u.id
+          ),
+          '[]'::json
+        ) AS content_items,
+        (
+          SELECT MAX(ut.updated_at)
+          FROM user_themes ut
+          WHERE ut.user_id = u.id
+        ) AS theme_updated_at,
+        (
+          SELECT MAX(us.updated_at)
+          FROM user_sections us
+          WHERE us.user_id = u.id
+        ) AS section_updated_at
       FROM users u
-      LEFT JOIN user_content uc ON uc.user_id = u.id
+      ${whereClause}
+      ORDER BY u.created_at DESC
     `;
-    const params = [];
-
-    if (search.trim()) {
-      sql += ` WHERE u.username ILIKE $1 OR u.email ILIKE $1 OR u.display_name ILIKE $1`;
-      params.push(`%${search.trim()}%`);
-    }
-
-    sql += ` GROUP BY u.id ORDER BY u.created_at DESC`;
 
     const { rows } = await query(sql, params);
-    res.json({ users: rows });
+
+    const users = rows.map((u) => {
+      let blockCount = 0;
+      let lastChanged = u.user_updated_at || u.created_at;
+
+      if (u.theme_updated_at) {
+        const t = new Date(u.theme_updated_at);
+        if (!lastChanged || t > new Date(lastChanged)) {
+          lastChanged = u.theme_updated_at;
+        }
+      }
+
+      if (u.section_updated_at) {
+        const t = new Date(u.section_updated_at);
+        if (!lastChanged || t > new Date(lastChanged)) {
+          lastChanged = u.section_updated_at;
+        }
+      }
+
+      const contentItems = Array.isArray(u.content_items) ? u.content_items : [];
+      const modularItem = contentItems.find((c) => c.key === 'modular_profile');
+
+      if (modularItem && modularItem.data) {
+        const data = typeof modularItem.data === 'string' ? JSON.parse(modularItem.data) : modularItem.data;
+        if (Array.isArray(data?.tabs)) {
+          for (const tab of data.tabs) {
+            if (Array.isArray(tab.blocks)) {
+              blockCount += tab.blocks.length;
+            }
+          }
+        }
+        if (modularItem.updated_at) {
+          const t = new Date(modularItem.updated_at);
+          if (!lastChanged || t > new Date(lastChanged)) {
+            lastChanged = modularItem.updated_at;
+          }
+        }
+      } else if (contentItems.length > 0) {
+        for (const item of contentItems) {
+          blockCount++;
+          if (item.updated_at) {
+            const t = new Date(item.updated_at);
+            if (!lastChanged || t > new Date(lastChanged)) {
+              lastChanged = item.updated_at;
+            }
+          }
+        }
+      }
+
+      return {
+        id: u.id,
+        username: u.username,
+        email: u.email,
+        display_name: u.display_name,
+        avatar_url: u.avatar_url,
+        is_public: u.is_public,
+        is_admin: u.is_admin,
+        template_slug: u.template_slug,
+        created_at: u.created_at,
+        updated_at: lastChanged,
+        last_changed_at: lastChanged,
+        block_count: blockCount,
+      };
+    });
+
+    res.json({ users });
   } catch (err) {
     console.error('Admin list users error:', err);
     res.status(500).json({ error: 'Failed to list users' });
