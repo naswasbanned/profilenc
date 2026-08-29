@@ -925,6 +925,7 @@
   cursor: pointer;
   transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
   overflow: hidden;
+  position: relative;
 }
 
 .journal-entry-card:hover {
@@ -933,49 +934,111 @@
   box-shadow: var(--shadow-md);
 }
 
+.journal-entry-card.is-pinned-card {
+  border-color: rgba(0, 240, 170, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 240, 170, 0.08);
+}
+
 .journal-entry-card.has-cover {
   padding: 0;
   display: flex;
   flex-direction: column;
 }
 
+/* --- Card Image Blurred Preview & Attachment Button --- */
 .journal-entry-cover-wrap {
+  position: relative;
   width: 100%;
-  height: 180px;
-  background: var(--color-surface-sunken);
+  height: 160px;
+  background: #020306;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .journal-entry-cover-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--transition-normal);
+  filter: blur(12px) brightness(0.62);
+  transform: scale(1.18);
+  transition: filter 0.35s ease, transform 0.35s ease;
+  display: block;
 }
 
 .journal-entry-card:hover .journal-entry-cover-img {
-  transform: scale(1.04);
+  filter: blur(7px) brightness(0.75);
+  transform: scale(1.22);
+}
+
+.journal-attachment-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 2;
+  transition: background 0.25s ease;
+}
+
+.journal-entry-card:hover .journal-attachment-overlay {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.journal-attachment-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(8, 10, 16, 0.82);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f1f5f9;
+  font-size: 0.74rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.journal-entry-card:hover .journal-attachment-btn {
+  background: rgba(0, 240, 170, 0.22);
+  border-color: var(--color-accent-primary, #00f0aa);
+  color: var(--color-accent-primary, #00f0aa);
+  box-shadow: 0 4px 20px rgba(0, 240, 170, 0.35);
+  transform: scale(1.05);
 }
 
 .journal-entry-content {
   padding: 20px 22px;
 }
 
+/* --- Reader Modal Full-Size Image --- */
 .journal-modal-cover-wrap {
   width: 100%;
-  max-height: 280px;
-  border-radius: var(--radius-sm);
+  max-height: 480px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  margin-bottom: 20px;
-  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  margin-bottom: 24px;
+  background: #000000;
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.12));
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .journal-modal-cover-img {
   width: 100%;
-  height: 100%;
-  max-height: 280px;
-  object-fit: cover;
+  height: auto;
+  max-height: 480px;
+  object-fit: contain;
   display: block;
+  filter: none !important;
 }
 
 .journal-entry-header {
@@ -983,6 +1046,23 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 8px;
+  gap: 8px;
+}
+
+.journal-pin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 240, 170, 0.14);
+  border: 1px solid rgba(0, 240, 170, 0.35);
+  color: var(--color-accent-primary, #00f0aa);
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .journal-date {
@@ -1189,10 +1269,36 @@
   color: #ffffff;
 }
 
+.journal-card-btn.btn-pinned {
+  background: rgba(0, 240, 170, 0.16);
+  border-color: rgba(0, 240, 170, 0.4);
+  color: var(--color-accent-primary, #00f0aa);
+  font-weight: 700;
+}
+
+.journal-card-btn.btn-pinned:hover {
+  background: rgba(0, 240, 170, 0.25);
+  border-color: #00f0aa;
+}
+
 .journal-card-btn.btn-del:hover {
   background: rgba(239, 68, 68, 0.18);
   color: #ef4444;
   border-color: rgba(239, 68, 68, 0.4);
+}
+
+.journal-pin-alert {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-size: var(--text-2xs);
+  font-family: var(--font-mono);
+  font-weight: 600;
 }
 
 /* ==========================================================================

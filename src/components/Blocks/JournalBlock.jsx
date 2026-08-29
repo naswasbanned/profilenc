@@ -25,6 +25,9 @@ import {
   Code2,
   Link2,
   Minus,
+  Pin,
+  Image as ImageIcon,
+  AlertCircle,
 } from 'lucide-react';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
@@ -420,6 +423,7 @@ export default function JournalBlock({
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formTab, setFormTab] = useState('write'); // 'write' | 'preview'
+  const [pinWarning, setPinWarning] = useState('');
 
   // Form Fields
   const [title, setTitle] = useState('');
@@ -429,14 +433,20 @@ export default function JournalBlock({
   const [coverUrl, setCoverUrl] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
+  const [pinned, setPinned] = useState(false);
 
   const textareaRef = useRef(null);
   const formRef = useRef(null);
 
-  // Sort list by recent entry or oldest
+  // Sort list: Pinned entries always on top (max 3), followed by date (newest or oldest)
   const sortedList = useMemo(() => {
     const copy = [...list];
     return copy.sort((a, b) => {
+      const pinA = Boolean(a.pinned);
+      const pinB = Boolean(b.pinned);
+      if (pinA !== pinB) {
+        return pinA ? -1 : 1;
+      }
       const timeA = getEntryDateValue(a);
       const timeB = getEntryDateValue(b);
       if (timeA !== timeB) {
@@ -450,6 +460,29 @@ export default function JournalBlock({
   const visibleList = useMemo(() => {
     return sortedList.filter((entry) => !editingId || entry.id !== editingId);
   }, [sortedList, editingId]);
+
+  // Pin toggle handler with strict max 3 limitation
+  const handleTogglePin = (entryId, e) => {
+    e.stopPropagation();
+    const target = list.find((item) => item.id === entryId);
+    if (!target) return;
+
+    const otherPinnedCount = list.filter((item) => item.pinned && item.id !== entryId).length;
+
+    if (!target.pinned && otherPinnedCount >= 3) {
+      setPinWarning('Maximum of 3 pinned entries allowed. Unpin another entry first.');
+      setTimeout(() => setPinWarning(''), 3500);
+      return;
+    }
+
+    setPinWarning('');
+    const updated = list.map((item) =>
+      item.id === entryId ? { ...item, pinned: !item.pinned } : item
+    );
+    if (onUpdateData) {
+      onUpdateData({ items: updated });
+    }
+  };
 
   // Insert markdown shortcuts into editor textarea
   const insertText = (before, after = '') => {
@@ -484,6 +517,7 @@ export default function JournalBlock({
     setCoverUrl('');
     setExcerpt('');
     setContent('');
+    setPinned(false);
     setFormTab('write');
     setIsFormOpen(true);
     setTimeout(() => {
@@ -501,6 +535,7 @@ export default function JournalBlock({
     setCoverUrl(entry.coverUrl || entry.imageUrl || '');
     setExcerpt(entry.excerpt || '');
     setContent(entry.content || '');
+    setPinned(Boolean(entry.pinned));
     setFormTab('write');
     setIsFormOpen(true);
     setTimeout(() => {
@@ -520,6 +555,17 @@ export default function JournalBlock({
     e.preventDefault();
     if (!title.trim()) return;
 
+    // Check max pinned count
+    let isPinnedValid = Boolean(pinned);
+    if (isPinnedValid) {
+      const otherPinnedCount = list.filter((item) => item.pinned && item.id !== editingId).length;
+      if (otherPinnedCount >= 3) {
+        setPinWarning('Maximum of 3 pinned entries allowed.');
+        setTimeout(() => setPinWarning(''), 3500);
+        isPinnedValid = false;
+      }
+    }
+
     let updatedItems = [];
     if (editingId) {
       updatedItems = list.map((item) =>
@@ -533,6 +579,7 @@ export default function JournalBlock({
               coverUrl: coverUrl || null,
               excerpt: excerpt.trim() || content.slice(0, 150),
               content: content.trim(),
+              pinned: isPinnedValid,
             }
           : item
       );
@@ -546,6 +593,7 @@ export default function JournalBlock({
         coverUrl: coverUrl || null,
         excerpt: excerpt.trim() || content.slice(0, 150),
         content: content.trim(),
+        pinned: isPinnedValid,
       };
       updatedItems = [newEntry, ...list];
     }
@@ -586,6 +634,12 @@ export default function JournalBlock({
           >
             <ArrowUp size={12} /> Oldest
           </button>
+          {pinWarning && (
+            <div className="journal-pin-alert">
+              <AlertCircle size={13} />
+              <span>{pinWarning}</span>
+            </div>
+          )}
         </div>
 
         {isEditing && (
@@ -628,7 +682,7 @@ export default function JournalBlock({
             </div>
 
             <form onSubmit={handleSaveEntry} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {/* Title & Date Row */}
+              {/* Title & Date Row + Pin Checkbox */}
               <div className="journal-form-row-2">
                 <div>
                   <label className="journal-input-label">Entry Title</label>
@@ -642,7 +696,28 @@ export default function JournalBlock({
                   />
                 </div>
                 <div>
-                  <label className="journal-input-label">Publication Date</label>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '5px' }}>
+                    <label className="journal-input-label" style={{ margin: 0 }}>Publication Date</label>
+                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.72rem', color: '#cbd5e1', cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={pinned}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            const otherPinned = list.filter((i) => i.pinned && i.id !== editingId).length;
+                            if (otherPinned >= 3) {
+                              setPinWarning('Maximum of 3 pinned entries allowed.');
+                              setTimeout(() => setPinWarning(''), 3500);
+                              return;
+                            }
+                          }
+                          setPinned(e.target.checked);
+                        }}
+                      />
+                      <Pin size={11} color={pinned ? '#00f0aa' : '#94a3b8'} />
+                      <span style={{ color: pinned ? '#00f0aa' : '#cbd5e1', fontWeight: pinned ? 700 : 400 }}>Pin to top</span>
+                    </label>
+                  </div>
                   <input
                     type="text"
                     value={date}
@@ -1014,10 +1089,10 @@ export default function JournalBlock({
             return (
               <div
                 key={entry.id || idx}
-                className={`journal-entry-card ${cover ? 'has-cover' : ''}`}
+                className={`journal-entry-card ${cover ? 'has-cover' : ''} ${entry.pinned ? 'is-pinned-card' : ''}`}
                 onClick={() => setActiveArticle(entry)}
               >
-                {/* Card Cover Photo */}
+                {/* Card Cover Photo with Blurred Preview & View Attachment Badge */}
                 {cover && (
                   <div className="journal-entry-cover-wrap">
                     <OptimizedImage
@@ -1025,12 +1100,22 @@ export default function JournalBlock({
                       alt={entry.title}
                       className="journal-entry-cover-img"
                     />
+                    <div className="journal-attachment-overlay">
+                      <span className="journal-attachment-btn">
+                        <ImageIcon size={12} /> View Attachment
+                      </span>
+                    </div>
                   </div>
                 )}
 
                 <div className="journal-entry-content">
                   <div className="journal-entry-header">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      {entry.pinned && (
+                        <span className="journal-pin-badge">
+                          <Pin size={10} /> PINNED
+                        </span>
+                      )}
                       <span className="journal-date">
                         <Calendar size={12} style={{ display: 'inline', marginRight: '4px' }} />
                         {entry.date || 'Recent'}
@@ -1047,11 +1132,19 @@ export default function JournalBlock({
                       <div className="journal-card-actions">
                         <button
                           type="button"
+                          className={`journal-card-btn ${entry.pinned ? 'btn-pinned' : ''}`}
+                          onClick={(e) => handleTogglePin(entry.id, e)}
+                          title={entry.pinned ? 'Unpin entry' : 'Pin to top (max 3)'}
+                        >
+                          <Pin size={11} /> {entry.pinned ? 'Pinned' : 'Pin'}
+                        </button>
+                        <button
+                          type="button"
                           className="journal-card-btn"
                           onClick={(e) => handleStartEdit(entry, e)}
                           title="Edit this entry"
                         >
-                          <Edit3 size={12} /> Edit
+                          <Edit3 size={11} /> Edit
                         </button>
                         <button
                           type="button"
@@ -1059,7 +1152,7 @@ export default function JournalBlock({
                           onClick={(e) => handleDeleteEntry(entry.id, e)}
                           title="Delete this entry"
                         >
-                          <Trash2 size={12} />
+                          <Trash2 size={11} />
                         </button>
                       </div>
                     )}
