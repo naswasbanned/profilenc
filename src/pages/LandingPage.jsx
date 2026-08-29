@@ -186,19 +186,6 @@ const ENGINE_PATCH_NOTES = [
   },
 ];
 
-// Human-friendly block taxonomy
-const MODULAR_BLOCKS = [
-  { code: '01', name: 'HERO PROFILE', desc: 'Avatar, bio, social links, status badges, and action buttons in center or split layouts.' },
-  { code: '02', name: 'SERVICES & RATES', desc: 'Pricing tier cards, deliverables checklist, turnaround time, and booking buttons.' },
-  { code: '03', name: 'PHOTO GALLERY', desc: 'Responsive photo grids with aspect ratio control and a full-screen image viewer.' },
-  { code: '04', name: 'EVENTS & CALENDAR', desc: 'Live stream badges and 1-click Google Calendar / Apple .ICS sync for events.' },
-  { code: '05', name: 'JOURNAL & BLOG', desc: 'Rich markdown writer with live preview, word stats, and an elegant reader modal.' },
-  { code: '06', name: 'EXPERIENCE & CAREER', desc: 'Milestones, company history, and multi-image project galleries.' },
-  { code: '07', name: 'SKILLS & BADGES', desc: 'Categorized technology badges with brand icons and proficiency ratings.' },
-  { code: '08', name: 'REVIEWS & FAVORITES', desc: 'Share your favorite games, movies, books, and anime with 5-star ratings.' },
-  { code: '09', name: 'GEAR & SETUP', desc: 'Show off your computer hardware, desk setup, camera, and audio equipment.' },
-];
-
 export default function LandingPage() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
@@ -721,31 +708,6 @@ export default function LandingPage() {
                   <span className="footer-code">PROFILE PREVIEW</span>
                   <span className="footer-link">gnc.web.id/{p.handle}</span>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 9-BLOCK CATALOG */}
-      <section id="blocks" className="raw-catalog-section">
-        <div className="raw-catalog-container">
-          <div className="catalog-header">
-            <span className="catalog-badge">[AVAILABLE_BLOCKS]</span>
-            <h2 className="catalog-title">CHOOSE FROM 10 MODULAR BLOCKS</h2>
-            <p className="catalog-sub">
-              Mix and match any blocks to create the perfect page for your portfolio, freelance work, or hobbies.
-            </p>
-          </div>
-
-          <div className="catalog-spec-grid">
-            {MODULAR_BLOCKS.map((m) => (
-              <div key={m.code} className="catalog-item-card">
-                <div className="catalog-item-top">
-                  <span className="item-code">[{m.code}]</span>
-                  <span className="item-name">{m.name}</span>
-                </div>
-                <p className="item-desc">{m.desc}</p>
               </div>
             ))}
           </div>

@@ -24,6 +24,8 @@ import {
   Flame,
   ChevronLeft,
   ChevronRight,
+  Video,
+  Play,
 } from 'lucide-react';
 import BlockRenderer from '../components/Blocks/BlockRenderer';
 import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
@@ -43,6 +45,8 @@ const TAB_ICON_MAP = {
   Star,
   User,
   Film,
+  Video,
+  Play,
   Music,
   Heart,
   Terminal,

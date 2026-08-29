@@ -25,6 +25,8 @@ import {
   Clock,
   Layout,
   BookOpen,
+  Video,
+  Film,
 } from 'lucide-react';
 import ImageUploadPicker from './ImageUploadPicker';
 
@@ -1838,6 +1840,367 @@ export default function BlockEditorModal({
                             style={{ color: '#f1f5f9', background: '#06070a' }}
                           />
                         </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* --- FEATURED VIDEO FORM --- */}
+            {(block.type === 'featured_video' || block.type === 'video') && (
+              <>
+                <div className="editor-control">
+                  <label style={{ color: '#e2e8f0' }}>Video URL (YouTube, Vimeo, Streamable, Loom, or Direct MP4/WebM)</label>
+                  <input
+                    type="text"
+                    value={formData.videoUrl || ''}
+                    onChange={(e) => handleFieldChange('videoUrl', e.target.value)}
+                    placeholder="e.g. https://www.youtube.com/watch?v=... or https://vimeo.com/... or /uploads/..."
+                    className="editor-text-input full-width"
+                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    required
+                  />
+                  <span style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>
+                    Supports standard YouTube links, Shorts, Vimeo, Streamable, Loom, or uploaded video URLs.
+                  </span>
+                </div>
+
+                <ImageUploadPicker
+                  label="Custom Video Poster / Cover Image (Optional)"
+                  value={formData.posterUrl || ''}
+                  onChange={(url) => handleFieldChange('posterUrl', url)}
+                />
+
+                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '12px' }}>
+                  <div className="editor-control" style={{ margin: 0 }}>
+                    <label style={{ color: '#e2e8f0' }}>Video Title</label>
+                    <input
+                      type="text"
+                      value={formData.title || ''}
+                      onChange={(e) => handleFieldChange('title', e.target.value)}
+                      placeholder="e.g. Welcome to My Creative Studio"
+                      className="editor-text-input full-width"
+                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                    />
+                  </div>
+                  <div className="editor-control" style={{ margin: 0 }}>
+                    <label style={{ color: '#e2e8f0' }}>Badge / Tagline</label>
+                    <input
+                      type="text"
+                      value={formData.badge || ''}
+                      onChange={(e) => handleFieldChange('badge', e.target.value)}
+                      placeholder="e.g. Featured Intro"
+                      className="editor-text-input full-width"
+                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                    />
+                  </div>
+                </div>
+
+                <div className="editor-control">
+                  <label style={{ color: '#e2e8f0' }}>Description</label>
+                  <textarea
+                    value={formData.description || ''}
+                    onChange={(e) => handleFieldChange('description', e.target.value)}
+                    placeholder="Brief description of the video content or project context..."
+                    className="editor-text-input full-width"
+                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    rows={2}
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="editor-control" style={{ margin: 0 }}>
+                    <label style={{ color: '#e2e8f0' }}>Video Aspect Ratio</label>
+                    <select
+                      value={formData.aspectRatio || '16:9'}
+                      onChange={(e) => handleFieldChange('aspectRatio', e.target.value)}
+                      className="editor-select"
+                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                    >
+                      <option value="16:9">Widescreen 16:9 (Standard)</option>
+                      <option value="21:9">Cinematic 21:9 (Ultrawide)</option>
+                      <option value="4:3">Classic 4:3</option>
+                    </select>
+                  </div>
+
+                  <div className="editor-control" style={{ margin: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <label style={{ color: '#e2e8f0', marginBottom: '8px' }}>Playback Options</label>
+                    <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#cbd5e1', cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          checked={Boolean(formData.autoplay)}
+                          onChange={(e) => handleFieldChange('autoplay', e.target.checked)}
+                        />
+                        Autoplay
+                      </label>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#cbd5e1', cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          checked={formData.muted !== false}
+                          onChange={(e) => handleFieldChange('muted', e.target.checked)}
+                        />
+                        Muted
+                      </label>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#cbd5e1', cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          checked={Boolean(formData.loop)}
+                          onChange={(e) => handleFieldChange('loop', e.target.checked)}
+                        />
+                        Loop
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Call-to-Action Action Buttons */}
+                <div style={{ marginTop: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <label style={{ fontSize: '0.84rem', fontWeight: 700, color: '#ffffff' }}>
+                      Action Buttons ({(formData.actions || []).length})
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleAddAction}
+                      className="editor-btn"
+                      style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '4px 10px', fontSize: '0.74rem' }}
+                    >
+                      <Plus size={13} /> Add Button
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {(formData.actions || []).map((act, aIdx) => (
+                      <div
+                        key={aIdx}
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1.2fr 2fr auto auto',
+                          gap: '8px',
+                          alignItems: 'center',
+                          padding: '8px 10px',
+                          borderRadius: '6px',
+                          background: '#06070a',
+                          border: '1px solid rgba(255,255,255,0.08)',
+                        }}
+                      >
+                        <input
+                          type="text"
+                          value={act.label || ''}
+                          onChange={(e) => handleActionChange(aIdx, 'label', e.target.value)}
+                          placeholder="Label (e.g. YouTube)"
+                          className="editor-text-input"
+                          style={{ color: '#f1f5f9', background: '#06070a', margin: 0 }}
+                        />
+                        <input
+                          type="text"
+                          value={act.url || ''}
+                          onChange={(e) => handleActionChange(aIdx, 'url', e.target.value)}
+                          placeholder="URL (https://...)"
+                          className="editor-text-input"
+                          style={{ color: '#f1f5f9', background: '#06070a', margin: 0 }}
+                        />
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.72rem', color: '#cbd5e1', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                          <input
+                            type="checkbox"
+                            checked={Boolean(act.primary)}
+                            onChange={(e) => handleActionChange(aIdx, 'primary', e.target.checked)}
+                          />
+                          Primary
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveAction(aIdx)}
+                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* --- VIDEO GALLERY FORM --- */}
+            {block.type === 'video_gallery' && (
+              <>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="editor-control" style={{ margin: 0 }}>
+                    <label style={{ color: '#e2e8f0' }}>Grid Columns</label>
+                    <select
+                      value={formData.columns || 3}
+                      onChange={(e) => handleFieldChange('columns', Number(e.target.value))}
+                      className="editor-select"
+                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                    >
+                      <option value={2}>2 Columns (Large Cards)</option>
+                      <option value={3}>3 Columns (Balanced Grid)</option>
+                      <option value={4}>4 Columns (Compact Grid)</option>
+                    </select>
+                  </div>
+
+                  <div className="editor-control" style={{ margin: 0 }}>
+                    <label style={{ color: '#e2e8f0' }}>Video Aspect Ratio</label>
+                    <select
+                      value={formData.aspectRatio || '16:9'}
+                      onChange={(e) => handleFieldChange('aspectRatio', e.target.value)}
+                      className="editor-select"
+                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                    >
+                      <option value="16:9">Widescreen 16:9 (Standard Videos)</option>
+                      <option value="9:16">Vertical 9:16 (Shorts / Reels / TikTok)</option>
+                      <option value="square">Square 1:1</option>
+                      <option value="4:3">Classic 4:3</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
+                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>
+                    Gallery Videos ({(formData.items || []).length})
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleAddItem({
+                        id: `vid-${Date.now()}`,
+                        videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                        posterUrl: '',
+                        title: 'New Video Clip',
+                        caption: '',
+                        duration: '3:30',
+                        author: '',
+                        date: '2026',
+                        tag: 'Video',
+                      })
+                    }
+                    className="editor-btn"
+                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                  >
+                    <Plus size={14} /> Add Video
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  {(formData.items || []).map((vid, idx) => (
+                    <div
+                      key={vid.id || idx}
+                      style={{
+                        borderRadius: '10px',
+                        background: '#06070a',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        padding: '16px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                          Video #{idx + 1}: {vid.title || 'Untitled Video'}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveItem(idx)}
+                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+
+                      <div className="editor-control" style={{ margin: 0 }}>
+                        <label style={{ color: '#e2e8f0' }}>Video URL (YouTube, Vimeo, Streamable, Loom, or Direct Video)</label>
+                        <input
+                          type="text"
+                          value={vid.videoUrl || vid.url || ''}
+                          onChange={(e) => handleItemChange(idx, 'videoUrl', e.target.value)}
+                          placeholder="e.g. https://www.youtube.com/watch?v=... or https://youtube.com/shorts/..."
+                          className="editor-text-input full-width"
+                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          required
+                        />
+                      </div>
+
+                      <ImageUploadPicker
+                        label="Custom Poster Thumbnail (Optional - auto resolves from YouTube)"
+                        value={vid.posterUrl || vid.imageUrl || ''}
+                        onChange={(url) => handleItemChange(idx, 'posterUrl', url)}
+                      />
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '10px' }}>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#e2e8f0' }}>Video Title</label>
+                          <input
+                            type="text"
+                            value={vid.title || ''}
+                            onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
+                            placeholder="e.g. Architecture Deep Dive"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          />
+                        </div>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#e2e8f0' }}>Category / Tags (comma separated)</label>
+                          <input
+                            type="text"
+                            value={vid.tag || ''}
+                            onChange={(e) => handleItemChange(idx, 'tag', e.target.value)}
+                            placeholder="e.g. Showreel, Tutorial"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          />
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#e2e8f0' }}>Duration (e.g. 12:45)</label>
+                          <input
+                            type="text"
+                            value={vid.duration || ''}
+                            onChange={(e) => handleItemChange(idx, 'duration', e.target.value)}
+                            placeholder="12:45"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          />
+                        </div>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#e2e8f0' }}>Creator / Channel</label>
+                          <input
+                            type="text"
+                            value={vid.author || ''}
+                            onChange={(e) => handleItemChange(idx, 'author', e.target.value)}
+                            placeholder="e.g. Alex Rivers"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          />
+                        </div>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#e2e8f0' }}>Date</label>
+                          <input
+                            type="text"
+                            value={vid.date || ''}
+                            onChange={(e) => handleItemChange(idx, 'date', e.target.value)}
+                            placeholder="e.g. Aug 2026"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="editor-control" style={{ margin: 0 }}>
+                        <label style={{ color: '#e2e8f0' }}>Caption / Summary</label>
+                        <input
+                          type="text"
+                          value={vid.caption || vid.description || ''}
+                          onChange={(e) => handleItemChange(idx, 'caption', e.target.value)}
+                          placeholder="Brief summary of what this video demonstrates..."
+                          className="editor-text-input full-width"
+                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                        />
                       </div>
                     </div>
                   ))}

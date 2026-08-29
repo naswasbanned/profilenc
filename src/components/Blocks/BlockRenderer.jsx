@@ -26,6 +26,8 @@ import {
   Rocket,
   Film,
   Music,
+  Video,
+  Play,
 } from 'lucide-react';
 import HeroBlock from './HeroBlock';
 import CardsGridBlock from './CardsGridBlock';
@@ -38,6 +40,8 @@ import SpecsGridBlock from './SpecsGridBlock';
 import ServicesBlock from './ServicesBlock';
 import GalleryBlock from './GalleryBlock';
 import EventsBlock from './EventsBlock';
+import FeaturedVideoBlock from './FeaturedVideoBlock';
+import VideoGalleryBlock from './VideoGalleryBlock';
 import './Blocks.css';
 
 const blockComponentMap = {
@@ -54,6 +58,9 @@ const blockComponentMap = {
   gallery: GalleryBlock,
   events: EventsBlock,
   calendar: EventsBlock,
+  featured_video: FeaturedVideoBlock,
+  video: FeaturedVideoBlock,
+  video_gallery: VideoGalleryBlock,
 };
 
 const blockIconMap = {
@@ -70,6 +77,9 @@ const blockIconMap = {
   gallery: Layers,
   events: Activity,
   calendar: Activity,
+  featured_video: Video,
+  video: Video,
+  video_gallery: Film,
 };
 
 const iconLibrary = {
@@ -82,6 +92,8 @@ const iconLibrary = {
   BookOpen,
   Film,
   Music,
+  Video,
+  Play,
   Star,
   Heart,
   Zap,
