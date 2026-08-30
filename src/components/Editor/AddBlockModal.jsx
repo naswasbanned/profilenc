@@ -126,11 +126,12 @@ const BLOCK_PRESETS = [
     defaultTitle: 'Tech Stack',
     defaultData: {
       items: [
-        { name: 'React', category: 'Frontend', tier: 'Expert', color: '#61DAFB', icon: 'SiReact' },
-        { name: 'JavaScript', category: 'Frontend', tier: 'Proficient', color: '#F7DF1E', icon: 'SiJavascript' },
-        { name: 'Tailwind CSS', category: 'Frontend', tier: 'Proficient', color: '#06B6D4', icon: 'SiTailwindcss' },
-        { name: 'Laravel', category: 'Backend', tier: 'Expert', color: '#FF2D20', icon: 'SiLaravel' },
-        { name: 'Docker', category: 'DevOps', tier: 'Intermediate', color: '#2496ED', icon: 'SiDocker' },
+        { name: 'Next.js', category: 'Frontend', tier: 'Expert', color: '#ffffff', icon: 'nextdotjs' },
+        { name: 'React', category: 'Frontend', tier: 'Expert', color: '#61DAFB', icon: 'react' },
+        { name: 'TypeScript', category: 'Frontend', tier: 'Proficient', color: '#3178C6', icon: 'typescript' },
+        { name: 'Go', category: 'Backend', tier: 'Proficient', color: '#00ADD8', icon: 'go' },
+        { name: 'Node.js', category: 'Backend', tier: 'Expert', color: '#5FA04E', icon: 'nodedotjs' },
+        { name: 'Docker', category: 'DevOps', tier: 'Intermediate', color: '#2496ED', icon: 'docker' },
       ],
     },
   },

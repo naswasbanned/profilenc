@@ -354,7 +354,7 @@ export default function LandingPage() {
     fetch(`${API_BASE}/api/templates/featured/profiles`)
       .then((r) => (r.ok ? r.json() : []))
       .then(setFeaturedProfiles)
-      .catch(() => {});
+      .catch(() => { });
 
     // Patch Notes
     fetch(`${API_BASE}/api/site/patch-notes`)
@@ -364,7 +364,7 @@ export default function LandingPage() {
           setPatchNotesList(data.patchNotes);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
 
     // Landing CMS Settings
     fetch(`${API_BASE}/api/site/landing`)
@@ -378,7 +378,7 @@ export default function LandingPage() {
           }));
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   return (
@@ -477,7 +477,7 @@ export default function LandingPage() {
                 <span className="dossier-indicator">FREE</span>
               </div>
               <div className="dossier-url-row">
-                <span className="dossier-host">gnc.web.id/</span>
+                <span className="dossier-host">profilenc.my.id/</span>
                 <span className="dossier-user">@yourname</span>
               </div>
               <div className="dossier-footer">
@@ -860,7 +860,7 @@ export default function LandingPage() {
                   <label className="suggestion-field-label">
                     ATTACH SCREENSHOT / MOCKUP <span className="opt">(OPTIONAL, MAX 10MB)</span>
                   </label>
-                  
+
                   {suggestionPreview ? (
                     <div className="suggestion-preview-box">
                       <div className="preview-thumb-wrap">

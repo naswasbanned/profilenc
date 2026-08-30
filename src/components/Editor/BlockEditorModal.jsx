@@ -29,6 +29,7 @@ import {
   Film,
 } from 'lucide-react';
 import ImageUploadPicker from './ImageUploadPicker';
+import { TechIcon, POPULAR_TECH_PRESETS, resolveTechIcon } from '../../utils/techIconUtils';
 
 export default function BlockEditorModal({
   block,
@@ -795,10 +796,17 @@ export default function BlockEditorModal({
             {block.type === 'skills' && (
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>Skills Badges ({(formData.items || []).length})</h4>
+                  <div>
+                    <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600, margin: 0 }}>
+                      Skills & Tech Stack Badges ({(formData.items || []).length})
+                    </h4>
+                    <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+                      Auto-detects official brand icons for Go, Next.js, React, Rust, Python, Docker, and any tech stack.
+                    </span>
+                  </div>
                   <button
                     type="button"
-                    onClick={() => handleAddItem({ name: 'Skill Name', category: 'Frontend', tier: 'Proficient', color: '#00f0aa', icon: '' })}
+                    onClick={() => handleAddItem({ name: 'Go', category: 'Backend', tier: 'Proficient', color: '#00ADD8', icon: 'go' })}
                     className="editor-btn"
                     style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
                   >
@@ -806,63 +814,190 @@ export default function BlockEditorModal({
                   </button>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {(formData.items || []).map((skill, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1.2fr 1fr 1fr 50px auto',
-                        gap: '8px',
-                        alignItems: 'center',
-                        padding: '10px 12px',
-                        borderRadius: '8px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                      }}
-                    >
-                      <input
-                        type="text"
-                        value={skill.name || ''}
-                        onChange={(e) => handleItemChange(idx, 'name', e.target.value)}
-                        placeholder="Skill (e.g. React)"
-                        className="editor-text-input"
-                        style={{ color: '#f1f5f9', background: '#06070a' }}
-                      />
-                      <input
-                        type="text"
-                        value={skill.category || ''}
-                        onChange={(e) => handleItemChange(idx, 'category', e.target.value)}
-                        placeholder="Category (e.g. Frontend)"
-                        className="editor-text-input"
-                        style={{ color: '#f1f5f9', background: '#06070a' }}
-                      />
-                      <select
-                        value={skill.tier || 'Proficient'}
-                        onChange={(e) => handleItemChange(idx, 'tier', e.target.value)}
-                        className="editor-select"
-                        style={{ color: '#f1f5f9', background: '#06070a' }}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {(formData.items || []).map((skill, idx) => {
+                    const resolved = resolveTechIcon(skill.name, skill.icon, skill.color);
+                    return (
+                      <div
+                        key={idx}
+                        style={{
+                          borderRadius: '10px',
+                          background: '#06070a',
+                          border: '1px solid rgba(255,255,255,0.08)',
+                          padding: '12px 14px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '10px',
+                        }}
                       >
-                        <option value="Expert">Expert</option>
-                        <option value="Proficient">Proficient</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Beginner">Beginner</option>
-                      </select>
-                      <input
-                        type="color"
-                        value={skill.color || '#00f0aa'}
-                        onChange={(e) => handleItemChange(idx, 'color', e.target.value)}
-                        style={{ width: '100%', height: '32px', border: 'none', borderRadius: '4px', cursor: 'pointer', background: 'transparent' }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveItem(idx)}
-                        style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  ))}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div
+                              style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '6px',
+                                background: 'rgba(255,255,255,0.05)',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
+                            >
+                              <TechIcon
+                                name={skill.name}
+                                icon={skill.icon}
+                                color={skill.color || '#00f0aa'}
+                                size={18}
+                              />
+                            </div>
+                            <div>
+                              <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc', display: 'block' }}>
+                                {skill.name || 'Untitled Skill'}
+                              </span>
+                              <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
+                                Icon: {resolved.slug || 'auto-match'} {skill.category ? `• ${skill.category}` : ''}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <input
+                              type="color"
+                              value={skill.color || resolved.color || '#00f0aa'}
+                              onChange={(e) => handleItemChange(idx, 'color', e.target.value)}
+                              title="Badge Theme Color"
+                              style={{ width: '30px', height: '28px', border: 'none', borderRadius: '4px', cursor: 'pointer', background: 'transparent' }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveItem(idx)}
+                              style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                              title="Delete skill"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1.2fr 1.2fr 1fr', gap: '8px' }}>
+                          <div className="editor-control" style={{ margin: 0 }}>
+                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Tech / Skill Name</label>
+                            <input
+                              type="text"
+                              value={skill.name || ''}
+                              onChange={(e) => {
+                                const newName = e.target.value;
+                                handleItemChange(idx, 'name', newName);
+                                // Auto-fill matching brand color if current color is default or unchanged
+                                const match = POPULAR_TECH_PRESETS.find((p) => p.name.toLowerCase() === newName.trim().toLowerCase());
+                                if (match && (!skill.color || skill.color === '#00f0aa' || skill.color === '#00d4ff')) {
+                                  handleItemChange(idx, 'color', match.color);
+                                }
+                              }}
+                              placeholder="e.g. Go, Next.js, Rust"
+                              className="editor-text-input full-width"
+                              style={{ color: '#f1f5f9', background: '#090a0f' }}
+                            />
+                          </div>
+
+                          <div className="editor-control" style={{ margin: 0 }}>
+                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Category</label>
+                            <input
+                              type="text"
+                              value={skill.category || ''}
+                              onChange={(e) => handleItemChange(idx, 'category', e.target.value)}
+                              placeholder="e.g. Languages, Frontend"
+                              className="editor-text-input full-width"
+                              style={{ color: '#f1f5f9', background: '#090a0f' }}
+                            />
+                          </div>
+
+                          <div className="editor-control" style={{ margin: 0 }}>
+                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Badge Icon</label>
+                            <select
+                              value={skill.icon || ''}
+                              onChange={(e) => handleItemChange(idx, 'icon', e.target.value)}
+                              className="editor-select full-width"
+                              style={{ color: '#f1f5f9', background: '#090a0f' }}
+                            >
+                              <option value="">Auto-Detect ({resolved.slug || 'brand'})</option>
+                              <optgroup label="Popular Languages">
+                                <option value="go">Go / Golang</option>
+                                <option value="typescript">TypeScript</option>
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                                <option value="rust">Rust</option>
+                                <option value="cplusplus">C++</option>
+                                <option value="csharp">C#</option>
+                                <option value="php">PHP</option>
+                                <option value="openjdk">Java</option>
+                                <option value="kotlin">Kotlin</option>
+                                <option value="swift">Swift</option>
+                                <option value="dart">Dart</option>
+                                <option value="ruby">Ruby</option>
+                              </optgroup>
+                              <optgroup label="Frameworks & Frontend">
+                                <option value="nextdotjs">Next.js</option>
+                                <option value="react">React</option>
+                                <option value="vuedotjs">Vue.js</option>
+                                <option value="svelte">Svelte</option>
+                                <option value="angular">Angular</option>
+                                <option value="astro">Astro</option>
+                                <option value="tailwindcss">Tailwind CSS</option>
+                                <option value="bootstrap">Bootstrap</option>
+                                <option value="html5">HTML5</option>
+                                <option value="css3">CSS3</option>
+                              </optgroup>
+                              <optgroup label="Backend & Cloud">
+                                <option value="nodedotjs">Node.js</option>
+                                <option value="bun">Bun</option>
+                                <option value="laravel">Laravel</option>
+                                <option value="django">Django</option>
+                                <option value="fastapi">FastAPI</option>
+                                <option value="springboot">Spring Boot</option>
+                                <option value="docker">Docker</option>
+                                <option value="kubernetes">Kubernetes</option>
+                                <option value="amazonwebservices">AWS</option>
+                                <option value="googlecloud">Google Cloud</option>
+                                <option value="linux">Linux</option>
+                              </optgroup>
+                              <optgroup label="Databases">
+                                <option value="postgresql">PostgreSQL</option>
+                                <option value="mysql">MySQL</option>
+                                <option value="mongodb">MongoDB</option>
+                                <option value="redis">Redis</option>
+                                <option value="supabase">Supabase</option>
+                                <option value="firebase">Firebase</option>
+                              </optgroup>
+                              <optgroup label="Creative & Mobile">
+                                <option value="flutter">Flutter</option>
+                                <option value="figma">Figma</option>
+                                <option value="blender">Blender</option>
+                                <option value="unity">Unity</option>
+                                <option value="unrealengine">Unreal Engine</option>
+                              </optgroup>
+                            </select>
+                          </div>
+
+                          <div className="editor-control" style={{ margin: 0 }}>
+                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Proficiency</label>
+                            <select
+                              value={skill.tier || 'Proficient'}
+                              onChange={(e) => handleItemChange(idx, 'tier', e.target.value)}
+                              className="editor-select full-width"
+                              style={{ color: '#f1f5f9', background: '#090a0f' }}
+                            >
+                              <option value="Expert">Expert</option>
+                              <option value="Proficient">Proficient</option>
+                              <option value="Intermediate">Intermediate</option>
+                              <option value="Beginner">Beginner</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </>
             )}
