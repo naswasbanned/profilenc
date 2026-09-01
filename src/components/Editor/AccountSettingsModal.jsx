@@ -209,25 +209,16 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
         </div>
       )}
       <motion.div
-        className="editor-modal-dialog"
+        className="editor-modal-dialog account-settings-modal"
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         onClick={(e) => e.stopPropagation()}
-        style={{
-          maxWidth: '620px',
-          width: '92vw',
-          display: 'flex',
-          flexDirection: 'column',
-          maxHeight: '88vh',
-          padding: 0,
-          overflow: 'hidden',
-        }}
       >
         {/* Header */}
-        <div className="editor-modal-header" style={{ padding: '16px 20px' }}>
+        <div className="editor-modal-header account-modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ padding: '7px', borderRadius: '8px', background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa' }}>
+            <div style={{ padding: '7px', borderRadius: '8px', background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', flexShrink: 0 }}>
               <User size={18} />
             </div>
             <div>
@@ -242,26 +233,19 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
           <button
             type="button"
             onClick={onClose}
-            style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+            style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px', flexShrink: 0 }}
+            title="Close modal"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Tab Navigation */}
-        <div
-          style={{
-            display: 'flex',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            background: '#090b12',
-            padding: '0 16px',
-            gap: '8px',
-          }}
-        >
+        <div className="account-tabs-nav">
           {[
-            { id: 'profile', label: 'Profile Details', icon: User },
-            { id: 'security', label: 'Security & Password', icon: Lock },
-            { id: 'session', label: 'Session & Logout', icon: LogOut },
+            { id: 'profile', label: 'Profile Details', shortLabel: 'Profile', icon: User },
+            { id: 'security', label: 'Security & Password', shortLabel: 'Security', icon: Lock },
+            { id: 'session', label: 'Session & Logout', shortLabel: 'Session', icon: LogOut },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -270,23 +254,11 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '12px 14px',
-                  background: 'none',
-                  border: 'none',
-                  borderBottom: isActive ? '2px solid #00f0aa' : '2px solid transparent',
-                  color: isActive ? '#00f0aa' : '#94a3b8',
-                  fontWeight: isActive ? 700 : 500,
-                  fontSize: '0.8rem',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                }}
+                className={`account-tab-btn ${isActive ? 'active' : ''}`}
               >
                 <Icon size={14} />
-                <span>{tab.label}</span>
+                <span className="account-tab-label-full">{tab.label}</span>
+                <span className="account-tab-label-short">{tab.shortLabel}</span>
               </button>
             );
           })}
@@ -296,7 +268,7 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
         <div className="editor-modal-body" style={{ padding: '20px', flex: 1, overflowY: 'auto' }}>
           {/* --- TAB 1: PROFILE DETAILS --- */}
           {activeTab === 'profile' && (
-            <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {profileMsg.text && (
                 <div
                   style={{
@@ -317,8 +289,8 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
               )}
 
               {/* Avatar Section with Live Preview */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px', background: '#06070a', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <div style={{ position: 'relative', width: '64px', height: '64px', borderRadius: '50%', overflow: 'hidden', background: '#12151e', border: '2px solid #00f0aa', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div className="account-avatar-card">
+                <div className="account-avatar-preview">
                   {avatarUrl ? (
                     <img
                       src={avatarUrl}
@@ -327,13 +299,13 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
                       onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     />
                   ) : (
-                    <span style={{ fontSize: '1.4rem', fontWeight: 700, color: '#00f0aa' }}>
+                    <span style={{ fontSize: '1.3rem', fontWeight: 700, color: '#00f0aa' }}>
                       {(displayName || username || 'U')[0].toUpperCase()}
                     </span>
                   )}
                 </div>
 
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, width: '100%' }}>
                   <ImageUploadPicker
                     label="Profile Avatar Picture"
                     value={avatarUrl}
@@ -357,8 +329,11 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
 
               {/* Username Handle */}
               <div className="editor-control" style={{ margin: 0 }}>
-                <label style={{ color: '#e2e8f0' }}>
-                  Username Handle <span style={{ color: '#94a3b8', fontSize: '0.72rem' }}>(Your personal link: gnc.web.id/@{username || 'yourname'})</span>
+                <label style={{ color: '#e2e8f0', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <span>Username Handle</span>
+                  <span style={{ color: '#94a3b8', fontSize: '0.71rem', fontWeight: 400 }}>
+                    Your link: gnc.web.id/@{username || 'yourname'}
+                  </span>
                 </label>
                 <div style={{ position: 'relative' }}>
                   <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600 }}>
@@ -421,17 +396,7 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
               </div>
 
               {/* Public / Private Switch */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '12px 14px',
-                  background: '#06070a',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                }}
-              >
+              <div className="account-toggle-card">
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <Globe size={14} color={isPublic ? '#00f0aa' : '#94a3b8'} />
@@ -449,6 +414,7 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
                 <button
                   type="button"
                   onClick={() => setIsPublic(!isPublic)}
+                  className="account-toggle-card-btn"
                   style={{
                     padding: '5px 12px',
                     borderRadius: '9999px',
@@ -546,8 +512,8 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
 
           {/* --- TAB 3: SESSION & LOGOUT --- */}
           {activeTab === 'session' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div style={{ padding: '16px', background: '#06070a', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ padding: '14px', background: '#06070a', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
                   Account Overview
                 </span>
@@ -566,18 +532,18 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
               </div>
 
               {/* Logout Box */}
-              <div style={{ padding: '16px', background: 'rgba(239, 68, 68, 0.06)', borderRadius: '10px', border: '1px solid rgba(239, 68, 68, 0.2)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ padding: '14px', background: 'rgba(239, 68, 68, 0.06)', borderRadius: '10px', border: '1px solid rgba(239, 68, 68, 0.2)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div>
                   <h4 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 700, color: '#ef4444' }}>
                     Sign Out of Your Account
                   </h4>
                   <p style={{ margin: '4px 0 0', fontSize: '0.76rem', color: '#94a3b8' }}>
-                    Logging out will clear your session on this browser. Any unsaved edits in the editor should be saved first.
+                    Logging out will clear your session on this browser.
                   </p>
                 </div>
 
                 {showLogoutConfirm ? (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                     <button
                       type="button"
                       onClick={handleLogout}
@@ -636,18 +602,7 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
         </div>
 
         {/* Attached Modal Footer Dock (Always visible & fixed at the bottom of the card) */}
-        <div
-          style={{
-            padding: '14px 20px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            background: '#07090e',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderBottomLeftRadius: '14px',
-            borderBottomRightRadius: '14px',
-          }}
-        >
+        <div className="account-modal-footer">
           {/* Status Pill on the Left (Only appears when unsaved or saving) */}
           {activeTab === 'profile' && (isProfileDirty || savingProfile) ? (
             <div className={`editor-save-status-pill ${savingProfile ? 'is-saving' : 'is-dirty'}`}>
@@ -682,7 +637,7 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
           )}
 
           {/* Action Buttons on the Right */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div className="account-modal-footer-actions">
             {activeTab === 'profile' && (
               <button
                 type="button"
@@ -700,7 +655,8 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
                 ) : isProfileDirty ? (
                   <>
                     <Save size={15} />
-                    <span>Save Profile Details</span>
+                    <span className="account-save-label-full">Save Profile Details</span>
+                    <span className="account-save-label-short">Save Changes</span>
                   </>
                 ) : (
                   <>
@@ -727,7 +683,8 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
                 ) : isSecurityDirty ? (
                   <>
                     <Shield size={15} />
-                    <span>Update Password</span>
+                    <span className="account-save-label-full">Update Password</span>
+                    <span className="account-save-label-short">Update</span>
                   </>
                 ) : (
                   <>

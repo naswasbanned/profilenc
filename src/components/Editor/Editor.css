@@ -307,6 +307,121 @@
   }
 }
 
+/* === Account & Profile Settings Modal Base Styles === */
+.account-settings-modal {
+  max-width: 620px;
+  width: 92vw;
+  display: flex;
+  flex-direction: column;
+  max-height: 88vh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.account-modal-header {
+  padding: 16px 20px;
+}
+
+.account-tabs-nav {
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #090b12;
+  padding: 0 16px;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.account-tabs-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.account-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 14px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #94a3b8;
+  font-weight: 500;
+  font-size: 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.account-tab-btn.active {
+  border-bottom-color: var(--color-accent-primary, #00f0aa);
+  color: var(--color-accent-primary, #00f0aa);
+  font-weight: 700;
+}
+
+.account-tab-label-short {
+  display: none;
+}
+
+.account-save-label-short {
+  display: none;
+}
+
+.account-avatar-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+  background: #06070a;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.account-avatar-preview {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #12151e;
+  border: 2px solid #00f0aa;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-toggle-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: #06070a;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 12px;
+}
+
+.account-modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #07090e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.account-modal-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 /* --- Side Panel --- */
 .editor-panel {
   position: fixed;
@@ -1075,7 +1190,7 @@
   }
 
   .editor-modal-dialog {
-    max-height: 92vh;
+    max-height: 94vh;
     border-radius: 14px;
   }
 
@@ -1093,6 +1208,87 @@
 
   .editor-modal-footer {
     padding: 12px 16px;
+  }
+
+  /* Account Settings Modal Specific Responsive Styles */
+  .account-settings-modal {
+    max-width: 620px;
+    width: 95vw !important;
+    max-height: 92vh !important;
+    border-radius: 14px;
+  }
+
+  .account-modal-header {
+    padding: 12px 14px !important;
+  }
+
+  .account-tabs-nav {
+    padding: 0 8px;
+    gap: 4px;
+  }
+
+  .account-tab-btn {
+    padding: 10px 8px;
+    font-size: 0.75rem;
+    gap: 4px;
+  }
+
+  .account-tab-label-full {
+    display: none;
+  }
+
+  .account-tab-label-short {
+    display: inline;
+  }
+
+  .account-save-label-full {
+    display: none;
+  }
+
+  .account-save-label-short {
+    display: inline;
+  }
+
+  .account-avatar-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .account-avatar-preview {
+    width: 52px;
+    height: 52px;
+  }
+
+  .account-toggle-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .account-modal-footer {
+    padding: 12px 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .account-modal-footer .editor-save-status-pill {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .account-modal-footer-actions {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .account-modal-footer-actions .editor-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 12px;
   }
 
   .add-block-grid {
