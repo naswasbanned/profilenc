@@ -70,6 +70,27 @@ export default function BlockEditorModal({
     });
   };
 
+  const handleMoveItem = (idx, direction) => {
+    setFormData((prev) => {
+      const items = [...(prev.items || [])];
+      const targetIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (targetIdx < 0 || targetIdx >= items.length) return prev;
+      [items[idx], items[targetIdx]] = [items[targetIdx], items[idx]];
+      return { ...prev, items };
+    });
+    setExpandedIndex(direction === 'up' ? idx - 1 : idx + 1);
+  };
+
+  const handleMoveImage = (idx, direction) => {
+    setFormData((prev) => {
+      const images = [...(prev.images || [])];
+      const targetIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (targetIdx < 0 || targetIdx >= images.length) return prev;
+      [images[idx], images[targetIdx]] = [images[targetIdx], images[idx]];
+      return { ...prev, images };
+    });
+  };
+
   const handleAddBullet = (itemIdx) => {
     setFormData((prev) => {
       const items = [...(prev.items || [])];
@@ -533,7 +554,7 @@ export default function BlockEditorModal({
                         <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
                           Tier #{idx + 1}: {svc.title || 'Untitled Tier'}
                         </span>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <button
                             type="button"
                             onClick={() => handleItemChange(idx, 'featured', !svc.featured)}
@@ -542,6 +563,8 @@ export default function BlockEditorModal({
                           >
                             {svc.featured ? '★ Featured Tier' : 'Make Featured'}
                           </button>
+                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(idx)}
@@ -713,14 +736,18 @@ export default function BlockEditorModal({
                         <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
                           Card #{idx + 1}: {item.title || 'Untitled'}
                         </span>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveItem(idx)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
-                          title="Delete card"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItem(idx)}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            title="Delete card"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="editor-form-row-2">
@@ -862,7 +889,7 @@ export default function BlockEditorModal({
                             </div>
                           </div>
 
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <input
                               type="color"
                               value={skill.color || resolved.color || '#00f0aa'}
@@ -870,6 +897,8 @@ export default function BlockEditorModal({
                               title="Badge Theme Color"
                               style={{ width: '30px', height: '28px', border: 'none', borderRadius: '4px', cursor: 'pointer', background: 'transparent' }}
                             />
+                            <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                            <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                             <button
                               type="button"
                               onClick={() => handleRemoveItem(idx)}
@@ -1086,14 +1115,18 @@ export default function BlockEditorModal({
                         <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc' }}>
                           Timeline Entry #{idx + 1}: {item.role || item.title || 'Untitled'}
                         </span>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveItem(idx)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
-                          title="Delete timeline item"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItem(idx)}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            title="Delete timeline item"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </div>
 
                       {/* Role & Company Inputs */}
@@ -1332,14 +1365,18 @@ export default function BlockEditorModal({
                         <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
                           Review #{idx + 1}: {rev.title || 'Untitled'}
                         </span>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveItem(idx)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
-                          title="Delete review"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItem(idx)}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            title="Delete review"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>
@@ -1481,14 +1518,18 @@ export default function BlockEditorModal({
                             </div>
                           </div>
 
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveItem(idx)}
-                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
-                            title="Delete spec item"
-                          >
-                            <Trash2 size={16} />
-                          </button>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                            <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveItem(idx)}
+                              style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                              title="Delete spec item"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
                         </div>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.5fr 1.5fr 1.3fr', gap: '8px' }}>
@@ -1619,16 +1660,20 @@ export default function BlockEditorModal({
                           handleFieldChange('images', images);
                         }}
                       />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const images = (formData.images || []).filter((_, i) => i !== idx);
-                          handleFieldChange('images', images);
-                        }}
-                        style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', marginTop: '20px' }}
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', marginTop: '20px' }}>
+                        <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveImage(idx, 'up')}><ChevronUp size={14} /></button>
+                        <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.images || []).length - 1} onClick={() => handleMoveImage(idx, 'down')}><ChevronDown size={14} /></button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const images = (formData.images || []).filter((_, i) => i !== idx);
+                            handleFieldChange('images', images);
+                          }}
+                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1712,13 +1757,17 @@ export default function BlockEditorModal({
                         <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
                           Photo #{idx + 1}: {photo.title || 'Untitled Photo'}
                         </span>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveItem(idx)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItem(idx)}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </div>
 
                       <ImageUploadPicker
@@ -1902,13 +1951,17 @@ export default function BlockEditorModal({
                         <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
                           Event #{idx + 1}: {evt.title || 'Untitled Event'}
                         </span>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveItem(idx)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItem(idx)}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>
@@ -2308,13 +2361,17 @@ export default function BlockEditorModal({
                         <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
                           Video #{idx + 1}: {vid.title || 'Untitled Video'}
                         </span>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveItem(idx)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItem(idx)}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>

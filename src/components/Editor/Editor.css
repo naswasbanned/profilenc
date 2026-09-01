@@ -246,6 +246,34 @@
   background: rgba(244, 63, 94, 0.2);
 }
 
+/* === Item Reorder Buttons === */
+.editor-reorder-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.editor-reorder-btn:hover:not(:disabled) {
+  background: rgba(0, 240, 170, 0.12);
+  border-color: rgba(0, 240, 170, 0.3);
+  color: #00f0aa;
+}
+
+.editor-reorder-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
 /* === Status Pills inside Modals & Panels === */
 .editor-save-status-pill {
   display: inline-flex;
