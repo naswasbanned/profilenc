@@ -63,7 +63,7 @@ export default function AdminPage() {
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Snapshot of saved data strings for deep change detection
-  const savedSnapshotsRef = useRef({});
+  const [savedSnapshots, setSavedSnapshots] = useState({});
 
   // All data states
   const [profile, setProfile] = useState(null);
@@ -97,7 +97,7 @@ export default function AdminPage() {
   const loadContent = useCallback((key, setter) => {
     fetchApi(`/api/content/${key}`).then((data) => {
       if (data !== null && data !== undefined) {
-        savedSnapshotsRef.current[key] = JSON.stringify(data);
+        setSavedSnapshots((prev) => ({ ...prev, [key]: JSON.stringify(data) }));
         setter(data);
       }
     });
@@ -128,11 +128,11 @@ export default function AdminPage() {
     return keys.some(({ state, key }) => {
       const currentData = stateMap[state];
       if (currentData === null || currentData === undefined) return false;
-      const saved = savedSnapshotsRef.current[key];
+      const saved = savedSnapshots[key];
       if (saved === undefined) return false; // Initial load not ready yet
       return JSON.stringify(currentData) !== saved;
     });
-  }, [activeSection, stateMap]);
+  }, [activeSection, stateMap, savedSnapshots]);
 
   // Set body bg for admin
   useEffect(() => {
@@ -146,6 +146,7 @@ export default function AdminPage() {
     setSaveSuccess(false);
 
     const keys = sectionContentKeys[activeSection] || [];
+    const newSnapshots = {};
     try {
       for (const { state, key } of keys) {
         const data = stateMap[state];
@@ -167,9 +168,9 @@ export default function AdminPage() {
           return;
         }
 
-        // Update saved snapshot
-        savedSnapshotsRef.current[key] = JSON.stringify(data);
+        newSnapshots[key] = JSON.stringify(data);
       }
+      setSavedSnapshots((prev) => ({ ...prev, ...newSnapshots }));
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 2500);
     } catch (err) {
@@ -314,6 +315,51 @@ export default function AdminPage() {
         {activeSection === 'diary' && (
           <DiaryEditor entries={diaryEntries || []} setEntries={setDiaryEntries} token={token} />
         )}
+
+        {/* Persistent Sticky Bottom Action Dock (Attached to the bottom so it's always visible) */}
+        <div className={`admin-bottom-action-dock ${isDirty ? 'has-unsaved' : ''}`}>
+          <div className="admin-bottom-dock-inner">
+            <div className={`admin-save-status-pill ${isDirty ? 'is-dirty' : 'is-saved'}`}>
+              {saving ? (
+                <>
+                  <span className="admin-status-dot pulse-saving" />
+                  <span>Saving changes...</span>
+                </>
+              ) : isDirty ? (
+                <>
+                  <span className="admin-status-dot pulse-dirty" />
+                  <span>Unsaved changes in {meta.title}</span>
+                </>
+              ) : (
+                <>
+                  <Check size={13} className="admin-status-check" />
+                  <span>All changes saved</span>
+                </>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span className="admin-dock-shortcut-hint">Ctrl+S</span>
+              <button
+                type="button"
+                className={`admin-save-btn ${isDirty ? 'active-dirty' : 'muted'} ${saveSuccess ? 'success' : ''}`}
+                onClick={handleSave}
+                disabled={!isDirty || saving}
+                title={isDirty ? 'Save changes to live profile (Ctrl+S)' : 'No unsaved changes (Saved)'}
+              >
+                {saving ? (
+                  <><Loader2 size={15} className="spin" /> Saving…</>
+                ) : saveSuccess ? (
+                  <><Check size={15} /> Saved!</>
+                ) : isDirty ? (
+                  <><Save size={15} /> Save Changes</>
+                ) : (
+                  <><Check size={15} /> Saved</>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   );

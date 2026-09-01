@@ -1020,6 +1020,47 @@ select.admin-field-input {
   background: var(--color-danger-dim);
 }
 
+/* === Persistent Sticky Bottom Action Dock === */
+.admin-bottom-action-dock {
+  position: sticky;
+  bottom: 20px;
+  z-index: 90;
+  margin-top: 36px;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.admin-bottom-dock-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md, 12px);
+  background: rgba(8, 9, 14, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  pointer-events: auto;
+  transition: all var(--transition-fast, 0.2s);
+}
+
+.admin-bottom-action-dock.has-unsaved .admin-bottom-dock-inner {
+  border-color: rgba(251, 191, 36, 0.45);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75), 0 0 24px rgba(251, 191, 36, 0.16);
+}
+
+.admin-dock-shortcut-hint {
+  font-size: var(--text-2xs, 0.68rem);
+  font-family: var(--font-mono, monospace);
+  color: var(--color-text-muted, #94a3b8);
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 /* === Image Upload === */
 .image-upload-container {
   display: flex;
