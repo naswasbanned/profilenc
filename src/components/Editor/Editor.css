@@ -246,6 +246,61 @@
   background: rgba(244, 63, 94, 0.2);
 }
 
+/* === Status Pills inside Modals & Panels === */
+.editor-save-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full, 9999px);
+  font-size: var(--text-2xs, 0.72rem);
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.editor-save-status-pill.is-dirty {
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  color: #fbbf24;
+}
+
+.editor-save-status-pill.is-saved {
+  background: rgba(0, 240, 170, 0.08);
+  border: 1px solid rgba(0, 240, 170, 0.22);
+  color: #00f0aa;
+}
+
+.editor-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.editor-status-dot.pulse-dirty {
+  background: #fbbf24;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.85);
+  animation: editorDotPulse 1.8s infinite ease-in-out;
+}
+
+.editor-status-dot.pulse-saving {
+  background: #00d4ff;
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.85);
+  animation: editorDotPulse 0.9s infinite ease-in-out;
+}
+
+@keyframes editorDotPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.75);
+  }
+}
+
 /* --- Side Panel --- */
 .editor-panel {
   position: fixed;

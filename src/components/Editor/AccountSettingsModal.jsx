@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -49,6 +49,33 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
   const [passwordMsg, setPasswordMsg] = useState({ type: '', text: '' });
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
+  // Compute if Profile Details have unsaved changes
+  const isProfileDirty = useMemo(() => {
+    const curName = (displayName || '').trim();
+    const initName = (user?.displayName || user?.username || '').trim();
+    const curUser = (username || '').toLowerCase().trim();
+    const initUser = (user?.username || '').toLowerCase().trim();
+    const curAvatar = (avatarUrl || '').trim();
+    const initAvatar = (user?.avatarUrl || '').trim();
+    const curBio = (bio || '').trim();
+    const initBio = (user?.bio || '').trim();
+    const curPublic = isPublic !== false;
+    const initPublic = user?.isPublic !== false;
+
+    return (
+      curName !== initName ||
+      curUser !== initUser ||
+      curAvatar !== initAvatar ||
+      curBio !== initBio ||
+      curPublic !== initPublic
+    );
+  }, [displayName, username, avatarUrl, bio, isPublic, user]);
+
+  // Compute if Security & Password has unsaved input
+  const isSecurityDirty = useMemo(() => {
+    return Boolean(currentPassword || newPassword || confirmPassword);
+  }, [currentPassword, newPassword, confirmPassword]);
+
   // Live username availability checker with debounce
   useEffect(() => {
     const trimmed = username.toLowerCase().trim();
@@ -81,7 +108,7 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
 
   const handleSaveProfile = async (e) => {
     e?.preventDefault();
-    if (savingProfile) return;
+    if (savingProfile || !isProfileDirty) return;
 
     if (usernameStatus.state === 'taken' || usernameStatus.state === 'invalid') {
       setProfileMsg({ type: 'error', text: 'Please resolve username issues before saving.' });
@@ -156,6 +183,22 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
     navigate('/login');
   };
 
+  // Keyboard shortcut Ctrl+S / Cmd+S
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (activeTab === 'profile' && isProfileDirty && !savingProfile) {
+          handleSaveProfile();
+        } else if (activeTab === 'security' && isSecurityDirty && !savingPassword) {
+          handleChangePassword();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeTab, isProfileDirty, savingProfile, isSecurityDirty, savingPassword]);
+
   const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(onClose);
 
   return (
@@ -171,10 +214,18 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         onClick={(e) => e.stopPropagation()}
-        style={{ maxWidth: '620px', width: '92vw' }}
+        style={{
+          maxWidth: '620px',
+          width: '92vw',
+          display: 'flex',
+          flexDirection: 'column',
+          maxHeight: '88vh',
+          padding: 0,
+          overflow: 'hidden',
+        }}
       >
         {/* Header */}
-        <div className="editor-modal-header">
+        <div className="editor-modal-header" style={{ padding: '16px 20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ padding: '7px', borderRadius: '8px', background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa' }}>
               <User size={18} />
@@ -242,7 +293,7 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
         </div>
 
         {/* Modal Body */}
-        <div className="editor-modal-body" style={{ padding: '20px', maxHeight: '68vh', overflowY: 'auto' }}>
+        <div className="editor-modal-body" style={{ padding: '20px', flex: 1, overflowY: 'auto' }}>
           {/* --- TAB 1: PROFILE DETAILS --- */}
           {activeTab === 'profile' && (
             <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
@@ -412,25 +463,6 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
                   {isPublic ? 'Public' : 'Private'}
                 </button>
               </div>
-
-              <button
-                type="submit"
-                disabled={savingProfile}
-                className="editor-btn editor-btn-save active-dirty"
-                style={{ padding: '10px 18px', fontSize: '0.85rem', alignSelf: 'flex-start' }}
-              >
-                {savingProfile ? (
-                  <>
-                    <Loader2 size={15} className="spin" />
-                    <span>Saving Profile...</span>
-                  </>
-                ) : (
-                  <>
-                    <Save size={15} />
-                    <span>Save Profile Details</span>
-                  </>
-                )}
-              </button>
             </form>
           )}
 
@@ -509,25 +541,6 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
                   style={{ color: '#f1f5f9', background: '#06070a' }}
                 />
               </div>
-
-              <button
-                type="submit"
-                disabled={savingPassword}
-                className="editor-btn editor-btn-save active-dirty"
-                style={{ padding: '10px 18px', fontSize: '0.85rem', alignSelf: 'flex-start' }}
-              >
-                {savingPassword ? (
-                  <>
-                    <Loader2 size={15} className="spin" />
-                    <span>Updating Password...</span>
-                  </>
-                ) : (
-                  <>
-                    <Shield size={15} />
-                    <span>Update Password</span>
-                  </>
-                )}
-              </button>
             </form>
           )}
 
@@ -620,6 +633,132 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Attached Modal Footer Dock (Always visible & fixed at the bottom of the card) */}
+        <div
+          style={{
+            padding: '14px 20px',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            background: '#07090e',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottomLeftRadius: '14px',
+            borderBottomRightRadius: '14px',
+          }}
+        >
+          {/* Status Pill on the Left */}
+          {activeTab === 'profile' && (
+            <div className={`editor-save-status-pill ${isProfileDirty ? 'is-dirty' : 'is-saved'}`}>
+              {savingProfile ? (
+                <>
+                  <span className="editor-status-dot pulse-saving" />
+                  <span>Saving changes...</span>
+                </>
+              ) : isProfileDirty ? (
+                <>
+                  <span className="editor-status-dot pulse-dirty" />
+                  <span>Unsaved Changes</span>
+                </>
+              ) : (
+                <>
+                  <Check size={13} color="#00f0aa" />
+                  <span>All changes saved</span>
+                </>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'security' && (
+            <div className={`editor-save-status-pill ${isSecurityDirty ? 'is-dirty' : 'is-saved'}`}>
+              {savingPassword ? (
+                <>
+                  <span className="editor-status-dot pulse-saving" />
+                  <span>Updating password...</span>
+                </>
+              ) : isSecurityDirty ? (
+                <>
+                  <span className="editor-status-dot pulse-dirty" />
+                  <span>Unsaved Password</span>
+                </>
+              ) : (
+                <>
+                  <Check size={13} color="#00f0aa" />
+                  <span>Secure</span>
+                </>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'session' && <div />}
+
+          {/* Action Buttons on the Right */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {activeTab === 'profile' && (
+              <button
+                type="button"
+                onClick={handleSaveProfile}
+                disabled={!isProfileDirty || savingProfile}
+                className={`editor-btn editor-btn-save ${isProfileDirty ? 'active-dirty' : 'muted'}`}
+                style={{ padding: '8px 18px', fontSize: '0.84rem' }}
+                title={isProfileDirty ? 'Save profile details' : 'No unsaved changes (Saved)'}
+              >
+                {savingProfile ? (
+                  <>
+                    <Loader2 size={15} className="spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : isProfileDirty ? (
+                  <>
+                    <Save size={15} />
+                    <span>Save Profile Details</span>
+                  </>
+                ) : (
+                  <>
+                    <Check size={15} color="#00f0aa" />
+                    <span>Saved</span>
+                  </>
+                )}
+              </button>
+            )}
+
+            {activeTab === 'security' && (
+              <button
+                type="button"
+                onClick={handleChangePassword}
+                disabled={!isSecurityDirty || savingPassword}
+                className={`editor-btn editor-btn-save ${isSecurityDirty ? 'active-dirty' : 'muted'}`}
+                style={{ padding: '8px 18px', fontSize: '0.84rem' }}
+              >
+                {savingPassword ? (
+                  <>
+                    <Loader2 size={15} className="spin" />
+                    <span>Updating...</span>
+                  </>
+                ) : isSecurityDirty ? (
+                  <>
+                    <Shield size={15} />
+                    <span>Update Password</span>
+                  </>
+                ) : (
+                  <>
+                    <Check size={15} color="#00f0aa" />
+                    <span>Saved</span>
+                  </>
+                )}
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="editor-btn editor-btn-ghost"
+              style={{ padding: '8px 16px', fontSize: '0.84rem' }}
+            >
+              Close
+            </button>
+          </div>
         </div>
       </motion.div>
     </div>
