@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import AdminSidebar from './AdminSidebar';
 import AdminLogin from './AdminLogin';
 import ProfileEditor from './editors/ProfileEditor';
@@ -62,6 +62,9 @@ export default function AdminPage() {
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
+  // Snapshot of saved data strings for deep change detection
+  const savedSnapshotsRef = useRef({});
+
   // All data states
   const [profile, setProfile] = useState(null);
   const [skills, setSkills] = useState(null);
@@ -80,30 +83,56 @@ export default function AdminPage() {
   const [diaryEntries, setDiaryEntries] = useState(null);
 
   // State lookup for save logic
-  const stateMap = {
+  const stateMap = useMemo(() => ({
     profile, skills, projects, experience, services,
     specs, setup, storyGames, currentlyPlaying, backlog,
     philosophy, movies, moviesWatching, moviesBacklog, diaryEntries,
-  };
+  }), [
+    profile, skills, projects, experience, services,
+    specs, setup, storyGames, currentlyPlaying, backlog,
+    philosophy, movies, moviesWatching, moviesBacklog, diaryEntries,
+  ]);
+
+  // Helper to load data and save initial snapshot
+  const loadContent = useCallback((key, setter) => {
+    fetchApi(`/api/content/${key}`).then((data) => {
+      if (data !== null && data !== undefined) {
+        savedSnapshotsRef.current[key] = JSON.stringify(data);
+        setter(data);
+      }
+    });
+  }, []);
 
   // Fetch all data on mount
   useEffect(() => {
-    fetchApi('/api/content/profile').then(setProfile);
-    fetchApi('/api/content/dev-skills').then(setSkills);
-    fetchApi('/api/content/dev-projects').then(setProjects);
-    fetchApi('/api/content/dev-experience').then(setExperience);
-    fetchApi('/api/content/dev-services').then(setServices);
-    fetchApi('/api/content/hobbies-specs').then(setSpecs);
-    fetchApi('/api/content/hobbies-setup').then(setSetup);
-    fetchApi('/api/content/hobbies-story-games').then(setStoryGames);
-    fetchApi('/api/content/hobbies-currently-playing').then(setCurrentlyPlaying);
-    fetchApi('/api/content/hobbies-backlog').then(setBacklog);
-    fetchApi('/api/content/hobbies-philosophy').then(setPhilosophy);
-    fetchApi('/api/content/hobbies-movies').then(setMovies);
-    fetchApi('/api/content/hobbies-movies-watching').then(setMoviesWatching);
-    fetchApi('/api/content/hobbies-movies-backlog').then(setMoviesBacklog);
-    fetchApi('/api/content/diary-entries').then(setDiaryEntries);
-  }, []);
+    loadContent('profile', setProfile);
+    loadContent('dev-skills', setSkills);
+    loadContent('dev-projects', setProjects);
+    loadContent('dev-experience', setExperience);
+    loadContent('dev-services', setServices);
+    loadContent('hobbies-specs', setSpecs);
+    loadContent('hobbies-setup', setSetup);
+    loadContent('hobbies-story-games', setStoryGames);
+    loadContent('hobbies-currently-playing', setCurrentlyPlaying);
+    loadContent('hobbies-backlog', setBacklog);
+    loadContent('hobbies-philosophy', setPhilosophy);
+    loadContent('hobbies-movies', setMovies);
+    loadContent('hobbies-movies-watching', setMoviesWatching);
+    loadContent('hobbies-movies-backlog', setMoviesBacklog);
+    loadContent('diary-entries', setDiaryEntries);
+  }, [loadContent]);
+
+  // Calculate dirty state for the currently active section
+  const isDirty = useMemo(() => {
+    const keys = sectionContentKeys[activeSection] || [];
+    return keys.some(({ state, key }) => {
+      const currentData = stateMap[state];
+      if (currentData === null || currentData === undefined) return false;
+      const saved = savedSnapshotsRef.current[key];
+      if (saved === undefined) return false; // Initial load not ready yet
+      return JSON.stringify(currentData) !== saved;
+    });
+  }, [activeSection, stateMap]);
 
   // Set body bg for admin
   useEffect(() => {
@@ -137,14 +166,43 @@ export default function AdminPage() {
           setToken(null);
           return;
         }
+
+        // Update saved snapshot
+        savedSnapshotsRef.current[key] = JSON.stringify(data);
       }
       setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 2000);
+      setTimeout(() => setSaveSuccess(false), 2500);
     } catch (err) {
       console.error('Save error:', err);
     }
     setSaving(false);
   }, [token, saving, activeSection, stateMap]);
+
+  // Beforeunload prompt if unsaved
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty]);
+
+  // Ctrl+S / Cmd+S shortcut to save
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (isDirty && !saving) {
+          handleSave();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleSave, isDirty, saving]);
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
@@ -169,18 +227,41 @@ export default function AdminPage() {
             <p>{meta.desc}</p>
           </div>
           <div className="admin-header-actions">
+            {/* Save Status Indicator Pill beside Save Button */}
+            <div className={`admin-save-status-pill ${isDirty ? 'is-dirty' : 'is-saved'}`}>
+              {saving ? (
+                <>
+                  <span className="admin-status-dot pulse-saving" />
+                  <span>Saving changes...</span>
+                </>
+              ) : isDirty ? (
+                <>
+                  <span className="admin-status-dot pulse-dirty" />
+                  <span>Unsaved Changes</span>
+                </>
+              ) : (
+                <>
+                  <Check size={13} className="admin-status-check" />
+                  <span>All changes saved</span>
+                </>
+              )}
+            </div>
+
             <button
               type="button"
-              className={`admin-save-btn ${saveSuccess ? 'success' : ''}`}
+              className={`admin-save-btn ${isDirty ? 'active-dirty' : 'muted'} ${saveSuccess ? 'success' : ''}`}
               onClick={handleSave}
-              disabled={saving}
+              disabled={!isDirty || saving}
+              title={isDirty ? 'Save changes to live profile (Ctrl+S)' : 'No unsaved changes (Saved)'}
             >
               {saving ? (
                 <><Loader2 size={16} className="spin" /> Saving…</>
               ) : saveSuccess ? (
                 <><Check size={16} /> Saved!</>
-              ) : (
+              ) : isDirty ? (
                 <><Save size={16} /> Save Changes</>
+              ) : (
+                <><Check size={16} /> Saved</>
               )}
             </button>
             <button type="button" className="admin-logout-btn" onClick={handleLogout} title="Logout">

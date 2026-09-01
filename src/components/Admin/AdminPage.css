@@ -882,18 +882,78 @@ select.admin-field-input {
   cursor: not-allowed;
 }
 
-/* === Header Actions (Save / Logout) === */
+/* === Header Actions (Save Status, Save Button, Logout) === */
 .admin-header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+}
+
+/* Save Status Pill */
+.admin-save-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full, 9999px);
+  font-size: var(--text-2xs, 0.72rem);
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.admin-save-status-pill.is-dirty {
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  color: #fbbf24;
+}
+
+.admin-save-status-pill.is-saved {
+  background: rgba(0, 240, 170, 0.08);
+  border: 1px solid rgba(0, 240, 170, 0.22);
+  color: #00f0aa;
+}
+
+.admin-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.admin-status-dot.pulse-dirty {
+  background: #fbbf24;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.85);
+  animation: adminDotPulse 1.8s infinite ease-in-out;
+}
+
+.admin-status-dot.pulse-saving {
+  background: #00d4ff;
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.85);
+  animation: adminDotPulse 0.9s infinite ease-in-out;
+}
+
+.admin-status-check {
+  color: #00f0aa;
+  flex-shrink: 0;
+}
+
+@keyframes adminDotPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.75);
+  }
 }
 
 .admin-save-btn {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 16px;
+  padding: 7px 16px;
   border: 1px solid var(--color-accent-primary);
   border-radius: var(--radius-sm);
   background: transparent;
@@ -902,10 +962,31 @@ select.admin-field-input {
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
-  transition: background-color var(--transition-fast), color var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
-.admin-save-btn:hover {
+.admin-save-btn.active-dirty {
+  background: var(--color-accent-primary);
+  color: #040508;
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 0 14px rgba(0, 240, 170, 0.35);
+}
+
+.admin-save-btn.active-dirty:hover {
+  background: #00ffb7;
+  border-color: #00ffb7;
+  transform: translateY(-1px);
+}
+
+.admin-save-btn.muted {
+  opacity: 0.55;
+  cursor: default;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-save-btn:hover:not(:disabled):not(.muted) {
   background: var(--color-accent-dim);
 }
 
