@@ -136,6 +136,30 @@ export function AuthProvider({ children }) {
     return res.json();
   }, []);
 
+  const deleteAccount = useCallback(async (confirmUsername) => {
+    if (!token || !user) throw new Error('Not authenticated');
+
+    const res = await fetch(`${API_BASE}/api/u/${user.username}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ confirmUsername }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Failed to delete account');
+    }
+
+    // Clear session & reset user state
+    localStorage.removeItem('auth_token');
+    setToken(null);
+    setUser(null);
+    return await res.json();
+  }, [token, user]);
+
   const value = {
     user,
     token,
@@ -147,6 +171,7 @@ export function AuthProvider({ children }) {
     updateProfile,
     changePassword,
     checkUsername,
+    deleteAccount,
   };
 
   return (

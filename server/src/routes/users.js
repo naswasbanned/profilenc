@@ -90,6 +90,39 @@ router.put('/:username', auth, ownerOnly, async (req, res) => {
 });
 
 /**
+ * DELETE /api/u/:username
+ * Auth only — permanently delete own account.
+ * User can only delete their own account.
+ * Requires confirmation username matching in request body.
+ */
+router.delete('/:username', auth, async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { confirmUsername } = req.body || {};
+
+    // Strictly enforce: users can ONLY delete their own account
+    if (!req.user || req.user.username.toLowerCase() !== username.toLowerCase()) {
+      return res.status(403).json({ error: 'You can only delete your own account' });
+    }
+
+    // Validation: user must retype their username to confirm
+    if (!confirmUsername || confirmUsername.trim().toLowerCase() !== username.toLowerCase()) {
+      return res.status(400).json({ error: 'Confirmation username does not match' });
+    }
+
+    const { rowCount } = await query('DELETE FROM users WHERE id = $1', [req.user.id]);
+    if (rowCount === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ success: true, message: 'Account deleted successfully' });
+  } catch (err) {
+    console.error('Delete account error:', err);
+    res.status(500).json({ error: 'Failed to delete account' });
+  }
+});
+
+/**
  * GET /api/u/:username/content/:key
  * Public — returns JSONB data for a content key.
  */

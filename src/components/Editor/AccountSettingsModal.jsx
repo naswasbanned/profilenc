@@ -14,6 +14,8 @@ import {
   EyeOff,
   Globe,
   Shield,
+  Trash2,
+  AlertTriangle,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
@@ -21,7 +23,7 @@ import ImageUploadPicker from './ImageUploadPicker';
 
 export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
   const navigate = useNavigate();
-  const { user, updateProfile, changePassword, logout, checkUsername } = useAuth();
+  const { user, updateProfile, changePassword, logout, checkUsername, deleteAccount } = useAuth();
 
   const [activeTab, setActiveTab] = useState('profile'); // 'profile' | 'security' | 'session'
 
@@ -48,6 +50,12 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
   const [profileMsg, setProfileMsg] = useState({ type: '', text: '' });
   const [passwordMsg, setPasswordMsg] = useState({ type: '', text: '' });
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  // Account Deletion State
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmUsername, setDeleteConfirmUsername] = useState('');
+  const [deletingAccount, setDeletingAccount] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
 
   // Compute if Profile Details have unsaved changes
   const isProfileDirty = useMemo(() => {
@@ -181,6 +189,23 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
     logout();
     onClose();
     navigate('/login');
+  };
+
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmUsername.trim().toLowerCase() !== user?.username?.toLowerCase()) {
+      setDeleteError('Please type your exact username to confirm');
+      return;
+    }
+    setDeletingAccount(true);
+    setDeleteError('');
+    try {
+      await deleteAccount(deleteConfirmUsername.trim());
+      onClose();
+      navigate('/');
+    } catch (err) {
+      setDeleteError(err.message || 'Failed to delete account');
+      setDeletingAccount(false);
+    }
   };
 
   // Keyboard shortcut Ctrl+S / Cmd+S
@@ -594,6 +619,137 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
                   >
                     <LogOut size={14} />
                     <span>Sign Out</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Danger Zone: Permanent Delete Account Card */}
+              <div
+                style={{
+                  padding: '14px',
+                  background: 'rgba(239, 68, 68, 0.05)',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(239, 68, 68, 0.25)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px',
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Trash2 size={16} color="#ef4444" />
+                    <h4 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 700, color: '#ef4444' }}>
+                      Delete Account Permanently
+                    </h4>
+                  </div>
+                  <p style={{ margin: '4px 0 0', fontSize: '0.76rem', color: '#94a3b8', lineHeight: '1.4' }}>
+                    Permanently deletes your account (<span style={{ color: '#f8fafc', fontWeight: 600 }}>@{user?.username}</span>), public profile, pages, blocks, and uploaded media. This action is irreversible.
+                  </p>
+                </div>
+
+                {deleteError && (
+                  <div
+                    style={{
+                      padding: '8px 12px',
+                      borderRadius: '6px',
+                      fontSize: '0.78rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      background: 'rgba(239, 68, 68, 0.15)',
+                      color: '#ef4444',
+                      border: '1px solid rgba(239, 68, 68, 0.3)',
+                    }}
+                  >
+                    <AlertCircle size={14} />
+                    <span>{deleteError}</span>
+                  </div>
+                )}
+
+                {showDeleteConfirm ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div style={{ padding: '10px 12px', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                      <label style={{ fontSize: '0.75rem', color: '#fca5a5', display: 'block', marginBottom: '6px' }}>
+                        To confirm deletion, please re-type your username <strong style={{ color: '#ffffff' }}>{user?.username}</strong> below:
+                      </label>
+                      <input
+                        type="text"
+                        value={deleteConfirmUsername}
+                        onChange={(e) => {
+                          setDeleteConfirmUsername(e.target.value);
+                          setDeleteError('');
+                        }}
+                        placeholder={user?.username}
+                        className="editor-text-input full-width"
+                        style={{
+                          color: '#ffffff',
+                          background: '#06070a',
+                          borderColor: deleteConfirmUsername.trim().toLowerCase() === user?.username?.toLowerCase() ? '#ef4444' : 'rgba(255,255,255,0.15)',
+                          fontSize: '0.82rem',
+                          padding: '8px 12px',
+                        }}
+                        autoFocus
+                      />
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                      <button
+                        type="button"
+                        onClick={handleDeleteAccount}
+                        disabled={deletingAccount || deleteConfirmUsername.trim().toLowerCase() !== user?.username?.toLowerCase()}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '6px',
+                          background: deleteConfirmUsername.trim().toLowerCase() === user?.username?.toLowerCase() ? '#ef4444' : 'rgba(239, 68, 68, 0.3)',
+                          color: '#ffffff',
+                          border: 'none',
+                          fontWeight: 700,
+                          fontSize: '0.8rem',
+                          cursor: deleteConfirmUsername.trim().toLowerCase() === user?.username?.toLowerCase() ? 'pointer' : 'not-allowed',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          opacity: deleteConfirmUsername.trim().toLowerCase() === user?.username?.toLowerCase() ? 1 : 0.6,
+                        }}
+                      >
+                        {deletingAccount ? <Loader2 size={14} className="spin" /> : <Trash2 size={14} />}
+                        <span>{deletingAccount ? 'Deleting Account...' : 'Permanently Delete My Account'}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowDeleteConfirm(false);
+                          setDeleteConfirmUsername('');
+                          setDeleteError('');
+                        }}
+                        className="editor-btn editor-btn-ghost"
+                        style={{ fontSize: '0.8rem' }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setShowDeleteConfirm(true)}
+                    style={{
+                      padding: '8px 16px',
+                      borderRadius: '6px',
+                      background: 'rgba(239, 68, 68, 0.1)',
+                      color: '#ef4444',
+                      border: '1px solid rgba(239, 68, 68, 0.3)',
+                      fontWeight: 600,
+                      fontSize: '0.8rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      alignSelf: 'flex-start',
+                    }}
+                  >
+                    <Trash2 size={14} />
+                    <span>Delete Account...</span>
                   </button>
                 )}
               </div>
