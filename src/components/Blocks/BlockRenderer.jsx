@@ -198,7 +198,7 @@ export default function BlockRenderer({
           <button
             type="button"
             className="block-edit-btn btn-delete"
-            onClick={() => onDeleteBlock(block.id)}
+            onClick={() => onDeleteBlock(block)}
             title="Delete block"
           >
             <Trash2 size={13} />

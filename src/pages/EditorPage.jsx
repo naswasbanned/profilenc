@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { LogIn, ArrowLeft, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
 import { ProfileCanvas, normalizeModularContent } from './ProfilePage';
 import EditorOverlay from '../components/Editor/EditorOverlay';
+import DeleteBlockModal from '../components/Editor/DeleteBlockModal';
 import '../pages/DashboardPage.css';
 import '../pages/AuthPages.css';
 
@@ -19,6 +21,7 @@ function EditorCanvasInner({
   const { theme: currentTheme, setIsDirty: setThemeIsDirty } = useTheme();
   const [activeTabId, setActiveTabId] = useState(() => content?.tabs?.[0]?.id || 'tab-main');
   const [editingBlock, setEditingBlock] = useState(null);
+  const [deletingBlock, setDeletingBlock] = useState(null);
 
   // State snapshots for real-time dirty state tracking with reactive re-render
   const [savedContentStr, setSavedContentStr] = useState(() => JSON.stringify(content));
@@ -181,7 +184,21 @@ function EditorCanvasInner({
     }, activeTabId);
   }, [currentTab, activeTabId, updateContentWithHistory]);
 
-  const handleDeleteBlock = useCallback((blockId) => {
+  const handleDeleteBlockRequest = useCallback((target) => {
+    if (!target) return;
+    if (typeof target === 'object' && target.id) {
+      setDeletingBlock(target);
+    } else {
+      const found = (content?.tabs || [])
+        .flatMap((t) => t.blocks || [])
+        .find((b) => b.id === target);
+      setDeletingBlock(found || { id: target, title: 'Untitled Block', type: 'block' });
+    }
+  }, [content]);
+
+  const handleConfirmDeleteBlock = useCallback(() => {
+    if (!deletingBlock) return;
+    const blockId = deletingBlock.id;
     updateContentWithHistory((prev) => {
       const updatedTabs = (prev.tabs || []).map((t) => ({
         ...t,
@@ -189,7 +206,8 @@ function EditorCanvasInner({
       }));
       return { ...prev, tabs: updatedTabs };
     }, activeTabId);
-  }, [activeTabId, updateContentWithHistory]);
+    setDeletingBlock(null);
+  }, [deletingBlock, activeTabId, updateContentWithHistory]);
 
   const handleUpdateTabs = useCallback((newTabs) => {
     let nextTabId = activeTabId;
@@ -242,7 +260,7 @@ function EditorCanvasInner({
         setActiveTabId={setActiveTabId}
         onEditBlock={(block) => setEditingBlock(block)}
         onMoveBlock={handleMoveBlock}
-        onDeleteBlock={handleDeleteBlock}
+        onDeleteBlock={handleDeleteBlockRequest}
         onUpdateBlock={handleEditBlock}
       />
 
@@ -256,7 +274,7 @@ function EditorCanvasInner({
         onAddBlock={handleAddBlock}
         onEditBlock={handleEditBlock}
         onMoveBlock={handleMoveBlock}
-        onDeleteBlock={handleDeleteBlock}
+        onDeleteBlock={handleDeleteBlockRequest}
         onUndo={handleUndo}
         onRedo={handleRedo}
         canUndo={canUndo}
@@ -265,6 +283,17 @@ function EditorCanvasInner({
         editingBlock={editingBlock}
         setEditingBlock={setEditingBlock}
       />
+
+      {/* Block Delete Confirmation Modal */}
+      <AnimatePresence>
+        {deletingBlock && (
+          <DeleteBlockModal
+            block={deletingBlock}
+            onConfirm={handleConfirmDeleteBlock}
+            onClose={() => setDeletingBlock(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
