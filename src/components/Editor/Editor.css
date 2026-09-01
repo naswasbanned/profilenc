@@ -970,8 +970,19 @@
 /* === Mobile Adjustments (Phones & Small Tablets) === */
 @media (max-width: 768px) {
   .editor-toolbar {
-    padding: 0 12px;
+    padding: 0 10px;
     height: 50px;
+    gap: 8px;
+  }
+
+  .editor-toolbar-left {
+    gap: 6px;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .editor-toolbar-left .editor-label {
+    display: none; /* Hide "Visual Editor" on mobile so close button and tools fit cleanly */
   }
 
   .editor-toolbar-center {
@@ -982,8 +993,21 @@
     display: none;
   }
 
-  .editor-toolbar-left .editor-label {
-    font-size: 0.85rem;
+  .editor-toolbar-right {
+    gap: 5px;
+    flex-shrink: 0;
+  }
+
+  .editor-toolbar-right .editor-btn {
+    padding: 6px 10px;
+  }
+
+  .editor-toolbar-right .editor-btn-ghost {
+    padding: 6px 8px;
+  }
+
+  .editor-btn-close {
+    flex-shrink: 0;
   }
 
   /* Floating Bottom Action Dock on Mobile */
