@@ -648,50 +648,38 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
             borderBottomRightRadius: '14px',
           }}
         >
-          {/* Status Pill on the Left */}
-          {activeTab === 'profile' && (
-            <div className={`editor-save-status-pill ${isProfileDirty ? 'is-dirty' : 'is-saved'}`}>
+          {/* Status Pill on the Left (Only appears when unsaved or saving) */}
+          {activeTab === 'profile' && (isProfileDirty || savingProfile) ? (
+            <div className={`editor-save-status-pill ${savingProfile ? 'is-saving' : 'is-dirty'}`}>
               {savingProfile ? (
                 <>
                   <span className="editor-status-dot pulse-saving" />
                   <span>Saving changes...</span>
                 </>
-              ) : isProfileDirty ? (
+              ) : (
                 <>
                   <span className="editor-status-dot pulse-dirty" />
                   <span>Unsaved Changes</span>
                 </>
-              ) : (
-                <>
-                  <Check size={13} color="#00f0aa" />
-                  <span>All changes saved</span>
-                </>
               )}
             </div>
-          )}
-
-          {activeTab === 'security' && (
-            <div className={`editor-save-status-pill ${isSecurityDirty ? 'is-dirty' : 'is-saved'}`}>
+          ) : activeTab === 'security' && (isSecurityDirty || savingPassword) ? (
+            <div className={`editor-save-status-pill ${savingPassword ? 'is-saving' : 'is-dirty'}`}>
               {savingPassword ? (
                 <>
                   <span className="editor-status-dot pulse-saving" />
                   <span>Updating password...</span>
                 </>
-              ) : isSecurityDirty ? (
+              ) : (
                 <>
                   <span className="editor-status-dot pulse-dirty" />
                   <span>Unsaved Password</span>
                 </>
-              ) : (
-                <>
-                  <Check size={13} color="#00f0aa" />
-                  <span>Secure</span>
-                </>
               )}
             </div>
+          ) : (
+            <div />
           )}
-
-          {activeTab === 'session' && <div />}
 
           {/* Action Buttons on the Right */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
