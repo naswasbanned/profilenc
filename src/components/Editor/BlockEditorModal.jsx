@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import ImageUploadPicker from './ImageUploadPicker';
 import { TechIcon, POPULAR_TECH_PRESETS, resolveTechIcon } from '../../utils/techIconUtils';
+import { GearIcon, GEAR_ICON_CATEGORIES, guessGearIcon } from '../../utils/gearIconUtils';
 
 export default function BlockEditorModal({
   block,
@@ -1422,10 +1423,17 @@ export default function BlockEditorModal({
             {block.type === 'specs_grid' && (
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>Specs & Gear ({(formData.items || []).length})</h4>
+                  <div>
+                    <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600, margin: 0 }}>
+                      Specs & Gear ({(formData.items || []).length})
+                    </h4>
+                    <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+                      Choose from 40+ hardware and peripheral icons or use smart auto-detection.
+                    </span>
+                  </div>
                   <button
                     type="button"
-                    onClick={() => handleAddItem({ category: 'Category', name: 'Item Name', detail: '', icon: 'Cpu' })}
+                    onClick={() => handleAddItem({ category: 'GPU', name: 'RTX 4080 Super', detail: '16GB GDDR6X', icon: 'Tv' })}
                     className="editor-btn"
                     style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
                   >
@@ -1434,53 +1442,116 @@ export default function BlockEditorModal({
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {(formData.items || []).map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="editor-item-card"
-                    >
-                      <div className="editor-item-card-header">
-                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>
-                          Spec #{idx + 1}: {item.category || 'Hardware'} - {item.name || 'Component'}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveItem(idx)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
-                          title="Delete spec item"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
+                  {(formData.items || []).map((item, idx) => {
+                    const guessed = guessGearIcon(item.category, item.name);
+                    return (
+                      <div
+                        key={idx}
+                        className="editor-item-card"
+                      >
+                        <div className="editor-item-card-header">
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div
+                              style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '6px',
+                                background: 'rgba(255,255,255,0.05)',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: '#00f0aa',
+                              }}
+                            >
+                              <GearIcon
+                                icon={item.icon}
+                                category={item.category}
+                                name={item.name}
+                                size={18}
+                              />
+                            </div>
+                            <div>
+                              <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#f8fafc', display: 'block' }}>
+                                {item.name || item.title || `Spec Item #${idx + 1}`}
+                              </span>
+                              <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
+                                {item.category || 'Hardware'} {item.icon ? `• ${item.icon}` : `• Auto (${guessed})`}
+                              </span>
+                            </div>
+                          </div>
 
-                      <div className="editor-form-row-3">
-                        <input
-                          type="text"
-                          value={item.category || ''}
-                          onChange={(e) => handleItemChange(idx, 'category', e.target.value)}
-                          placeholder="Category (e.g. GPU)"
-                          className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
-                        />
-                        <input
-                          type="text"
-                          value={item.name || ''}
-                          onChange={(e) => handleItemChange(idx, 'name', e.target.value)}
-                          placeholder="Name (e.g. RTX 4060)"
-                          className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
-                        />
-                        <input
-                          type="text"
-                          value={item.detail || ''}
-                          onChange={(e) => handleItemChange(idx, 'detail', e.target.value)}
-                          placeholder="Detail (e.g. 8GB GDDR6)"
-                          className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
-                        />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItem(idx)}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            title="Delete spec item"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.5fr 1.5fr 1.3fr', gap: '8px' }}>
+                          <div className="editor-control" style={{ margin: 0 }}>
+                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Category</label>
+                            <input
+                              type="text"
+                              value={item.category || ''}
+                              onChange={(e) => handleItemChange(idx, 'category', e.target.value)}
+                              placeholder="e.g. GPU, Audio, Desk"
+                              className="editor-text-input full-width"
+                              style={{ color: '#f1f5f9', background: '#06070a' }}
+                            />
+                          </div>
+
+                          <div className="editor-control" style={{ margin: 0 }}>
+                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Item / Hardware Name</label>
+                            <input
+                              type="text"
+                              value={item.name || ''}
+                              onChange={(e) => handleItemChange(idx, 'name', e.target.value)}
+                              placeholder="e.g. RTX 4080 Super"
+                              className="editor-text-input full-width"
+                              style={{ color: '#f1f5f9', background: '#06070a' }}
+                            />
+                          </div>
+
+                          <div className="editor-control" style={{ margin: 0 }}>
+                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Detail / Specs</label>
+                            <input
+                              type="text"
+                              value={item.detail || ''}
+                              onChange={(e) => handleItemChange(idx, 'detail', e.target.value)}
+                              placeholder="e.g. 16GB GDDR6X"
+                              className="editor-text-input full-width"
+                              style={{ color: '#f1f5f9', background: '#06070a' }}
+                            />
+                          </div>
+
+                          <div className="editor-control" style={{ margin: 0 }}>
+                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Gear Icon</label>
+                            <select
+                              value={item.icon || ''}
+                              onChange={(e) => handleItemChange(idx, 'icon', e.target.value)}
+                              className="editor-select full-width"
+                              style={{ color: '#f1f5f9', background: '#06070a' }}
+                            >
+                              <option value="">Auto-Detect ({guessed})</option>
+                              {GEAR_ICON_CATEGORIES.map((cat) => (
+                                <optgroup key={cat.group} label={cat.group}>
+                                  {cat.icons.map((ic) => (
+                                    <option key={ic.id} value={ic.id}>
+                                      {ic.label}
+                                    </option>
+                                  ))}
+                                </optgroup>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </>
             )}

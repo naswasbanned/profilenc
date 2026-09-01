@@ -25,6 +25,7 @@ import {
   Clapperboard,
 } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
+import { GearIcon } from '../../utils/gearIconUtils';
 import './HobbiesSide.css';
 
 // Map icon string names from JSON to Lucide components
@@ -278,24 +279,24 @@ export default function HobbiesSide({
                   <Cpu size={24} />
                   <span>PC Hardware Specifications</span>
                 </h2>
-                <div className="hobbies-specs-grid">
-                  {activeSpecs.map((spec, i) => (
-                    <motion.div
-                      key={i}
-                      className="hobbies-spec-card"
-                      whileHover={{ y: -4, borderColor: '#00e5ff' }}
-                    >
-                      <div className="hobbies-spec-icon-wrapper">
-                        {iconMap[spec.icon] || <Cpu size={20} />}
-                      </div>
-                      <div className="hobbies-spec-info">
-                        <span className="hobbies-spec-category">{spec.category}</span>
-                        <h4 className="hobbies-spec-name">{spec.name}</h4>
-                        <p className="hobbies-spec-detail">{spec.detail}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+                    <div className="hobbies-specs-grid">
+                      {activeSpecs.map((spec, i) => (
+                        <motion.div
+                          key={i}
+                          className="hobbies-spec-card"
+                          whileHover={{ y: -4, borderColor: '#00e5ff' }}
+                        >
+                          <div className="hobbies-spec-icon-wrapper">
+                            <GearIcon icon={spec.icon} category={spec.category} name={spec.name} size={20} />
+                          </div>
+                          <div className="hobbies-spec-info">
+                            <span className="hobbies-spec-category">{spec.category}</span>
+                            <h4 className="hobbies-spec-name">{spec.name}</h4>
+                            <p className="hobbies-spec-detail">{spec.detail}</p>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
               </section>
             )}
 
