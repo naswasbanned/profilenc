@@ -104,6 +104,9 @@ export default function EditorOverlay({
         transition={{ duration: 0.35, ease: 'easeOut' }}
       >
         <div className="editor-toolbar-left">
+          <span className="editor-label">
+            <Palette size={16} /> Profile Editor
+          </span>
           <button
             type="button"
             onClick={() => setShowAccountSettings(true)}
