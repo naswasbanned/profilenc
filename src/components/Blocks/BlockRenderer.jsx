@@ -42,6 +42,9 @@ import GalleryBlock from './GalleryBlock';
 import EventsBlock from './EventsBlock';
 import FeaturedVideoBlock from './FeaturedVideoBlock';
 import VideoGalleryBlock from './VideoGalleryBlock';
+import GitHubHeatmapBlock from './GitHubHeatmapBlock';
+import MusicPlayerBlock from './MusicPlayerBlock';
+import MilestonesBlock from './MilestonesBlock';
 import './Blocks.css';
 
 const blockComponentMap = {
@@ -61,6 +64,9 @@ const blockComponentMap = {
   featured_video: FeaturedVideoBlock,
   video: FeaturedVideoBlock,
   video_gallery: VideoGalleryBlock,
+  github_heatmap: GitHubHeatmapBlock,
+  music_player: MusicPlayerBlock,
+  milestones: MilestonesBlock,
 };
 
 const blockIconMap = {
@@ -80,6 +86,9 @@ const blockIconMap = {
   featured_video: Video,
   video: Video,
   video_gallery: Film,
+  github_heatmap: Activity,
+  music_player: Music,
+  milestones: Star,
 };
 
 const iconLibrary = {

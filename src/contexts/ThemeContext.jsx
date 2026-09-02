@@ -36,6 +36,10 @@ const DEFAULT_THEME = {
     tabButtonActiveTextColor: null,
     glassBlur: 12,
     animationSpeed: 1,
+    backgroundImage: null,
+    backgroundOverlayOpacity: 0.75,
+    backgroundOverlayColor: null,
+    backgroundBlur: 0,
   },
   tabs: {},
   pages: {
@@ -169,6 +173,16 @@ function themeToCSSVars(theme) {
   if (g.backgroundGradient) {
     vars['--bg-gradient'] = g.backgroundGradient;
   }
+
+  // Custom Background Image & Glass Effect
+  if (g.backgroundImage) {
+    vars['--bg-image'] = `url(${g.backgroundImage})`;
+  } else {
+    vars['--bg-image'] = 'none';
+  }
+  vars['--bg-overlay-opacity'] = `${g.backgroundOverlayOpacity ?? 0.75}`;
+  vars['--bg-overlay-color'] = g.backgroundOverlayColor || bg;
+  vars['--bg-blur'] = `${g.backgroundBlur ?? 0}px`;
 
   return vars;
 }

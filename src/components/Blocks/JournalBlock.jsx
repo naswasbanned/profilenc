@@ -431,6 +431,7 @@ export default function JournalBlock({
   const [mood, setMood] = useState('');
   const [moodEmoji, setMoodEmoji] = useState('');
   const [coverUrl, setCoverUrl] = useState('');
+  const [isSpoiler, setIsSpoiler] = useState(false);
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [pinned, setPinned] = useState(false);
@@ -515,6 +516,7 @@ export default function JournalBlock({
     setMood('');
     setMoodEmoji('');
     setCoverUrl('');
+    setIsSpoiler(false);
     setExcerpt('');
     setContent('');
     setPinned(false);
@@ -533,6 +535,7 @@ export default function JournalBlock({
     setMood(entry.mood || '');
     setMoodEmoji(entry.moodEmoji || '');
     setCoverUrl(entry.coverUrl || entry.imageUrl || '');
+    setIsSpoiler(Boolean(entry.spoiler || entry.hasSpoiler));
     setExcerpt(entry.excerpt || '');
     setContent(entry.content || '');
     setPinned(Boolean(entry.pinned));
@@ -577,6 +580,7 @@ export default function JournalBlock({
               mood: mood || null,
               moodEmoji: moodEmoji || null,
               coverUrl: coverUrl || null,
+              spoiler: Boolean(isSpoiler),
               excerpt: excerpt.trim() || content.slice(0, 150),
               content: content.trim(),
               pinned: isPinnedValid,
@@ -591,6 +595,7 @@ export default function JournalBlock({
         mood: mood || null,
         moodEmoji: moodEmoji || null,
         coverUrl: coverUrl || null,
+        spoiler: Boolean(isSpoiler),
         excerpt: excerpt.trim() || content.slice(0, 150),
         content: content.trim(),
         pinned: isPinnedValid,
@@ -734,6 +739,20 @@ export default function JournalBlock({
                 value={coverUrl}
                 onChange={setCoverUrl}
               />
+
+              {coverUrl && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '-4px' }}>
+                  <label style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#cbd5e1', cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={isSpoiler}
+                      onChange={(e) => setIsSpoiler(e.target.checked)}
+                      style={{ accentColor: 'var(--color-accent-primary, #00f0aa)' }}
+                    />
+                    <span>Use spoiler blur with "View Attachment" button</span>
+                  </label>
+                </div>
+              )}
 
               {/* Quick Mood & Reflection Tag Selector */}
               <div>
@@ -1092,19 +1111,21 @@ export default function JournalBlock({
                 className={`journal-entry-card ${cover ? 'has-cover' : ''} ${entry.pinned ? 'is-pinned-card' : ''}`}
                 onClick={() => setActiveArticle(entry)}
               >
-                {/* Card Cover Photo with Blurred Preview & View Attachment Badge */}
+                {/* Card Cover Photo with optional Spoiler Effect */}
                 {cover && (
-                  <div className="journal-entry-cover-wrap">
+                  <div className={`journal-entry-cover-wrap ${entry.spoiler ? 'is-spoiler' : ''}`}>
                     <OptimizedImage
                       src={cover}
                       alt={entry.title}
                       className="journal-entry-cover-img"
                     />
-                    <div className="journal-attachment-overlay">
-                      <span className="journal-attachment-btn">
-                        <ImageIcon size={12} /> View Attachment
-                      </span>
-                    </div>
+                    {entry.spoiler && (
+                      <div className="journal-attachment-overlay">
+                        <span className="journal-attachment-btn">
+                          <ImageIcon size={12} /> View Attachment
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )}
 

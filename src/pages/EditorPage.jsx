@@ -146,8 +146,9 @@ function EditorCanvasInner({
   // Block Manipulation Handlers with History Tracking
   const handleAddBlock = useCallback((newBlock) => {
     updateContentWithHistory((prev) => {
+      const targetTabId = activeTabId || prev.tabs?.[0]?.id;
       const updatedTabs = (prev.tabs || []).map((t) => {
-        if (t.id === (currentTab?.id || t.id)) {
+        if (t.id === targetTabId) {
           return {
             ...t,
             blocks: [...(t.blocks || []), newBlock],
@@ -157,7 +158,7 @@ function EditorCanvasInner({
       });
       return { ...prev, tabs: updatedTabs };
     }, activeTabId);
-  }, [currentTab, activeTabId, updateContentWithHistory]);
+  }, [activeTabId, updateContentWithHistory]);
 
   const handleEditBlock = useCallback((updatedBlock) => {
     updateContentWithHistory((prev) => {
@@ -251,7 +252,7 @@ function EditorCanvasInner({
   }, [username, token, content, currentTheme, setThemeIsDirty]);
 
   return (
-    <div className="editor-page" style={{ paddingTop: '52px', paddingBottom: '90px' }}>
+    <div className="editor-page" style={{ paddingTop: '52px', paddingBottom: '32px' }}>
       <ProfileCanvas
         username={username}
         content={content}

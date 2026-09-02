@@ -13,6 +13,10 @@ import {
   Sparkles,
   Video,
   Film,
+  Github,
+  Music,
+  Target,
+  Disc3,
 } from 'lucide-react';
 
 const BLOCK_PRESETS = [
@@ -370,6 +374,82 @@ const BLOCK_PRESETS = [
           author: 'Alex Rivers',
           date: '2026',
           tag: 'UI Design',
+        },
+      ],
+    },
+  },
+  {
+    type: 'github_heatmap',
+    title: 'GitHub Contributions',
+    desc: 'Live GitHub contribution heatmap calendar with streak stats, tooltips, and accent-colored intensity levels.',
+    icon: <Github size={24} color="#34d399" />,
+    defaultTitle: 'GitHub Activity',
+    defaultData: {
+      username: '',
+      showStats: true,
+    },
+  },
+  {
+    type: 'music_player',
+    title: 'Music Player',
+    desc: 'Spinning vinyl disc music player with Spotify, YouTube, SoundCloud, or Apple Music embed support and playlist mode.',
+    icon: <Disc3 size={24} color="#1db954" />,
+    defaultTitle: 'Now Playing',
+    defaultData: {
+      items: [
+        {
+          id: 'track-1',
+          embedUrl: '',
+          artworkUrl: '',
+          title: 'Track Title',
+          artist: 'Artist Name',
+        },
+      ],
+    },
+  },
+  {
+    type: 'milestones',
+    title: 'Milestones & Bucket List',
+    desc: 'Track life goals and achievements with progress ring, categories, nested sub-tasks, and completion animation.',
+    icon: <Target size={24} color="#fbbf24" />,
+    defaultTitle: 'Life Goals & Milestones',
+    defaultData: {
+      items: [
+        {
+          id: 'ms-1',
+          title: 'Launch a SaaS product',
+          category: 'Career',
+          completed: true,
+          date: '2025',
+          subTasks: [],
+        },
+        {
+          id: 'ms-2',
+          title: 'Visit Japan',
+          category: 'Travel',
+          completed: false,
+          date: '',
+          subTasks: [
+            { id: 'st-1', title: 'Book flights', completed: true },
+            { id: 'st-2', title: 'Plan itinerary', completed: false },
+            { id: 'st-3', title: 'Learn basic Japanese', completed: false },
+          ],
+        },
+        {
+          id: 'ms-3',
+          title: 'Build a custom mechanical keyboard',
+          category: 'Creative',
+          completed: false,
+          date: '',
+          subTasks: [],
+        },
+        {
+          id: 'ms-4',
+          title: 'Contribute to major open source project',
+          category: 'Tech',
+          completed: true,
+          date: '2026',
+          subTasks: [],
         },
       ],
     },

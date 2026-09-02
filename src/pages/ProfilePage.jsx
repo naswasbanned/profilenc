@@ -355,6 +355,12 @@ export function ProfileCanvas({
   const tabBgColor = theme?.tabs?.[currentTab?.id]?.backgroundColor || theme?.global?.backgroundColor || '#090a0f';
   const tabBgGradient = theme?.tabs?.[currentTab?.id]?.backgroundGradient || theme?.global?.backgroundGradient || null;
 
+  // Custom background image (per-tab or global)
+  const bgImage = theme?.tabs?.[currentTab?.id]?.backgroundImage || theme?.global?.backgroundImage || null;
+  const bgOverlayOpacity = theme?.tabs?.[currentTab?.id]?.backgroundOverlayOpacity ?? theme?.global?.backgroundOverlayOpacity ?? 0.75;
+  const bgOverlayColor = theme?.tabs?.[currentTab?.id]?.backgroundOverlayColor || theme?.global?.backgroundOverlayColor || tabBgColor;
+  const bgBlur = theme?.tabs?.[currentTab?.id]?.backgroundBlur ?? theme?.global?.backgroundBlur ?? 0;
+
   return (
     <div
       className="app"
@@ -365,6 +371,26 @@ export function ProfileCanvas({
         transition: 'background-color 0.35s ease, background-image 0.35s ease',
       }}
     >
+      {/* Custom Background Image Layer with Glass Effect */}
+      {bgImage && (
+        <div className="profile-bg-layer" aria-hidden="true">
+          <div
+            className="profile-bg-image"
+            style={{
+              backgroundImage: `url(${bgImage})`,
+              filter: bgBlur > 0 ? `blur(${bgBlur}px)` : undefined,
+            }}
+          />
+          <div
+            className="profile-bg-overlay"
+            style={{
+              backgroundColor: bgOverlayColor,
+              opacity: bgOverlayOpacity,
+            }}
+          />
+        </div>
+      )}
+
       {/* Edit FAB for profile owner */}
       {isOwner && !isEditing && (
         <button
@@ -373,7 +399,7 @@ export function ProfileCanvas({
           onClick={() => navigate(`/@${username}/edit`)}
           title="Open Visual Editor"
         >
-          ✏️ Edit Profile
+          Edit Profile
         </button>
       )}
 
@@ -388,7 +414,7 @@ export function ProfileCanvas({
       )}
 
       {/* Blocks Canvas */}
-      <main style={{ minHeight: '80vh', padding: '40px 0 60px' }}>
+      <main style={{ minHeight: '50vh', padding: '20px 0 40px' }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={currentTab?.id || 'main'}
@@ -398,8 +424,8 @@ export function ProfileCanvas({
             exit="exit"
           >
             {blocks.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '80px 20px', color: '#666' }}>
-                <p style={{ fontSize: '1.1rem', marginBottom: '12px' }}>This tab is currently empty.</p>
+              <div style={{ textAlign: 'center', padding: '60px 20px', color: '#666' }}>
+                <p style={{ fontSize: '1.05rem', marginBottom: '8px' }}>This tab is currently empty.</p>
                 {isEditing && (
                   <p style={{ fontSize: '0.85rem', color: '#888' }}>
                     Click <strong>"+ Add Block"</strong> in the top toolbar to insert content.

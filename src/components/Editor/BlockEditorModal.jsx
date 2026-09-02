@@ -27,6 +27,9 @@ import {
   BookOpen,
   Video,
   Film,
+  Github,
+  Music,
+  Target,
 } from 'lucide-react';
 import ImageUploadPicker from './ImageUploadPicker';
 import { TechIcon, POPULAR_TECH_PRESETS, resolveTechIcon } from '../../utils/techIconUtils';
@@ -2464,6 +2467,364 @@ export default function BlockEditorModal({
                           className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* --- GITHUB HEATMAP FORM --- */}
+            {block.type === 'github_heatmap' && (
+              <>
+                <div className="editor-control">
+                  <label style={{ color: '#e2e8f0' }}>GitHub Username</label>
+                  <input
+                    type="text"
+                    value={formData.username || ''}
+                    onChange={(e) => handleFieldChange('username', e.target.value)}
+                    placeholder="e.g. octocat"
+                    className="editor-text-input full-width"
+                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                  />
+                  <span style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>
+                    Contributions will be fetched from the public GitHub API.
+                  </span>
+                </div>
+
+                <div className="editor-control">
+                  <label style={{ color: '#e2e8f0' }}>Show Stats Bar</label>
+                  <select
+                    value={formData.showStats !== false ? 'true' : 'false'}
+                    onChange={(e) => handleFieldChange('showStats', e.target.value === 'true')}
+                    className="editor-select"
+                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                  >
+                    <option value="true">Show (Total contributions, streaks, best day)</option>
+                    <option value="false">Hidden</option>
+                  </select>
+                </div>
+              </>
+            )}
+
+            {/* --- MUSIC PLAYER FORM --- */}
+            {block.type === 'music_player' && (
+              <>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="editor-control" style={{ margin: 0 }}>
+                    <label style={{ color: '#e2e8f0' }}>Autoplay Audio</label>
+                    <select
+                      value={formData.autoplay ? 'true' : 'false'}
+                      onChange={(e) => handleFieldChange('autoplay', e.target.value === 'true')}
+                      className="editor-select"
+                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                    >
+                      <option value="false">Off (User clicks to play)</option>
+                      <option value="true">On (Auto-start audio on load)</option>
+                    </select>
+                  </div>
+
+                  <div className="editor-control" style={{ margin: 0 }}>
+                    <label style={{ color: '#e2e8f0' }}>Display Mode</label>
+                    <select
+                      value={formData.showEmbed === true || formData.displayMode === 'embedded' ? 'embedded' : 'vinyl_only'}
+                      onChange={(e) => handleFieldChange('showEmbed', e.target.value === 'embedded')}
+                      className="editor-select"
+                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                    >
+                      <option value="vinyl_only">Vinyl Disc Player (Pure Audio - No extra embed box)</option>
+                      <option value="embedded">Vinyl Disc + Visible Embed Player Below</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
+                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>Playlist Tracks ({(formData.items || []).length})</h4>
+                  <button
+                    type="button"
+                    onClick={() => handleAddItem({
+                      id: `track-${Date.now()}`,
+                      embedUrl: '',
+                      artworkUrl: '',
+                      title: 'New Track',
+                      artist: '',
+                    })}
+                    className="editor-btn"
+                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                  >
+                    <Plus size={14} /> Add Track
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  {(formData.items || []).map((track, idx) => (
+                    <div
+                      key={track.id || idx}
+                      style={{
+                        borderRadius: '10px',
+                        background: '#06070a',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        padding: '16px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                          Track #{idx + 1}: {track.title || 'Untitled'}
+                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItem(idx)}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            title="Remove track"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#e2e8f0' }}>Track Title</label>
+                          <input
+                            type="text"
+                            value={track.title || ''}
+                            onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
+                            placeholder="e.g. My Favorite Song"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          />
+                        </div>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#e2e8f0' }}>Artist</label>
+                          <input
+                            type="text"
+                            value={track.artist || ''}
+                            onChange={(e) => handleItemChange(idx, 'artist', e.target.value)}
+                            placeholder="e.g. Artist Name"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="editor-control" style={{ margin: 0 }}>
+                        <label style={{ color: '#e2e8f0' }}>YouTube / Media URL</label>
+                        <input
+                          type="text"
+                          value={track.embedUrl || ''}
+                          onChange={(e) => handleItemChange(idx, 'embedUrl', e.target.value)}
+                          placeholder="https://www.youtube.com/watch?v=... or Spotify/SoundCloud link"
+                          className="editor-text-input full-width"
+                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                        />
+                        <span style={{ fontSize: '0.68rem', color: '#94a3b8', marginTop: '3px', display: 'block' }}>
+                          YouTube links automatically stream pure audio on the vinyl disc and auto-fetch album art.
+                        </span>
+                      </div>
+
+                      <ImageUploadPicker
+                        label="Custom Disc Center Artwork (Optional - auto-resolves from YouTube)"
+                        value={track.artworkUrl || ''}
+                        onChange={(url) => handleItemChange(idx, 'artworkUrl', url)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* --- MILESTONES FORM --- */}
+            {block.type === 'milestones' && (
+              <>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>Milestones ({(formData.items || []).length})</h4>
+                  <button
+                    type="button"
+                    onClick={() => handleAddItem({
+                      id: `ms-${Date.now()}`,
+                      title: 'New Milestone',
+                      category: 'Goals',
+                      completed: false,
+                      date: '',
+                      subTasks: [],
+                    })}
+                    className="editor-btn"
+                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                  >
+                    <Plus size={14} /> Add Milestone
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  {(formData.items || []).map((ms, idx) => (
+                    <div
+                      key={ms.id || idx}
+                      style={{
+                        borderRadius: '10px',
+                        background: '#06070a',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        padding: '16px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                          #{idx + 1}: {ms.title || 'Untitled'}
+                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <button
+                            type="button"
+                            onClick={() => handleItemChange(idx, 'completed', !ms.completed)}
+                            className={`editor-btn ${ms.completed ? 'editor-btn-save' : 'editor-btn-ghost'}`}
+                            style={{ fontSize: '0.72rem', padding: '4px 8px' }}
+                          >
+                            {ms.completed ? 'Completed' : 'Mark Done'}
+                          </button>
+                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItem(idx)}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            title="Remove milestone"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '10px' }}>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#e2e8f0' }}>Title</label>
+                          <input
+                            type="text"
+                            value={ms.title || ''}
+                            onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
+                            placeholder="e.g. Launch a SaaS product"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          />
+                        </div>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#e2e8f0' }}>Category</label>
+                          <select
+                            value={ms.category || 'Goals'}
+                            onChange={(e) => handleItemChange(idx, 'category', e.target.value)}
+                            className="editor-select"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          >
+                            <option value="Career">Career</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Creative">Creative</option>
+                            <option value="Learning">Learning</option>
+                            <option value="Fitness">Fitness</option>
+                            <option value="Adventure">Adventure</option>
+                            <option value="Achievement">Achievement</option>
+                            <option value="Tech">Tech</option>
+                            <option value="Goals">Goals</option>
+                          </select>
+                        </div>
+                        <div className="editor-control" style={{ margin: 0 }}>
+                          <label style={{ color: '#e2e8f0' }}>Date (optional)</label>
+                          <input
+                            type="text"
+                            value={ms.date || ''}
+                            onChange={(e) => handleItemChange(idx, 'date', e.target.value)}
+                            placeholder="e.g. 2025"
+                            className="editor-text-input full-width"
+                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Sub-tasks */}
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                          <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#e2e8f0' }}>
+                            Sub-Tasks ({(ms.subTasks || []).length})
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updatedItems = [...(formData.items || [])];
+                              const updatedMs = { ...updatedItems[idx] };
+                              updatedMs.subTasks = [...(updatedMs.subTasks || []), { id: `st-${Date.now()}`, title: '', completed: false }];
+                              updatedItems[idx] = updatedMs;
+                              setFormData((prev) => ({ ...prev, items: updatedItems }));
+                            }}
+                            className="editor-btn"
+                            style={{ background: 'rgba(0, 240, 170, 0.08)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.2)', padding: '3px 10px', fontSize: '0.72rem' }}
+                          >
+                            <Plus size={12} /> Sub-Task
+                          </button>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                          {(ms.subTasks || []).map((sub, si) => (
+                            <div key={sub.id || si} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updatedItems = [...(formData.items || [])];
+                                  const updatedMs = { ...updatedItems[idx] };
+                                  const updatedSubs = [...(updatedMs.subTasks || [])];
+                                  updatedSubs[si] = { ...updatedSubs[si], completed: !updatedSubs[si].completed };
+                                  updatedMs.subTasks = updatedSubs;
+                                  updatedItems[idx] = updatedMs;
+                                  setFormData((prev) => ({ ...prev, items: updatedItems }));
+                                }}
+                                style={{
+                                  background: sub.completed ? 'var(--accent-color, #00f0aa)' : 'transparent',
+                                  border: `1px solid ${sub.completed ? 'var(--accent-color, #00f0aa)' : 'rgba(255,255,255,0.15)'}`,
+                                  width: '18px',
+                                  height: '18px',
+                                  borderRadius: '4px',
+                                  cursor: 'pointer',
+                                  flexShrink: 0,
+                                }}
+                                title={sub.completed ? 'Mark incomplete' : 'Mark complete'}
+                              />
+                              <input
+                                type="text"
+                                value={sub.title || ''}
+                                onChange={(e) => {
+                                  const updatedItems = [...(formData.items || [])];
+                                  const updatedMs = { ...updatedItems[idx] };
+                                  const updatedSubs = [...(updatedMs.subTasks || [])];
+                                  updatedSubs[si] = { ...updatedSubs[si], title: e.target.value };
+                                  updatedMs.subTasks = updatedSubs;
+                                  updatedItems[idx] = updatedMs;
+                                  setFormData((prev) => ({ ...prev, items: updatedItems }));
+                                }}
+                                placeholder="Sub-task title..."
+                                className="editor-text-input full-width"
+                                style={{ color: '#f1f5f9', background: '#06070a', fontSize: '0.82rem' }}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updatedItems = [...(formData.items || [])];
+                                  const updatedMs = { ...updatedItems[idx] };
+                                  updatedMs.subTasks = (updatedMs.subTasks || []).filter((_, i) => i !== si);
+                                  updatedItems[idx] = updatedMs;
+                                  setFormData((prev) => ({ ...prev, items: updatedItems }));
+                                }}
+                                style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '2px', flexShrink: 0 }}
+                                title="Remove sub-task"
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   ))}

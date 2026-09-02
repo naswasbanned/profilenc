@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTheme } from '../../../contexts/ThemeContext';
-import { Sparkles, Type, Check, Layers, Palette, Square, FolderKanban } from 'lucide-react';
+import { Sparkles, Type, Check, Layers, Palette, Square, FolderKanban, Image, Trash2 } from 'lucide-react';
+import ImageUploadPicker from '../ImageUploadPicker';
 
 const HEADING_FONT_GROUPS = {
   'Tech & Modern Display': [
@@ -952,6 +953,85 @@ export default function ThemePanel({ tabs = [] }) {
                   className="editor-text-input full-width"
                   style={{ color: '#f1f5f9', background: '#06070a', border: '1px solid rgba(255,255,255,0.12)' }}
                 />
+              </div>
+            </div>
+
+            <hr style={{ border: 'none', borderTop: '1px solid rgba(255, 255, 255, 0.08)', margin: 0 }} />
+
+            {/* Custom Background Image & Glass Overlay */}
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+                <Image size={14} color="#00f0aa" />
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                  Custom Background Image
+                </span>
+              </div>
+              <p style={{ fontSize: '0.76rem', color: '#94a3b8', marginBottom: '14px', lineHeight: '1.4' }}>
+                Upload a background image with adjustable glass overlay and blur for a premium visual effect.
+              </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <ImageUploadPicker
+                  label="Background Image"
+                  value={getNestedValue('global.backgroundImage') || ''}
+                  onChange={(url) => updateTheme('global.backgroundImage', url || null)}
+                />
+
+                {getNestedValue('global.backgroundImage') && (
+                  <>
+                    <SliderInput
+                      label="Overlay Darkness"
+                      value={Math.round((getNestedValue('global.backgroundOverlayOpacity') ?? 0.75) * 100)}
+                      onChange={(v) => updateTheme('global.backgroundOverlayOpacity', v / 100)}
+                      min={0}
+                      max={100}
+                      step={5}
+                      unit="%"
+                    />
+
+                    <ColorInput
+                      label="Overlay Color (defaults to canvas background)"
+                      value={getNestedValue('global.backgroundOverlayColor') || getNestedValue('global.backgroundColor') || '#090a0f'}
+                      onChange={(v) => updateTheme('global.backgroundOverlayColor', v)}
+                    />
+
+                    <SliderInput
+                      label="Background Blur"
+                      value={getNestedValue('global.backgroundBlur') ?? 0}
+                      onChange={(v) => updateTheme('global.backgroundBlur', v)}
+                      min={0}
+                      max={20}
+                      step={1}
+                      unit="px"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        updateTheme('global.backgroundImage', null);
+                        updateTheme('global.backgroundOverlayOpacity', 0.75);
+                        updateTheme('global.backgroundOverlayColor', null);
+                        updateTheme('global.backgroundBlur', 0);
+                      }}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '7px 14px',
+                        borderRadius: '6px',
+                        background: 'rgba(239, 68, 68, 0.1)',
+                        border: '1px solid rgba(239, 68, 68, 0.3)',
+                        color: '#ef4444',
+                        fontSize: '0.78rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        width: 'fit-content',
+                      }}
+                    >
+                      <Trash2 size={13} /> Remove Background Image
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
