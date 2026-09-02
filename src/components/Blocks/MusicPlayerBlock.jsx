@@ -185,6 +185,46 @@ export default function MusicPlayerBlock({ data }) {
     }
   }, [isPlaying, currentIndex]);
 
+  // Mobile Autoplay unlock: mobile browsers (iOS/Android) block unmuted audio until first user interaction.
+  // This listener starts audio the moment the user touches/taps anywhere on the screen to scroll or browse.
+  useEffect(() => {
+    if (!data?.autoplay) return;
+
+    let unlocked = false;
+    const unlockAudio = () => {
+      if (unlocked) return;
+      unlocked = true;
+      setIsPlaying(true);
+      if (iframeRef.current?.contentWindow) {
+        try {
+          iframeRef.current.contentWindow.postMessage(
+            JSON.stringify({ event: 'command', func: 'playVideo', args: '' }),
+            '*'
+          );
+          iframeRef.current.contentWindow.postMessage(
+            JSON.stringify({ event: 'command', func: 'unMute', args: '' }),
+            '*'
+          );
+        } catch {
+          // ignore
+        }
+      }
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('pointerdown', unlockAudio);
+      window.removeEventListener('click', unlockAudio);
+    };
+
+    window.addEventListener('touchstart', unlockAudio, { passive: true, once: true });
+    window.addEventListener('pointerdown', unlockAudio, { passive: true, once: true });
+    window.addEventListener('click', unlockAudio, { passive: true, once: true });
+
+    return () => {
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('pointerdown', unlockAudio);
+      window.removeEventListener('click', unlockAudio);
+    };
+  }, [data?.autoplay]);
+
   const handlePlayToggle = () => {
     setIsPlaying((prev) => !prev);
   };
