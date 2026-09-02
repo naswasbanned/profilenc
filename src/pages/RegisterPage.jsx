@@ -115,10 +115,9 @@ export default function RegisterPage() {
         </Link>
 
         <div className="auth-header">
-          <Link to="/" className="auth-brand">
-            <span className="brand-bracket">[</span>
+          <Link to="/" className="auth-brand" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <img src="/logo.svg" alt="Profilenc Logo" style={{ width: '24px', height: '24px' }} />
             <span className="brand-name">PROFILENC</span>
-            <span className="brand-bracket">]</span>
           </Link>
           <h1 className="auth-title">
             {step === 1 ? 'CREATE YOUR PROFILE' : 'PICK A STARTER TEMPLATE'}

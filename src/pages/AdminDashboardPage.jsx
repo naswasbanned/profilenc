@@ -517,10 +517,9 @@ export default function AdminDashboardPage() {
       <header className="admin-header">
         <div className="admin-header-container">
           <div className="admin-brand-wrap">
-            <Link to="/" className="admin-brand">
-              <span className="brand-bracket">[</span>
+            <Link to="/" className="admin-brand" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              <img src="/logo.svg" alt="Profilenc Logo" style={{ width: '22px', height: '22px' }} />
               <span className="brand-name">PROFILENC</span>
-              <span className="brand-bracket">]</span>
             </Link>
             <div className="admin-kernel-badge">KERNEL_ADMIN_CONTROL</div>
           </div>

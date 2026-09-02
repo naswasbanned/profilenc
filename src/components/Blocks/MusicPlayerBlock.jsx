@@ -245,7 +245,7 @@ export default function MusicPlayerBlock({ data }) {
     return (
       <div className="music-player-empty">
         <Music size={32} />
-        <p>Add a Spotify, YouTube, or SoundCloud link to start</p>
+        <p>Add a YouTube or SoundCloud audio link to start</p>
       </div>
     );
   }

@@ -390,9 +390,8 @@ export default function LandingPage() {
       <header className="raw-header">
         <div className="raw-header-container">
           <Link to="/" className="raw-brand">
-            <span className="brand-bracket">[</span>
+            <img src="/logo.svg" alt="Profilenc Logo" className="brand-logo-img" style={{ width: '26px', height: '26px' }} />
             <span className="brand-name">PROFILENC</span>
-            <span className="brand-bracket">]</span>
           </Link>
 
           <div className="raw-nav-actions">
@@ -979,7 +978,10 @@ export default function LandingPage() {
       <footer className="raw-footer">
         <div className="raw-footer-container">
           <div className="footer-left">
-            <span className="footer-logo">PROFILENC</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <img src="/logo.svg" alt="Profilenc Logo" style={{ width: '20px', height: '20px' }} />
+              <span className="footer-logo">PROFILENC</span>
+            </div>
             <span className="footer-copy">// SIMPLE & MODULAR PERSONAL PROFILES</span>
           </div>
           <div className="footer-right">

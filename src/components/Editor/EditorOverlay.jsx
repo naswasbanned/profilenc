@@ -105,7 +105,8 @@ export default function EditorOverlay({
       >
         <div className="editor-toolbar-left">
           <span className="editor-label">
-            <Palette size={16} /> Profile Editor
+            <img src="/logo.svg" alt="Profilenc" style={{ width: '18px', height: '18px' }} />
+            <span>Profile Editor</span>
           </span>
           <button
             type="button"

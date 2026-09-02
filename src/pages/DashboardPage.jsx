@@ -56,9 +56,8 @@ export default function DashboardPage() {
 
       <nav className="dashboard-nav">
         <Link to="/" className="dashboard-logo">
-          <span className="brand-bracket">[</span>
+          <img src="/logo.svg" alt="Profilenc Logo" style={{ width: '22px', height: '22px' }} />
           <span>PROFILENC</span>
-          <span className="brand-bracket">]</span>
         </Link>
         <div className="dashboard-nav-right">
           {user.isAdmin && (

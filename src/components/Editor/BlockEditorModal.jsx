@@ -2633,7 +2633,7 @@ export default function BlockEditorModal({
                           type="text"
                           value={track.embedUrl || ''}
                           onChange={(e) => handleItemChange(idx, 'embedUrl', e.target.value)}
-                          placeholder="https://www.youtube.com/watch?v=... or Spotify/SoundCloud link"
+                          placeholder="https://www.youtube.com/watch?v=... or SoundCloud link"
                           className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#06070a' }}
                         />

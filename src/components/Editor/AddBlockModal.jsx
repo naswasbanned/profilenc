@@ -392,8 +392,8 @@ const BLOCK_PRESETS = [
   {
     type: 'music_player',
     title: 'Music Player',
-    desc: 'Spinning vinyl disc music player with Spotify, YouTube, SoundCloud, or Apple Music embed support and playlist mode.',
-    icon: <Disc3 size={24} color="#1db954" />,
+    desc: 'Spinning vinyl disc audio player with YouTube, SoundCloud, or direct audio link support, album artwork, and playlist mode.',
+    icon: <Disc3 size={24} color="#00f0aa" />,
     defaultTitle: 'Now Playing',
     defaultData: {
       items: [
