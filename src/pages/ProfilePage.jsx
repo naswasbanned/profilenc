@@ -367,7 +367,9 @@ export function ProfileCanvas({
       style={{
         backgroundColor: tabBgColor,
         backgroundImage: tabBgGradient || undefined,
-        minHeight: '100vh',
+        minHeight: isEditing ? 'calc(100vh - 52px)' : '100vh',
+        display: 'flex',
+        flexDirection: 'column',
         transition: 'background-color 0.35s ease, background-image 0.35s ease',
       }}
     >
@@ -414,7 +416,7 @@ export function ProfileCanvas({
       )}
 
       {/* Blocks Canvas */}
-      <main style={{ minHeight: '50vh', padding: '20px 0 40px' }}>
+      <main style={{ flex: 1, minHeight: '50vh', padding: '20px 0 40px' }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={currentTab?.id || 'main'}

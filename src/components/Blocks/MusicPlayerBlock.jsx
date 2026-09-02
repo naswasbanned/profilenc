@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, SkipBack, SkipForward, Music, Disc3, ExternalLink } from 'lucide-react';
 
@@ -35,7 +35,7 @@ function parseEmbedUrl(url, autoplay = false) {
   if (ytMatch) {
     return {
       provider: 'youtube',
-      embedSrc: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=${autoplay ? '1' : '0'}&enablejsapi=1&rel=0`,
+      embedSrc: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=${autoplay ? '1' : '0'}&enablejsapi=1&playsinline=1&rel=0`,
       defaultHeight: 200,
     };
   }
@@ -161,6 +161,30 @@ export default function MusicPlayerBlock({ data }) {
     [currentTrack?.embedUrl, isPlaying, data?.autoplay]
   );
 
+  // Send play/pause commands to YouTube iframe via postMessage API
+  useEffect(() => {
+    if (!iframeRef.current?.contentWindow) return;
+    try {
+      if (isPlaying) {
+        iframeRef.current.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func: 'playVideo', args: '' }),
+          '*'
+        );
+        iframeRef.current.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func: 'unMute', args: '' }),
+          '*'
+        );
+      } else {
+        iframeRef.current.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }),
+          '*'
+        );
+      }
+    } catch {
+      // ignore cross-origin error
+    }
+  }, [isPlaying, currentIndex]);
+
   const handlePlayToggle = () => {
     setIsPlaying((prev) => !prev);
   };
@@ -272,21 +296,23 @@ export default function MusicPlayerBlock({ data }) {
         </div>
       </div>
 
-      {/* Hidden audio-stream iframe for pure vinyl disc player mode */}
-      {parsed.embedSrc && isPlaying && !showVisibleEmbed && (
+      {/* Invisible YouTube / Audio Streamer (Maintained in DOM for Mobile WebKit/Chromium) */}
+      {parsed.embedSrc && !showVisibleEmbed && (
         <iframe
           ref={iframeRef}
           src={parsed.embedSrc}
           title={currentTrack?.title || 'Music Stream'}
-          allow="autoplay; encrypted-media"
+          allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
           loading="eager"
           style={{
             position: 'absolute',
-            width: '1px',
-            height: '1px',
-            opacity: 0,
-            pointerEvents: 'none',
+            left: '-9999px',
+            top: '-9999px',
+            width: '240px',
+            height: '240px',
             border: 'none',
+            opacity: 0.01,
+            pointerEvents: 'none',
           }}
         />
       )}

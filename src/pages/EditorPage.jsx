@@ -252,7 +252,7 @@ function EditorCanvasInner({
   }, [username, token, content, currentTheme, setThemeIsDirty]);
 
   return (
-    <div className="editor-page" style={{ paddingTop: '52px', paddingBottom: '32px' }}>
+    <div className="editor-page" style={{ paddingTop: '52px', paddingBottom: 0 }}>
       <ProfileCanvas
         username={username}
         content={content}
