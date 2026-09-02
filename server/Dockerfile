@@ -1,7 +1,4 @@
-FROM node:22-alpine
-
-# sharp needs vips native lib
-RUN apk add --no-cache vips-dev
+FROM public.ecr.aws/docker/library/node:22-slim
 
 WORKDIR /app
 

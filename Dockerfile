@@ -1,5 +1,5 @@
 ## Build stage: build the Vite app inside the image
-FROM node:22-alpine AS build
+FROM public.ecr.aws/docker/library/node:22-slim AS build
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 ## Runtime stage: serve built files with nginx
-FROM nginx:alpine
+FROM public.ecr.aws/docker/library/nginx:alpine
 
 # Custom nginx config with API reverse proxy
 COPY nginx.conf /etc/nginx/conf.d/default.conf
