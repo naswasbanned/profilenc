@@ -251,10 +251,11 @@ export default function MusicPlayerBlock({ data }) {
   }
 
   const showVisibleEmbed = data?.showEmbed === true || data?.displayMode === 'embedded';
+  const discPosition = data?.discPosition || 'left';
 
   return (
     <div className="music-player-block">
-      <div className="music-player-layout">
+      <div className={`music-player-layout align-${discPosition}`}>
         {/* Vinyl Disc Visual */}
         <VinylDisc
           artworkUrl={getTrackArtwork(currentTrack)}

@@ -3476,6 +3476,56 @@
   gap: 32px;
 }
 
+.music-player-layout.align-left {
+  flex-direction: row;
+  text-align: left;
+}
+
+.music-player-layout.align-right {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.music-player-layout.align-right .music-controls {
+  justify-content: flex-end;
+}
+
+.music-player-layout.align-right .music-track-details {
+  text-align: right;
+}
+
+.music-player-layout.align-right .music-playlist-counter {
+  align-self: flex-end;
+}
+
+.music-player-layout.align-center {
+  flex-direction: column;
+  text-align: center;
+  gap: 24px;
+}
+
+.music-player-layout.align-center .music-player-info {
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.music-player-layout.align-center .music-controls {
+  justify-content: center;
+}
+
+.music-player-layout.align-center .music-track-details {
+  text-align: center;
+}
+
+.music-player-layout.align-center .music-playlist-counter {
+  align-self: center;
+}
+
+.music-player-layout.align-center .music-provider-badge {
+  align-self: center;
+}
+
 /* -- Vinyl Disc -- */
 .vinyl-player-disc-container {
   position: relative;

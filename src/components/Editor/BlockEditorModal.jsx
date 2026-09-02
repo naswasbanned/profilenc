@@ -2510,7 +2510,7 @@ export default function BlockEditorModal({
             {/* --- MUSIC PLAYER FORM --- */}
             {block.type === 'music_player' && (
               <>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
                   <div className="editor-control" style={{ margin: 0 }}>
                     <label style={{ color: '#e2e8f0' }}>Autoplay Audio</label>
                     <select
@@ -2519,8 +2519,22 @@ export default function BlockEditorModal({
                       className="editor-select"
                       style={{ color: '#f1f5f9', background: '#06070a' }}
                     >
-                      <option value="false">Off (User clicks to play)</option>
-                      <option value="true">On (Auto-start audio on load)</option>
+                      <option value="false">Off (Click to play)</option>
+                      <option value="true">On (Auto-start)</option>
+                    </select>
+                  </div>
+
+                  <div className="editor-control" style={{ margin: 0 }}>
+                    <label style={{ color: '#e2e8f0' }}>Disc Position</label>
+                    <select
+                      value={formData.discPosition || 'left'}
+                      onChange={(e) => handleFieldChange('discPosition', e.target.value)}
+                      className="editor-select"
+                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                    >
+                      <option value="left">Left (Disc Left)</option>
+                      <option value="center">Center (Disc Centered)</option>
+                      <option value="right">Right (Disc Right)</option>
                     </select>
                   </div>
 
@@ -2532,8 +2546,8 @@ export default function BlockEditorModal({
                       className="editor-select"
                       style={{ color: '#f1f5f9', background: '#06070a' }}
                     >
-                      <option value="vinyl_only">Vinyl Disc Player (Pure Audio - No extra embed box)</option>
-                      <option value="embedded">Vinyl Disc + Visible Embed Player Below</option>
+                      <option value="vinyl_only">Vinyl Only</option>
+                      <option value="embedded">Vinyl + Embed</option>
                     </select>
                   </div>
                 </div>
