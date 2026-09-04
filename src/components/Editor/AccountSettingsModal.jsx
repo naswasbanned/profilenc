@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -22,6 +23,7 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import ImageUploadPicker from './ImageUploadPicker';
+import './Editor.css';
 
 export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
   const navigate = useNavigate();
@@ -227,10 +229,35 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeTab, isProfileDirty, savingProfile, isSecurityDirty, savingPassword]);
 
+  // Lock body scroll while modal is mounted
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  // Close modal on Escape key
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') onClose?.();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [onClose]);
+
   const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(onClose);
 
-  return (
-    <div className="editor-modal-backdrop" onClick={handleBackdropClick}>
+  const modalContent = (
+    <motion.div
+      className="editor-modal-backdrop"
+      onClick={handleBackdropClick}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.18 }}
+    >
       {hintVisible && (
         <div className="modal-double-click-hint">
           <span>Click once more outside to close (or use ✕)</span>
@@ -241,6 +268,7 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -903,6 +931,10 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged }) {
           </div>
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
+
+  return typeof document !== 'undefined'
+    ? createPortal(modalContent, document.body)
+    : modalContent;
 }

@@ -61,7 +61,10 @@ export default function CardsGridBlock({ data = {} }) {
 
               {item.tags && item.tags.length > 0 && (
                 <div className="card-tags">
-                  {item.tags.map((tag, tIdx) => (
+                  {(Array.isArray(item.tags)
+                    ? item.tags
+                    : item.tags.split(',').map((t) => t.trim()).filter(Boolean)
+                  ).map((tag, tIdx) => (
                     <span key={tIdx} className="card-tag">{tag}</span>
                   ))}
                 </div>

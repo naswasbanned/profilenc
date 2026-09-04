@@ -274,6 +274,32 @@
   margin-bottom: 24px;
 }
 
+/* >3 social links: compact 2-col grid, icon-first pills */
+.hero-socials:has(.hero-social-link:nth-child(4)) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.hero-socials:has(.hero-social-link:nth-child(4)) .hero-social-link {
+  justify-content: flex-start;
+  padding: 6px 12px;
+}
+
+/* Even number of items: last lone child spans full width */
+.hero-socials:has(.hero-social-link:nth-child(4)):not(:has(.hero-social-link:nth-child(5))):not(:has(.hero-social-link:nth-child(6))) .hero-social-link:last-child,
+.hero-socials:has(.hero-social-link:nth-child(6)):not(:has(.hero-social-link:nth-child(7))) .hero-social-link:last-child {
+  /* even count — no orphan */
+}
+
+/* Odd count >3: last item spans full row */
+.hero-socials:has(.hero-social-link:nth-child(5)):not(:has(.hero-social-link:nth-child(6))) .hero-social-link:last-child,
+.hero-socials:has(.hero-social-link:nth-child(7)):not(:has(.hero-social-link:nth-child(8))) .hero-social-link:last-child {
+  grid-column: 1 / -1;
+  width: fit-content;
+  margin: 0 auto;
+}
+
 .hero-social-link {
   display: flex;
   align-items: center;
@@ -340,6 +366,74 @@
 .hero-btn.secondary:hover {
   background: var(--color-surface-overlay);
   border-color: var(--color-border-strong);
+}
+
+/* ==========================================================================
+   HERO BLOCK — Mobile Responsive (force center on ≤640px)
+   ========================================================================== */
+@media (max-width: 640px) {
+  /* Collapse split layouts to stacked center */
+  .hero-block.layout-split,
+  .hero-block.layout-split-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0;
+  }
+
+  .hero-block.layout-split .hero-split-media,
+  .hero-block.layout-split-right .hero-split-media {
+    display: contents; /* let avatar-wrap render inline in flex column */
+  }
+
+  .hero-block.layout-split .hero-split-body,
+  .hero-block.layout-split-right .hero-split-body {
+    display: contents;
+  }
+
+  .hero-block.layout-split .hero-avatar,
+  .hero-block.layout-split .hero-avatar-fallback,
+  .hero-block.layout-split-right .hero-avatar,
+  .hero-block.layout-split-right .hero-avatar-fallback {
+    width: 120px;
+    height: 120px;
+  }
+
+  .hero-block.layout-split .hero-avatar-wrap,
+  .hero-block.layout-split-right .hero-avatar-wrap {
+    margin-bottom: 24px;
+  }
+
+  /* Force left/right align to center */
+  .hero-block.align-left,
+  .hero-block.align-right {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-block.align-left .hero-status-badge,
+  .hero-block.align-right .hero-status-badge {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+
+  .hero-block.align-left .hero-socials,
+  .hero-block.align-left .hero-actions,
+  .hero-block.align-right .hero-socials,
+  .hero-block.align-right .hero-actions,
+  .hero-block.layout-split .hero-socials,
+  .hero-block.layout-split .hero-actions,
+  .hero-block.layout-split-right .hero-socials,
+  .hero-block.layout-split-right .hero-actions {
+    justify-content: center;
+  }
+
+  /* Socials grid stays 2-col on mobile but caps nicely */
+  .hero-socials:has(.hero-social-link:nth-child(4)) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* ==========================================================================

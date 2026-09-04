@@ -26,8 +26,10 @@ import {
   ChevronRight,
   Video,
   Play,
+  Settings,
 } from 'lucide-react';
 import BlockRenderer from '../components/Blocks/BlockRenderer';
+import AccountSettingsModal from '../components/Editor/AccountSettingsModal';
 import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import '../App.css';
@@ -347,6 +349,7 @@ export function ProfileCanvas({
   const { user: authUser } = useAuth();
   const { theme } = useTheme();
   const isOwner = authUser?.username?.toLowerCase() === username?.toLowerCase();
+  const [showAccountSettings, setShowAccountSettings] = useState(false);
 
   const tabs = (content?.tabs || []).filter((t) => t.enabled !== false);
   const currentTab = tabs.find((t) => t.id === activeTabId) || tabs[0];
@@ -393,17 +396,43 @@ export function ProfileCanvas({
         </div>
       )}
 
-      {/* Edit FAB for profile owner */}
+      {/* Settings + Edit FABs for profile owner */}
       {isOwner && !isEditing && (
-        <button
-          type="button"
-          className="profile-edit-fab"
-          onClick={() => navigate(`/@${username}/edit`)}
-          title="Open Visual Editor"
-        >
-          Edit Profile
-        </button>
+        <div className="profile-fab-stack">
+          <button
+            type="button"
+            className="profile-settings-fab"
+            onClick={() => setShowAccountSettings(true)}
+            title="Profile Settings & Logout"
+          >
+            <Settings size={15} />
+            Settings
+          </button>
+          <button
+            type="button"
+            className="profile-edit-fab"
+            onClick={() => navigate(`/@${username}/edit`)}
+            title="Open Visual Editor"
+          >
+            Edit Profile
+          </button>
+        </div>
       )}
+
+      {/* Account Settings Modal (accessible from profile view) */}
+      <AnimatePresence>
+        {isOwner && showAccountSettings && (
+          <AccountSettingsModal
+            onClose={() => setShowAccountSettings(false)}
+            onUsernameChanged={(newUsername) => {
+              setShowAccountSettings(false);
+              if (newUsername && newUsername !== username) {
+                navigate(`/@${newUsername}`, { replace: true });
+              }
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Dynamic Tab Navigation Bar (if more than 1 tab) */}
       {tabs.length > 1 && (

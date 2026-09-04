@@ -793,7 +793,7 @@ export default function BlockEditorModal({
                       <input
                         type="text"
                         value={Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || ''}
-                        onChange={(e) => handleItemChange(idx, 'tags', e.target.value.split(',').map((t) => t.trim()).filter(Boolean))}
+                        onChange={(e) => handleItemChange(idx, 'tags', e.target.value)}
                         placeholder="Tags (comma separated, e.g. React, Node.js)"
                         className="editor-text-input full-width"
                         style={{ color: '#f1f5f9', background: '#06070a' }}
@@ -1331,7 +1331,7 @@ export default function BlockEditorModal({
                         <input
                           type="text"
                           value={Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || ''}
-                          onChange={(e) => handleItemChange(idx, 'tags', e.target.value.split(',').map((t) => t.trim()).filter(Boolean))}
+                          onChange={(e) => handleItemChange(idx, 'tags', e.target.value)}
                           placeholder="Tags (comma separated, e.g. React, TypeScript, Docker)"
                           className="editor-text-input full-width"
                           style={{ color: '#f1f5f9', background: '#090a0f' }}

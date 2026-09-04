@@ -87,7 +87,10 @@ export default function TimelineBlock({ data = {} }) {
 
                 {item.tags && item.tags.length > 0 && (
                   <div className="card-tags" style={{ marginTop: '14px', marginBottom: 0 }}>
-                    {item.tags.map((tag, tIdx) => (
+                    {(Array.isArray(item.tags)
+                      ? item.tags
+                      : item.tags.split(',').map((t) => t.trim()).filter(Boolean)
+                    ).map((tag, tIdx) => (
                       <span key={tIdx} className="card-tag">{tag}</span>
                     ))}
                   </div>
