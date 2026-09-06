@@ -65,8 +65,8 @@
   padding: 4px 8px;
   border-radius: var(--radius-xs);
   background: rgba(9, 10, 15, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
   border: 1px solid var(--color-border-normal);
   box-shadow: var(--shadow-md);
   opacity: 0;
@@ -246,6 +246,8 @@ img.hero-avatar:not(.optimized-image) {
   padding: 3px 10px;
   border-radius: var(--radius-full);
   background: var(--color-surface-sunken, rgba(9, 10, 15, 0.95));
+  backdrop-filter: blur(var(--glass-blur, 8px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 8px));
   border: 1px solid var(--color-accent-dim, rgba(0, 240, 170, 0.3));
   font-size: var(--text-2xs);
   font-weight: 600;
@@ -479,9 +481,11 @@ img.hero-avatar:not(.optimized-image) {
 .card-item {
   position: relative;
   border-radius: var(--radius-md);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border-subtle);
+  background: var(--card-bg, var(--color-surface-raised));
+  border: 1px solid var(--card-border, var(--color-border-subtle));
   overflow: hidden;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
   transition: border-color var(--transition-normal), background-color var(--transition-normal), box-shadow var(--transition-normal);
   display: flex;
   flex-direction: column;
@@ -518,7 +522,8 @@ img.hero-avatar:not(.optimized-image) {
   padding: 3px 8px;
   border-radius: var(--radius-xs);
   background: rgba(9, 10, 15, 0.88);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(var(--glass-blur, 8px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 8px));
   font-size: var(--text-2xs);
   font-weight: 700;
   font-family: var(--font-mono);
@@ -599,9 +604,11 @@ img.hero-avatar:not(.optimized-image) {
 
 .skills-category {
   border-radius: var(--radius-md);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border-subtle);
+  background: var(--card-bg, var(--color-surface-raised));
+  border: 1px solid var(--card-border, var(--color-border-subtle));
   padding: 22px;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .skills-category-title {
@@ -687,8 +694,10 @@ img.hero-avatar:not(.optimized-image) {
 .timeline-card {
   padding: 20px 22px;
   border-radius: var(--radius-md);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border-subtle);
+  background: var(--card-bg, var(--color-surface-raised));
+  border: 1px solid var(--card-border, var(--color-border-subtle));
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .timeline-meta {
@@ -807,10 +816,12 @@ img.hero-avatar:not(.optimized-image) {
   position: absolute;
   inset: 0;
   border-radius: var(--radius-md);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border-subtle);
+  background: var(--card-bg, var(--color-surface-raised));
+  border: 1px solid var(--card-border, var(--color-border-subtle));
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition-normal);
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .deck-layer.layer-back {
@@ -895,12 +906,14 @@ img.hero-avatar:not(.optimized-image) {
 .spec-card {
   padding: 16px 18px;
   border-radius: var(--radius-md);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border-subtle);
+  background: var(--card-bg, var(--color-surface-raised));
+  border: 1px solid var(--card-border, var(--color-border-subtle));
   display: flex;
   align-items: flex-start;
   gap: 14px;
   transition: border-color var(--transition-fast);
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .spec-card:hover {
@@ -961,12 +974,14 @@ img.hero-avatar:not(.optimized-image) {
 
 .review-card {
   border-radius: var(--radius-md);
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border-subtle);
+  background: var(--card-bg, var(--color-surface-raised));
+  border: 1px solid var(--card-border, var(--color-border-subtle));
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: border-color var(--transition-fast);
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .review-card:hover {
@@ -1047,6 +1062,8 @@ img.hero-avatar:not(.optimized-image) {
   transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
   overflow: hidden;
   position: relative;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .journal-entry-card:hover {
@@ -1316,6 +1333,8 @@ img.hero-avatar:not(.optimized-image) {
   flex-direction: column;
   gap: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .journal-form-header {
@@ -1453,6 +1472,8 @@ img.hero-avatar:not(.optimized-image) {
   display: flex;
   flex-direction: column;
   transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-fast);
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .service-card.has-media {
@@ -1679,11 +1700,13 @@ img.hero-avatar:not(.optimized-image) {
   position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: var(--color-surface-sunken);
+  background: var(--card-bg, var(--color-surface-sunken));
   border: 1px solid var(--card-border, var(--color-border-subtle));
   cursor: pointer;
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .gallery-card:hover {
@@ -1892,6 +1915,8 @@ img.hero-avatar:not(.optimized-image) {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .gallery-lightbox-title {
@@ -2041,6 +2066,8 @@ img.hero-avatar:not(.optimized-image) {
   background: var(--card-bg, var(--color-surface-raised));
   border: 1px solid var(--card-border, var(--color-border-subtle));
   transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .event-card:hover {
@@ -2297,6 +2324,8 @@ img.hero-avatar:not(.optimized-image) {
   border: 1px solid var(--card-border, var(--color-border-subtle));
   border-radius: var(--radius-md);
   padding: 24px;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .events-month-header {
@@ -2734,13 +2763,15 @@ img.hero-avatar:not(.optimized-image) {
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--card-bg, rgba(255, 255, 255, 0.02));
   border: 1px dashed var(--card-border, rgba(255, 255, 255, 0.12));
   border-radius: var(--radius-md);
   color: var(--color-text-secondary, #8b949e);
   gap: 10px;
   text-align: center;
   font-size: 0.88rem;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 /* --- Featured Video Block --- */
@@ -3019,13 +3050,15 @@ img.hero-avatar:not(.optimized-image) {
   position: relative;
   border-radius: var(--radius-md, 8px);
   overflow: hidden;
-  background: var(--color-surface-sunken, #06070a);
+  background: var(--card-bg, var(--color-surface-sunken, #06070a));
   border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .video-gallery-card:hover {
@@ -3385,6 +3418,8 @@ img.hero-avatar:not(.optimized-image) {
   border-radius: var(--radius-md, 10px);
   padding: 24px;
   overflow: hidden;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .github-heatmap-header {
@@ -3572,6 +3607,8 @@ img.hero-avatar:not(.optimized-image) {
   color: var(--text-muted, #8b949e);
   font-size: 0.85rem;
   text-align: center;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .github-heatmap-loading { flex-direction: row; }
@@ -3592,6 +3629,8 @@ img.hero-avatar:not(.optimized-image) {
   border-radius: var(--radius-md, 10px);
   padding: 28px;
   overflow: hidden;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .music-player-layout {
@@ -3946,6 +3985,8 @@ img.hero-avatar:not(.optimized-image) {
   color: var(--text-muted, #8b949e);
   font-size: 0.85rem;
   text-align: center;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 @media (max-width: 640px) {
@@ -3980,6 +4021,8 @@ img.hero-avatar:not(.optimized-image) {
   border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
   border-radius: var(--radius-md, 10px);
   padding: 28px;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 .milestones-header {
@@ -4257,6 +4300,8 @@ img.hero-avatar:not(.optimized-image) {
   color: var(--text-muted, #8b949e);
   font-size: 0.85rem;
   text-align: center;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
 }
 
 @media (max-width: 640px) {

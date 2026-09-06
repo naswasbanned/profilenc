@@ -23,7 +23,7 @@ const DEFAULT_THEME = {
     headingColor: '#ffffff',
     textColor: '#e6edf3',
     textColorMuted: '#8b949e',
-    cardBackground: '#12151e',
+    cardBackground: 'rgba(18, 21, 30, 0.82)',
     cardBorder: 'rgba(255, 255, 255, 0.08)',
     cardHeadingColor: null,
     cardTextColor: null,
@@ -88,9 +88,18 @@ function themeToCSSVars(theme) {
   vars['--dev-bg'] = bg;
   vars['--cs-bg'] = bg;
   vars['--diary-bg'] = bg;
-  vars['--card-bg'] = cardBg;
-  vars['--color-surface-raised'] = cardBg;
-  vars['--color-surface-base'] = cardBg;
+  // Container Card Glass Effect:
+  // If background image is active and glass blur is enabled, ensure solid 6-digit hex backgrounds
+  // get subtle translucency so the glass blur effect is clearly visible through the container.
+  const blur = g.glassBlur ?? 12;
+  let resolvedCardBg = cardBg;
+  if (g.backgroundImage && blur > 0 && typeof cardBg === 'string' && cardBg.startsWith('#') && cardBg.length === 7) {
+    resolvedCardBg = `color-mix(in srgb, ${cardBg} 75%, transparent)`;
+  }
+
+  vars['--card-bg'] = resolvedCardBg;
+  vars['--color-surface-raised'] = resolvedCardBg;
+  vars['--color-surface-base'] = resolvedCardBg;
   vars['--color-surface-sunken'] = bg;
   vars['--card-border'] = cardBorder;
   vars['--color-border-subtle'] = cardBorder;
@@ -139,7 +148,6 @@ function themeToCSSVars(theme) {
   vars['--color-btn-primary-bg'] = btnBg;
   vars['--color-btn-primary-text'] = btnText;
   const speed = g.animationSpeed ?? 1;
-  const blur = g.glassBlur ?? 12;
 
   vars['--base-font-size'] = `${g.baseFontSize || 16}px`;
   vars['--border-radius'] = `${radius}px`;
