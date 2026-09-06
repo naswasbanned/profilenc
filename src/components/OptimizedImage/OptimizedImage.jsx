@@ -14,7 +14,9 @@ export default function OptimizedImage({
   src,
   alt = '',
   className = '',
+  wrapperClassName = '',
   style,
+  wrapperStyle,
   width,
   height,
   ...rest
@@ -27,12 +29,12 @@ export default function OptimizedImage({
     if (imgRef.current?.complete && imgRef.current?.naturalWidth > 0) {
       setLoaded(true);
     }
-  }, []);
+  }, [src]);
 
   return (
     <div
-      className={`optimized-image-wrapper ${loaded ? 'loaded' : ''}`}
-      style={style}
+      className={`optimized-image-wrapper ${loaded ? 'loaded' : ''} ${wrapperClassName}`.trim()}
+      style={wrapperStyle || style}
     >
       <img
         ref={imgRef}

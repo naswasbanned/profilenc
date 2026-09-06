@@ -10,6 +10,10 @@
   background: var(--color-surface-sunken);
 }
 
+.optimized-image-wrapper.loaded {
+  background: transparent;
+}
+
 .optimized-image-wrapper::before {
   content: '';
   position: absolute;

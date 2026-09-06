@@ -43,6 +43,7 @@ export default function HeroBlock({ data = {} }) {
           src={avatarUrl}
           alt={name}
           className="hero-avatar"
+          wrapperClassName="hero-avatar-img-wrap"
           width={120}
           height={120}
         />
