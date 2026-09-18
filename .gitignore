@@ -27,3 +27,13 @@ dist-ssr
 server/uploads/
 server/node_modules/
 .env
+
+.agents/*
+.claude/*
+
+brag-output
+brag-output-demo
+
+*.md
+!README.md
+DEPLOY_INSTRUCTIONS.txt

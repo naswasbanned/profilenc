@@ -26,16 +26,26 @@
   --font-serif: 'Crimson Text', Georgia, serif;
 
   /* Type Scale Tokens */
-  --text-2xs: 0.6875rem; /* 11px */
-  --text-xs: 0.75rem;    /* 12px */
-  --text-sm: 0.875rem;   /* 14px */
-  --text-base: 1rem;     /* 16px */
-  --text-lg: 1.125rem;   /* 18px */
-  --text-xl: 1.25rem;    /* 20px */
-  --text-2xl: 1.5rem;    /* 24px */
-  --text-3xl: 1.875rem;  /* 30px */
-  --text-4xl: 2.25rem;   /* 36px */
-  --text-5xl: 3rem;      /* 48px */
+  --text-2xs: 0.6875rem;
+  /* 11px */
+  --text-xs: 0.75rem;
+  /* 12px */
+  --text-sm: 0.875rem;
+  /* 14px */
+  --text-base: 1rem;
+  /* 16px */
+  --text-lg: 1.125rem;
+  /* 18px */
+  --text-xl: 1.25rem;
+  /* 20px */
+  --text-2xl: 1.5rem;
+  /* 24px */
+  --text-3xl: 1.875rem;
+  /* 30px */
+  --text-4xl: 2.25rem;
+  /* 36px */
+  --text-5xl: 3rem;
+  /* 48px */
 
   /* Legacy theme aliases for ThemeContext compatibility */
   --font-family: var(--font-body);
@@ -222,6 +232,7 @@ img {
 
 /* === Reduced Motion Fallback for Accessibility === */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -269,9 +280,9 @@ img {
     opacity: 0;
     transform: translate(-50%, 12px) scale(0.94);
   }
+
   100% {
     opacity: 1;
     transform: translate(-50%, 0) scale(1);
   }
 }
-
