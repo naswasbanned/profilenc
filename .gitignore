@@ -31,9 +31,10 @@ server/node_modules/
 .agents/*
 .claude/*
 
-brag-output
-brag-output-demo
-
 *.md
 !README.md
 DEPLOY_INSTRUCTIONS.txt
+
+brag-output/*
+brag-output-demo/*
+
