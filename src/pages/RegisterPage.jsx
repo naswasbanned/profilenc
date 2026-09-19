@@ -153,7 +153,7 @@ export default function RegisterPage() {
             <div className="auth-field">
               <label>CLAIM USERNAME</label>
               <div className="auth-username-wrap">
-                <span className="auth-username-prefix">gnc.web.id/@</span>
+                <span className="auth-username-prefix">profilenc.my.id/@</span>
                 <input
                   type="text"
                   value={form.username}
