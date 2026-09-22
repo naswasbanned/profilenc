@@ -1,4 +1,4 @@
-import { Star } from 'lucide-react';
+import { Star, ExternalLink } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 
 export default function MediaReviewsBlock({ data = {} }) {
@@ -64,6 +64,19 @@ export default function MediaReviewsBlock({ data = {} }) {
                     <span key={gIdx} className="card-tag">{g}</span>
                   ))}
                 </div>
+              )}
+
+              {(item.link || item.url) && (
+                <a
+                  href={item.link || item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="review-link-btn"
+                  title="Open review link"
+                >
+                  <ExternalLink size={13} />
+                  <span>View Details</span>
+                </a>
               )}
             </div>
           </div>

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+.env.example
+brag-output/
+brag-output-demo/
+package-lock.json
+public/

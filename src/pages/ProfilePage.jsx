@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Layers,
@@ -232,7 +232,7 @@ export function normalizeModularContent(rawContent, username = 'User') {
   return { tabs };
 }
 
-function ProfileTabsNav({ tabs, currentTabId, onSelectTab, isEditing }) {
+function ProfileTabsNav({ tabs, currentTabId, onSelectTab, isEditing, navBackground }) {
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -284,7 +284,13 @@ function ProfileTabsNav({ tabs, currentTabId, onSelectTab, isEditing }) {
   };
 
   return (
-    <nav className="profile-tabs-nav" style={{ top: isEditing ? '52px' : 0 }}>
+    <nav
+      className="profile-tabs-nav"
+      style={{
+        top: isEditing ? '58px' : 0,
+        backgroundColor: navBackground || undefined,
+      }}
+    >
       <div className="profile-tabs-nav-container">
         {canScrollLeft && (
           <button
@@ -357,6 +363,7 @@ export function ProfileCanvas({
 
   const tabBgColor = theme?.tabs?.[currentTab?.id]?.backgroundColor || theme?.global?.backgroundColor || '#090a0f';
   const tabBgGradient = theme?.tabs?.[currentTab?.id]?.backgroundGradient || theme?.global?.backgroundGradient || null;
+  const tabNavBg = theme?.tabs?.[currentTab?.id]?.tabNavBackground || theme?.global?.tabNavBackground || null;
 
   // Custom background image (per-tab or global)
   const bgImage = theme?.tabs?.[currentTab?.id]?.backgroundImage || theme?.global?.backgroundImage || null;
@@ -367,10 +374,14 @@ export function ProfileCanvas({
   return (
     <div
       className="app"
+      data-pill-style={theme?.global?.pillStyle || (theme?.global?.designStyle === 'field-notes' ? 'editorial-bordered' : 'rounded-glow')}
+      data-button-style={theme?.global?.buttonStyle || (theme?.global?.designStyle === 'field-notes' ? 'editorial-tactile' : theme?.global?.designStyle === 'neo-brutalist' ? 'neo-brutalist' : theme?.global?.designStyle === 'midnight-violet' ? 'rounded-glow' : 'flat-border')}
+      data-icon-style={theme?.global?.iconStyle || (theme?.global?.designStyle === 'field-notes' ? 'bordered-box' : 'glass-accent')}
+      data-design-style={theme?.global?.designStyle || 'field-notes'}
       style={{
         backgroundColor: tabBgColor,
         backgroundImage: tabBgGradient || undefined,
-        minHeight: isEditing ? 'calc(100vh - 52px)' : '100vh',
+        minHeight: isEditing ? 'calc(100vh - 58px)' : '100vh',
         display: 'flex',
         flexDirection: 'column',
         transition: 'background-color 0.35s ease, background-image 0.35s ease',
@@ -394,6 +405,18 @@ export function ProfileCanvas({
             }}
           />
         </div>
+      )}
+
+      {/* Sticky Profilenc Home Badge on Top-Left */}
+      {!isEditing && (
+        <Link
+          to="/"
+          className="profile-home-badge"
+          title="Back to Profilenc"
+          aria-label="Back to Profilenc"
+        >
+          <img src="/logo.svg" alt="Profilenc" className="profile-home-badge-img" />
+        </Link>
       )}
 
       {/* Settings + Edit FABs for profile owner */}
@@ -441,11 +464,15 @@ export function ProfileCanvas({
           currentTabId={currentTab?.id}
           onSelectTab={setActiveTabId}
           isEditing={isEditing}
+          navBackground={tabNavBg}
         />
       )}
 
       {/* Blocks Canvas */}
-      <main style={{ flex: 1, minHeight: '50vh', padding: '20px 0 40px' }}>
+      <main
+        className={`profile-canvas-main ${isEditing ? 'is-editing' : ''}`}
+        style={{ flex: 1, minHeight: '50vh', padding: isEditing ? '36px 0 40px' : '20px 0 40px' }}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={currentTab?.id || 'main'}

@@ -37,6 +37,7 @@ import { GearIcon, GEAR_ICON_CATEGORIES, guessGearIcon } from '../../utils/gearI
 
 export default function BlockEditorModal({
   block,
+  editorTheme = 'dark',
   onSave,
   onClose,
 }) {
@@ -184,7 +185,7 @@ export default function BlockEditorModal({
   const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(onClose);
 
   return (
-    <div className="editor-modal-backdrop" onClick={handleBackdropClick}>
+    <div className="editor-modal-backdrop" data-editor-theme={editorTheme} onClick={handleBackdropClick}>
       {hintVisible && (
         <div className="modal-double-click-hint">
           <span>Click once more outside to close (or use ✕)</span>
@@ -200,17 +201,17 @@ export default function BlockEditorModal({
         {/* Modal Header */}
         <div className="editor-modal-header">
           <div>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#fff', textTransform: 'capitalize' }}>
+            <h3 style={{ textTransform: 'capitalize' }}>
               Edit {block.type?.replace('_', ' ')} Block
             </h3>
-            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+            <span>
               Customize content, alignments, and items visually
             </span>
           </div>
           <button
             type="button"
             onClick={onClose}
-            style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+            title="Close"
           >
             <X size={20} />
           </button>
@@ -224,58 +225,58 @@ export default function BlockEditorModal({
             {block.type !== 'hero' && (
               <div className="editor-form-grid-3">
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>Section Title</label>
+                  <label>Section Title</label>
                   <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. Featured Projects"
                     className="editor-text-input full-width"
-                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    
                   />
                 </div>
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>Subtitle (optional)</label>
+                  <label>Subtitle (optional)</label>
                   <input
                     type="text"
                     value={subtitle}
                     onChange={(e) => setSubtitle(e.target.value)}
                     placeholder="e.g. Selected client works"
                     className="editor-text-input full-width"
-                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    
                   />
                 </div>
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>Section Icon / Logo</label>
+                  <label>Section Icon / Logo</label>
                   <select
                     value={icon}
                     onChange={(e) => setIcon(e.target.value)}
                     className="editor-select"
-                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    
                   >
                     <option value="default">Default Icon (Auto)</option>
                     <option value="none">No Icon (Just Text)</option>
-                    <option value="Sparkles">Sparkles ✨</option>
-                    <option value="Code2">Code & Dev 💻</option>
-                    <option value="Briefcase">Briefcase / Career 💼</option>
-                    <option value="Layers">Layers / Cards 🗂️</option>
+                    <option value="Sparkles">Sparkles</option>
+                    <option value="Code2">Code & Dev</option>
+                    <option value="Briefcase">Briefcase / Career</option>
+                    <option value="Layers">Layers / Cards</option>
                     <option value="Cpu">CPU / Hardware ⚙️</option>
-                    <option value="Gamepad2">Gamepad / Gaming 🎮</option>
-                    <option value="BookOpen">Book / Journal 📖</option>
-                    <option value="Film">Film / Cinema 🎬</option>
-                    <option value="Music">Music / Audio 🎵</option>
-                    <option value="Star">Star / Highlights ⭐</option>
-                    <option value="Heart">Heart / Favorites ❤️</option>
-                    <option value="Zap">Zap / Energy ⚡</option>
-                    <option value="Globe">Globe / Web 🌐</option>
-                    <option value="Award">Award / Achievements 🏆</option>
-                    <option value="Terminal">Terminal / CLI &gt;_</option>
-                    <option value="Folder">Folder / Projects 📁</option>
-                    <option value="Coffee">Coffee / Life ☕</option>
-                    <option value="Shield">Shield / Security 🛡️</option>
-                    <option value="Activity">Activity / Stats 📊</option>
-                    <option value="Flame">Flame / Trending 🔥</option>
-                    <option value="Rocket">Rocket / Launch 🚀</option>
+                    <option value="Gamepad2">Gamepad / Gaming</option>
+                    <option value="BookOpen">Book / Journal</option>
+                    <option value="Film">Film / Cinema</option>
+                    <option value="Music">Music / Audio</option>
+                    <option value="Star">Star / Highlights</option>
+                    <option value="Heart">Heart / Favorites</option>
+                    <option value="Zap">Zap / Energy</option>
+                    <option value="Globe">Globe / Web</option>
+                    <option value="Award">Award / Achievements</option>
+                    <option value="Terminal">Terminal / CLI</option>
+                    <option value="Folder">Folder / Projects</option>
+                    <option value="Coffee">Coffee / Life</option>
+                    <option value="Shield">Shield / Security</option>
+                    <option value="Activity">Activity / Stats</option>
+                    <option value="Flame">Flame / Trending</option>
+                    <option value="Rocket">Rocket / Launch</option>
                   </select>
                 </div>
               </div>
@@ -285,12 +286,12 @@ export default function BlockEditorModal({
             {block.type === 'hero' && (
               <>
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>Hero Layout & Alignment</label>
+                  <label>Hero Layout & Alignment</label>
                   <select
                     value={formData.align || 'center'}
                     onChange={(e) => handleFieldChange('align', e.target.value)}
                     className="editor-select"
-                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    
                   >
                     <option value="center">Middle (Centered Avatar, Text & Buttons)</option>
                     <option value="left">Left Aligned (Avatar, Text & Buttons on Left)</option>
@@ -302,26 +303,26 @@ export default function BlockEditorModal({
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
                   <div className="editor-control">
-                    <label style={{ color: '#e2e8f0' }}>Full Name</label>
+                    <label>Full Name</label>
                     <input
                       type="text"
                       value={formData.name || ''}
                       onChange={(e) => handleFieldChange('name', e.target.value)}
                       placeholder="e.g. Alex Rivers"
                       className="editor-text-input full-width"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                       required
                     />
                   </div>
                   <div className="editor-control">
-                    <label style={{ color: '#e2e8f0' }}>Tagline / Role</label>
+                    <label>Tagline / Role</label>
                     <input
                       type="text"
                       value={formData.tagline || ''}
                       onChange={(e) => handleFieldChange('tagline', e.target.value)}
                       placeholder="e.g. Full-Stack Engineer"
                       className="editor-text-input full-width"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     />
                   </div>
                 </div>
@@ -333,40 +334,39 @@ export default function BlockEditorModal({
                 />
 
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>Status Pill Badge (optional)</label>
+                  <label>Status Pill Badge (optional)</label>
                   <input
                     type="text"
                     value={formData.statusBadge || ''}
                     onChange={(e) => handleFieldChange('statusBadge', e.target.value)}
                     placeholder="e.g. Available for Freelance"
                     className="editor-text-input full-width"
-                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    
                   />
                 </div>
 
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>Bio / Summary</label>
+                  <label>Bio / Summary</label>
                   <textarea
                     value={formData.bio || ''}
                     onChange={(e) => handleFieldChange('bio', e.target.value)}
                     placeholder="Brief description about yourself..."
                     className="editor-text-input full-width"
                     rows={3}
-                    style={{ resize: 'vertical', color: '#f1f5f9', background: '#06070a' }}
+                    style={{ resize: "vertical" }}
                   />
                 </div>
 
                 {/* Action Buttons (Get in Touch / Contact / Links) */}
                 <div style={{ marginTop: '4px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <label style={{ fontSize: '0.84rem', fontWeight: 700, color: '#ffffff' }}>
+                    <label className="editor-section-heading">
                       Action & Contact Buttons ({(formData.actions || []).length})
                     </label>
                     <button
                       type="button"
                       onClick={handleAddAction}
-                      className="editor-btn"
-                      style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '5px 12px', fontSize: '0.78rem' }}
+                      className="editor-btn-add"
                     >
                       <Plus size={13} /> Add Action Button
                     </button>
@@ -376,13 +376,7 @@ export default function BlockEditorModal({
                     {(formData.actions || []).map((act, aIdx) => (
                       <div
                         key={aIdx}
-                        className="editor-form-row-action"
-                        style={{
-                          padding: '10px 12px',
-                          borderRadius: '8px',
-                          background: '#06070a',
-                          border: '1px solid rgba(255,255,255,0.08)',
-                        }}
+                        className="editor-subitem-row"
                       >
                         <input
                           type="text"
@@ -390,7 +384,7 @@ export default function BlockEditorModal({
                           onChange={(e) => handleActionChange(aIdx, 'label', e.target.value)}
                           placeholder="Button Label (e.g. Get in Touch)"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                         <input
                           type="text"
@@ -398,7 +392,7 @@ export default function BlockEditorModal({
                           onChange={(e) => handleActionChange(aIdx, 'url', e.target.value)}
                           placeholder="URL / Email (e.g. mailto:...)"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                         <button
                           type="button"
@@ -412,7 +406,7 @@ export default function BlockEditorModal({
                         <button
                           type="button"
                           onClick={() => handleRemoveAction(aIdx)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                          className="editor-icon-btn is-delete"
                           title="Delete button"
                         >
                           <Trash2 size={15} />
@@ -425,14 +419,13 @@ export default function BlockEditorModal({
                 {/* Social & Profile Links */}
                 <div style={{ marginTop: '4px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <label style={{ fontSize: '0.84rem', fontWeight: 700, color: '#ffffff' }}>
+                    <label className="editor-section-heading">
                       Social & Profile Links ({(formData.socials || []).length})
                     </label>
                     <button
                       type="button"
                       onClick={handleAddSocial}
-                      className="editor-btn"
-                      style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '5px 12px', fontSize: '0.78rem' }}
+                      className="editor-btn-add"
                     >
                       <Plus size={13} /> Add Social Link
                     </button>
@@ -442,19 +435,13 @@ export default function BlockEditorModal({
                     {(formData.socials || []).map((soc, sIdx) => (
                       <div
                         key={sIdx}
-                        className="editor-form-row-social"
-                        style={{
-                          padding: '10px 12px',
-                          borderRadius: '8px',
-                          background: '#06070a',
-                          border: '1px solid rgba(255,255,255,0.08)',
-                        }}
+                        className="editor-subitem-row"
                       >
                         <select
                           value={soc.platform || 'Github'}
                           onChange={(e) => handleSocialChange(sIdx, 'platform', e.target.value)}
                           className="editor-select full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         >
                           <option value="Github">GitHub</option>
                           <option value="Linkedin">LinkedIn</option>
@@ -470,7 +457,7 @@ export default function BlockEditorModal({
                           onChange={(e) => handleSocialChange(sIdx, 'label', e.target.value)}
                           placeholder="Label (e.g. GitHub)"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                         <input
                           type="text"
@@ -478,12 +465,12 @@ export default function BlockEditorModal({
                           onChange={(e) => handleSocialChange(sIdx, 'url', e.target.value)}
                           placeholder="https://..."
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                         <button
                           type="button"
                           onClick={() => handleRemoveSocial(sIdx)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                          className="editor-icon-btn is-delete"
                         >
                           <Trash2 size={15} />
                         </button>
@@ -498,12 +485,12 @@ export default function BlockEditorModal({
             {(block.type === 'services' || block.type === 'commission') && (
               <>
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>Grid Columns</label>
+                  <label>Grid Columns</label>
                   <select
                     value={formData.columns || 2}
                     onChange={(e) => handleFieldChange('columns', Number(e.target.value))}
                     className="editor-select"
-                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    
                   >
                     <option value={1}>1 Column (Full Width Stack)</option>
                     <option value={2}>2 Columns (Recommended)</option>
@@ -512,7 +499,7 @@ export default function BlockEditorModal({
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>
+                  <h4 className="editor-section-heading">
                     Services & Commission Tiers ({(formData.items || []).length})
                   </h4>
                   <button
@@ -532,8 +519,7 @@ export default function BlockEditorModal({
                         ctaUrl: 'mailto:hello@example.com',
                       })
                     }
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Service Tier
                   </button>
@@ -543,18 +529,10 @@ export default function BlockEditorModal({
                   {(formData.items || []).map((svc, idx) => (
                     <div
                       key={idx}
-                      style={{
-                        borderRadius: '10px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px',
-                      }}
+                      className="editor-item-card"
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                        <span className="editor-item-card-title">
                           Tier #{idx + 1}: {svc.title || 'Untitled Tier'}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -566,12 +544,12 @@ export default function BlockEditorModal({
                           >
                             {svc.featured ? '★ Featured Tier' : 'Make Featured'}
                           </button>
-                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
-                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(idx)}
-                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            className="editor-icon-btn is-delete"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -580,61 +558,61 @@ export default function BlockEditorModal({
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Service Name</label>
+                          <label>Service Name</label>
                           <input
                             type="text"
                             value={svc.title || ''}
                             onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
                             placeholder="e.g. Full-Stack Web App"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Price</label>
+                          <label>Price</label>
                           <input
                             type="text"
                             value={svc.price || ''}
                             onChange={(e) => handleItemChange(idx, 'price', e.target.value)}
                             placeholder="e.g. $1,200 or $50/hr"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Billing Period</label>
+                          <label>Billing Period</label>
                           <input
                             type="text"
                             value={svc.period || ''}
                             onChange={(e) => handleItemChange(idx, 'period', e.target.value)}
                             placeholder="e.g. project / mo / hr"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Availability / Status</label>
+                          <label>Availability / Status</label>
                           <input
                             type="text"
                             value={svc.status || ''}
                             onChange={(e) => handleItemChange(idx, 'status', e.target.value)}
                             placeholder="e.g. Available / 2 Slots Left"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Delivery / Turnaround</label>
+                          <label>Delivery / Turnaround</label>
                           <input
                             type="text"
                             value={svc.deliveryTime || ''}
                             onChange={(e) => handleItemChange(idx, 'deliveryTime', e.target.value)}
                             placeholder="e.g. 1-2 weeks"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
@@ -646,50 +624,50 @@ export default function BlockEditorModal({
                       />
 
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#e2e8f0' }}>Service Description</label>
+                        <label>Service Description</label>
                         <textarea
                           value={svc.description || ''}
                           onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
                           placeholder="What this service covers..."
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                           rows={2}
                         />
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#e2e8f0' }}>Included Deliverables / Features (one per line)</label>
+                        <label>Included Deliverables / Features (one per line)</label>
                         <textarea
                           value={Array.isArray(svc.features) ? svc.features.join('\n') : svc.features || ''}
                           onChange={(e) => handleItemChange(idx, 'features', e.target.value.split('\n'))}
                           placeholder="✓ Responsive UI Design&#10;✓ Frontend & Backend Integration&#10;✓ Free 14-day Support"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                           rows={3}
                         />
                       </div>
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Button Label</label>
+                          <label>Button Label</label>
                           <input
                             type="text"
                             value={svc.ctaLabel || ''}
                             onChange={(e) => handleItemChange(idx, 'ctaLabel', e.target.value)}
                             placeholder="e.g. Book Commission"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Button Link / Action</label>
+                          <label>Button Link / Action</label>
                           <input
                             type="text"
                             value={svc.ctaUrl || ''}
                             onChange={(e) => handleItemChange(idx, 'ctaUrl', e.target.value)}
                             placeholder="mailto:you@example.com or URL"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
@@ -703,12 +681,12 @@ export default function BlockEditorModal({
             {block.type === 'cards_grid' && (
               <>
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>Grid Columns</label>
+                  <label>Grid Columns</label>
                   <select
                     value={formData.columns || 2}
                     onChange={(e) => handleFieldChange('columns', Number(e.target.value))}
                     className="editor-select"
-                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    
                   >
                     <option value={1}>1 Column (Stack)</option>
                     <option value={2}>2 Columns</option>
@@ -718,12 +696,11 @@ export default function BlockEditorModal({
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>Cards ({(formData.items || []).length})</h4>
+                  <h4 className="editor-section-heading">Cards ({(formData.items || []).length})</h4>
                   <button
                     type="button"
                     onClick={() => handleAddItem({ id: `card-${Date.now()}`, title: 'New Card', description: '', badge: '', tags: [], linkUrl: '', actionLabel: 'View' })}
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Card
                   </button>
@@ -736,16 +713,16 @@ export default function BlockEditorModal({
                       className="editor-item-card"
                     >
                       <div className="editor-item-card-header">
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                        <span className="editor-item-card-title">
                           Card #{idx + 1}: {item.title || 'Untitled'}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
-                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(idx)}
-                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            className="editor-icon-btn is-delete"
                             title="Delete card"
                           >
                             <Trash2 size={16} />
@@ -760,7 +737,7 @@ export default function BlockEditorModal({
                           onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
                           placeholder="Card Title"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                         <input
                           type="text"
@@ -768,7 +745,7 @@ export default function BlockEditorModal({
                           onChange={(e) => handleItemChange(idx, 'badge', e.target.value)}
                           placeholder="Badge (e.g. Featured)"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                       </div>
 
@@ -786,7 +763,7 @@ export default function BlockEditorModal({
                         onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
                         placeholder="Description..."
                         className="editor-text-input full-width"
-                        style={{ color: '#f1f5f9', background: '#06070a' }}
+                        
                         rows={2}
                       />
 
@@ -796,7 +773,7 @@ export default function BlockEditorModal({
                         onChange={(e) => handleItemChange(idx, 'tags', e.target.value)}
                         placeholder="Tags (comma separated, e.g. React, Node.js)"
                         className="editor-text-input full-width"
-                        style={{ color: '#f1f5f9', background: '#06070a' }}
+                        
                       />
 
                       <div className="editor-form-row-2">
@@ -806,7 +783,7 @@ export default function BlockEditorModal({
                           onChange={(e) => handleItemChange(idx, 'linkUrl', e.target.value)}
                           placeholder="Link URL (https://...)"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                         <input
                           type="text"
@@ -814,7 +791,7 @@ export default function BlockEditorModal({
                           onChange={(e) => handleItemChange(idx, 'actionLabel', e.target.value)}
                           placeholder="Button Label (e.g. View Project)"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                       </div>
                     </div>
@@ -828,7 +805,7 @@ export default function BlockEditorModal({
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div>
-                    <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600, margin: 0 }}>
+                    <h4 className="editor-section-heading" style={{ margin: 0 }}>
                       Skills & Tech Stack Badges ({(formData.items || []).length})
                     </h4>
                     <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
@@ -838,8 +815,7 @@ export default function BlockEditorModal({
                   <button
                     type="button"
                     onClick={() => handleAddItem({ name: 'Go', category: 'Backend', tier: 'Proficient', color: '#00ADD8', icon: 'go' })}
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Skill Badge
                   </button>
@@ -851,15 +827,7 @@ export default function BlockEditorModal({
                     return (
                       <div
                         key={idx}
-                        style={{
-                          borderRadius: '10px',
-                          background: '#06070a',
-                          border: '1px solid rgba(255,255,255,0.08)',
-                          padding: '12px 14px',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '10px',
-                        }}
+                        className="editor-item-card"
                       >
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -883,7 +851,7 @@ export default function BlockEditorModal({
                               />
                             </div>
                             <div>
-                              <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc', display: 'block' }}>
+                              <span className="editor-item-card-title" style={{ display: "block" }}>
                                 {skill.name || 'Untitled Skill'}
                               </span>
                               <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
@@ -900,12 +868,12 @@ export default function BlockEditorModal({
                               title="Badge Theme Color"
                               style={{ width: '30px', height: '28px', border: 'none', borderRadius: '4px', cursor: 'pointer', background: 'transparent' }}
                             />
-                            <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
-                            <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                            <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                            <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                             <button
                               type="button"
                               onClick={() => handleRemoveItem(idx)}
-                              style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                              className="editor-icon-btn is-delete"
                               title="Delete skill"
                             >
                               <Trash2 size={16} />
@@ -915,7 +883,7 @@ export default function BlockEditorModal({
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1.2fr 1.2fr 1fr', gap: '8px' }}>
                           <div className="editor-control" style={{ margin: 0 }}>
-                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Tech / Skill Name</label>
+                            <label style={{ fontSize: "0.72rem", marginBottom: "3px", display: "block" }}>Tech / Skill Name</label>
                             <input
                               type="text"
                               value={skill.name || ''}
@@ -930,29 +898,29 @@ export default function BlockEditorModal({
                               }}
                               placeholder="e.g. Go, Next.js, Rust"
                               className="editor-text-input full-width"
-                              style={{ color: '#f1f5f9', background: '#090a0f' }}
+                              
                             />
                           </div>
 
                           <div className="editor-control" style={{ margin: 0 }}>
-                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Category</label>
+                            <label style={{ fontSize: "0.72rem", marginBottom: "3px", display: "block" }}>Category</label>
                             <input
                               type="text"
                               value={skill.category || ''}
                               onChange={(e) => handleItemChange(idx, 'category', e.target.value)}
                               placeholder="e.g. Languages, Frontend"
                               className="editor-text-input full-width"
-                              style={{ color: '#f1f5f9', background: '#090a0f' }}
+                              
                             />
                           </div>
 
                           <div className="editor-control" style={{ margin: 0 }}>
-                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Badge Icon</label>
+                            <label style={{ fontSize: "0.72rem", marginBottom: "3px", display: "block" }}>Badge Icon</label>
                             <select
                               value={skill.icon || ''}
                               onChange={(e) => handleItemChange(idx, 'icon', e.target.value)}
                               className="editor-select full-width"
-                              style={{ color: '#f1f5f9', background: '#090a0f' }}
+                              
                             >
                               <option value="">Auto-Detect ({resolved.slug || 'brand'})</option>
                               <optgroup label="Popular Languages">
@@ -1014,12 +982,12 @@ export default function BlockEditorModal({
                           </div>
 
                           <div className="editor-control" style={{ margin: 0 }}>
-                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Proficiency</label>
+                            <label style={{ fontSize: "0.72rem", marginBottom: "3px", display: "block" }}>Proficiency</label>
                             <select
                               value={skill.tier || 'Proficient'}
                               onChange={(e) => handleItemChange(idx, 'tier', e.target.value)}
                               className="editor-select full-width"
-                              style={{ color: '#f1f5f9', background: '#090a0f' }}
+                              
                             >
                               <option value="Expert">Expert</option>
                               <option value="Proficient">Proficient</option>
@@ -1039,7 +1007,7 @@ export default function BlockEditorModal({
             {block.type === 'timeline' && (
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>Timeline Items ({(formData.items || []).length})</h4>
+                  <h4 className="editor-section-heading">Timeline Items ({(formData.items || []).length})</h4>
                   <button
                     type="button"
                     onClick={() =>
@@ -1057,8 +1025,7 @@ export default function BlockEditorModal({
                         tags: [],
                       })
                     }
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Timeline Item
                   </button>
@@ -1069,12 +1036,12 @@ export default function BlockEditorModal({
                     style={{
                       padding: '36px 20px',
                       textAlign: 'center',
-                      background: '#06070a',
-                      borderRadius: '10px',
-                      border: '1px dashed rgba(255,255,255,0.12)',
+                      background: 'var(--fn-editor-paper-light)',
+                      borderRadius: '12px',
+                      border: '2px dashed var(--fn-editor-line)',
                     }}
                   >
-                    <p style={{ fontSize: '0.85rem', color: '#94a3b8', margin: '0 0 14px' }}>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--fn-editor-muted)', margin: '0 0 14px' }}>
                       No timeline entries yet. Add your first career, project, or education milestone.
                     </p>
                     <button
@@ -1095,7 +1062,7 @@ export default function BlockEditorModal({
                       className="editor-btn editor-btn-save"
                       style={{ padding: '8px 18px', margin: '0 auto' }}
                     >
-                      <Plus size={15} /> Add First Timeline Entry
+                      <Plus size={15} /> <span>Add First Timeline Entry</span>
                     </button>
                   </div>
                 )}
@@ -1104,27 +1071,19 @@ export default function BlockEditorModal({
                   {(formData.items || []).map((item, idx) => (
                     <div
                       key={item.id || idx}
-                      style={{
-                        borderRadius: '10px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px',
-                      }}
+                      className="editor-item-card"
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '10px' }}>
-                        <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc' }}>
+                        <span className="editor-item-card-title">
                           Timeline Entry #{idx + 1}: {item.role || item.title || 'Untitled'}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
-                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(idx)}
-                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            className="editor-icon-btn is-delete"
                             title="Delete timeline item"
                           >
                             <Trash2 size={16} />
@@ -1135,7 +1094,7 @@ export default function BlockEditorModal({
                       {/* Role & Company Inputs */}
                       <div className="editor-form-row-2">
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Role / Milestone Title</label>
+                          <label style={{ fontSize: "0.78rem", marginBottom: "4px", display: "block" }}>Role / Milestone Title</label>
                           <input
                             type="text"
                             value={item.role || item.title || ''}
@@ -1145,18 +1104,18 @@ export default function BlockEditorModal({
                             }}
                             placeholder="e.g. Senior Software Engineer"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#090a0f' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Company / Organization</label>
+                          <label style={{ fontSize: "0.78rem", marginBottom: "4px", display: "block" }}>Company / Organization</label>
                           <input
                             type="text"
                             value={item.company || ''}
                             onChange={(e) => handleItemChange(idx, 'company', e.target.value)}
                             placeholder="e.g. Acme Labs"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#090a0f' }}
+                            
                           />
                         </div>
                       </div>
@@ -1164,38 +1123,38 @@ export default function BlockEditorModal({
                       {/* Period & Location Inputs */}
                       <div className="editor-form-row-2">
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Period / Date</label>
+                          <label style={{ fontSize: "0.78rem", marginBottom: "4px", display: "block" }}>Period / Date</label>
                           <input
                             type="text"
                             value={item.period || ''}
                             onChange={(e) => handleItemChange(idx, 'period', e.target.value)}
                             placeholder="e.g. 2022 - Present / Oct 2023"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#090a0f' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Location / Mode (optional)</label>
+                          <label style={{ fontSize: "0.78rem", marginBottom: "4px", display: "block" }}>Location / Mode (optional)</label>
                           <input
                             type="text"
                             value={item.location || ''}
                             onChange={(e) => handleItemChange(idx, 'location', e.target.value)}
                             placeholder="e.g. Remote / New York, NY"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#090a0f' }}
+                            
                           />
                         </div>
                       </div>
 
                       {/* Summary Description */}
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Overview Description</label>
+                        <label style={{ fontSize: "0.78rem", marginBottom: "4px", display: "block" }}>Overview Description</label>
                         <textarea
                           value={item.description || ''}
                           onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
                           placeholder="Brief summary of your responsibilities or milestone context..."
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#090a0f' }}
+                          
                           rows={2}
                         />
                       </div>
@@ -1205,35 +1164,29 @@ export default function BlockEditorModal({
                         style={{
                           padding: '12px',
                           borderRadius: '8px',
-                          background: 'rgba(255,255,255,0.02)',
-                          border: '1px solid rgba(255,255,255,0.06)',
+                          background: 'var(--fn-editor-paper-sunken)',
+                          border: '1.5px solid var(--fn-editor-line)',
                           display: 'flex',
                           flexDirection: 'column',
                           gap: '10px',
                         }}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#00f0aa' }}>
+                          <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--fn-editor-ink)' }}>
                             Timeline Points & Key Achievements ({(item.bullets || []).length})
                           </label>
                           <button
                             type="button"
                             onClick={() => handleAddBullet(idx)}
-                            className="editor-btn"
-                            style={{
-                              background: 'rgba(0, 240, 170, 0.12)',
-                              color: '#00f0aa',
-                              border: '1px solid rgba(0,240,170,0.3)',
-                              padding: '4px 10px',
-                              fontSize: '0.75rem',
-                            }}
+                            className="editor-btn-add"
+                            style={{ padding: '4px 10px', fontSize: '0.75rem' }}
                           >
                             <Plus size={13} /> Add Point
                           </button>
                         </div>
 
                         {(item.bullets || []).length === 0 ? (
-                          <div style={{ fontSize: '0.76rem', color: '#64748b', fontStyle: 'italic', padding: '4px 0' }}>
+                          <div style={{ fontSize: '0.76rem', color: 'var(--fn-editor-muted)', fontStyle: 'italic', padding: '4px 0' }}>
                             No bullet points yet. Click "+ Add Point" to add specific responsibilities or achievements.
                           </div>
                         ) : (
@@ -1241,25 +1194,21 @@ export default function BlockEditorModal({
                             {(item.bullets || []).map((bullet, bIdx) => (
                               <div
                                 key={bIdx}
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '8px',
-                                }}
+                                className="editor-subitem-row"
                               >
-                                <span style={{ color: '#00f0aa', fontWeight: 800, fontSize: '0.9rem', userSelect: 'none' }}>•</span>
+                                <span style={{ color: 'var(--fn-editor-coral)', fontWeight: 800, fontSize: '0.9rem', userSelect: 'none' }}>•</span>
                                 <input
                                   type="text"
                                   value={typeof bullet === 'string' ? bullet : ''}
                                   onChange={(e) => handleBulletChange(idx, bIdx, e.target.value)}
                                   placeholder={`Achievement / Timeline Point #${bIdx + 1}`}
                                   className="editor-text-input full-width"
-                                  style={{ color: '#f1f5f9', background: '#090a0f', fontSize: '0.82rem' }}
+                                  style={{ fontSize: "0.82rem" }}
                                 />
                                 <button
                                   type="button"
                                   onClick={() => handleRemoveBullet(idx, bIdx)}
-                                  style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                                  className="editor-icon-btn is-delete"
                                   title="Delete point"
                                 >
                                   <Trash2 size={14} />
@@ -1282,8 +1231,7 @@ export default function BlockEditorModal({
                               const currentImages = Array.isArray(item.images) ? [...item.images] : item.imageUrl ? [item.imageUrl] : [];
                               handleItemChange(idx, 'images', [...currentImages, '']);
                             }}
-                            className="editor-btn"
-                            style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '3px 8px', fontSize: '0.72rem' }}
+                            className="editor-btn-add"
                           >
                             <Plus size={12} /> Add Photo
                           </button>
@@ -1292,15 +1240,7 @@ export default function BlockEditorModal({
                         {((Array.isArray(item.images) ? item.images : item.imageUrl ? [item.imageUrl] : [])).map((img, iIdx) => (
                           <div
                             key={iIdx}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '8px',
-                              padding: '8px',
-                              borderRadius: '6px',
-                              background: '#090a0f',
-                              border: '1px solid rgba(255,255,255,0.06)',
-                            }}
+                            className="editor-subitem-row"
                           >
                             <ImageUploadPicker
                               label={`Photo #${iIdx + 1}`}
@@ -1317,7 +1257,7 @@ export default function BlockEditorModal({
                                 const currentImages = (Array.isArray(item.images) ? item.images : item.imageUrl ? [item.imageUrl] : []).filter((_, i) => i !== iIdx);
                                 handleItemChange(idx, 'images', currentImages);
                               }}
-                              style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', marginTop: '18px' }}
+                              className="editor-icon-btn is-delete" style={{ marginTop: "18px" }}
                             >
                               <Trash2 size={15} />
                             </button>
@@ -1327,14 +1267,14 @@ export default function BlockEditorModal({
 
                       {/* Tags */}
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Tags / Tech Used</label>
+                        <label style={{ fontSize: "0.78rem", marginBottom: "4px", display: "block" }}>Tags / Tech Used</label>
                         <input
                           type="text"
                           value={Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || ''}
                           onChange={(e) => handleItemChange(idx, 'tags', e.target.value)}
                           placeholder="Tags (comma separated, e.g. React, TypeScript, Docker)"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#090a0f' }}
+                          
                         />
                       </div>
                     </div>
@@ -1347,12 +1287,11 @@ export default function BlockEditorModal({
             {block.type === 'media_reviews' && (
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>Review Items ({(formData.items || []).length})</h4>
+                  <h4 className="editor-section-heading">Review Items ({(formData.items || []).length})</h4>
                   <button
                     type="button"
                     onClick={() => handleAddItem({ id: `rev-${Date.now()}`, title: 'Title', rating: 5, status: 'Completed', notes: '', genre: '' })}
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Review Item
                   </button>
@@ -1365,16 +1304,16 @@ export default function BlockEditorModal({
                       className="editor-item-card"
                     >
                       <div className="editor-item-card-header">
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                        <span className="editor-item-card-title">
                           Review #{idx + 1}: {rev.title || 'Untitled'}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
-                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(idx)}
-                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            className="editor-icon-btn is-delete"
                             title="Delete review"
                           >
                             <Trash2 size={16} />
@@ -1383,36 +1322,36 @@ export default function BlockEditorModal({
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Media Title</label>
+                        <label style={{ fontSize: "0.78rem", marginBottom: "4px", display: "block" }}>Media Title</label>
                         <input
                           type="text"
                           value={rev.title || ''}
                           onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
                           placeholder="e.g. Cyberpunk 2077 / Interstellar"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                       </div>
 
                       <div className="editor-form-row-3">
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Genre / Badge</label>
+                          <label style={{ fontSize: "0.78rem", marginBottom: "4px", display: "block" }}>Genre / Badge</label>
                           <input
                             type="text"
                             value={Array.isArray(rev.genre) ? rev.genre.join(', ') : rev.genre || ''}
                             onChange={(e) => handleItemChange(idx, 'genre', e.target.value)}
                             placeholder="e.g. Action RPG"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Rating</label>
+                          <label style={{ fontSize: "0.78rem", marginBottom: "4px", display: "block" }}>Rating</label>
                           <select
                             value={rev.rating || 5}
                             onChange={(e) => handleItemChange(idx, 'rating', Number(e.target.value))}
                             className="editor-select full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           >
                             {[5, 4, 3, 2, 1].map((r) => (
                               <option key={r} value={r}>{'★'.repeat(r)} ({r} Stars)</option>
@@ -1420,14 +1359,14 @@ export default function BlockEditorModal({
                           </select>
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Status</label>
+                          <label style={{ fontSize: "0.78rem", marginBottom: "4px", display: "block" }}>Status</label>
                           <input
                             type="text"
                             value={rev.status || ''}
                             onChange={(e) => handleItemChange(idx, 'status', e.target.value)}
                             placeholder="e.g. Completed"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
@@ -1443,13 +1382,13 @@ export default function BlockEditorModal({
                       />
 
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#cbd5e1', fontSize: '0.78rem', marginBottom: '4px', display: 'block' }}>Review Notes</label>
+                        <label style={{ fontSize: "0.78rem", marginBottom: "4px", display: "block" }}>Review Notes</label>
                         <textarea
                           value={rev.notes || ''}
                           onChange={(e) => handleItemChange(idx, 'notes', e.target.value)}
                           placeholder="Review / Notes..."
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                           rows={2}
                         />
                       </div>
@@ -1464,7 +1403,7 @@ export default function BlockEditorModal({
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div>
-                    <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600, margin: 0 }}>
+                    <h4 className="editor-section-heading" style={{ margin: 0 }}>
                       Specs & Gear ({(formData.items || []).length})
                     </h4>
                     <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
@@ -1474,8 +1413,7 @@ export default function BlockEditorModal({
                   <button
                     type="button"
                     onClick={() => handleAddItem({ category: 'GPU', name: 'RTX 4080 Super', detail: '16GB GDDR6X', icon: 'Tv' })}
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Spec Item
                   </button>
@@ -1496,12 +1434,12 @@ export default function BlockEditorModal({
                                 width: '32px',
                                 height: '32px',
                                 borderRadius: '6px',
-                                background: 'rgba(255,255,255,0.05)',
-                                border: '1px solid rgba(255,255,255,0.1)',
+                                background: 'var(--fn-editor-paper)',
+                                border: '1.5px solid var(--fn-editor-line)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                color: '#00f0aa',
+                                color: 'var(--fn-editor-coral-dark)',
                               }}
                             >
                               <GearIcon
@@ -1512,7 +1450,7 @@ export default function BlockEditorModal({
                               />
                             </div>
                             <div>
-                              <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#f8fafc', display: 'block' }}>
+                              <span className="editor-item-card-title" style={{ display: "block" }}>
                                 {item.name || item.title || `Spec Item #${idx + 1}`}
                               </span>
                               <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
@@ -1522,12 +1460,12 @@ export default function BlockEditorModal({
                           </div>
 
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
-                            <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                            <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                            <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                             <button
                               type="button"
                               onClick={() => handleRemoveItem(idx)}
-                              style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                              className="editor-icon-btn is-delete"
                               title="Delete spec item"
                             >
                               <Trash2 size={16} />
@@ -1537,48 +1475,48 @@ export default function BlockEditorModal({
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.5fr 1.5fr 1.3fr', gap: '8px' }}>
                           <div className="editor-control" style={{ margin: 0 }}>
-                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Category</label>
+                            <label style={{ fontSize: "0.72rem", marginBottom: "3px", display: "block" }}>Category</label>
                             <input
                               type="text"
                               value={item.category || ''}
                               onChange={(e) => handleItemChange(idx, 'category', e.target.value)}
                               placeholder="e.g. GPU, Audio, Desk"
                               className="editor-text-input full-width"
-                              style={{ color: '#f1f5f9', background: '#06070a' }}
+                              
                             />
                           </div>
 
                           <div className="editor-control" style={{ margin: 0 }}>
-                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Item / Hardware Name</label>
+                            <label style={{ fontSize: "0.72rem", marginBottom: "3px", display: "block" }}>Item / Hardware Name</label>
                             <input
                               type="text"
                               value={item.name || ''}
                               onChange={(e) => handleItemChange(idx, 'name', e.target.value)}
                               placeholder="e.g. RTX 4080 Super"
                               className="editor-text-input full-width"
-                              style={{ color: '#f1f5f9', background: '#06070a' }}
+                              
                             />
                           </div>
 
                           <div className="editor-control" style={{ margin: 0 }}>
-                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Detail / Specs</label>
+                            <label style={{ fontSize: "0.72rem", marginBottom: "3px", display: "block" }}>Detail / Specs</label>
                             <input
                               type="text"
                               value={item.detail || ''}
                               onChange={(e) => handleItemChange(idx, 'detail', e.target.value)}
                               placeholder="e.g. 16GB GDDR6X"
                               className="editor-text-input full-width"
-                              style={{ color: '#f1f5f9', background: '#06070a' }}
+                              
                             />
                           </div>
 
                           <div className="editor-control" style={{ margin: 0 }}>
-                            <label style={{ color: '#cbd5e1', fontSize: '0.72rem', marginBottom: '3px', display: 'block' }}>Gear Icon</label>
+                            <label style={{ fontSize: "0.72rem", marginBottom: "3px", display: "block" }}>Gear Icon</label>
                             <select
                               value={item.icon || ''}
                               onChange={(e) => handleItemChange(idx, 'icon', e.target.value)}
                               className="editor-select full-width"
-                              style={{ color: '#f1f5f9', background: '#06070a' }}
+                              
                             >
                               <option value="">Auto-Detect ({guessed})</option>
                               {GEAR_ICON_CATEGORIES.map((cat) => (
@@ -1605,18 +1543,18 @@ export default function BlockEditorModal({
               <div
                 style={{
                   padding: '20px',
-                  borderRadius: '10px',
-                  background: 'rgba(0, 240, 170, 0.05)',
-                  border: '1px solid rgba(0, 240, 170, 0.2)',
+                  borderRadius: '12px',
+                  background: 'var(--fn-editor-paper-light)',
+                  border: '2px solid var(--fn-editor-line)',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '8px',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#00f0aa', fontWeight: 600, fontSize: '0.9rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--fn-editor-coral-dark)', fontWeight: 600, fontSize: '0.9rem' }}>
                   <BookOpen size={16} /> Journal & Articles Management
                 </div>
-                <p style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: '1.6', margin: 0 }}>
+                <p style={{ fontSize: '0.82rem', color: 'var(--fn-editor-muted)', lineHeight: '1.6', margin: 0 }}>
                   Journal entries are managed directly on the profile canvas. Use the <strong>"+ Quick Add Entry"</strong> button and entry card actions on the Journal block in your profile editor to write, edit, or delete articles.
                 </p>
               </div>
@@ -1626,15 +1564,14 @@ export default function BlockEditorModal({
             {block.type === 'stacked_deck' && (
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>Deck Images ({(formData.images || []).length})</h4>
+                  <h4 className="editor-section-heading">Deck Images ({(formData.images || []).length})</h4>
                   <button
                     type="button"
                     onClick={() => {
                       const images = [...(formData.images || []), '/images/projects/template.png'];
                       handleFieldChange('images', images);
                     }}
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Image
                   </button>
@@ -1644,15 +1581,7 @@ export default function BlockEditorModal({
                   {(formData.images || []).map((img, idx) => (
                     <div
                       key={idx}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '8px 12px',
-                        borderRadius: '8px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                      }}
+                      className="editor-subitem-row"
                     >
                       <ImageUploadPicker
                         label={`Image #${idx + 1}`}
@@ -1664,15 +1593,16 @@ export default function BlockEditorModal({
                         }}
                       />
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', marginTop: '20px' }}>
-                        <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveImage(idx, 'up')}><ChevronUp size={14} /></button>
-                        <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.images || []).length - 1} onClick={() => handleMoveImage(idx, 'down')}><ChevronDown size={14} /></button>
+                        <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveImage(idx, 'up')}><ChevronUp size={14} /></button>
+                        <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.images || []).length - 1} onClick={() => handleMoveImage(idx, 'down')}><ChevronDown size={14} /></button>
                         <button
                           type="button"
+                          className="editor-icon-btn is-delete"
                           onClick={() => {
                             const images = (formData.images || []).filter((_, i) => i !== idx);
                             handleFieldChange('images', images);
                           }}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}
+                          title="Remove image"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -1688,12 +1618,12 @@ export default function BlockEditorModal({
               <>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Grid Columns</label>
+                    <label>Grid Columns</label>
                     <select
                       value={formData.columns || 3}
                       onChange={(e) => handleFieldChange('columns', Number(e.target.value))}
                       className="editor-select"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     >
                       <option value={2}>2 Columns (Large Cards)</option>
                       <option value={3}>3 Columns (Balanced Grid)</option>
@@ -1702,12 +1632,12 @@ export default function BlockEditorModal({
                   </div>
 
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Photo Aspect Ratio</label>
+                    <label>Photo Aspect Ratio</label>
                     <select
                       value={formData.aspectRatio || 'square'}
                       onChange={(e) => handleFieldChange('aspectRatio', e.target.value)}
                       className="editor-select"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     >
                       <option value="square">Square (1:1)</option>
                       <option value="wide">Landscape / Wide (16:10)</option>
@@ -1718,7 +1648,7 @@ export default function BlockEditorModal({
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>
+                  <h4 className="editor-section-heading">
                     Gallery Photos ({(formData.items || []).length})
                   </h4>
                   <button
@@ -1735,8 +1665,7 @@ export default function BlockEditorModal({
                         tag: '',
                       })
                     }
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Photo
                   </button>
@@ -1746,27 +1675,19 @@ export default function BlockEditorModal({
                   {(formData.items || []).map((photo, idx) => (
                     <div
                       key={photo.id || idx}
-                      style={{
-                        borderRadius: '10px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px',
-                      }}
+                      className="editor-item-card"
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                        <span className="editor-item-card-title">
                           Photo #{idx + 1}: {photo.title || 'Untitled Photo'}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
-                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(idx)}
-                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            className="editor-icon-btn is-delete"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -1781,56 +1702,56 @@ export default function BlockEditorModal({
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Photo Title / Name</label>
+                          <label>Photo Title / Name</label>
                           <input
                             type="text"
                             value={photo.title || ''}
                             onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
                             placeholder="e.g. Kyoto Sunset"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Tag / Category</label>
+                          <label>Tag / Category</label>
                           <input
                             type="text"
                             value={photo.tag || ''}
                             onChange={(e) => handleItemChange(idx, 'tag', e.target.value)}
                             placeholder="e.g. Photography / 3D Art"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Location (optional)</label>
+                          <label>Location (optional)</label>
                           <input
                             type="text"
                             value={photo.location || ''}
                             onChange={(e) => handleItemChange(idx, 'location', e.target.value)}
                             placeholder="e.g. Tokyo, Japan"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Date / Year (optional)</label>
+                          <label>Date / Year (optional)</label>
                           <input
                             type="text"
                             value={photo.date || ''}
                             onChange={(e) => handleItemChange(idx, 'date', e.target.value)}
                             placeholder="e.g. 2026 or Oct 2025"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#e2e8f0' }}>Description (shown in full photo modal)</label>
+                        <label>Description (shown in full photo modal)</label>
                         <textarea
                           value={photo.description || photo.caption || ''}
                           onChange={(e) => {
@@ -1839,32 +1760,32 @@ export default function BlockEditorModal({
                           }}
                           placeholder="Photo background story, camera settings, or notes..."
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                           rows={2}
                         />
                       </div>
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Link Label</label>
+                          <label>Link Label</label>
                           <input
                             type="text"
                             value={photo.linkLabel || ''}
                             onChange={(e) => handleItemChange(idx, 'linkLabel', e.target.value)}
                             placeholder="e.g. View on Unsplash"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Link URL (optional)</label>
+                          <label>Link URL (optional)</label>
                           <input
                             type="text"
                             value={photo.linkUrl || ''}
                             onChange={(e) => handleItemChange(idx, 'linkUrl', e.target.value)}
                             placeholder="https://..."
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
@@ -1879,12 +1800,12 @@ export default function BlockEditorModal({
               <>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Default View</label>
+                    <label>Default View</label>
                     <select
                       value={formData.defaultView || 'list'}
                       onChange={(e) => handleFieldChange('defaultView', e.target.value)}
                       className="editor-select"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     >
                       <option value="list">Schedule Feed (Timeline List)</option>
                       <option value="calendar">Monthly Calendar View</option>
@@ -1892,12 +1813,12 @@ export default function BlockEditorModal({
                   </div>
 
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Show Filter Tabs</label>
+                    <label>Show Filter Tabs</label>
                     <select
                       value={formData.showFilters !== false ? 'yes' : 'no'}
                       onChange={(e) => handleFieldChange('showFilters', e.target.value === 'yes')}
                       className="editor-select"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     >
                       <option value="yes">Yes (All / Upcoming / Live / Past)</option>
                       <option value="no">No</option>
@@ -1906,7 +1827,7 @@ export default function BlockEditorModal({
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>
+                  <h4 className="editor-section-heading">
                     Events & Streams ({(formData.items || []).length})
                   </h4>
                   <button
@@ -1929,8 +1850,7 @@ export default function BlockEditorModal({
                         linkUrl: 'https://twitch.tv',
                       })
                     }
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Event
                   </button>
@@ -1940,27 +1860,19 @@ export default function BlockEditorModal({
                   {(formData.items || []).map((evt, idx) => (
                     <div
                       key={evt.id || idx}
-                      style={{
-                        borderRadius: '10px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px',
-                      }}
+                      className="editor-item-card"
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                        <span className="editor-item-card-title">
                           Event #{idx + 1}: {evt.title || 'Untitled Event'}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
-                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(idx)}
-                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            className="editor-icon-btn is-delete"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -1968,52 +1880,52 @@ export default function BlockEditorModal({
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#e2e8f0' }}>Event Title</label>
+                        <label>Event Title</label>
                         <input
                           type="text"
                           value={evt.title || ''}
                           onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
                           placeholder="e.g. Live Coding: Profile Architecture"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                       </div>
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Event Date (YYYY-MM-DD)</label>
+                          <label>Event Date (YYYY-MM-DD)</label>
                           <input
                             type="text"
                             value={evt.date || ''}
                             onChange={(e) => handleItemChange(idx, 'date', e.target.value)}
                             placeholder="2026-08-28"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
 
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Time String</label>
+                          <label>Time String</label>
                           <input
                             type="text"
                             value={evt.time || ''}
                             onChange={(e) => handleItemChange(idx, 'time', e.target.value)}
                             placeholder="19:00 - 21:00 UTC"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
 
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Status Pill</label>
+                          <label>Status Pill</label>
                           <select
                             value={evt.status || 'Upcoming'}
                             onChange={(e) => handleItemChange(idx, 'status', e.target.value)}
                             className="editor-select"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           >
                             <option value="Upcoming">Upcoming</option>
-                            <option value="Live Now">🔴 Live Now</option>
+                            <option value="Live Now">Live Now</option>
                             <option value="Registration Open">Registration Open</option>
                             <option value="Confirmed">Confirmed</option>
                             <option value="Sold Out">Sold Out</option>
@@ -2024,12 +1936,12 @@ export default function BlockEditorModal({
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Event Type</label>
+                          <label>Event Type</label>
                           <select
                             value={evt.type || 'Stream'}
                             onChange={(e) => handleItemChange(idx, 'type', e.target.value)}
                             className="editor-select"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           >
                             <option value="Stream">Live Stream</option>
                             <option value="Meetup">Meetup / Community</option>
@@ -2040,7 +1952,7 @@ export default function BlockEditorModal({
                         </div>
 
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Location / Streaming Platform</label>
+                          <label>Location / Streaming Platform</label>
                           <input
                             type="text"
                             value={evt.location || evt.platform || ''}
@@ -2050,56 +1962,56 @@ export default function BlockEditorModal({
                             }}
                             placeholder="e.g. Twitch / YouTube or San Francisco, CA"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#e2e8f0' }}>Event Description / Agenda</label>
+                        <label>Event Description / Agenda</label>
                         <textarea
                           value={evt.description || ''}
                           onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
                           placeholder="What will happen during this event..."
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                           rows={2}
                         />
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#e2e8f0' }}>Topics / Tags (comma separated)</label>
+                        <label>Topics / Tags (comma separated)</label>
                         <input
                           type="text"
                           value={Array.isArray(evt.topics) ? evt.topics.join(', ') : evt.topics || ''}
                           onChange={(e) => handleItemChange(idx, 'topics', e.target.value.split(',').map((t) => t.trim()).filter(Boolean))}
                           placeholder="React, CSS, Frontend"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                       </div>
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Button Label</label>
+                          <label>Button Label</label>
                           <input
                             type="text"
                             value={evt.linkLabel || ''}
                             onChange={(e) => handleItemChange(idx, 'linkLabel', e.target.value)}
                             placeholder="e.g. Watch Stream / RSVP"
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Button URL</label>
+                          <label>Button URL</label>
                           <input
                             type="text"
                             value={evt.linkUrl || ''}
                             onChange={(e) => handleItemChange(idx, 'linkUrl', e.target.value)}
                             placeholder="https://..."
                             className="editor-text-input"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
@@ -2113,14 +2025,14 @@ export default function BlockEditorModal({
             {(block.type === 'featured_video' || block.type === 'video') && (
               <>
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>Video URL (YouTube, Vimeo, Streamable, Loom, or Direct MP4/WebM)</label>
+                  <label>Video URL (YouTube, Vimeo, Streamable, Loom, or Direct MP4/WebM)</label>
                   <input
                     type="text"
                     value={formData.videoUrl || ''}
                     onChange={(e) => handleFieldChange('videoUrl', e.target.value)}
                     placeholder="e.g. https://www.youtube.com/watch?v=... or https://vimeo.com/... or /uploads/..."
                     className="editor-text-input full-width"
-                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    
                     required
                   />
                   <span style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>
@@ -2136,49 +2048,49 @@ export default function BlockEditorModal({
 
                 <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '12px' }}>
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Video Title</label>
+                    <label>Video Title</label>
                     <input
                       type="text"
                       value={formData.title || ''}
                       onChange={(e) => handleFieldChange('title', e.target.value)}
                       placeholder="e.g. Welcome to My Creative Studio"
                       className="editor-text-input full-width"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     />
                   </div>
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Badge / Tagline</label>
+                    <label>Badge / Tagline</label>
                     <input
                       type="text"
                       value={formData.badge || ''}
                       onChange={(e) => handleFieldChange('badge', e.target.value)}
                       placeholder="e.g. Featured Intro"
                       className="editor-text-input full-width"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     />
                   </div>
                 </div>
 
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>Description</label>
+                  <label>Description</label>
                   <textarea
                     value={formData.description || ''}
                     onChange={(e) => handleFieldChange('description', e.target.value)}
                     placeholder="Brief description of the video content or project context..."
                     className="editor-text-input full-width"
-                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    
                     rows={2}
                   />
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Video Aspect Ratio</label>
+                    <label>Video Aspect Ratio</label>
                     <select
                       value={formData.aspectRatio || '16:9'}
                       onChange={(e) => handleFieldChange('aspectRatio', e.target.value)}
                       className="editor-select"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     >
                       <option value="16:9">Widescreen 16:9 (Standard)</option>
                       <option value="21:9">Cinematic 21:9 (Ultrawide)</option>
@@ -2187,7 +2099,7 @@ export default function BlockEditorModal({
                   </div>
 
                   <div className="editor-control" style={{ margin: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <label style={{ color: '#e2e8f0', marginBottom: '8px' }}>Playback Options</label>
+                    <label style={{ marginBottom: "8px" }}>Playback Options</label>
                     <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
                       <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#cbd5e1', cursor: 'pointer' }}>
                         <input
@@ -2220,14 +2132,13 @@ export default function BlockEditorModal({
                 {/* Call-to-Action Action Buttons */}
                 <div style={{ marginTop: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <label style={{ fontSize: '0.84rem', fontWeight: 700, color: '#ffffff' }}>
+                    <label className="editor-section-heading">
                       Action Buttons ({(formData.actions || []).length})
                     </label>
                     <button
                       type="button"
                       onClick={handleAddAction}
-                      className="editor-btn"
-                      style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '4px 10px', fontSize: '0.74rem' }}
+                      className="editor-btn-add"
                     >
                       <Plus size={13} /> Add Button
                     </button>
@@ -2237,15 +2148,12 @@ export default function BlockEditorModal({
                     {(formData.actions || []).map((act, aIdx) => (
                       <div
                         key={aIdx}
+                        className="editor-subitem-row"
                         style={{
                           display: 'grid',
                           gridTemplateColumns: '1.2fr 2fr auto auto',
                           gap: '8px',
                           alignItems: 'center',
-                          padding: '8px 10px',
-                          borderRadius: '6px',
-                          background: '#06070a',
-                          border: '1px solid rgba(255,255,255,0.08)',
                         }}
                       >
                         <input
@@ -2254,7 +2162,6 @@ export default function BlockEditorModal({
                           onChange={(e) => handleActionChange(aIdx, 'label', e.target.value)}
                           placeholder="Label (e.g. YouTube)"
                           className="editor-text-input"
-                          style={{ color: '#f1f5f9', background: '#06070a', margin: 0 }}
                         />
                         <input
                           type="text"
@@ -2262,9 +2169,8 @@ export default function BlockEditorModal({
                           onChange={(e) => handleActionChange(aIdx, 'url', e.target.value)}
                           placeholder="URL (https://...)"
                           className="editor-text-input"
-                          style={{ color: '#f1f5f9', background: '#06070a', margin: 0 }}
                         />
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.72rem', color: '#cbd5e1', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.72rem', color: 'var(--fn-editor-ink)', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                           <input
                             type="checkbox"
                             checked={Boolean(act.primary)}
@@ -2275,9 +2181,10 @@ export default function BlockEditorModal({
                         <button
                           type="button"
                           onClick={() => handleRemoveAction(aIdx)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                          className="editor-icon-btn is-delete"
+                          title="Remove action"
                         >
-                          <Trash2 size={15} />
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     ))}
@@ -2291,12 +2198,12 @@ export default function BlockEditorModal({
               <>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Grid Columns</label>
+                    <label>Grid Columns</label>
                     <select
                       value={formData.columns || 3}
                       onChange={(e) => handleFieldChange('columns', Number(e.target.value))}
                       className="editor-select"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     >
                       <option value={2}>2 Columns (Large Cards)</option>
                       <option value={3}>3 Columns (Balanced Grid)</option>
@@ -2305,12 +2212,12 @@ export default function BlockEditorModal({
                   </div>
 
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Video Aspect Ratio</label>
+                    <label>Video Aspect Ratio</label>
                     <select
                       value={formData.aspectRatio || '16:9'}
                       onChange={(e) => handleFieldChange('aspectRatio', e.target.value)}
                       className="editor-select"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     >
                       <option value="16:9">Widescreen 16:9 (Standard Videos)</option>
                       <option value="9:16">Vertical 9:16 (Shorts / Reels / TikTok)</option>
@@ -2321,7 +2228,7 @@ export default function BlockEditorModal({
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>
+                  <h4 className="editor-section-heading">
                     Gallery Videos ({(formData.items || []).length})
                   </h4>
                   <button
@@ -2339,8 +2246,7 @@ export default function BlockEditorModal({
                         tag: 'Video',
                       })
                     }
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Video
                   </button>
@@ -2350,27 +2256,19 @@ export default function BlockEditorModal({
                   {(formData.items || []).map((vid, idx) => (
                     <div
                       key={vid.id || idx}
-                      style={{
-                        borderRadius: '10px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px',
-                      }}
+                      className="editor-item-card"
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                        <span className="editor-item-card-title">
                           Video #{idx + 1}: {vid.title || 'Untitled Video'}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
-                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(idx)}
-                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            className="editor-icon-btn is-delete"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -2378,14 +2276,14 @@ export default function BlockEditorModal({
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#e2e8f0' }}>Video URL (YouTube, Vimeo, Streamable, Loom, or Direct Video)</label>
+                        <label>Video URL (YouTube, Vimeo, Streamable, Loom, or Direct Video)</label>
                         <input
                           type="text"
                           value={vid.videoUrl || vid.url || ''}
                           onChange={(e) => handleItemChange(idx, 'videoUrl', e.target.value)}
                           placeholder="e.g. https://www.youtube.com/watch?v=... or https://youtube.com/shorts/..."
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                           required
                         />
                       </div>
@@ -2398,74 +2296,74 @@ export default function BlockEditorModal({
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Video Title</label>
+                          <label>Video Title</label>
                           <input
                             type="text"
                             value={vid.title || ''}
                             onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
                             placeholder="e.g. Architecture Deep Dive"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Category / Tags (comma separated)</label>
+                          <label>Category / Tags (comma separated)</label>
                           <input
                             type="text"
                             value={vid.tag || ''}
                             onChange={(e) => handleItemChange(idx, 'tag', e.target.value)}
                             placeholder="e.g. Showreel, Tutorial"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Duration (e.g. 12:45)</label>
+                          <label>Duration (e.g. 12:45)</label>
                           <input
                             type="text"
                             value={vid.duration || ''}
                             onChange={(e) => handleItemChange(idx, 'duration', e.target.value)}
                             placeholder="12:45"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Creator / Channel</label>
+                          <label>Creator / Channel</label>
                           <input
                             type="text"
                             value={vid.author || ''}
                             onChange={(e) => handleItemChange(idx, 'author', e.target.value)}
                             placeholder="e.g. Alex Rivers"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Date</label>
+                          <label>Date</label>
                           <input
                             type="text"
                             value={vid.date || ''}
                             onChange={(e) => handleItemChange(idx, 'date', e.target.value)}
                             placeholder="e.g. Aug 2026"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#e2e8f0' }}>Caption / Summary</label>
+                        <label>Caption / Summary</label>
                         <input
                           type="text"
                           value={vid.caption || vid.description || ''}
                           onChange={(e) => handleItemChange(idx, 'caption', e.target.value)}
                           placeholder="Brief summary of what this video demonstrates..."
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                       </div>
                     </div>
@@ -2478,14 +2376,14 @@ export default function BlockEditorModal({
             {block.type === 'github_heatmap' && (
               <>
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>GitHub Username</label>
+                  <label>GitHub Username</label>
                   <input
                     type="text"
                     value={formData.username || ''}
                     onChange={(e) => handleFieldChange('username', e.target.value)}
                     placeholder="e.g. octocat"
                     className="editor-text-input full-width"
-                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    
                   />
                   <span style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>
                     Contributions will be fetched from the public GitHub API.
@@ -2493,12 +2391,12 @@ export default function BlockEditorModal({
                 </div>
 
                 <div className="editor-control">
-                  <label style={{ color: '#e2e8f0' }}>Show Stats Bar</label>
+                  <label>Show Stats Bar</label>
                   <select
                     value={formData.showStats !== false ? 'true' : 'false'}
                     onChange={(e) => handleFieldChange('showStats', e.target.value === 'true')}
                     className="editor-select"
-                    style={{ color: '#f1f5f9', background: '#06070a' }}
+                    
                   >
                     <option value="true">Show (Total contributions, streaks, best day)</option>
                     <option value="false">Hidden</option>
@@ -2512,12 +2410,12 @@ export default function BlockEditorModal({
               <>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Autoplay Audio</label>
+                    <label>Autoplay Audio</label>
                     <select
                       value={formData.autoplay ? 'true' : 'false'}
                       onChange={(e) => handleFieldChange('autoplay', e.target.value === 'true')}
                       className="editor-select"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     >
                       <option value="false">Off (Click to play)</option>
                       <option value="true">On (Auto-start)</option>
@@ -2525,12 +2423,12 @@ export default function BlockEditorModal({
                   </div>
 
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Disc Position</label>
+                    <label>Disc Position</label>
                     <select
                       value={formData.discPosition || 'left'}
                       onChange={(e) => handleFieldChange('discPosition', e.target.value)}
                       className="editor-select"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     >
                       <option value="left">Left (Disc Left)</option>
                       <option value="center">Center (Disc Centered)</option>
@@ -2539,12 +2437,12 @@ export default function BlockEditorModal({
                   </div>
 
                   <div className="editor-control" style={{ margin: 0 }}>
-                    <label style={{ color: '#e2e8f0' }}>Display Mode</label>
+                    <label>Display Mode</label>
                     <select
                       value={formData.showEmbed === true || formData.displayMode === 'embedded' ? 'embedded' : 'vinyl_only'}
                       onChange={(e) => handleFieldChange('showEmbed', e.target.value === 'embedded')}
                       className="editor-select"
-                      style={{ color: '#f1f5f9', background: '#06070a' }}
+                      
                     >
                       <option value="vinyl_only">Vinyl Only</option>
                       <option value="embedded">Vinyl + Embed</option>
@@ -2553,7 +2451,7 @@ export default function BlockEditorModal({
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>Playlist Tracks ({(formData.items || []).length})</h4>
+                  <h4 className="editor-section-heading">Playlist Tracks ({(formData.items || []).length})</h4>
                   <button
                     type="button"
                     onClick={() => handleAddItem({
@@ -2563,8 +2461,7 @@ export default function BlockEditorModal({
                       title: 'New Track',
                       artist: '',
                     })}
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Track
                   </button>
@@ -2574,27 +2471,19 @@ export default function BlockEditorModal({
                   {(formData.items || []).map((track, idx) => (
                     <div
                       key={track.id || idx}
-                      style={{
-                        borderRadius: '10px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px',
-                      }}
+                      className="editor-item-card"
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                        <span className="editor-item-card-title">
                           Track #{idx + 1}: {track.title || 'Untitled'}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
-                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(idx)}
-                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            className="editor-icon-btn is-delete"
                             title="Remove track"
                           >
                             <Trash2 size={16} />
@@ -2604,38 +2493,38 @@ export default function BlockEditorModal({
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Track Title</label>
+                          <label>Track Title</label>
                           <input
                             type="text"
                             value={track.title || ''}
                             onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
                             placeholder="e.g. My Favorite Song"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Artist</label>
+                          <label>Artist</label>
                           <input
                             type="text"
                             value={track.artist || ''}
                             onChange={(e) => handleItemChange(idx, 'artist', e.target.value)}
                             placeholder="e.g. Artist Name"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
 
                       <div className="editor-control" style={{ margin: 0 }}>
-                        <label style={{ color: '#e2e8f0' }}>YouTube / Media URL</label>
+                        <label>YouTube / Media URL</label>
                         <input
                           type="text"
                           value={track.embedUrl || ''}
                           onChange={(e) => handleItemChange(idx, 'embedUrl', e.target.value)}
                           placeholder="https://www.youtube.com/watch?v=... or SoundCloud link"
                           className="editor-text-input full-width"
-                          style={{ color: '#f1f5f9', background: '#06070a' }}
+                          
                         />
                         <span style={{ fontSize: '0.68rem', color: '#94a3b8', marginTop: '3px', display: 'block' }}>
                           YouTube links automatically stream pure audio on the vinyl disc and auto-fetch album art.
@@ -2657,7 +2546,7 @@ export default function BlockEditorModal({
             {block.type === 'milestones' && (
               <>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <h4 style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>Milestones ({(formData.items || []).length})</h4>
+                  <h4 className="editor-section-heading">Milestones ({(formData.items || []).length})</h4>
                   <button
                     type="button"
                     onClick={() => handleAddItem({
@@ -2668,8 +2557,7 @@ export default function BlockEditorModal({
                       date: '',
                       subTasks: [],
                     })}
-                    className="editor-btn"
-                    style={{ background: 'rgba(0, 240, 170, 0.12)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.3)', padding: '6px 12px' }}
+                    className="editor-btn-add"
                   >
                     <Plus size={14} /> Add Milestone
                   </button>
@@ -2679,18 +2567,10 @@ export default function BlockEditorModal({
                   {(formData.items || []).map((ms, idx) => (
                     <div
                       key={ms.id || idx}
-                      style={{
-                        borderRadius: '10px',
-                        background: '#06070a',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px',
-                      }}
+                      className="editor-item-card"
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+                        <span className="editor-item-card-title">
                           #{idx + 1}: {ms.title || 'Untitled'}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -2702,12 +2582,12 @@ export default function BlockEditorModal({
                           >
                             {ms.completed ? 'Completed' : 'Mark Done'}
                           </button>
-                          <button type="button" className="editor-reorder-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
-                          <button type="button" className="editor-reorder-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move up" disabled={idx === 0} onClick={() => handleMoveItem(idx, 'up')}><ChevronUp size={14} /></button>
+                          <button type="button" className="editor-icon-btn" title="Move down" disabled={idx === (formData.items || []).length - 1} onClick={() => handleMoveItem(idx, 'down')}><ChevronDown size={14} /></button>
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(idx)}
-                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                            className="editor-icon-btn is-delete"
                             title="Remove milestone"
                           >
                             <Trash2 size={16} />
@@ -2717,23 +2597,23 @@ export default function BlockEditorModal({
 
                       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '10px' }}>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Title</label>
+                          <label>Title</label>
                           <input
                             type="text"
                             value={ms.title || ''}
                             onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
                             placeholder="e.g. Launch a SaaS product"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Category</label>
+                          <label>Category</label>
                           <select
                             value={ms.category || 'Goals'}
                             onChange={(e) => handleItemChange(idx, 'category', e.target.value)}
                             className="editor-select"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           >
                             <option value="Career">Career</option>
                             <option value="Travel">Travel</option>
@@ -2748,14 +2628,14 @@ export default function BlockEditorModal({
                           </select>
                         </div>
                         <div className="editor-control" style={{ margin: 0 }}>
-                          <label style={{ color: '#e2e8f0' }}>Date (optional)</label>
+                          <label>Date (optional)</label>
                           <input
                             type="text"
                             value={ms.date || ''}
                             onChange={(e) => handleItemChange(idx, 'date', e.target.value)}
                             placeholder="e.g. 2025"
                             className="editor-text-input full-width"
-                            style={{ color: '#f1f5f9', background: '#06070a' }}
+                            
                           />
                         </div>
                       </div>
@@ -2775,8 +2655,7 @@ export default function BlockEditorModal({
                               updatedItems[idx] = updatedMs;
                               setFormData((prev) => ({ ...prev, items: updatedItems }));
                             }}
-                            className="editor-btn"
-                            style={{ background: 'rgba(0, 240, 170, 0.08)', color: '#00f0aa', border: '1px solid rgba(0,240,170,0.2)', padding: '3px 10px', fontSize: '0.72rem' }}
+                            className="editor-btn-add"
                           >
                             <Plus size={12} /> Sub-Task
                           </button>
@@ -2796,8 +2675,7 @@ export default function BlockEditorModal({
                                   setFormData((prev) => ({ ...prev, items: updatedItems }));
                                 }}
                                 style={{
-                                  background: sub.completed ? 'var(--accent-color, #00f0aa)' : 'transparent',
-                                  border: `1px solid ${sub.completed ? 'var(--accent-color, #00f0aa)' : 'rgba(255,255,255,0.15)'}`,
+                                  background: sub.completed ? 'var(--fn-editor-coral)' : 'var(--fn-editor-paper-light)', border: sub.completed ? '2px solid var(--fn-editor-ink)' : '2px solid var(--fn-editor-line)',
                                   width: '18px',
                                   height: '18px',
                                   borderRadius: '4px',
@@ -2820,7 +2698,7 @@ export default function BlockEditorModal({
                                 }}
                                 placeholder="Sub-task title..."
                                 className="editor-text-input full-width"
-                                style={{ color: '#f1f5f9', background: '#06070a', fontSize: '0.82rem' }}
+                                style={{ fontSize: "0.82rem" }}
                               />
                               <button
                                 type="button"
@@ -2831,7 +2709,7 @@ export default function BlockEditorModal({
                                   updatedItems[idx] = updatedMs;
                                   setFormData((prev) => ({ ...prev, items: updatedItems }));
                                 }}
-                                style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '2px', flexShrink: 0 }}
+                                className="editor-icon-btn is-delete"
                                 title="Remove sub-task"
                               >
                                 <Trash2 size={13} />
@@ -2860,10 +2738,9 @@ export default function BlockEditorModal({
             </button>
             <button
               type="submit"
-              className="editor-btn editor-btn-save"
-              style={{ padding: '9px 22px' }}
+              className="editor-btn editor-btn-save active-dirty"
             >
-              <Save size={15} /> Apply Changes
+              <Save size={15} /> <span>Apply Changes</span>
             </button>
           </div>
         </form>

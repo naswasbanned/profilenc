@@ -16,7 +16,7 @@ export default function StackedDeckBlock({ data = {} }) {
 
   if (total === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '32px', color: '#666', fontSize: '0.85rem' }}>
+      <div style={{ textAlign: 'center', padding: '32px', color: 'var(--card-text-muted, var(--color-text-secondary, #8b949e))', fontSize: '0.85rem' }}>
         No images added to this stacked deck. Click Edit to add images.
       </div>
     );
@@ -79,7 +79,7 @@ export default function StackedDeckBlock({ data = {} }) {
                 onClick={handlePrev}
                 aria-label="Previous image"
               >
-                <ChevronLeft size={14} />
+                <ChevronLeft size={16} />
               </button>
               <button
                 type="button"
@@ -87,7 +87,7 @@ export default function StackedDeckBlock({ data = {} }) {
                 onClick={handleNext}
                 aria-label="Next image"
               >
-                <ChevronRight size={14} />
+                <ChevronRight size={16} />
               </button>
             </div>
           )}

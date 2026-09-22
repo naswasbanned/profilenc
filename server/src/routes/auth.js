@@ -115,12 +115,70 @@ router.post('/register', async (req, res) => {
       }
     }
 
-    // Create default theme if none from template
+const FIELD_NOTES_THEME = {
+  global: {
+    designStyle: 'field-notes',
+    fontFamily: "'DM Sans', sans-serif",
+    headingFont: "'Fraunces', serif",
+    monoFont: "'DM Mono', monospace",
+    serifFont: "'Fraunces', Georgia, serif",
+    baseFontSize: 16,
+    borderRadius: 14,
+    backgroundType: 'solid',
+    backgroundColor: '#f5efdf',
+    backgroundGradient: null,
+    accentColor: '#e96d52',
+    accentColorSecondary: '#f4cf62',
+    buttonBackground: '#252320',
+    buttonTextColor: '#fffaf0',
+    headingColor: '#252320',
+    textColor: '#252320',
+    textColorMuted: '#746e63',
+    cardBackground: '#fffaf0',
+    cardBorder: '#d7ccb8',
+    cardHeadingColor: '#252320',
+    cardTextColor: '#252320',
+    cardTextMuted: '#746e63',
+    tabNavBackground: 'rgba(245, 239, 223, 0.95)',
+    tabNavBorder: '#d7ccb8',
+    tabButtonBackground: 'rgba(37, 35, 32, 0.05)',
+    tabButtonTextColor: '#746e63',
+    tabButtonActiveBackground: '#252320',
+    tabButtonActiveTextColor: '#fffaf0',
+    glassBlur: 0,
+    animationSpeed: 1,
+    backgroundImage: null,
+    backgroundOverlayOpacity: 0.75,
+    backgroundOverlayColor: null,
+    backgroundBlur: 0,
+    cardBoxShadow: '4px 5px 0 rgba(37, 35, 32, 0.22)',
+    cardShadow: '4px 5px 0 rgba(37, 35, 32, 0.22)',
+    cardShadowHover: '6px 7px 0 rgba(37, 35, 32, 0.32)',
+    cardBorderWidth: 2,
+    cardBorderStyle: 'solid',
+    blockGap: 32,
+    blockPadding: 20,
+    blockDividerStyle: 'solid',
+    blockDividerColor: '#d7ccb8',
+    headingFontWeight: 600,
+    pillStyle: 'editorial-bordered',
+    iconStyle: 'bordered-box',
+  },
+  tabs: {},
+  pages: {
+    dev: { backgroundColor: '#f5efdf' },
+    hobbies: { backgroundColor: '#f5efdf' },
+    diary: { backgroundColor: '#f5efdf' },
+  },
+  sections: {},
+};
+
+    // Create default theme for new user (Field Notes Editorial default)
     await query(
       `INSERT INTO user_themes (user_id, theme)
-       VALUES ($1, '{}')
+       VALUES ($1, $2)
        ON CONFLICT (user_id) DO NOTHING`,
-      [user.id]
+      [user.id, JSON.stringify(FIELD_NOTES_THEME)]
     );
 
     // Create default sections if none from template

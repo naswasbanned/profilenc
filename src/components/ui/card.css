@@ -1,0 +1,56 @@
+/* ==========================================================================
+   UI CARD COMPONENT STYLES
+   Field Notes Editorial System • Tactile Card Primitives
+   ========================================================================== */
+
+.ui-card {
+  border-radius: var(--radius-md, 18px);
+  border: 2px solid var(--line, #252320);
+  background-color: var(--paper-light, #fffaf0);
+  color: var(--ink, #252320);
+  box-shadow: var(--shadow, 3px 4px 0 var(--line, #252320));
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .ui-card {
+  background-color: var(--paper-light, #241e33);
+  border-color: var(--line, #44375b);
+  box-shadow: var(--shadow, 3px 4px 0 var(--line, #44375b));
+  color: var(--ink, #f9f3e9);
+}
+
+.ui-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px 10px;
+}
+
+.ui-card-title {
+  font-family: var(--fn-display, 'Fraunces', serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--ink, #252320);
+  margin: 0;
+}
+
+.ui-card-desc {
+  font-family: var(--fn-body, 'DM Sans', sans-serif);
+  font-size: 0.84rem;
+  color: var(--muted, #746e63);
+  margin: 0;
+}
+
+.ui-card-content {
+  padding: 16px 20px;
+}
+
+.ui-card-footer {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px 18px;
+  border-top: 1.5px dashed var(--line, #252320);
+}

@@ -58,6 +58,7 @@ function ProgressRing({ completed, total, size = 80, strokeWidth = 6 }) {
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         {/* Background track */}
         <circle
+          className="milestones-progress-track"
           cx={size / 2}
           cy={size / 2}
           r={radius}
@@ -67,6 +68,7 @@ function ProgressRing({ completed, total, size = 80, strokeWidth = 6 }) {
         />
         {/* Progress arc */}
         <motion.circle
+          className="milestones-progress-fill"
           cx={size / 2}
           cy={size / 2}
           r={radius}

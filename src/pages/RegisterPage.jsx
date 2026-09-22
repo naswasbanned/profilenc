@@ -14,16 +14,19 @@ import {
   Gamepad2,
   PenLine,
   Layout,
+  AlertCircle,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import './AuthPages.css';
 
 const TEMPLATE_OPTIONS = [
-  { slug: 'developer', name: 'Developer', icon: <Code2 size={20} />, color: '#00f0aa', desc: 'Code stack, work experience & repositories' },
-  { slug: 'designer', name: 'Designer', icon: <Palette size={20} />, color: '#ff5500', desc: 'Visual portfolio, services & rate cards' },
-  { slug: 'gamer', name: 'Gamer / Streamer', icon: <Gamepad2 size={20} />, color: '#ff2a5f', desc: 'Streaming schedule, game reviews & gear setup' },
-  { slug: 'minimal', name: 'Minimal Writer', icon: <PenLine size={20} />, color: '#e8e6df', desc: 'Editorial essays, reading notes & focus reader' },
-  { slug: 'creative', name: 'Creative Multi-Hyphenate', icon: <Layout size={20} />, color: '#00d4ff', desc: 'Modular canvas mixing all available blocks' },
+  { slug: 'developer', name: 'Developer', icon: <Code2 size={20} />, color: 'var(--mint)', desc: 'Code stack, work experience & repositories' },
+  { slug: 'designer', name: 'Designer', icon: <Palette size={20} />, color: 'var(--coral)', desc: 'Visual portfolio, services & rate cards' },
+  { slug: 'gamer', name: 'Gamer / Streamer', icon: <Gamepad2 size={20} />, color: 'var(--lavender)', desc: 'Streaming schedule, game reviews & gear setup' },
+  { slug: 'minimal', name: 'Minimal Writer', icon: <PenLine size={20} />, color: 'var(--butter)', desc: 'Editorial essays, reading notes & focus reader' },
+  { slug: 'creative', name: 'Creative Multi-Hyphenate', icon: <Layout size={20} />, color: 'var(--blue)', desc: 'Modular canvas mixing all available blocks' },
 ];
 
 export default function RegisterPage() {
@@ -40,10 +43,61 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [usernameStatus, setUsernameStatus] = useState(null); // null, 'checking', 'available', 'taken'
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('profilenc_theme') || 'dark';
+    }
+    return 'dark';
+  });
 
   useEffect(() => {
     document.title = 'Profilenc — Create Account';
-  }, []);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = (e) => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+
+    if (!document.startViewTransition) {
+      setTheme(nextTheme);
+      localStorage.setItem('profilenc_theme', nextTheme);
+      document.documentElement.setAttribute('data-theme', nextTheme);
+      return;
+    }
+
+    const rect = e?.currentTarget?.getBoundingClientRect();
+    const x = rect ? rect.left + rect.width / 2 : window.innerWidth;
+    const y = rect ? rect.top + rect.height / 2 : 0;
+
+    const maxDist = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+    const endRadius = Math.ceil(maxDist) + 40;
+
+    const transition = document.startViewTransition(() => {
+      setTheme(nextTheme);
+      localStorage.setItem('profilenc_theme', nextTheme);
+      document.documentElement.setAttribute('data-theme', nextTheme);
+    });
+
+    transition.ready.then(() => {
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration: 650,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+          fill: 'forwards',
+          pseudoElement: '::view-transition-new(root)',
+        }
+      );
+    });
+  };
 
   // Debounced username check
   useEffect(() => {
@@ -101,7 +155,7 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-page">
-      {/* Background Matrix Grid */}
+      {/* Background Matrix Texture */}
       <div className="raw-grid-matrix" aria-hidden="true" />
 
       <motion.div
@@ -110,17 +164,33 @@ export default function RegisterPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <Link to="/" className="auth-back">
-          <ArrowLeft size={14} /> <span>BACK TO HOME</span>
-        </Link>
+        <div className="auth-top-bar">
+          <Link to="/" className="auth-back">
+            <ArrowLeft size={14} /> <span>Back to Home</span>
+          </Link>
+          <button
+            type="button"
+            className="fn-theme-toggle fn-theme-toggle-compact"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+          </button>
+        </div>
 
         <div className="auth-header">
-          <Link to="/" className="auth-brand" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-            <img src="/logo.svg" alt="Profilenc Logo" style={{ width: '24px', height: '24px' }} />
-            <span className="brand-name">PROFILENC</span>
+          <Link to="/" className="fn-logo">
+            <span className="fn-logo-mark">
+              <img src="/logo.svg" alt="" aria-hidden="true" />
+            </span>
+            Profilenc
           </Link>
+          <div className="auth-eyebrow">
+            {step === 1 ? 'Get Started' : 'Starter Foundation'}
+          </div>
           <h1 className="auth-title">
-            {step === 1 ? 'CREATE YOUR PROFILE' : 'PICK A STARTER TEMPLATE'}
+            {step === 1 ? 'Create your profile' : 'Pick a starter template'}
           </h1>
           <p className="auth-sub">
             {step === 1
@@ -132,17 +202,18 @@ export default function RegisterPage() {
         {/* Step Indicator */}
         <div className="auth-steps">
           <div className={`auth-step ${step >= 1 ? 'active' : ''}`}>
-            <span>01</span> ACCOUNT
+            <span>01</span> Account
           </div>
           <div className="auth-step-line" />
           <div className={`auth-step ${step >= 2 ? 'active' : ''}`}>
-            <span>02</span> TEMPLATE
+            <span>02</span> Template
           </div>
         </div>
 
         {error && (
           <div className="auth-error">
-            <span className="error-tag">[ERROR]</span>
+            <AlertCircle size={16} />
+            <span className="error-tag">Error</span>
             <span>{error}</span>
           </div>
         )}
@@ -151,7 +222,7 @@ export default function RegisterPage() {
         {step === 1 && (
           <form onSubmit={handleStep1} className="auth-form">
             <div className="auth-field">
-              <label>CLAIM USERNAME</label>
+              <label>Claim Username</label>
               <div className="auth-username-wrap">
                 <span className="auth-username-prefix">profilenc.my.id/@</span>
                 <input
@@ -172,15 +243,15 @@ export default function RegisterPage() {
                 {usernameStatus && (
                   <span className={`username-status ${usernameStatus}`}>
                     {usernameStatus === 'checking' && '...'}
-                    {usernameStatus === 'available' && <Check size={14} />}
-                    {usernameStatus === 'taken' && <X size={14} />}
+                    {usernameStatus === 'available' && <Check size={16} />}
+                    {usernameStatus === 'taken' && <X size={16} />}
                   </span>
                 )}
               </div>
             </div>
 
             <div className="auth-field">
-              <label>EMAIL ADDRESS</label>
+              <label>Email Address</label>
               <input
                 type="email"
                 value={form.email}
@@ -191,7 +262,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="auth-field">
-              <label>PASSWORD</label>
+              <label>Password</label>
               <div className="auth-password-wrap">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -207,14 +278,14 @@ export default function RegisterPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
             <button type="submit" className="auth-submit">
-              <span>CONTINUE TO TEMPLATES</span>
-              <ArrowRight size={15} />
+              <span>Continue to Templates</span>
+              <ArrowRight size={16} />
             </button>
           </form>
         )}
@@ -234,7 +305,7 @@ export default function RegisterPage() {
                   <div className="tmpl-top">
                     <div className="tmpl-icon">{t.icon}</div>
                     {form.templateSlug === t.slug && (
-                      <span className="tmpl-active-badge">SELECTED</span>
+                      <span className="tmpl-active-badge">Selected</span>
                     )}
                   </div>
                   <h4>{t.name}</h4>
@@ -249,8 +320,8 @@ export default function RegisterPage() {
                 className="auth-submit auth-submit-secondary"
                 onClick={() => setStep(1)}
               >
-                <ArrowLeft size={15} />
-                <span>BACK</span>
+                <ArrowLeft size={16} />
+                <span>Back</span>
               </button>
               <button
                 type="button"
@@ -258,8 +329,8 @@ export default function RegisterPage() {
                 onClick={handleRegister}
                 disabled={loading}
               >
-                <span>{loading ? 'CREATING PROFILE...' : 'INITIALIZE PROFILE'}</span>
-                <UserPlus size={15} />
+                <span>{loading ? 'Creating Profile...' : 'Initialize Profile'}</span>
+                <UserPlus size={16} />
               </button>
             </div>
           </div>
@@ -267,8 +338,8 @@ export default function RegisterPage() {
 
         {step === 1 && (
           <div className="auth-switch">
-            <span>ALREADY HAVE AN ACCOUNT?</span>
-            <Link to="/login">LOG IN →</Link>
+            <span>Already have an account?</span>
+            <Link to="/login">Log in →</Link>
           </div>
         )}
       </motion.div>

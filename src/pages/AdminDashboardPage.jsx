@@ -27,6 +27,8 @@ import {
   Maximize2,
   Image as ImageIcon,
   Clock,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import './AdminDashboardPage.css';
@@ -57,6 +59,62 @@ function formatLastChange(dateStr) {
 export default function AdminDashboardPage() {
   const { user, token, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+  // Theme State
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('profilenc_theme') || 'dark';
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = (e) => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+
+    if (!document.startViewTransition) {
+      setTheme(nextTheme);
+      localStorage.setItem('profilenc_theme', nextTheme);
+      document.documentElement.setAttribute('data-theme', nextTheme);
+      return;
+    }
+
+    const rect = e?.currentTarget?.getBoundingClientRect();
+    const x = rect ? rect.left + rect.width / 2 : window.innerWidth;
+    const y = rect ? rect.top + rect.height / 2 : 0;
+
+    const maxDist = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+    const endRadius = Math.ceil(maxDist) + 40;
+
+    const transition = document.startViewTransition(() => {
+      setTheme(nextTheme);
+      localStorage.setItem('profilenc_theme', nextTheme);
+      document.documentElement.setAttribute('data-theme', nextTheme);
+    });
+
+    transition.ready.then(() => {
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration: 650,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+          fill: 'forwards',
+          pseudoElement: '::view-transition-new(root)',
+        }
+      );
+    });
+  };
 
   // Active Tab
   const [activeTab, setActiveTab] = useState('users'); // 'users' | 'patches' | 'landing' | 'suggestions'
@@ -502,7 +560,7 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="admin-page">
+    <div className="admin-page" data-theme={theme}>
       <div className="raw-grid-matrix" />
 
       {/* Toast Notification */}
@@ -525,6 +583,16 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="admin-header-nav">
+            <button
+              type="button"
+              className="admin-theme-toggle"
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+              <span>{theme === 'dark' ? 'LIGHT' : 'DARK'}</span>
+            </button>
             <Link to="/" target="_blank" className="admin-nav-link">
               <ExternalLink size={14} /> View Live Site
             </Link>
@@ -573,7 +641,7 @@ export default function AdminDashboardPage() {
             onClick={() => setActiveTab('users')}
           >
             <Users size={16} />
-            <span>[01 // USERS_REGISTRY]</span>
+            <span>01 // USERS REGISTRY</span>
             <span className="tab-count">{stats.totalUsers}</span>
           </button>
           <button
@@ -582,7 +650,7 @@ export default function AdminDashboardPage() {
             onClick={() => setActiveTab('patches')}
           >
             <FileText size={16} />
-            <span>[02 // PATCH_NOTES_ENGINE]</span>
+            <span>02 // PATCH NOTES</span>
             <span className="tab-count">{stats.totalPatches}</span>
           </button>
           <button
@@ -591,7 +659,7 @@ export default function AdminDashboardPage() {
             onClick={() => setActiveTab('landing')}
           >
             <Layers size={16} />
-            <span>[03 // LANDING_PAGE_CMS]</span>
+            <span>03 // LANDING CMS</span>
           </button>
           <button
             type="button"
@@ -599,7 +667,7 @@ export default function AdminDashboardPage() {
             onClick={() => setActiveTab('suggestions')}
           >
             <MessageSquare size={16} />
-            <span>[04 // SUGGESTION_BOX]</span>
+            <span>04 // SUGGESTION BOX</span>
             {stats.newSuggestions > 0 ? (
               <span className="tab-count highlight">{stats.newSuggestions} NEW</span>
             ) : (
@@ -680,16 +748,16 @@ export default function AdminDashboardPage() {
                           <span className="template-tag">[{u.template_slug || 'CUSTOM'}]</span>
                         </td>
                         <td>
-                          <span className="monospace-cell" style={{ fontWeight: 600, color: '#f1f5f9' }}>
+                          <span className="admin-blocks-badge">
                             {u.block_count || 0} {u.block_count === 1 ? 'block' : 'blocks'}
                           </span>
                         </td>
                         <td>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                            <span className="monospace-cell" style={{ color: '#00f0aa', fontSize: '0.82rem', fontWeight: 600 }}>
+                          <div className="admin-recent-cell">
+                            <span className="admin-recent-time">
                               {formatLastChange(u.last_changed_at || u.updated_at || u.created_at)}
                             </span>
-                            <span style={{ fontSize: '0.7rem', color: '#64748b' }}>
+                            <span className="admin-recent-date">
                               {new Date(u.last_changed_at || u.updated_at || u.created_at).toLocaleDateString('en-US', {
                                 month: 'short',
                                 day: 'numeric',

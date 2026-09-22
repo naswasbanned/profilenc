@@ -105,22 +105,11 @@ export default function TimelineBlock({ data = {} }) {
       <AnimatePresence>
         {previewImage && (
           <motion.div
-            className="article-modal-backdrop"
+            className="timeline-lightbox-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleBackdropClick}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 999,
-              background: 'rgba(5,5,8,0.92)',
-              backdropFilter: 'blur(16px)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '24px',
-            }}
           >
             {hintVisible && (
               <div className="modal-double-click-hint">
@@ -128,52 +117,27 @@ export default function TimelineBlock({ data = {} }) {
               </div>
             )}
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              className="timeline-lightbox-dialog"
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              style={{
-                position: 'relative',
-                maxWidth: '90vw',
-                maxHeight: '88vh',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                boxShadow: '0 24px 64px rgba(0,0,0,0.9)',
-                border: '1px solid rgba(255,255,255,0.1)',
-              }}
             >
-              <button
-                onClick={() => setPreviewImage(null)}
-                style={{
-                  position: 'absolute',
-                  top: '12px',
-                  right: '12px',
-                  zIndex: 10,
-                  background: 'rgba(0,0,0,0.6)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  color: '#fff',
-                  borderRadius: '50%',
-                  width: '32px',
-                  height: '32px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                }}
-              >
-                <X size={18} />
-              </button>
-              <img
-                src={previewImage}
-                alt="Enlarged view"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  maxHeight: '85vh',
-                  objectFit: 'contain',
-                  display: 'block',
-                }}
-              />
+              <div className="timeline-lightbox-img-wrap">
+                <button
+                  type="button"
+                  className="timeline-lightbox-close"
+                  onClick={() => setPreviewImage(null)}
+                  title="Close preview"
+                >
+                  <X size={20} />
+                </button>
+                <img
+                  src={previewImage}
+                  alt="Enlarged timeline view"
+                  className="timeline-lightbox-img"
+                />
+              </div>
             </motion.div>
           </motion.div>
         )}

@@ -6,7 +6,7 @@ export default function SpecsGridBlock({ data = {} }) {
 
   if (list.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '32px', color: '#666', fontSize: '0.85rem' }}>
+      <div style={{ textAlign: 'center', padding: '32px', color: 'var(--card-text-muted, var(--color-text-secondary, #8b949e))', fontSize: '0.85rem' }}>
         No specs or gear items yet. Click Edit to add gear.
       </div>
     );

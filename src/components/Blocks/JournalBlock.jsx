@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calendar,
@@ -28,6 +28,7 @@ import {
   Pin,
   Image as ImageIcon,
   AlertCircle,
+  ArrowRight,
 } from 'lucide-react';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
@@ -104,49 +105,33 @@ function parseInlineMarkdown(text) {
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          style={{
-            color: 'var(--color-accent-primary, #00f0aa)',
-            textDecoration: 'underline',
-            textUnderlineOffset: '3px',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
+          className="journal-prose-link"
         >
           {linkText}
         </a>
       );
     } else if (isBoldItalic) {
       nodes.push(
-        <strong key={key} style={{ fontWeight: 700, color: 'var(--card-heading-color, #ffffff)' }}>
-          <em>{bi1 || bi2}</em>
+        <strong key={key} className="journal-prose-bold">
+          <em className="journal-prose-italic">{bi1 || bi2}</em>
         </strong>
       );
     } else if (isBold) {
       nodes.push(
-        <strong key={key} style={{ fontWeight: 700, color: 'var(--card-heading-color, #ffffff)' }}>
+        <strong key={key} className="journal-prose-bold">
           {b1 || b2}
         </strong>
       );
     } else if (isItalic) {
-      nodes.push(<em key={key} style={{ fontStyle: 'italic' }}>{i1 || i2}</em>);
+      nodes.push(<em key={key} className="journal-prose-italic">{i1 || i2}</em>);
     } else if (isCode) {
       nodes.push(
-        <code
-          key={key}
-          style={{
-            background: 'rgba(255, 255, 255, 0.09)',
-            color: 'var(--color-accent-primary, #00f0aa)',
-            padding: '2px 6px',
-            borderRadius: '4px',
-            fontFamily: 'var(--font-mono, monospace)',
-            fontSize: '0.86em',
-          }}
-        >
+        <code key={key} className="journal-prose-code">
           {codeText}
         </code>
       );
     } else if (isStrike) {
-      nodes.push(<del key={key} style={{ opacity: 0.6 }}>{strikeText}</del>);
+      nodes.push(<del key={key} className="journal-prose-del">{strikeText}</del>);
     }
 
     lastIndex = match.index + fullMatch.length;
@@ -181,21 +166,7 @@ function renderJournalMarkdown(content) {
       }
       i++; // consume closing ```
       blocks.push(
-        <pre
-          key={`code-${blocks.length}`}
-          style={{
-            padding: '14px 18px',
-            borderRadius: '10px',
-            background: '#04060a',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            fontFamily: 'var(--font-mono, monospace)',
-            fontSize: '0.84rem',
-            color: 'var(--color-accent-primary, #00f0aa)',
-            overflowX: 'auto',
-            margin: '16px 0',
-            lineHeight: '1.6',
-          }}
-        >
+        <pre key={`code-${blocks.length}`} className="journal-prose-pre">
           <code>{codeLines.join('\n')}</code>
         </pre>
       );
@@ -210,25 +181,9 @@ function renderJournalMarkdown(content) {
         i++;
       }
       blocks.push(
-        <blockquote
-          key={`quote-${blocks.length}`}
-          style={{
-            borderLeft: '4px solid var(--color-accent-primary, #00f0aa)',
-            background: 'rgba(0, 240, 170, 0.05)',
-            padding: '12px 18px',
-            margin: '16px 0',
-            borderRadius: '0 8px 8px 0',
-            color: 'var(--card-text-color, #e2e8f0)',
-            fontStyle: 'italic',
-            fontFamily: 'var(--font-serif)',
-            fontSize: '1.05rem',
-            lineHeight: '1.7',
-          }}
-        >
+        <blockquote key={`quote-${blocks.length}`} className="journal-prose-quote">
           {quoteLines.map((qLine, qIdx) => (
-            <p key={qIdx} style={{ margin: qIdx > 0 ? '6px 0 0' : 0 }}>
-              {parseInlineMarkdown(qLine)}
-            </p>
+            <p key={qIdx}>{parseInlineMarkdown(qLine)}</p>
           ))}
         </blockquote>
       );
@@ -243,24 +198,9 @@ function renderJournalMarkdown(content) {
         i++;
       }
       blocks.push(
-        <ul
-          key={`ul-${blocks.length}`}
-          style={{
-            margin: '12px 0 16px 20px',
-            paddingLeft: '6px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '6px',
-            color: 'var(--card-text-color, #cbd5e1)',
-            fontFamily: 'var(--font-serif)',
-            fontSize: '1rem',
-            lineHeight: '1.65',
-          }}
-        >
+        <ul key={`ul-${blocks.length}`} className="journal-prose-ul">
           {listItems.map((item, itemIdx) => (
-            <li key={itemIdx}>
-              {parseInlineMarkdown(item)}
-            </li>
+            <li key={itemIdx}>{parseInlineMarkdown(item)}</li>
           ))}
         </ul>
       );
@@ -275,24 +215,9 @@ function renderJournalMarkdown(content) {
         i++;
       }
       blocks.push(
-        <ol
-          key={`ol-${blocks.length}`}
-          style={{
-            margin: '12px 0 16px 24px',
-            paddingLeft: '6px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '6px',
-            color: 'var(--card-text-color, #cbd5e1)',
-            fontFamily: 'var(--font-serif)',
-            fontSize: '1rem',
-            lineHeight: '1.65',
-          }}
-        >
+        <ol key={`ol-${blocks.length}`} className="journal-prose-ol">
           {listItems.map((item, itemIdx) => (
-            <li key={itemIdx}>
-              {parseInlineMarkdown(item)}
-            </li>
+            <li key={itemIdx}>{parseInlineMarkdown(item)}</li>
           ))}
         </ol>
       );
@@ -302,17 +227,7 @@ function renderJournalMarkdown(content) {
     // 5. Headings
     if (trimmed.startsWith('# ')) {
       blocks.push(
-        <h2
-          key={`h1-${blocks.length}`}
-          style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: '1.75rem',
-            color: 'var(--card-heading-color, #ffffff)',
-            margin: '24px 0 10px',
-            fontWeight: 700,
-            lineHeight: '1.3',
-          }}
-        >
+        <h2 key={`h1-${blocks.length}`} className="journal-prose-h1">
           {parseInlineMarkdown(trimmed.replace('# ', ''))}
         </h2>
       );
@@ -322,17 +237,7 @@ function renderJournalMarkdown(content) {
 
     if (trimmed.startsWith('## ')) {
       blocks.push(
-        <h3
-          key={`h2-${blocks.length}`}
-          style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: '1.45rem',
-            color: 'var(--card-heading-color, #ffffff)',
-            margin: '22px 0 8px',
-            fontWeight: 700,
-            lineHeight: '1.3',
-          }}
-        >
+        <h3 key={`h2-${blocks.length}`} className="journal-prose-h2">
           {parseInlineMarkdown(trimmed.replace('## ', ''))}
         </h3>
       );
@@ -342,17 +247,7 @@ function renderJournalMarkdown(content) {
 
     if (trimmed.startsWith('### ')) {
       blocks.push(
-        <h4
-          key={`h3-${blocks.length}`}
-          style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: '1.22rem',
-            color: 'var(--card-heading-color, #ffffff)',
-            margin: '18px 0 6px',
-            fontWeight: 700,
-            lineHeight: '1.3',
-          }}
-        >
+        <h4 key={`h3-${blocks.length}`} className="journal-prose-h3">
           {parseInlineMarkdown(trimmed.replace('### ', ''))}
         </h4>
       );
@@ -362,16 +257,7 @@ function renderJournalMarkdown(content) {
 
     // 6. Horizontal Rule: --- or ***
     if (trimmed === '---' || trimmed === '***' || trimmed === '___') {
-      blocks.push(
-        <hr
-          key={`hr-${blocks.length}`}
-          style={{
-            border: 'none',
-            borderTop: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
-            margin: '22px 0',
-          }}
-        />
-      );
+      blocks.push(<hr key={`hr-${blocks.length}`} className="journal-prose-hr" />);
       i++;
       continue;
     }
@@ -385,23 +271,14 @@ function renderJournalMarkdown(content) {
 
     // 8. Regular Paragraph
     blocks.push(
-      <p
-        key={`p-${blocks.length}`}
-        style={{
-          color: 'var(--card-text-color, #e2e8f0)',
-          fontSize: '1.02rem',
-          lineHeight: '1.75',
-          margin: '6px 0',
-          fontFamily: 'var(--font-serif)',
-        }}
-      >
+      <p key={`p-${blocks.length}`} className="journal-prose-p">
         {parseInlineMarkdown(line)}
       </p>
     );
     i++;
   }
 
-  return blocks;
+  return <div className="journal-article-prose">{blocks}</div>;
 }
 
 export default function JournalBlock({
@@ -418,6 +295,23 @@ export default function JournalBlock({
   // Reader Modal State
   const [activeArticle, setActiveArticle] = useState(null);
   const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(() => setActiveArticle(null));
+
+  // Close reader modal on Escape key press and lock background scroll
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setActiveArticle(null);
+      }
+    };
+    if (activeArticle) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [activeArticle]);
 
   // Quick Form State
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -1181,6 +1075,12 @@ export default function JournalBlock({
 
                   <h3 className="journal-entry-title">{entry.title}</h3>
                   {entry.excerpt && <p className="journal-entry-preview">{entry.excerpt}</p>}
+
+                  <div className="journal-entry-footer">
+                    <span className="journal-read-btn">
+                      Read Entry <ArrowRight size={12} />
+                    </span>
+                  </div>
                 </div>
               </div>
             );
@@ -1197,57 +1097,54 @@ export default function JournalBlock({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleBackdropClick}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 999,
-              background: 'rgba(5,5,8,0.88)',
-              backdropFilter: 'blur(16px)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '24px',
-            }}
           >
             {hintVisible && (
               <div className="modal-double-click-hint">
-                <span>Click once more outside to close (or use ✕)</span>
+                <span>Click once more outside to close (or use close button)</span>
               </div>
             )}
             <motion.div
               className="article-modal"
-              initial={{ scale: 0.95, y: 20 }}
+              initial={{ scale: 0.95, y: 16 }}
               animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 20 }}
+              exit={{ scale: 0.95, y: 16 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
-              style={{
-                width: '100%',
-                maxWidth: '720px',
-                maxHeight: '85vh',
-                overflowY: 'auto',
-                padding: '38px 36px',
-                borderRadius: '16px',
-                background: 'var(--card-bg, #0d0d12)',
-                border: '1px solid var(--card-border, rgba(255,255,255,0.08))',
-                boxShadow: '0 24px 64px rgba(0,0,0,0.85)',
-                position: 'relative',
-              }}
             >
               <button
+                type="button"
+                className="article-modal-close-btn"
                 onClick={() => setActiveArticle(null)}
-                style={{
-                  position: 'absolute',
-                  top: '20px',
-                  right: '20px',
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--card-text-muted, #888)',
-                  cursor: 'pointer',
-                  padding: '4px',
-                }}
+                title="Close reader (Esc)"
+                aria-label="Close reader"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
+
+              <div className="article-modal-header">
+                <span className="article-modal-kicker">
+                  <BookOpen size={13} /> Journal & Thoughts
+                </span>
+
+                <h2 className="article-modal-title">
+                  {activeArticle.title}
+                </h2>
+
+                <div className="article-modal-meta">
+                  <span className="journal-date">
+                    <Calendar size={12} style={{ display: 'inline', marginRight: '4px' }} />
+                    {activeArticle.date || 'Recent'}
+                  </span>
+                  {activeArticle.mood && (
+                    <span className="journal-mood-badge">
+                      {activeArticle.moodEmoji ? `${activeArticle.moodEmoji} ` : ''}{activeArticle.mood}
+                    </span>
+                  )}
+                  <span className="journal-read-time">
+                    <Clock size={12} /> {activeReadTime} min read
+                  </span>
+                </div>
+              </div>
 
               {/* Modal Cover Image (if available) */}
               {(activeArticle.coverUrl || activeArticle.imageUrl) && (
@@ -1260,32 +1157,7 @@ export default function JournalBlock({
                 </div>
               )}
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px', flexWrap: 'wrap' }}>
-                <span className="journal-date">{activeArticle.date}</span>
-                {activeArticle.mood && (
-                  <span className="journal-mood-badge">
-                    {activeArticle.moodEmoji ? `${activeArticle.moodEmoji} ` : ''}{activeArticle.mood}
-                  </span>
-                )}
-                <span style={{ fontSize: '0.75rem', color: 'var(--card-text-muted, #8b949e)', display: 'flex', alignItems: 'center', gap: '4px', fontFamily: 'var(--font-mono)' }}>
-                  <Clock size={12} /> {activeReadTime} min read
-                </span>
-              </div>
-
-              <h2
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: '2.1rem',
-                  fontWeight: 700,
-                  color: 'var(--card-heading-color, var(--color-card-heading, #ffffff))',
-                  marginBottom: '24px',
-                  lineHeight: '1.25',
-                }}
-              >
-                {activeArticle.title}
-              </h2>
-
-              <div style={{ paddingBottom: '16px' }}>
+              <div className="article-modal-body">
                 {renderJournalMarkdown(activeContent)}
               </div>
             </motion.div>

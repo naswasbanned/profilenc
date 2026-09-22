@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Field Notes — Design Library</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --paper: #f5efdf;
+      --paper-light: #fffaf0;
+      --ink: #252320;
+      --muted: #746e63;
+      --line: #d7ccb8;
+
+      --coral: #e96d52;
+      --coral-dark: #c9503c;
+      --butter: #f4cf62;
+      --mint: #b9d9bb;
+      --blue: #5578bd;
+      --lavender: #c6b9df;
+
+      --shadow: 6px 7px 0 var(--ink);
+      --shadow-small: 3px 4px 0 var(--ink);
+
+      --radius-sm: 8px;
+      --radius-md: 18px;
+      --radius-lg: 34px;
+      --max-width: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(rgba(37, 35, 32, 0.07) 0.7px, transparent 0.7px),
+        var(--paper);
+      background-size: 7px 7px;
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    .container {
+      width: min(calc(100% - 40px), var(--max-width));
+      margin-inline: auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--coral-dark);
+      font-family: "DM Mono", monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .section {
+      padding: 110px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 40px;
+      margin-bottom: 54px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-family: "Fraunces", serif;
+      font-size: clamp(2.5rem, 6vw, 5.5rem);
+      font-weight: 600;
+      letter-spacing: -0.07em;
+      line-height: 0.92;
+    }
+
+    .section-heading p {
+      max-width: 540px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    /* Navigation */
+
+    .site-header {
+      position: relative;
+      z-index: 5;
+      padding: 22px 0;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: "Fraunces", serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+    }
+
+    .logo-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: var(--coral);
+      box-shadow: var(--shadow-small);
+      transform: rotate(-8deg);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+    }
+
+    /* Buttons */
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 21px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: var(--ink);
+      color: var(--paper-light);
+      cursor: pointer;
+      font-weight: 700;
+      transition: 180ms ease;
+    }
+
+    .button:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: var(--shadow-small);
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .button.coral {
+      background: var(--coral);
+      color: var(--ink);
+    }
+
+    .button.yellow {
+      background: var(--butter);
+      color: var(--ink);
+    }
+
+    .button.square {
+      border-radius: var(--radius-sm);
+    }
+
+    .button.small {
+      min-height: 36px;
+      padding: 0 15px;
+      font-size: 0.84rem;
+    }
+
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Hero */
+
+    .hero {
+      min-height: 700px;
+      padding: 70px 0 120px;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      gap: 70px;
+    }
+
+    .hero h1 {
+      max-width: 700px;
+      margin: 0 0 28px;
+      font-family: "Fraunces", serif;
+      font-size: clamp(4rem, 9vw, 8.8rem);
+      font-weight: 600;
+      letter-spacing: -0.09em;
+      line-height: 0.82;
+    }
+
+    .hero h1 em {
+      color: var(--coral);
+      font-style: normal;
+    }
+
+    .hero-copy {
+      max-width: 510px;
+      margin-bottom: 30px;
+      color: var(--muted);
+      font-size: 1.12rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-art {
+      position: relative;
+      min-height: 500px;
+    }
+
+    .poster {
+      position: absolute;
+      width: 310px;
+      min-height: 390px;
+      padding: 28px;
+      border: 2px solid var(--ink);
+      background: var(--butter);
+      box-shadow: 12px 13px 0 var(--ink);
+      transform: rotate(7deg);
+    }
+
+    .poster::before {
+      position: absolute;
+      top: -19px;
+      left: 50%;
+      width: 110px;
+      height: 36px;
+      background: rgba(255, 250, 240, 0.7);
+      content: "";
+      transform: translateX(-50%) rotate(-4deg);
+    }
+
+    .poster-main {
+      top: 45px;
+      right: 30px;
+      z-index: 2;
+    }
+
+    .poster-back {
+      top: 100px;
+      left: 20px;
+      background: var(--lavender);
+      transform: rotate(-10deg);
+    }
+
+    .poster h3 {
+      margin: 0 0 60px;
+      font-family: "Fraunces", serif;
+      font-size: 3.3rem;
+      letter-spacing: -0.08em;
+      line-height: 0.85;
+    }
+
+    .poster-circle {
+      width: 145px;
+      height: 145px;
+      margin: 0 auto 38px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: var(--coral);
+    }
+
+    .poster-lines {
+      display: grid;
+      gap: 8px;
+    }
+
+    .poster-lines span {
+      display: block;
+      height: 8px;
+      background: var(--ink);
+    }
+
+    .poster-lines span:nth-child(2) {
+      width: 70%;
+    }
+
+    .poster-lines span:nth-child(3) {
+      width: 45%;
+    }
+
+    /* Typography */
+
+    .type-specimens {
+      display: grid;
+      gap: 26px;
+    }
+
+    .type-row {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 30px;
+      align-items: baseline;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .type-label {
+      color: var(--muted);
+      font-family: "DM Mono", monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .display-xl {
+      font-family: "Fraunces", serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      letter-spacing: -0.08em;
+      line-height: 0.85;
+    }
+
+    .display-lg {
+      font-family: "Fraunces", serif;
+      font-size: clamp(2.4rem, 5vw, 5rem);
+      letter-spacing: -0.07em;
+      line-height: 0.9;
+    }
+
+    .display-md {
+      font-family: "Fraunces", serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      letter-spacing: -0.06em;
+      line-height: 0.95;
+    }
+
+    .body-large {
+      max-width: 580px;
+      font-size: 1.25rem;
+    }
+
+    .mono {
+      font-family: "DM Mono", monospace;
+      font-size: 0.86rem;
+    }
+
+    /* Color palette */
+
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .swatch {
+      min-height: 170px;
+      padding: 15px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-small);
+    }
+
+    .swatch strong {
+      font-family: "DM Mono", monospace;
+      font-size: 0.76rem;
+    }
+
+    .swatch.paper {
+      background: var(--paper-light);
+    }
+
+    .swatch.coral {
+      background: var(--coral);
+    }
+
+    .swatch.yellow {
+      background: var(--butter);
+    }
+
+    .swatch.mint {
+      background: var(--mint);
+    }
+
+    .swatch.blue {
+      background: var(--blue);
+      color: white;
+    }
+
+    /* Cards */
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .card {
+      overflow: hidden;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-md);
+      background: var(--paper-light);
+      box-shadow: var(--shadow-small);
+      transition: 180ms ease;
+    }
+
+    .card:hover {
+      transform: translateY(-7px) rotate(-1deg);
+      box-shadow: 7px 10px 0 var(--ink);
+    }
+
+    .card-image {
+      min-height: 190px;
+      border-bottom: 2px solid var(--ink);
+      background:
+        linear-gradient(135deg, transparent 45%, rgba(37, 35, 32, 0.12) 46% 54%, transparent 55%),
+        var(--coral);
+    }
+
+    .card:nth-child(2) .card-image {
+      background:
+        radial-gradient(circle at 30% 40%, var(--coral) 0 28%, transparent 29%),
+        var(--blue);
+    }
+
+    .card:nth-child(3) .card-image {
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          var(--mint) 0 12px,
+          var(--paper-light) 12px 24px
+        );
+    }
+
+    .card-content {
+      padding: 24px;
+    }
+
+    .card-tag {
+      color: var(--coral-dark);
+      font-family: "DM Mono", monospace;
+      font-size: 0.73rem;
+      text-transform: uppercase;
+    }
+
+    .card h3 {
+      margin: 15px 0 9px;
+      font-family: "Fraunces", serif;
+      font-size: 1.85rem;
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    /* Feature cards */
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 22px;
+    }
+
+    .feature {
+      min-height: 420px;
+      padding: 36px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-lg);
+      background: var(--mint);
+      box-shadow: var(--shadow);
+    }
+
+    .feature.secondary {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--lavender);
+    }
+
+    .feature h3 {
+      max-width: 600px;
+      margin: 30px 0 0;
+      font-family: "Fraunces", serif;
+      font-size: clamp(2.6rem, 5vw, 5rem);
+      letter-spacing: -0.07em;
+      line-height: 0.88;
+    }
+
+    .feature.secondary h3 {
+      font-size: 3rem;
+    }
+
+    .arrow {
+      display: grid;
+      width: 52px;
+      height: 52px;
+      place-items: center;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: var(--paper-light);
+      font-size: 1.5rem;
+    }
+
+    /* Badges and alerts */
+
+    .component-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 45px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 29px;
+      padding: 0 12px;
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      background: var(--butter);
+      font-family: "DM Mono", monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+    }
+
+    .badge.coral {
+      background: var(--coral);
+    }
+
+    .badge.mint {
+      background: var(--mint);
+    }
+
+    .badge.outline {
+      background: transparent;
+    }
+
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 18px 20px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-md);
+      background: var(--butter);
+      box-shadow: var(--shadow-small);
+    }
+
+    .alert-icon {
+      display: grid;
+      flex: 0 0 30px;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--butter);
+      font-weight: 700;
+    }
+
+    .alert p {
+      margin: 0;
+    }
+
+    /* Form */
+
+    .form-layout {
+      display: grid;
+      grid-template-columns: 0.75fr 1.25fr;
+      gap: 70px;
+    }
+
+    .form-layout h3 {
+      margin: 0;
+      font-family: "Fraunces", serif;
+      font-size: 3rem;
+      letter-spacing: -0.06em;
+      line-height: 0.95;
+    }
+
+    .form {
+      display: grid;
+      gap: 17px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      font-family: "DM Mono", monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 14px 15px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-sm);
+      outline: none;
+      background: var(--paper-light);
+      color: var(--ink);
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      box-shadow: 4px 4px 0 var(--coral);
+    }
+
+    /* Pricing */
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .price-card {
+      padding: 30px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-md);
+      background: var(--paper-light);
+      box-shadow: var(--shadow-small);
+    }
+
+    .price-card.featured {
+      background: var(--coral);
+      transform: translateY(-15px) rotate(1deg);
+    }
+
+    .price-card h3 {
+      margin: 0 0 15px;
+      font-family: "Fraunces", serif;
+      font-size: 2.2rem;
+      letter-spacing: -0.06em;
+    }
+
+    .price {
+      margin-bottom: 25px;
+      font-family: "Fraunces", serif;
+      font-size: 3.5rem;
+      letter-spacing: -0.08em;
+    }
+
+    .price span {
+      color: var(--muted);
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0;
+    }
+
+    .price-list {
+      display: grid;
+      gap: 10px;
+      min-height: 150px;
+      margin: 0 0 25px;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+    }
+
+    .price-list li::before {
+      margin-right: 8px;
+      color: var(--coral-dark);
+      content: "✳";
+    }
+
+    /* Quote */
+
+    .quote {
+      position: relative;
+      padding: 65px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-lg);
+      background: var(--blue);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .quote-mark {
+      position: absolute;
+      top: 20px;
+      left: 35px;
+      color: var(--butter);
+      font-family: "Fraunces", serif;
+      font-size: 7rem;
+      line-height: 1;
+    }
+
+    blockquote {
+      max-width: 850px;
+      margin: 0 0 30px;
+      font-family: "Fraunces", serif;
+      font-size: clamp(2.2rem, 5vw, 4.8rem);
+      letter-spacing: -0.07em;
+      line-height: 0.95;
+    }
+
+    .quote cite {
+      color: #e4e8f5;
+      font-style: normal;
+    }
+
+    /* Footer */
+
+    .site-footer {
+      padding: 50px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-family: "DM Mono", monospace;
+      font-size: 0.75rem;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 850px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-grid,
+      .section-heading,
+      .form-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 35px;
+      }
+
+      .hero-art {
+        min-height: 450px;
+      }
+
+      .poster-main {
+        right: 10%;
+      }
+
+      .poster-back {
+        left: 8%;
+      }
+
+      .card-grid,
+      .pricing-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature.secondary {
+        min-height: 300px;
+      }
+
+      .swatches {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        width: min(calc(100% - 28px), var(--max-width));
+      }
+
+      .section {
+        padding: 75px 0;
+      }
+
+      .hero h1 {
+        font-size: 4.7rem;
+      }
+
+      .hero-art {
+        min-height: 390px;
+        transform: scale(0.82);
+        transform-origin: top left;
+      }
+
+      .card-grid,
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .swatches {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .type-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .quote {
+        padding: 50px 25px 35px;
+      }
+
+      blockquote {
+        font-size: 2.6rem;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="#" class="logo">
+        <span class="logo-mark">✳</span>
+        Field Notes
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#typography">Type</a>
+        <a href="#colors">Colors</a>
+        <a href="#components">Components</a>
+        <a href="#patterns">Patterns</a>
+      </nav>
+
+      <a href="#contact" class="button small coral">Start a project</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">A visual design library / 001</p>
+
+          <h1>
+            Made for
+            <em>curious</em>
+            minds.
+          </h1>
+
+          <p class="hero-copy">
+            A flexible collection of editorial components, tactile layouts,
+            expressive typography, and joyful interface details.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#components" class="button coral">Explore components</a>
+            <a href="#contact" class="button secondary">Read the notes</a>
+          </div>
+        </div>
+
+        <div class="hero-art" aria-hidden="true">
+          <div class="poster poster-back">
+            <p class="eyebrow">Issue no. 04</p>
+            <div class="poster-circle"></div>
+            <div class="poster-lines">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+
+          <div class="poster poster-main">
+            <p class="eyebrow">Field notes</p>
+            <h3>Good ideas grow here.</h3>
+            <div class="poster-circle"></div>
+            <div class="poster-lines">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Typography -->
+    <section class="section" id="typography">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">01 / Typography</p>
+            <h2>Words with a little rhythm.</h2>
+          </div>
+
+          <p>
+            Headlines should feel memorable, while supporting text remains
+            clear, calm, and easy to scan. Use contrast in scale rather than
+            visual clutter.
+          </p>
+        </div>
+
+        <div class="type-specimens">
+          <div class="type-row">
+            <span class="type-label">Display XL</span>
+            <span class="display-xl">Make room for wonder.</span>
+          </div>
+
+          <div class="type-row">
+            <span class="type-label">Display LG</span>
+            <span class="display-lg">A slower kind of digital.</span>
+          </div>
+
+          <div class="type-row">
+            <span class="type-label">Display MD</span>
+            <span class="display-md">Useful things, beautifully made.</span>
+          </div>
+
+          <div class="type-row">
+            <span class="type-label">Body Large</span>
+            <span class="body-large">
+              Thoughtful interfaces combine character with clarity. Let every
+              element have a reason to be there.
+            </span>
+          </div>
+
+          <div class="type-row">
+            <span class="type-label">Mono Label</span>
+            <span class="mono">ARCHIVE / 2026 / COLLECTION 004</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Colors -->
+    <section class="section" id="colors">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">02 / Color system</p>
+            <h2>Bright, warm, and slightly unexpected.</h2>
+          </div>
+
+          <p>
+            Use the paper tones as the foundation. Bring in one or two expressive
+            colors for emphasis, interaction, and moments of surprise.
+          </p>
+        </div>
+
+        <div class="swatches">
+          <div class="swatch paper">
+            <strong>Paper Light</strong>
+            <span>#FFFAF0</span>
+          </div>
+
+          <div class="swatch coral">
+            <strong>Coral</strong>
+            <span>#E96D52</span>
+          </div>
+
+          <div class="swatch yellow">
+            <strong>Butter</strong>
+            <span>#F4CF62</span>
+          </div>
+
+          <div class="swatch mint">
+            <strong>Mint</strong>
+            <span>#B9D9BB</span>
+          </div>
+
+          <div class="swatch blue">
+            <strong>Cobalt</strong>
+            <span>#5578BD</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Components -->
+    <section class="section" id="components">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">03 / Components</p>
+            <h2>Small pieces, strong personality.</h2>
+          </div>
+
+          <p>
+            Keep components tactile and direct. Rounded forms are used as accents,
+            while borders and shadows make the interface feel physical.
+          </p>
+        </div>
+
+        <!-- Buttons -->
+        <p class="eyebrow">Buttons</p>
+
+        <div class="component-row">
+          <button class="button coral">Primary action</button>
+          <button class="button">Dark button</button>
+          <button class="button yellow">Bright button</button>
+          <button class="button secondary">Outline button</button>
+          <button class="button coral square">Square button</button>
+          <button class="button small" disabled>Disabled</button>
+        </div>
+
+        <!-- Badges -->
+        <p class="eyebrow">Badges</p>
+
+        <div class="component-row">
+          <span class="badge coral">New project</span>
+          <span class="badge">In progress</span>
+          <span class="badge mint">Available</span>
+          <span class="badge outline">Archive</span>
+        </div>
+
+        <!-- Alert -->
+        <p class="eyebrow">Alert</p>
+
+        <div class="alert">
+          <span class="alert-icon">!</span>
+          <p>
+            <strong>Fresh from the studio.</strong>
+            This collection is updated every month with new patterns and
+            experiments.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards -->
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">04 / Cards</p>
+            <h2>Give every idea a place to land.</h2>
+          </div>
+
+          <p>
+            Cards work best when their content is specific. Use them for
+            articles, projects, services, products, or small collections.
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <article class="card">
+            <div class="card-image"></div>
+            <div class="card-content">
+              <span class="card-tag">Journal / 01</span>
+              <h3>Making space for better ideas.</h3>
+              <p>
+                Notes on creating digital experiences that feel more personal
+                and less predictable.
+              </p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-image"></div>
+            <div class="card-content">
+              <span class="card-tag">Studio / 02</span>
+              <h3>The beauty of unfinished things.</h3>
+              <p>
+                Exploring texture, process, and the useful imperfections found
+                in handmade work.
+              </p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-image"></div>
+            <div class="card-content">
+              <span class="card-tag">Guide / 03</span>
+              <h3>A calmer way to build online.</h3>
+              <p>
+                A practical guide to using contrast, rhythm, and restraint in
+                interface design.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature patterns -->
+    <section class="section" id="patterns">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">05 / Feature patterns</p>
+            <h2>Layouts that create movement.</h2>
+          </div>
+
+          <p>
+            Use large color fields and irregular scale to break up long pages.
+            These blocks are useful for service introductions, campaigns, and
+            editorial storytelling.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature">
+            <div class="arrow">↗</div>
+            <h3>Design should leave a trace.</h3>
+          </article>
+
+          <article class="feature secondary">
+            <div class="arrow">✳</div>
+            <h3>Keep the useful. Remove the usual.</h3>
+            <a href="#" class="button secondary">Discover more</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form -->
+    <section class="section" id="contact">
+      <div class="container form-layout">
+        <div>
+          <p class="eyebrow">06 / Form elements</p>
+          <h3>Tell us what you’re making.</h3>
+          <p class="body-large">
+            Use short labels, generous spacing, and clear focus states to make
+            forms feel welcoming instead of administrative.
+          </p>
+        </div>
+
+        <form class="form">
+          <div class="field">
+            <label for="name">Your name</label>
+            <input id="name" type="text" placeholder="Jane Smith" />
+          </div>
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" type="email" placeholder="hello@example.com" />
+          </div>
+
+          <div class="field">
+            <label for="project">Project type</label>
+            <select id="project">
+              <option>Select an option</option>
+              <option>Website design</option>
+              <option>Brand identity</option>
+              <option>Digital product</option>
+              <option>Something else</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="message">A few words</label>
+            <textarea
+              id="message"
+              placeholder="Tell us a little about your idea..."
+            ></textarea>
+          </div>
+
+          <button class="button coral" type="submit">
+            Send your note →
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">07 / Pricing cards</p>
+            <h2>Simple offers, clearly presented.</h2>
+          </div>
+
+          <p>
+            Pricing cards should make differences obvious. Keep the feature
+            lists short and give the recommended option a strong visual cue.
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          <article class="price-card">
+            <h3>Seed</h3>
+            <div class="price">$900 <span>/ project</span></div>
+
+            <ul class="price-list">
+              <li>One-page website</li>
+              <li>Custom visual direction</li>
+              <li>Basic responsive layout</li>
+            </ul>
+
+            <a href="#" class="button secondary">Choose seed</a>
+          </article>
+
+          <article class="price-card featured">
+            <h3>Bloom</h3>
+            <div class="price">$2,400 <span>/ project</span></div>
+
+            <ul class="price-list">
+              <li>Complete website system</li>
+              <li>Custom components</li>
+              <li>Motion and interactions</li>
+              <li>Content structure</li>
+            </ul>
+
+            <a href="#" class="button">Choose bloom</a>
+          </article>
+
+          <article class="price-card">
+            <h3>Wild</h3>
+            <div class="price">$5,000 <span>/ project</span></div>
+
+            <ul class="price-list">
+              <li>Full digital experience</li>
+              <li>Brand identity direction</li>
+              <li>Advanced interactions</li>
+            </ul>
+
+            <a href="#" class="button secondary">Choose wild</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quote -->
+    <section class="section">
+      <div class="container">
+        <div class="quote">
+          <span class="quote-mark">“</span>
+
+          <blockquote>
+            The best interfaces do not shout for attention. They invite people
+            to stay a little longer.
+          </blockquote>
+
+          <cite>— A note from the studio wall</cite>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a href="#" class="logo">
+        <span class="logo-mark">✳</span>
+        Field Notes
+      </a>
+
+      <span class="footer-note">
+        Built with curiosity / Updated 2026
+      </span>
+    </div>
+  </footer>
+</body>
+</html>

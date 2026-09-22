@@ -4,9 +4,10 @@ const ThemeContext = createContext(null);
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
-// Default theme values — aligned with Technical Obsidian design system
+// Default theme values — aligned with Technical Obsidian design system (legacy / fallback)
 const DEFAULT_THEME = {
   global: {
+    designStyle: 'obsidian',
     fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
     headingFont: "'Space Grotesk', sans-serif",
     monoFont: "'JetBrains Mono', monospace",
@@ -40,12 +41,85 @@ const DEFAULT_THEME = {
     backgroundOverlayOpacity: 0.75,
     backgroundOverlayColor: null,
     backgroundBlur: 0,
+    cardBoxShadow: 'none',
+    cardShadow: 'none',
+    cardBorderWidth: 1,
+    cardBorderStyle: 'solid',
+    blockGap: 28,
+    blockPadding: 20,
+    blockDividerStyle: 'none',
+    blockDividerColor: 'rgba(255, 255, 255, 0.08)',
+    headingFontWeight: 700,
+    pillStyle: 'rounded-glow',
+    buttonStyle: 'flat-border',
+    iconStyle: 'glass-accent',
   },
   tabs: {},
   pages: {
     dev: { backgroundColor: '#090a0f' },
     hobbies: { backgroundColor: '#090a0f' },
     diary: { backgroundColor: '#0e0e12' },
+  },
+  sections: {},
+};
+
+// Field Notes Editorial theme preset — new default for new users & 1-click migration
+export const FIELD_NOTES_THEME = {
+  global: {
+    designStyle: 'field-notes',
+    fontFamily: "'DM Sans', sans-serif",
+    headingFont: "'Fraunces', serif",
+    monoFont: "'DM Mono', monospace",
+    serifFont: "'Fraunces', Georgia, serif",
+    baseFontSize: 16,
+    borderRadius: 14,
+    backgroundType: 'solid',
+    backgroundColor: '#f5efdf',
+    backgroundGradient: null,
+    accentColor: '#e96d52',
+    accentColorSecondary: '#f4cf62',
+    buttonBackground: '#252320',
+    buttonTextColor: '#fffaf0',
+    headingColor: '#252320',
+    textColor: '#252320',
+    textColorMuted: '#746e63',
+    cardBackground: '#fffaf0',
+    cardBorder: '#d7ccb8',
+    cardHeadingColor: '#252320',
+    cardTextColor: '#252320',
+    cardTextMuted: '#746e63',
+    tabNavBackground: 'rgba(255, 250, 240, 0.96)',
+    tabNavBorder: '#d7ccb8',
+    tabButtonBackground: '#fffaf0',
+    tabButtonTextColor: '#746e63',
+    tabButtonBorder: '#d7ccb8',
+    tabButtonActiveBackground: '#e96d52',
+    tabButtonActiveTextColor: '#fffaf0',
+    glassBlur: 0,
+    animationSpeed: 1,
+    backgroundImage: null,
+    backgroundOverlayOpacity: 0.75,
+    backgroundOverlayColor: null,
+    backgroundBlur: 0,
+    cardBoxShadow: '4px 5px 0 rgba(37, 35, 32, 0.22)',
+    cardShadow: '4px 5px 0 rgba(37, 35, 32, 0.22)',
+    cardShadowHover: '6px 7px 0 rgba(37, 35, 32, 0.32)',
+    cardBorderWidth: 2,
+    cardBorderStyle: 'solid',
+    blockGap: 32,
+    blockPadding: 20,
+    blockDividerStyle: 'solid',
+    blockDividerColor: '#d7ccb8',
+    headingFontWeight: 600,
+    pillStyle: 'editorial-bordered',
+    buttonStyle: 'editorial-tactile',
+    iconStyle: 'bordered-box',
+  },
+  tabs: {},
+  pages: {
+    dev: { backgroundColor: '#f5efdf' },
+    hobbies: { backgroundColor: '#f5efdf' },
+    diary: { backgroundColor: '#f5efdf' },
   },
   sections: {},
 };
@@ -69,6 +143,56 @@ function themeToCSSVars(theme) {
   const btnBg = g.buttonBackground || accent;
   const btnText = g.buttonTextColor || '#090a0f';
   const radius = g.borderRadius ?? 10;
+
+  // Card surface & layout tokens
+  const cardShadow = g.cardBoxShadow || g.cardShadow || 'none';
+  const cardBorderWidth = typeof g.cardBorderWidth === 'number' ? `${g.cardBorderWidth}px` : (g.cardBorderWidth || '1px');
+  const cardBorderStyle = g.cardBorderStyle || 'solid';
+  const blockGap = typeof g.blockGap === 'number' ? `${g.blockGap}px` : (g.blockGap || '28px');
+  const blockPadding = typeof g.blockPadding === 'number' ? `${g.blockPadding}px` : (g.blockPadding || '20px');
+  const blockDividerStyle = g.blockDividerStyle || 'none';
+  const blockDividerColor = g.blockDividerColor || cardBorder;
+  const headingWeight = g.headingFontWeight || 700;
+  const pillStyle = g.pillStyle || 'rounded-glow';
+  const iconStyle = g.iconStyle || 'glass-accent';
+
+  const isLightOrPaper = bg === '#f5efdf' || bg === '#fffaf0' || bg === '#fafafa' || bg === '#ffffff' || bg === '#f8fafc' || g.designStyle === 'field-notes' || g.designStyle === 'clean-light' || g.designStyle === 'neo-brutalist';
+
+  // Compute dynamic card hover shadow based on current preset & cardShadow
+  let cardShadowHover = g.cardShadowHover;
+  if (!cardShadowHover) {
+    if (cardShadow === 'none' || !cardShadow) {
+      cardShadowHover = isLightOrPaper
+        ? '0 6px 20px rgba(0, 0, 0, 0.08)'
+        : '0 8px 24px rgba(0, 0, 0, 0.45)';
+    } else if (cardShadow.includes('rgba(37, 35, 32') || cardShadow.includes('#252320')) {
+      cardShadowHover = '6px 7px 0 rgba(37, 35, 32, 0.32)';
+    } else if (cardShadow.includes('#000000')) {
+      cardShadowHover = '7px 7px 0 #000000';
+    } else if (cardShadow.includes('rgba')) {
+      cardShadowHover = '0 8px 24px rgba(0, 0, 0, 0.16)';
+    } else {
+      cardShadowHover = cardShadow;
+    }
+  }
+
+  vars['--card-shadow'] = cardShadow;
+  vars['--card-shadow-hover'] = cardShadowHover;
+  vars['--card-border-radius'] = `${radius}px`;
+  vars['--card-border-width'] = cardBorderWidth;
+  vars['--card-border-style'] = cardBorderStyle;
+  vars['--block-gap'] = blockGap;
+  vars['--block-padding'] = blockPadding;
+  vars['--block-divider-style'] = blockDividerStyle;
+  vars['--block-divider-color'] = blockDividerColor;
+  vars['--heading-font-weight'] = `${headingWeight}`;
+  vars['--pill-style'] = pillStyle;
+  vars['--icon-style'] = iconStyle;
+
+  // Tactile tokens: in paper/light mode use soft black ink rgba(37, 35, 32, 0.32), in dark mode use pure black #000000
+  const tactileShadow = isLightOrPaper ? 'rgba(37, 35, 32, 0.32)' : '#000000';
+  vars['--tactile-shadow-color'] = tactileShadow;
+  vars['--tactile-border-color'] = isLightOrPaper ? (heading === '#ffffff' ? '#252320' : heading || '#252320') : cardBorder;
 
   // Fonts
   vars['--font-family'] = g.fontFamily || DEFAULT_THEME.global.fontFamily;
@@ -157,18 +281,26 @@ function themeToCSSVars(theme) {
   vars['--radius-xs'] = `${Math.max(0, Math.round(radius * 0.4))}px`;
   vars['--btn-radius'] = `${radius}px`;
 
-  // Tab Navigation Bar & Options
-  vars['--tabs-nav-bg'] = g.tabNavBackground || 'rgba(10, 10, 15, 0.82)';
-  vars['--tabs-nav-border'] = g.tabNavBorder || 'rgba(255, 255, 255, 0.06)';
-  vars['--tab-btn-bg'] = g.tabButtonBackground || 'rgba(255, 255, 255, 0.03)';
-  vars['--tab-btn-text'] = g.tabButtonTextColor || '#aaaaaa';
-  vars['--tab-btn-border'] = g.tabButtonBorder || 'rgba(255, 255, 255, 0.08)';
+  // Tab Navigation Bar & Options (dynamic paper/dark fallback)
+  const buttonStyle = g.buttonStyle || (g.designStyle === 'field-notes' ? 'editorial-tactile' : g.designStyle === 'neo-brutalist' ? 'neo-brutalist' : g.designStyle === 'midnight-violet' ? 'rounded-glow' : 'flat-border');
+  vars['--button-style'] = buttonStyle;
+
+  vars['--tabs-nav-bg'] = g.tabNavBackground || (isLightOrPaper ? 'rgba(255, 250, 240, 0.96)' : 'rgba(10, 10, 15, 0.82)');
+  vars['--tabs-nav-border'] = g.tabNavBorder || (isLightOrPaper ? cardBorder : 'rgba(255, 255, 255, 0.06)');
+  vars['--tab-btn-bg'] = g.tabButtonBackground || (isLightOrPaper ? cardBg : 'rgba(255, 255, 255, 0.03)');
+  vars['--tab-btn-text'] = g.tabButtonTextColor || (isLightOrPaper ? textMuted : '#aaaaaa');
+  vars['--tab-btn-border'] = g.tabButtonBorder || (isLightOrPaper ? cardBorder : 'rgba(255, 255, 255, 0.08)');
   if (g.tabButtonActiveBackground) {
     vars['--tab-btn-active-bg'] = g.tabButtonActiveBackground;
+  } else if (isLightOrPaper) {
+    vars['--tab-btn-active-bg'] = accent;
   }
   if (g.tabButtonActiveTextColor) {
     vars['--tab-btn-active-text'] = g.tabButtonActiveTextColor;
     vars['--tab-btn-active-border'] = g.tabButtonActiveTextColor;
+  } else if (isLightOrPaper) {
+    vars['--tab-btn-active-text'] = '#fffaf0';
+    vars['--tab-btn-active-border'] = heading;
   }
 
   // Glass & Animation
@@ -264,7 +396,11 @@ function loadGoogleFont(fontFamily) {
   const link = document.createElement('link');
   link.id = linkId;
   link.rel = 'stylesheet';
-  link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(cleanName)}:wght@300;400;500;600;700;800;900&display=swap`;
+  if (cleanName.toLowerCase() === 'fraunces') {
+    link.href = `https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&display=swap`;
+  } else {
+    link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(cleanName)}:wght@300;400;500;600;700;800;900&display=swap`;
+  }
   document.head.appendChild(link);
 }
 

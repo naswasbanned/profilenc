@@ -184,6 +184,15 @@ body {
   outline-offset: 2px;
 }
 
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible {
+  outline: none !important;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -285,4 +294,65 @@ img {
     opacity: 1;
     transform: translate(-50%, 0) scale(1);
   }
+}
+
+/* ==========================================================================
+   Sweet Dark Mode & View Transitions
+   ========================================================================== */
+
+:root,
+[data-theme="dark"] {
+  /* Sweet dark purple palette */
+  --paper: #191524;
+  --paper-light: #241e33;
+  --paper-elevated: #2f2742;
+  --ink: #f9f3e9;
+  --muted: #b2a5c2;
+  --line: #44375b;
+
+  --coral: #f1846b;
+  --coral-dark: #d96351;
+  --butter: #f6d878;
+  --mint: #9ed0b0;
+  --blue: #8ba8e2;
+  --lavender: #cbbbe8;
+
+  --bg-dots: rgba(249, 243, 233, 0.07);
+  --error-bg: #3b1c2b;
+}
+
+[data-theme="light"] {
+  /* Editorial paper light mode palette */
+  --paper: #f5efdf;
+  --paper-light: #fffaf0;
+  --ink: #252320;
+  --muted: #746e63;
+  --line: #d7ccb8;
+
+  --coral: #e96d52;
+  --coral-dark: #c9503c;
+  --butter: #f4cf62;
+  --mint: #b9d9bb;
+  --blue: #5578bd;
+  --lavender: #c6b9df;
+
+  --bg-dots: rgba(37, 35, 32, 0.07);
+  --error-bg: #fde8e4;
+}
+
+/* View Transition corner sweep animation */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 99999;
+  will-change: clip-path;
+  transform: translateZ(0);
 }

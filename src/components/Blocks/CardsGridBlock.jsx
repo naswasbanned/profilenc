@@ -29,11 +29,9 @@ export default function CardsGridBlock({ data = {} }) {
         {cardList.map((item, idx) => {
           const img = item.image || item.imageUrl || item.coverImage;
           return (
-            <motion.div
+            <div
               key={item.id || idx}
               className="card-item"
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2 }}
             >
               {img && (
                 <div
@@ -93,58 +91,54 @@ export default function CardsGridBlock({ data = {} }) {
                 </div>
               )}
             </div>
-          </motion.div>
-        );
-      })}
+          </div>
+          );
+        })}
     </div>
 
       {/* Image Zoom Modal */}
       <AnimatePresence>
         {activeModalImage && (
           <motion.div
-            className="image-modal-backdrop"
+            className="image-zoom-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleBackdropClick}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 999,
-              background: 'rgba(0,0,0,0.85)',
-              backdropFilter: 'blur(12px)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '24px',
-            }}
           >
             {hintVisible && (
               <div className="modal-double-click-hint">
                 <span>Click once more outside to close (or use ✕)</span>
               </div>
             )}
-            <div style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh' }}>
-              <img
-                src={activeModalImage.src}
-                alt={activeModalImage.title}
-                style={{ width: '100%', maxHeight: '85vh', objectFit: 'contain', borderRadius: '12px' }}
-              />
-              <button
-                onClick={() => setActiveModalImage(null)}
-                style={{
-                  position: 'absolute',
-                  top: '-40px',
-                  right: 0,
-                  background: 'none',
-                  border: 'none',
-                  color: '#fff',
-                  cursor: 'pointer',
-                }}
-              >
-                <X size={24} />
-              </button>
-            </div>
+            <motion.div
+              className="image-zoom-dialog"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="image-zoom-img-wrap">
+                <button
+                  type="button"
+                  className="image-zoom-close"
+                  onClick={() => setActiveModalImage(null)}
+                  title="Close image"
+                >
+                  <X size={20} />
+                </button>
+                <img
+                  src={activeModalImage.src}
+                  alt={activeModalImage.title || 'Zoomed card image'}
+                  className="image-zoom-img"
+                />
+              </div>
+              {activeModalImage.title && (
+                <div className="image-zoom-caption">
+                  {activeModalImage.title}
+                </div>
+              )}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -23,6 +23,30 @@ function EditorCanvasInner({
   const [editingBlock, setEditingBlock] = useState(null);
   const [deletingBlock, setDeletingBlock] = useState(null);
 
+  // Universal Editor UI Light / Dark Mode sync
+  const [editorTheme, setEditorTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('profilenc_theme') || document.documentElement.getAttribute('data-theme') || 'dark';
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', editorTheme);
+    }
+  }, [editorTheme]);
+
+  useEffect(() => {
+    const handleStorage = (e) => {
+      if (e.key === 'profilenc_theme' && (e.newValue === 'dark' || e.newValue === 'light')) {
+        setEditorTheme(e.newValue);
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
   // State snapshots for real-time dirty state tracking with reactive re-render
   const [savedContentStr, setSavedContentStr] = useState(() => JSON.stringify(content));
   const [savedThemeStr, setSavedThemeStr] = useState(() => JSON.stringify(currentTheme));
@@ -252,7 +276,7 @@ function EditorCanvasInner({
   }, [username, token, content, currentTheme, setThemeIsDirty]);
 
   return (
-    <div className="editor-page" style={{ paddingTop: '52px', paddingBottom: 0 }}>
+    <div className="editor-page" data-editor-theme={editorTheme} style={{ paddingTop: '58px', paddingBottom: 0 }}>
       <ProfileCanvas
         username={username}
         content={content}
@@ -283,6 +307,8 @@ function EditorCanvasInner({
         onSaveAll={handleSaveAll}
         editingBlock={editingBlock}
         setEditingBlock={setEditingBlock}
+        editorTheme={editorTheme}
+        setEditorTheme={setEditorTheme}
       />
 
       {/* Block Delete Confirmation Modal */}
@@ -292,6 +318,7 @@ function EditorCanvasInner({
             block={deletingBlock}
             onConfirm={handleConfirmDeleteBlock}
             onClose={() => setDeletingBlock(null)}
+            editorTheme={editorTheme}
           />
         )}
       </AnimatePresence>
@@ -311,8 +338,13 @@ export default function EditorPage() {
 
   const isOwner = user?.username?.toLowerCase() === username?.toLowerCase();
 
-  // Load all data
+  // Load all data & sync universal theme
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('profilenc_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
     if (username) {
       document.title = `Profilenc Studio — @${username}`;
     }

@@ -18,6 +18,8 @@ import {
   AlertCircle,
   AlertTriangle,
   Settings,
+  Moon,
+  Sun,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -47,6 +49,8 @@ export default function EditorOverlay({
   onSaveAll,
   editingBlock,
   setEditingBlock,
+  editorTheme: propEditorTheme,
+  setEditorTheme: propSetEditorTheme,
 }) {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -59,6 +63,54 @@ export default function EditorOverlay({
   const [showExitModal, setShowExitModal] = useState(false);
   const [dismissedToast, setDismissedToast] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  // Universal Dark/Light Theme State synchronized with Landing Page & entire app
+  const [localEditorTheme, setLocalEditorTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('profilenc_theme');
+      if (saved) return saved;
+      const htmlTheme = document.documentElement.getAttribute('data-theme');
+      if (htmlTheme) return htmlTheme;
+    }
+    return 'dark';
+  });
+
+  const editorTheme = propEditorTheme || localEditorTheme;
+
+  // Keep documentElement data-theme and universal storage in sync
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', editorTheme);
+    }
+  }, [editorTheme]);
+
+  // Real-time synchronization if changed in another window/tab
+  useEffect(() => {
+    const handleStorage = (e) => {
+      if (e.key === 'profilenc_theme' && e.newValue && (e.newValue === 'dark' || e.newValue === 'light')) {
+        if (propSetEditorTheme) {
+          propSetEditorTheme(e.newValue);
+        } else {
+          setLocalEditorTheme(e.newValue);
+        }
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, [propSetEditorTheme]);
+
+  const toggleEditorTheme = useCallback(() => {
+    const next = editorTheme === 'dark' ? 'light' : 'dark';
+    if (propSetEditorTheme) {
+      propSetEditorTheme(next);
+    } else {
+      setLocalEditorTheme(next);
+    }
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('profilenc_theme', next);
+      document.documentElement.setAttribute('data-theme', next);
+    }
+  }, [editorTheme, propSetEditorTheme]);
 
   const { handleBackdropClick: handleExitBackdropClick, hintVisible: exitHintVisible } = useDoubleBackdropClose(
     () => setShowExitModal(false)
@@ -99,14 +151,17 @@ export default function EditorOverlay({
       {/* Fixed Editor Top Toolbar */}
       <motion.div
         className="editor-toolbar"
+        data-editor-theme={editorTheme}
         initial={{ y: -60 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.35, ease: 'easeOut' }}
       >
         <div className="editor-toolbar-left">
           <span className="editor-label">
-            <img src="/logo.svg" alt="Profilenc" style={{ width: '18px', height: '18px' }} />
-            <span>Profile Editor</span>
+            <span className="fn-logo-mark">
+              <img src="/logo.svg" alt="Profilenc" />
+            </span>
+            <span>Profilenc</span>
           </span>
           <button
             type="button"
@@ -124,15 +179,25 @@ export default function EditorOverlay({
             <span className="editor-user-handle">@{username}</span>
             <Settings size={13} className="editor-user-gear" />
           </button>
+
+          {/* Dedicated Editor UI Dark / Light Mode Toggle beside profile */}
+          <button
+            type="button"
+            className="editor-theme-toggle-btn"
+            onClick={toggleEditorTheme}
+            title={editorTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            aria-label={editorTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {editorTheme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+          </button>
         </div>
 
         {/* Center Quick Actions */}
         <div className="editor-toolbar-center">
           <button
             type="button"
-            className="editor-tab active"
+            className="editor-tab"
             onClick={() => setShowAddBlockModal(true)}
-            style={{ background: 'var(--color-accent-dim)', color: 'var(--color-accent-primary)' }}
           >
             <Plus size={15} />
             <span>Add Block</span>
@@ -215,7 +280,7 @@ export default function EditorOverlay({
               </>
             ) : (
               <>
-                <Check size={14} color="#00f0aa" />
+                <Check size={14} color="var(--fn-editor-mint)" />
                 <span>Saved</span>
               </>
             )}
@@ -235,6 +300,7 @@ export default function EditorOverlay({
       {/* Mobile Floating Action Dock (Always visible & accessible on phone) */}
       <motion.div
         className="editor-mobile-dock-wrap"
+        data-editor-theme={editorTheme}
         initial={{ y: 60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.35, ease: 'easeOut', delay: 0.1 }}
@@ -283,6 +349,7 @@ export default function EditorOverlay({
         {showThemeDrawer && (
           <motion.div
             className="editor-panel"
+            data-editor-theme={editorTheme}
             initial={{ x: 360, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 360, opacity: 0 }}
@@ -311,6 +378,7 @@ export default function EditorOverlay({
         {editingBlock && (
           <BlockEditorModal
             block={editingBlock}
+            editorTheme={editorTheme}
             onSave={(updatedBlock) => onEditBlock(updatedBlock)}
             onClose={() => setEditingBlock(null)}
           />
@@ -320,6 +388,7 @@ export default function EditorOverlay({
       <AnimatePresence>
         {showAddBlockModal && (
           <AddBlockModal
+            editorTheme={editorTheme}
             onAddBlock={(newBlock) => onAddBlock(newBlock)}
             onClose={() => setShowAddBlockModal(false)}
           />
@@ -329,6 +398,7 @@ export default function EditorOverlay({
       <AnimatePresence>
         {showTabManager && (
           <TabManagerModal
+            editorTheme={editorTheme}
             tabs={tabs}
             onSaveTabs={(newTabs) => onUpdateTabs(newTabs)}
             onClose={() => setShowTabManager(false)}
@@ -339,6 +409,7 @@ export default function EditorOverlay({
       <AnimatePresence>
         {showAccountSettings && (
           <AccountSettingsModal
+            editorTheme={editorTheme}
             onClose={() => setShowAccountSettings(false)}
           />
         )}
@@ -349,6 +420,7 @@ export default function EditorOverlay({
         {isDirty && !dismissedToast && (
           <motion.div
             className="editor-unsaved-banner"
+            data-editor-theme={editorTheme}
             initial={{ y: -15, opacity: 0, scale: 0.96 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: -15, opacity: 0, scale: 0.96 }}
@@ -377,7 +449,7 @@ export default function EditorOverlay({
       {/* Unsaved Changes Exit Confirmation Guard Modal */}
       <AnimatePresence>
         {showExitModal && (
-          <div className="editor-modal-backdrop" onClick={handleExitBackdropClick}>
+          <div className="editor-modal-backdrop" data-editor-theme={editorTheme} onClick={handleExitBackdropClick}>
             {exitHintVisible && (
               <div className="modal-double-click-hint">
                 <span>Click once more outside to close (or use ✕)</span>
@@ -392,45 +464,44 @@ export default function EditorOverlay({
               style={{ maxWidth: '480px' }}
             >
               <div className="editor-modal-header">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ padding: '8px', borderRadius: '50%', background: 'var(--fn-editor-butter)', color: 'var(--fn-editor-ink)', border: '2px solid var(--fn-editor-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <AlertTriangle size={18} />
                   </div>
                   <div>
-                    <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#fff' }}>Unsaved Changes</h3>
-                    <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>You have unsaved edits on your profile</span>
+                    <h3>Unsaved Changes</h3>
+                    <span>You have unsaved edits on your profile</span>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={() => setShowExitModal(false)}
-                  style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+                  title="Close"
                 >
                   <X size={18} />
                 </button>
               </div>
 
-              <div className="editor-modal-body" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <p style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: '1.6', margin: 0 }}>
+              <div className="editor-modal-body" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <p style={{ fontSize: '0.9rem', lineHeight: '1.6', margin: 0 }}>
                   You have made changes that haven't been saved yet. If you exit now, your recent edits will be lost.
                 </p>
               </div>
 
-              <div className="editor-modal-footer" style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+              <div className="editor-modal-footer" style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
                 <button
                   type="button"
                   onClick={() => navigate(`/@${username}`)}
-                  className="editor-btn editor-btn-close"
-                  style={{ fontSize: '0.78rem', padding: '8px 14px' }}
+                  className="editor-btn editor-btn-ghost"
+                  style={{ color: 'var(--fn-editor-coral-dark)' }}
                 >
                   Discard & Exit
                 </button>
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div style={{ display: 'flex', gap: '10px' }}>
                   <button
                     type="button"
                     onClick={() => setShowExitModal(false)}
                     className="editor-btn editor-btn-ghost"
-                    style={{ fontSize: '0.78rem', padding: '8px 14px' }}
                   >
                     Keep Editing
                   </button>
@@ -449,7 +520,6 @@ export default function EditorOverlay({
                     }}
                     disabled={saving}
                     className="editor-btn editor-btn-save active-dirty"
-                    style={{ fontSize: '0.78rem', padding: '8px 16px' }}
                   >
                     {saving ? 'Saving...' : 'Save & Exit'}
                   </button>

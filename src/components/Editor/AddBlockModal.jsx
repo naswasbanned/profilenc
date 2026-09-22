@@ -456,7 +456,7 @@ const BLOCK_PRESETS = [
   },
 ];
 
-export default function AddBlockModal({ onAddBlock, onClose }) {
+export default function AddBlockModal({ onAddBlock, onClose, editorTheme = 'dark' }) {
   const handleSelect = (preset) => {
     const newBlock = {
       id: `block-${Date.now()}`,
@@ -472,7 +472,7 @@ export default function AddBlockModal({ onAddBlock, onClose }) {
   const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(onClose);
 
   return (
-    <div className="editor-modal-backdrop" onClick={handleBackdropClick}>
+    <div className="editor-modal-backdrop" data-editor-theme={editorTheme} onClick={handleBackdropClick}>
       {hintVisible && (
         <div className="modal-double-click-hint">
           <span>Click once more outside to close (or use ✕)</span>
@@ -487,15 +487,15 @@ export default function AddBlockModal({ onAddBlock, onClose }) {
       >
         <div className="editor-modal-header">
           <div>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#fff' }}>Block Library</h3>
-            <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '2px' }}>
+            <h3>Block Library</h3>
+            <p style={{ marginTop: '2px' }}>
               Choose a block to add to your current tab
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+            title="Close"
           >
             <X size={20} />
           </button>
@@ -510,15 +510,15 @@ export default function AddBlockModal({ onAddBlock, onClose }) {
               whileTap={{ scale: 0.98 }}
               className="add-block-card"
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                <div style={{ padding: '8px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
+                <div style={{ padding: '8px', borderRadius: '10px', background: 'var(--fn-editor-paper)', border: '2px solid var(--fn-editor-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   {preset.icon}
                 </div>
-                <h4 style={{ fontSize: '0.96rem', fontWeight: 700, color: '#f1f5f9' }}>{preset.title}</h4>
+                <h4>{preset.title}</h4>
               </div>
-              <p style={{ fontSize: '0.8rem', color: '#94a3b8', lineHeight: '1.5', flex: 1 }}>{preset.desc}</p>
-              <div style={{ marginTop: '14px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent-color, #00f0aa)', fontSize: '0.78rem', fontWeight: 600 }}>
-                <Plus size={14} /> Add to Tab
+              <p style={{ flex: 1, margin: 0 }}>{preset.desc}</p>
+              <div style={{ marginTop: '14px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--fn-editor-coral)', fontSize: '0.82rem', fontWeight: 700 }}>
+                <Plus size={15} /> <span>Add to Tab</span>
               </div>
             </motion.div>
           ))}

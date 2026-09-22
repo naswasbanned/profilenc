@@ -16,7 +16,7 @@ import OptimizedImage from '../OptimizedImage/OptimizedImage';
 export default function GalleryBlock({ data = {} }) {
   const {
     items = [],
-    columns = 3,
+    columns,
     aspectRatio = 'square', // 'square' | 'wide' | 'tall' | 'natural'
     showCaptions = true,
   } = data;
@@ -24,6 +24,10 @@ export default function GalleryBlock({ data = {} }) {
   const photos = Array.isArray(items) ? items : [];
   const [activeIdx, setActiveIdx] = useState(null);
   const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(() => setActiveIdx(null));
+
+  // Dynamic columns: matches photo count up to the maximum selected in the edit block (default 3, max 4)
+  const maxCols = typeof columns === 'number' && columns >= 1 ? Math.min(columns, 4) : 3;
+  const dynamicCols = Math.min(Math.max(photos.length, 1), maxCols);
 
   // Keyboard navigation for lightbox
   useEffect(() => {
@@ -45,7 +49,7 @@ export default function GalleryBlock({ data = {} }) {
 
   if (photos.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '36px', color: '#888', fontSize: '0.85rem' }}>
+      <div style={{ textAlign: 'center', padding: '36px', color: 'var(--card-text-muted, var(--color-text-secondary, #8b949e))', fontSize: '0.85rem' }}>
         No photos in this gallery yet. Click Edit to add photos.
       </div>
     );
@@ -65,7 +69,7 @@ export default function GalleryBlock({ data = {} }) {
 
   return (
     <>
-      <div className={`gallery-grid cols-${columns || 3} ratio-${aspectRatio || 'square'}`}>
+      <div className={`gallery-grid cols-${dynamicCols} ratio-${aspectRatio || 'square'}`}>
         {photos.map((item, idx) => {
           const src = typeof item === 'string' ? item : item.src || item.url || item.imageUrl;
           const title = item.title || item.caption || '';
@@ -75,12 +79,10 @@ export default function GalleryBlock({ data = {} }) {
           if (!src) return null;
 
           return (
-            <motion.div
+            <div
               key={item.id || idx}
               className="gallery-card"
               onClick={() => setActiveIdx(idx)}
-              whileHover={{ y: -3 }}
-              transition={{ duration: 0.2 }}
             >
               <div className="gallery-img-wrap">
                 <OptimizedImage
@@ -111,7 +113,7 @@ export default function GalleryBlock({ data = {} }) {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
           );
         })}
       </div>
@@ -142,8 +144,9 @@ export default function GalleryBlock({ data = {} }) {
                   className="gallery-lightbox-close"
                   onClick={() => setActiveIdx(null)}
                   title="Close (Esc)"
+                  aria-label="Close modal"
                 >
-                  <X size={20} />
+                  <X size={22} />
                 </button>
               </div>
 
@@ -160,20 +163,20 @@ export default function GalleryBlock({ data = {} }) {
                   </button>
                 )}
 
-                <motion.div
-                  key={activeIdx}
-                  className="gallery-lightbox-image-wrap"
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.22 }}
-                >
-                  <img
-                    src={typeof activePhoto === 'string' ? activePhoto : activePhoto.src || activePhoto.url || activePhoto.imageUrl}
-                    alt={activePhoto.title || `Photo ${activeIdx + 1}`}
-                    className="gallery-lightbox-img"
-                  />
-                </motion.div>
+                <div className="gallery-lightbox-image-wrap">
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={activePhoto.id || activeIdx}
+                      src={activePhoto.url || activePhoto.src || activePhoto.imageUrl || (typeof activePhoto === 'string' ? activePhoto : '')}
+                      alt={activePhoto.alt || activePhoto.title || `Photo ${activeIdx + 1}`}
+                      className="gallery-lightbox-img"
+                      initial={{ opacity: 0, scale: 0.96 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.96 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  </AnimatePresence>
+                </div>
 
                 {photos.length > 1 && (
                   <button
@@ -190,7 +193,7 @@ export default function GalleryBlock({ data = {} }) {
               {/* Bottom Caption & Meta Footer */}
               {(activePhoto.title || activePhoto.caption || activePhoto.description || activePhoto.location || activePhoto.date || activePhoto.linkUrl) && (
                 <div className="gallery-lightbox-footer">
-                  <div>
+                  <div className="gallery-lightbox-info">
                     {(activePhoto.title || activePhoto.caption) && (
                       <h3 className="gallery-lightbox-title">
                         {activePhoto.title || activePhoto.caption}

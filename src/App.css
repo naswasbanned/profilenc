@@ -61,8 +61,9 @@
   background: var(--tabs-nav-bg, rgba(10, 10, 15, 0.82));
   backdrop-filter: blur(var(--glass-blur, 20px));
   -webkit-backdrop-filter: blur(var(--glass-blur, 20px));
-  border-bottom: 1px solid var(--tabs-nav-border, rgba(255, 255, 255, 0.06));
-  transition: top var(--transition-fast);
+  border-bottom: var(--card-border-width, 1px) solid var(--tabs-nav-border, rgba(255, 255, 255, 0.06));
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  transition: top var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
   width: 100%;
   box-sizing: border-box;
 }
@@ -74,6 +75,9 @@
   justify-content: center;
   max-width: 100%;
   width: 100%;
+  padding-left: 72px;
+  padding-right: 72px;
+  box-sizing: border-box;
 }
 
 .profile-tabs-scroll {
@@ -103,7 +107,7 @@
   gap: 8px;
   padding: 8px 18px;
   border-radius: var(--radius-full, 9999px);
-  border: 1px solid var(--tab-btn-border, var(--color-border-subtle, rgba(255, 255, 255, 0.08)));
+  border: var(--card-border-width, 1px) solid var(--tab-btn-border, var(--color-border-subtle, rgba(255, 255, 255, 0.08)));
   background: var(--tab-btn-bg, var(--color-surface-raised, rgba(255, 255, 255, 0.03)));
   color: var(--tab-btn-text, var(--color-text-muted, #aaa));
   font-family: var(--font-family, var(--font-body));
@@ -116,9 +120,9 @@
 }
 
 .profile-tab-btn:hover {
-  background: rgba(255, 255, 255, 0.07);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.16);
+  background: var(--color-surface-overlay, rgba(255, 255, 255, 0.07));
+  color: var(--heading-color, #fff);
+  border-color: var(--heading-color, rgba(255, 255, 255, 0.16));
 }
 
 .profile-tab-btn.active {
@@ -126,6 +130,29 @@
   background: var(--tab-btn-active-bg, color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 15%, rgba(0,0,0,0.4)));
   color: var(--tab-btn-active-text, var(--accent-color, var(--color-accent-primary)));
   box-shadow: 0 0 16px color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 20%, transparent);
+}
+
+/* Editorial Tactile styling for Profile Tab Navigation */
+[data-button-style="editorial-tactile"] .profile-tab-btn {
+  border: 2px solid var(--tab-btn-border, #d7ccb8) !important;
+  background: var(--tab-btn-bg, #fffaf0);
+  color: var(--tab-btn-text, #746e63);
+  font-weight: 700;
+  box-shadow: none;
+}
+
+[data-button-style="editorial-tactile"] .profile-tab-btn:hover {
+  border-color: var(--tactile-border-color, #252320) !important;
+  color: var(--heading-color, #252320);
+  transform: translate(-1px, -1px);
+  box-shadow: 2px 2px 0 var(--tactile-shadow-color, #252320);
+}
+
+[data-button-style="editorial-tactile"] .profile-tab-btn.active {
+  border-color: var(--tactile-border-color, #252320) !important;
+  background: var(--tab-btn-active-bg, #e96d52) !important;
+  color: var(--tab-btn-active-text, #fffaf0) !important;
+  box-shadow: 2px 2px 0 var(--tactile-shadow-color, #252320);
 }
 
 /* Scroll Arrows for Multi-Tab Navigation */
@@ -168,6 +195,11 @@
 @media (max-width: 768px) {
   .profile-tabs-nav {
     padding: 8px 10px;
+  }
+
+  .profile-tabs-nav-container {
+    padding-left: 56px;
+    padding-right: 12px;
   }
 
   .profile-tabs-scroll {
@@ -215,7 +247,7 @@
 }
 
 /* Ensure all content sits above the background layer */
-.app > *:not(.profile-bg-layer):not(.profile-edit-fab):not(.profile-fab-stack):not(.profile-tabs-nav):not(.editor-modal-backdrop) {
+.app > *:not(.profile-bg-layer):not(.profile-home-badge):not(.profile-edit-fab):not(.profile-fab-stack):not(.profile-tabs-nav):not(.editor-modal-backdrop) {
   position: relative;
   z-index: 1;
 }
@@ -229,27 +261,29 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 18px;
-  border-radius: var(--radius-sm, 6px);
-  background: var(--color-accent-primary, #00f0aa);
-  color: #090a0f;
-  border: 1px solid var(--color-accent-primary, #00f0aa);
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: var(--fn-editor-coral, #f1846b);
+  color: var(--fn-editor-ink, #f9f3e9);
+  border: 2px solid var(--fn-editor-ink, #f9f3e9);
   cursor: pointer;
-  font-size: var(--text-xs, 0.75rem);
+  font-size: 0.88rem;
   font-weight: 700;
-  font-family: var(--font-mono, monospace);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  transition: all var(--transition-fast, 0.15s ease);
+  font-family: var(--fn-editor-body, 'DM Sans', sans-serif);
+  box-shadow: 3px 4px 0 var(--fn-editor-ink, #f9f3e9);
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
 .profile-edit-fab:hover {
-  background: var(--color-accent-hover, #00d696);
-  transform: translateY(-2px);
-  box-shadow: 0 0 20px var(--color-accent-glow, rgba(0, 240, 170, 0.4));
+  background: var(--fn-editor-coral-dark, #d96351);
+  transform: translate(-3px, -3px);
+  box-shadow: 5px 6px 0 var(--fn-editor-ink, #f9f3e9);
 }
 
 .profile-edit-fab:active {
-  transform: scale(0.98);
+  transform: translate(0, 0);
+  box-shadow: none;
 }
 
 /* --- FAB Stack (Settings above Edit) --- */
@@ -261,7 +295,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
+  gap: 10px;
 }
 
 .profile-fab-stack .profile-edit-fab {
@@ -275,31 +309,31 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 8px 14px;
-  border-radius: var(--radius-sm, 6px);
-  background: rgba(13, 17, 23, 0.92);
-  color: var(--color-text-primary, #e6edf3);
-  border: 1px solid var(--color-border-strong, rgba(255, 255, 255, 0.18));
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--fn-editor-paper-light, #241e33);
+  color: var(--fn-editor-ink, #f9f3e9);
+  border: 2px solid var(--fn-editor-ink, #f9f3e9);
   cursor: pointer;
-  font-size: var(--text-xs, 0.75rem);
-  font-weight: 600;
-  font-family: var(--font-mono, monospace);
-  backdrop-filter: blur(var(--glass-blur, 10px));
-  -webkit-backdrop-filter: blur(var(--glass-blur, 10px));
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
-  transition: all var(--transition-fast, 0.15s ease);
+  font-size: 0.84rem;
+  font-weight: 700;
+  font-family: var(--fn-editor-body, 'DM Sans', sans-serif);
+  box-shadow: 3px 4px 0 var(--fn-editor-ink, #f9f3e9);
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
 .profile-settings-fab:hover {
-  background: rgba(22, 27, 34, 0.95);
-  border-color: var(--color-accent-primary, #00f0aa);
-  color: var(--color-accent-primary, #00f0aa);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 18px rgba(0, 240, 170, 0.25);
+  background: var(--fn-editor-paper-elevated, #2f2742);
+  border-color: var(--fn-editor-ink, #f9f3e9);
+  color: var(--fn-editor-ink, #f9f3e9);
+  transform: translate(-3px, -3px);
+  box-shadow: 5px 6px 0 var(--fn-editor-ink, #f9f3e9);
 }
 
 .profile-settings-fab:active {
-  transform: scale(0.98);
+  transform: translate(0, 0);
+  box-shadow: none;
 }
 
 @media (max-width: 640px) {
@@ -307,6 +341,67 @@
     bottom: 16px;
     right: 16px;
     gap: 6px;
+  }
+}
+
+/* --- Sticky Profilenc Brand Badge (Top-Left on Public Profiles) --- */
+.profile-home-badge {
+  position: fixed;
+  top: 8px;
+  left: 16px;
+  z-index: 120;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background-color: var(--paper-light, #fffaf0);
+  border: 2px solid var(--ink, #252320);
+  box-shadow: 2.5px 3px 0 var(--ink, #252320);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.profile-home-badge:hover {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 4px 4.5px 0 var(--ink, #252320);
+  background-color: #ffffff;
+}
+
+.profile-home-badge:active {
+  transform: translate(0.5px, 0.5px);
+  box-shadow: 1px 1.5px 0 var(--ink, #252320);
+}
+
+.profile-home-badge-img {
+  width: 22px;
+  height: 22px;
+  display: block;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .profile-home-badge {
+    top: 6px;
+    left: 10px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+    box-shadow: 2px 2.5px 0 var(--ink, #252320);
+  }
+
+  .profile-home-badge-img {
+    width: 19px;
+    height: 19px;
   }
 }
 

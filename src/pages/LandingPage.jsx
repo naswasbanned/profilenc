@@ -5,31 +5,43 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import {
   ArrowRight,
-  Globe,
-  Code2,
-  Gamepad2,
-  BookOpen,
-  Calendar as CalendarIcon,
-  Layers,
-  Cpu,
-  User,
-  Check,
-  ChevronRight,
-  Clock,
-  Briefcase,
   ArrowUpRight,
+  Check,
   Plus,
   Send,
   Upload,
-  Image as ImageIcon,
-  MessageSquare,
   CheckCircle2,
   AlertCircle,
   X,
   Sparkles,
+  Sun,
+  Moon,
+  Lock,
+  Calendar,
+  Code2,
+  Briefcase,
+  Layers,
+  Cpu,
+  Gamepad2,
+  BookOpen,
+  Music,
+  Activity,
+  ExternalLink,
+  Play,
+  Clock,
+  Github,
+  Monitor,
+  Headphones,
+  Video,
+  Radio,
+  Star,
+  Globe,
 } from 'lucide-react';
+import { motion, useTransform } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
-import OptimizedImage from '../components/OptimizedImage/OptimizedImage';
+import { ContainerScroll } from '../components/ui/container-scroll-animation';
+import HowItWorks from '../components/ui/how-it-works';
+import ThreeDTestimonials from '../components/ui/3d-testimonails';
 import './LandingPage.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -37,102 +49,135 @@ gsap.registerPlugin(ScrollTrigger);
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
 
-// Clean, friendly showcase personas
-const SHOWCASE_PERSONAS = [
-  {
-    id: 'dev',
-    index: '01',
-    role: 'SOFTWARE_ENGINEER',
-    name: 'Alex Rivers',
-    handle: '@alexrivers',
-    location: 'BERLIN, DE',
-    accentColor: '#00f0aa',
-    bio: 'Frontend engineer building web apps, interactive components, and developer tools.',
-    status: 'OPEN FOR WORK',
-    tabs: ['SKILLS', 'EXPERIENCE', 'PROJECTS'],
-    highlights: [
-      { name: 'React', tag: 'UI' },
-      { name: 'TypeScript', tag: 'LANG' },
-      { name: 'Node.js', tag: 'BACKEND' },
-      { name: 'Docker', tag: 'DEVOPS' },
-    ],
-    experience: {
+// Comprehensive showcase profile featuring all core modular blocks
+const MAIN_SHOWCASE_PROFILE = {
+  role: 'SOFTWARE_ENGINEER',
+  name: 'Alex Rivers',
+  handle: '@alexrivers',
+  avatarInitials: 'AR',
+  location: 'BERLIN, DE',
+  accentColor: '#00f0aa',
+  bio: 'Frontend architect and open-source engineer building reactive web apps, high-throughput component systems, and developer tools.',
+  status: 'OPEN FOR WORK',
+  socials: [
+    { label: 'GitHub', url: 'https://github.com/alexrivers' },
+    { label: 'Twitter', url: 'https://twitter.com/alexrivers' },
+    { label: 'Email', url: 'mailto:alex@rivers.dev' },
+    { label: 'Resume', url: '#' },
+  ],
+  skills: [
+    { category: 'LANGUAGES', items: ['TypeScript', 'JavaScript (ESNext)', 'Go', 'Python'] },
+    { category: 'FRONTEND', items: ['React 19', 'Next.js', 'Tailwind CSS', 'Framer Motion'] },
+    { category: 'BACKEND & CLOUD', items: ['Node.js', 'PostgreSQL', 'Docker', 'Redis', 'Kubernetes'] },
+  ],
+  github: {
+    total: 1842,
+    currentStreak: 48,
+    longestStreak: 126,
+    bestDay: '28 commits',
+  },
+  projects: [
+    {
+      title: 'Hyperion UI',
+      category: 'OPEN SOURCE',
+      desc: 'A headless, accessible React component library built for modern high-velocity design systems.',
+      tags: ['React', 'TypeScript', 'Radix UI'],
+      link: 'https://github.com/alexrivers/hyperion',
+    },
+    {
+      title: 'DevPulse Telemetry',
+      category: 'DEVELOPER TOOL',
+      desc: 'Real-time distributed tracing, telemetry, and error monitoring dashboard for cloud microservices.',
+      tags: ['Go', 'Redis', 'WebSockets'],
+      link: 'https://devpulse.io',
+    },
+  ],
+  services: [
+    {
+      title: 'Frontend Architecture Consulting',
+      price: '$1,800',
+      period: 'audit',
+      delivery: '3-5 days',
+      desc: 'Deep audit of codebase scalability, bundle size, React 19 migration, and state management optimization.',
+      features: [
+        'Full AST architecture & dependency audit',
+        'Runtime performance bottleneck profiling',
+        'Step-by-step prioritized modernization roadmap',
+      ],
+      featured: true,
+    },
+    {
+      title: 'Fullstack MVP Development',
+      price: '$4,500',
+      period: 'sprint',
+      delivery: '2-3 weeks',
+      desc: 'End-to-end design system and web application development from Figma specs to production deployment.',
+      features: [
+        'Modern React 19 & Next.js fullstack build',
+        'PostgreSQL schema, Auth & Stripe integration',
+        'Automated CI/CD testing & edge deployment',
+      ],
+      featured: false,
+    },
+  ],
+  video: {
+    title: 'Building a Zero-Dependency Reactive State Engine in Rust & WebAssembly',
+    topic: 'SYSTEMS ARCHITECTURE',
+    duration: '24:18',
+    views: '48.2K views',
+  },
+  events: [
+    {
+      date: 'OCT 12, 2026',
+      time: '18:00 UTC',
+      status: 'KEYNOTE SPEAKER',
+      title: 'Next-Gen Frontend Architectures // Berlin Tech Summit',
+      desc: 'Live keynote talk exploring reactive DOM diffing algorithms, server components, and edge rendering architectures.',
+    },
+    {
+      date: 'NOV 04, 2026',
+      time: '15:30 UTC',
+      status: 'LIVE WORKSHOP',
+      title: 'Building Modular Micro-Frontends with React 19',
+      desc: 'Interactive 3-hour deep dive workshop covering shared component registries, isolation patterns, and module federation.',
+    },
+  ],
+  journal: [
+    {
+      date: 'SEPTEMBER 14, 2026',
+      readTime: '6 min read',
+      title: 'The Hidden Cost of JavaScript Hydration and How We Solved It',
+      excerpt: 'Analyzing real-world CPU time during client-side hydration and why partial island architectures outperform monolithic SPAs.',
+    },
+    {
+      date: 'AUGUST 28, 2026',
+      readTime: '8 min read',
+      title: 'Designing Deterministic State Machines for Complex Web UIs',
+      excerpt: 'Why finite state machines eliminate impossible UI states, race conditions, and phantom re-renders across large teams.',
+    },
+  ],
+  timeline: [
+    {
       role: 'Frontend Architect',
       company: 'Vortex Labs',
       period: '2023 — Present',
-      desc: 'Built fast interactive dashboards, responsive component systems, and web apps.',
+      desc: 'Leading frontend architecture for real-time telemetry dashboards and component design systems.',
+      tags: ['Architecture', 'React 19', 'Performance'],
     },
-  },
-  {
-    id: 'artist',
-    index: '02',
-    role: 'UI_UX_DESIGNER',
-    name: 'Elena Rostova',
-    handle: '@elenadesign',
-    location: 'TOKYO, JP',
-    accentColor: '#ff5500',
-    bio: 'Product designer creating websites, Figma prototypes, and 3D digital art.',
-    status: 'AVAILABLE FOR FREELANCE',
-    tabs: ['SERVICES', 'GALLERY', 'ABOUT'],
-    service: {
-      title: 'Website Design & Development',
-      price: '$1,200',
-      period: 'PROJECT',
-      features: [
-        'Custom UI/UX Design in Figma',
-        'Interactive Mobile & Desktop Prototype',
-        'Production Ready Web Development',
-        'Direct Revisions & Hand-off',
-      ],
+    {
+      role: 'Senior Software Engineer',
+      company: 'Monolith Systems',
+      period: '2021 — 2023',
+      desc: 'Engineered high-throughput GraphQL APIs and modernized core legacy client applications.',
+      tags: ['TypeScript', 'Node.js', 'Docker'],
     },
-    galleryPhotos: [
-      { title: 'Tokyo Neon Alley', tag: '3D Render' },
-      { title: 'Abstract Glass Shapes', tag: 'UI Concept' },
-    ],
-  },
-  {
-    id: 'creator',
-    index: '03',
-    role: 'CONTENT_CREATOR',
-    name: 'Kai Takahashi',
-    handle: '@kaicodes',
-    location: 'SAN FRANCISCO, CA',
-    accentColor: '#ff2a5f',
-    bio: 'Streaming live coding sessions, indie product builds, and video game reviews.',
-    status: 'STREAMING TODAY',
-    tabs: ['SCHEDULE', 'REVIEWS', 'GEAR'],
-    event: {
-      title: 'Live Coding: Building a Web App from Scratch',
-      date: 'AUG 28',
-      time: '19:00 UTC',
-      status: 'UPCOMING STREAM',
-      desc: 'Live tutorial covering React, animations, and clean CSS styling. Bring your questions!',
-    },
-    review: {
-      title: 'Cyberpunk 2077: Phantom Liberty',
-      rating: '5/5 STARS',
-      notes: 'Incredible graphics, immersive city design, and deeply memorable story missions.',
-    },
-  },
-  {
-    id: 'writer',
-    index: '04',
-    role: 'ESSAYIST_&_WRITER',
-    name: 'Marcus Vance',
-    handle: '@marcusvance',
-    location: 'LONDON, UK',
-    accentColor: '#e8e6df',
-    bio: 'Writing essays about technology, design philosophy, and simple digital tools.',
-    status: 'NEW POST PUBLISHED',
-    tabs: ['ARTICLES', 'READING LIST', 'SETUP'],
-    journal: {
-      title: 'Designing Websites That Stand the Test of Time',
-      date: 'AUGUST 2026',
-      readTime: '4 MIN READ',
-      excerpt: 'Why clean typography, simplicity, and fast load times will always beat noisy visual trends on the web...',
-    },
-  },
-];
+  ],
+  specs: [
+    { category: 'WORKSTATION', name: 'MacBook Pro M3 Max', detail: '64GB Unified Memory' },
+    { category: 'DISPLAY', name: 'Apple Studio Display 27"', detail: '5K Retina 600 nits' },
+    { category: 'PERIPHERAL', name: 'ZSA Moonlander Split', detail: 'Kailh Box Silent Pinks' },
+  ],
+};
 
 // Human-friendly patch notes / updates
 const ENGINE_PATCH_NOTES = [
@@ -180,15 +225,470 @@ const ENGINE_PATCH_NOTES = [
     codename: 'BETA RELEASE',
     title: 'Visual Live Editor & Custom Profile URLs',
     changes: [
-      { type: 'NEW', text: 'Custom Profile URLs: Get your unique profile link at gnc.web.id/@yourname.' },
+      { type: 'NEW', text: 'Custom Profile URLs: Get your unique profile link at profilenc.my.id/@yourname.' },
       { type: 'NEW', text: 'Visual Live Editor: Edit your profile blocks and see changes instantly in real-time.' },
     ],
   },
 ];
 
+function ShowcaseBrowserPreview({ profile, scrollYProgress }) {
+  const windowRef = useRef(null);
+  const contentRef = useRef(null);
+  const maxScrollRef = useRef(0);
+  const [, setForceUpdate] = useState(0);
+
+  useEffect(() => {
+    const updateScroll = () => {
+      if (contentRef.current && windowRef.current) {
+        const scrollable = contentRef.current.scrollHeight - windowRef.current.clientHeight;
+        const val = Math.max(0, scrollable + 24);
+        maxScrollRef.current = val;
+        setForceUpdate((prev) => prev + 1);
+      }
+    };
+
+    updateScroll();
+
+    let ro;
+    if (window.ResizeObserver && contentRef.current) {
+      ro = new ResizeObserver(updateScroll);
+      ro.observe(contentRef.current);
+      if (windowRef.current) ro.observe(windowRef.current);
+    }
+
+    window.addEventListener('resize', updateScroll);
+    return () => {
+      window.removeEventListener('resize', updateScroll);
+      ro?.disconnect();
+    };
+  }, []);
+
+  // Phase 1 (0.00 -> 0.12): Card tilts from 18deg to 0deg into full viewport focus
+  // Phase 2 (0.12 -> 0.88): Card is pinned flat in viewport. Inner content scrolls from 0 to -maxScroll!
+  // Phase 3 (0.88 -> 1.00): Inner content remains at -maxScroll (at bottom), card unpins with page
+  const innerY = useTransform(scrollYProgress, (val) => {
+    const max = maxScrollRef.current;
+    if (max <= 0) return 0;
+    if (val <= 0.12) return 0;
+    if (val >= 0.88) return -max;
+    const progress = (val - 0.12) / (0.88 - 0.12);
+    return -progress * max;
+  });
+
+  const progressBarScale = useTransform(scrollYProgress, (val) => {
+    if (val <= 0.12) return 0;
+    if (val >= 0.88) return 1;
+    return (val - 0.12) / (0.88 - 0.12);
+  });
+
+  return (
+    <div className="fn-showcase-browser-window">
+      {/* Browser Window Chrome */}
+      <div className="fn-browser-chrome">
+        <div className="fn-browser-dots">
+          <span className="fn-dot close" />
+          <span className="fn-dot minimize" />
+          <span className="fn-dot zoom" />
+        </div>
+        <div className="fn-browser-url-bar">
+          <Lock size={12} className="fn-url-icon" />
+          <span className="fn-url-text">profilenc.my.id/{profile.handle}</span>
+        </div>
+        <div className="fn-browser-badge">
+          <span className="fn-live-pulse-dot" />
+          <span>SCROLLING PREVIEW</span>
+        </div>
+      </div>
+
+      {/* Browser Scroll Progress Indicator */}
+      <div className="fn-browser-progress-track">
+        <motion.div
+          className="fn-browser-progress-bar"
+          style={{
+            scaleX: progressBarScale,
+            transformOrigin: 'left',
+          }}
+        />
+      </div>
+
+      {/* Specimen Content Window */}
+      <div
+        className="fn-browser-body"
+        ref={windowRef}
+        style={{ '--accent': profile.accentColor }}
+      >
+        <motion.div
+          ref={contentRef}
+          style={{ y: innerY }}
+          className="fn-specimen-scroll-track"
+        >
+          <article className="fn-specimen fn-specimen-featured">
+            {/* Top Identity Header */}
+            <div className="fn-specimen-head">
+              <div className="fn-specimen-meta">
+                <span className="fn-specimen-index">PROFILE SPECIMEN</span>
+                <span className="fn-specimen-role">{profile.role}</span>
+              </div>
+              <div className="fn-specimen-loc">{profile.location}</div>
+            </div>
+
+            <div className="fn-specimen-body">
+              {/* 1. HERO BLOCK */}
+              <div className="fn-preview-hero">
+                <div className="fn-preview-hero-top">
+                  <div className="fn-preview-avatar">
+                    <span>{profile.avatarInitials}</span>
+                  </div>
+                  <div className="fn-preview-hero-info">
+                    <div className="fn-preview-name-row">
+                      <h3 className="fn-specimen-name">{profile.name}</h3>
+                      <span className="fn-specimen-status">
+                        <span className="fn-status-dot" />
+                        <span>{profile.status}</span>
+                      </span>
+                    </div>
+                    <div className="fn-specimen-handle">{profile.handle} &bull; {profile.location}</div>
+                  </div>
+                </div>
+
+                <p className="fn-specimen-bio">{profile.bio}</p>
+
+                <div className="fn-preview-socials">
+                  {profile.socials?.map((s, sIdx) => (
+                    <span key={sIdx} className="fn-preview-social-pill">
+                      {s.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* 2. SKILLS BLOCK */}
+              <div className="fn-preview-block">
+                <div className="fn-preview-block-header">
+                  <div className="fn-preview-block-icon"><Code2 size={15} /></div>
+                  <div>
+                    <span className="fn-preview-block-tag">BLOCK // SKILLS</span>
+                    <h4 className="fn-preview-block-title">Core Technologies &amp; Stack</h4>
+                  </div>
+                </div>
+                <div className="fn-preview-skills-grid">
+                  {profile.skills.map((cat, cIdx) => (
+                    <div key={cIdx} className="fn-preview-skill-group">
+                      <div className="fn-preview-group-label">{cat.category}</div>
+                      <div className="fn-pills">
+                        {cat.items.map((item, iIdx) => (
+                          <span key={iIdx} className="fn-pill">
+                            <strong>{item}</strong>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 3. GITHUB HEATMAP BLOCK */}
+              <div className="fn-preview-block">
+                <div className="fn-preview-block-header">
+                  <div className="fn-preview-block-icon"><Github size={15} /></div>
+                  <div>
+                    <span className="fn-preview-block-tag">BLOCK // GITHUB_HEATMAP</span>
+                    <h4 className="fn-preview-block-title">Open Source Contributions</h4>
+                  </div>
+                </div>
+                <div className="fn-preview-heatmap-card">
+                  <div className="fn-preview-heatmap-stats">
+                    <div className="fn-preview-stat-item">
+                      <span className="stat-num">{profile.github.total}</span>
+                      <span className="stat-lbl">Contributions in 2026</span>
+                    </div>
+                    <div className="fn-preview-stat-item">
+                      <span className="stat-num">{profile.github.currentStreak}d</span>
+                      <span className="stat-lbl">Current Streak</span>
+                    </div>
+                    <div className="fn-preview-stat-item">
+                      <span className="stat-num">{profile.github.bestDay}</span>
+                      <span className="stat-lbl">Best Day Record</span>
+                    </div>
+                  </div>
+                  <div className="fn-preview-heatmap-matrix" aria-hidden="true">
+                    {Array.from({ length: 28 }).map((_, dIdx) => (
+                      <span
+                        key={dIdx}
+                        className={`fn-heatmap-cell lvl-${(dIdx % 4) + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* 4. CARDS_GRID (PROJECTS) BLOCK */}
+              <div className="fn-preview-block">
+                <div className="fn-preview-block-header">
+                  <div className="fn-preview-block-icon"><Layers size={15} /></div>
+                  <div>
+                    <span className="fn-preview-block-tag">BLOCK // CARDS_GRID</span>
+                    <h4 className="fn-preview-block-title">Featured Projects</h4>
+                  </div>
+                </div>
+                <div className="fn-preview-cards-grid">
+                  {profile.projects.map((proj, pIdx) => (
+                    <div key={pIdx} className="fn-preview-card-item">
+                      <div className="fn-preview-card-tag">{proj.category}</div>
+                      <h5 className="fn-preview-card-title">{proj.title}</h5>
+                      <p className="fn-preview-card-desc">{proj.desc}</p>
+                      <div className="fn-pills">
+                        {proj.tags.map((t, tIdx) => (
+                          <span key={tIdx} className="fn-pill small">{t}</span>
+                        ))}
+                      </div>
+                      <div className="fn-preview-card-foot">
+                        <span className="fn-card-btn">
+                          <span>View Project</span>
+                          <ExternalLink size={12} />
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 5. SERVICES & COMMISSION RATES BLOCK */}
+              <div className="fn-preview-block">
+                <div className="fn-preview-block-header">
+                  <div className="fn-preview-block-icon"><Sparkles size={15} /></div>
+                  <div>
+                    <span className="fn-preview-block-tag">BLOCK // SERVICES</span>
+                    <h4 className="fn-preview-block-title">Services &amp; Commission Rates</h4>
+                  </div>
+                </div>
+                <div className="fn-preview-services-grid">
+                  {profile.services.map((srv, sIdx) => (
+                    <div key={sIdx} className={`fn-preview-service-card ${srv.featured ? 'featured' : ''}`}>
+                      <div className="fn-service-top">
+                        {srv.featured && <span className="fn-featured-badge">Featured Tier</span>}
+                        <span className="fn-delivery-pill"><Clock size={11} /> {srv.delivery}</span>
+                      </div>
+                      <h5 className="fn-service-title">{srv.title}</h5>
+                      <div className="fn-price">
+                        {srv.price} <small>/ {srv.period}</small>
+                      </div>
+                      <p className="fn-desc">{srv.desc}</p>
+                      <ul className="fn-checklist">
+                        {srv.features.map((f, fIdx) => (
+                          <li key={fIdx}><Check size={12} /> {f}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 6. FEATURED_VIDEO BLOCK */}
+              <div className="fn-preview-block">
+                <div className="fn-preview-block-header">
+                  <div className="fn-preview-block-icon"><Video size={15} /></div>
+                  <div>
+                    <span className="fn-preview-block-tag">BLOCK // FEATURED_VIDEO</span>
+                    <h4 className="fn-preview-block-title">Latest Deep Dive Video</h4>
+                  </div>
+                </div>
+                <div className="fn-preview-video-card">
+                  <div className="fn-video-mockup">
+                    <div className="fn-video-play-btn"><Play size={20} /></div>
+                    <span className="fn-video-duration">{profile.video.duration}</span>
+                  </div>
+                  <div className="fn-video-info">
+                    <span className="fn-video-topic">{profile.video.topic}</span>
+                    <h5 className="fn-video-title">{profile.video.title}</h5>
+                    <span className="fn-video-views">{profile.video.views}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 7. EVENTS BLOCK */}
+              <div className="fn-preview-block">
+                <div className="fn-preview-block-header">
+                  <div className="fn-preview-block-icon"><Radio size={15} /></div>
+                  <div>
+                    <span className="fn-preview-block-tag">BLOCK // EVENTS</span>
+                    <h4 className="fn-preview-block-title">Upcoming Talks &amp; Live Streams</h4>
+                  </div>
+                </div>
+                <div className="fn-preview-events-list">
+                  {profile.events.map((ev, eIdx) => (
+                    <div key={eIdx} className="fn-preview-event-card">
+                      <div className="fn-event-date-box">
+                        <span className="fn-event-date-text">{ev.date}</span>
+                        <span className="fn-event-time-text">{ev.time}</span>
+                      </div>
+                      <div className="fn-event-info">
+                        <div className="fn-event-status-badge">{ev.status}</div>
+                        <h5 className="fn-event-title">{ev.title}</h5>
+                        <p className="fn-desc">{ev.desc}</p>
+                        <span className="fn-cal-tag">
+                          <Calendar size={11} /> Sync to Calendar
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 8. JOURNAL BLOCK */}
+              <div className="fn-preview-block">
+                <div className="fn-preview-block-header">
+                  <div className="fn-preview-block-icon"><BookOpen size={15} /></div>
+                  <div>
+                    <span className="fn-preview-block-tag">BLOCK // JOURNAL</span>
+                    <h4 className="fn-preview-block-title">Engineering Essays &amp; Journal</h4>
+                  </div>
+                </div>
+                <div className="fn-preview-journal-list">
+                  {profile.journal.map((j, jIdx) => (
+                    <div key={jIdx} className="fn-preview-journal-card">
+                      <div className="fn-journal-meta">
+                        <span>{j.date}</span>
+                        <span className="fn-journal-read-time">{j.readTime}</span>
+                      </div>
+                      <h5 className="fn-journal-title">{j.title}</h5>
+                      <p className="fn-journal-excerpt">{j.excerpt}</p>
+                      <span className="fn-read-link">
+                        <span>Read Essay</span>
+                        <ArrowRight size={12} />
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 9. TIMELINE BLOCK */}
+              <div className="fn-preview-block">
+                <div className="fn-preview-block-header">
+                  <div className="fn-preview-block-icon"><Briefcase size={15} /></div>
+                  <div>
+                    <span className="fn-preview-block-tag">BLOCK // TIMELINE</span>
+                    <h4 className="fn-preview-block-title">Experience &amp; Career</h4>
+                  </div>
+                </div>
+                <div className="fn-preview-timeline">
+                  {profile.timeline.map((t, tIdx) => (
+                    <div key={tIdx} className="fn-preview-timeline-item">
+                      <div className="fn-preview-timeline-dot" />
+                      <div className="fn-preview-timeline-content">
+                        <div className="fn-timeline-head">
+                          <h5 className="fn-role-title">{t.role}</h5>
+                          <span className="fn-timeline-date">
+                            <Calendar size={11} /> {t.period}
+                          </span>
+                        </div>
+                        <div className="fn-company">{t.company}</div>
+                        <p className="fn-desc">{t.desc}</p>
+                        <div className="fn-pills">
+                          {t.tags.map((tag, tagIdx) => (
+                            <span key={tagIdx} className="fn-pill small">{tag}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 10. SPECS_GRID BLOCK */}
+              <div className="fn-preview-block">
+                <div className="fn-preview-block-header">
+                  <div className="fn-preview-block-icon"><Cpu size={15} /></div>
+                  <div>
+                    <span className="fn-preview-block-tag">BLOCK // SPECS_GRID</span>
+                    <h4 className="fn-preview-block-title">Workstation Gear</h4>
+                  </div>
+                </div>
+                <div className="fn-preview-specs-grid">
+                  {profile.specs.map((sp, sIdx) => (
+                    <div key={sIdx} className="fn-preview-spec-item">
+                      <div className="fn-spec-cat">{sp.category}</div>
+                      <div className="fn-spec-name">{sp.name}</div>
+                      <div className="fn-spec-detail">{sp.detail}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="fn-specimen-foot">
+              <span>Profile preview</span>
+              <span className="fn-foot-link">profilenc.my.id/{profile.handle}</span>
+            </div>
+          </article>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
 export default function LandingPage() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('profilenc_theme') || 'dark';
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = (e) => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+
+    // Fallback if View Transitions API is not available
+    if (!document.startViewTransition) {
+      setTheme(nextTheme);
+      localStorage.setItem('profilenc_theme', nextTheme);
+      document.documentElement.setAttribute('data-theme', nextTheme);
+      return;
+    }
+
+    // Get origin coordinates from the button (or corner top-right)
+    const rect = e?.currentTarget?.getBoundingClientRect();
+    const x = rect ? rect.left + rect.width / 2 : window.innerWidth;
+    const y = rect ? rect.top + rect.height / 2 : 0;
+
+    // Calculate maximum radius to cover the entire viewport plus safety margin to prevent edge clipping
+    const maxDist = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+    const endRadius = Math.ceil(maxDist) + 40;
+
+    const transition = document.startViewTransition(() => {
+      setTheme(nextTheme);
+      localStorage.setItem('profilenc_theme', nextTheme);
+      document.documentElement.setAttribute('data-theme', nextTheme);
+    });
+
+    transition.ready.then(() => {
+      // Circular wave expanding from top corner / button smoothly over the entire viewport
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration: 650,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+          fill: 'forwards',
+          pseudoElement: '::view-transition-new(root)',
+        }
+      );
+    });
+  };
+
   const [featuredProfiles, setFeaturedProfiles] = useState([]);
   const [patchNotesList, setPatchNotesList] = useState(ENGINE_PATCH_NOTES);
   const [landingData, setLandingData] = useState({
@@ -284,8 +784,6 @@ export default function LandingPage() {
     }
   };
 
-  const horizontalSectionRef = useRef(null);
-  const horizontalTrackRef = useRef(null);
   const marquee1Ref = useRef(null);
 
   useEffect(() => {
@@ -318,42 +816,89 @@ export default function LandingPage() {
       });
     }
 
-    // 3. Pinned Horizontal Showcase Slide
-    const track = horizontalTrackRef.current;
-    const horizontalSec = horizontalSectionRef.current;
-
-    if (track && horizontalSec) {
-      const getScrollAmount = () => -(track.scrollWidth - window.innerWidth + 80);
-
-      const tween = gsap.to(track, {
-        x: getScrollAmount,
-        ease: 'none',
-      });
-
-      ScrollTrigger.create({
-        trigger: horizontalSec,
-        start: 'top top',
-        end: () => `+=${track.scrollWidth - window.innerWidth + 400}`,
-        pin: true,
-        animation: tween,
-        scrub: 1,
-        invalidateOnRefresh: true,
+    // Refresh ScrollTrigger when fonts finish loading
+    if (document.fonts) {
+      document.fonts.ready.then(() => {
+        ScrollTrigger.refresh();
       });
     }
 
+    const onResize = () => {
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener('resize', onResize);
+
+    // Smooth anchor link clicks via Lenis
+    const handleAnchorClick = (e) => {
+      const anchor = e.target.closest('a');
+      const href = anchor?.getAttribute('href');
+      if (href && href.startsWith('#') && href.length > 1) {
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          lenis.scrollTo(target, { offset: 0 });
+        }
+      }
+    };
+    document.addEventListener('click', handleAnchorClick);
+
     return () => {
+      window.removeEventListener('resize', onResize);
+      document.removeEventListener('click', handleAnchorClick);
       lenis.destroy();
       gsap.ticker.remove(tickerCb);
-      ScrollTrigger.getAll().forEach((st) => st.kill());
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
+  // Refresh ScrollTrigger when dynamic landing data finishes loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 120);
+    return () => clearTimeout(timer);
+  }, [featuredProfiles, patchNotesList, landingData]);
+
   // Fetch Live Site Data (Landing Config & Patch Notes & Featured Profiles)
   useEffect(() => {
-    // Featured Profiles
+    // Featured Profiles (with dynamic Account Bio / Headline)
     fetch(`${API_BASE}/api/templates/featured/profiles`)
       .then((r) => (r.ok ? r.json() : []))
-      .then(setFeaturedProfiles)
+      .then(async (profiles) => {
+        if (!Array.isArray(profiles)) return;
+        setFeaturedProfiles(profiles);
+
+        // If any profile has not explicitly configured account bio yet, enrich with their profile hero bio/tagline
+        const needsBio = profiles.filter((p) => !p.bio);
+        if (needsBio.length > 0) {
+          const enriched = await Promise.all(
+            profiles.map(async (p) => {
+              if (p.bio) return p;
+              try {
+                const cRes = await fetch(`${API_BASE}/api/u/${p.username}/content`);
+                if (cRes.ok) {
+                  const content = await cRes.json();
+                  const profileData = content.modular_profile || content;
+                  const tabs = profileData.tabs || [];
+                  for (const tab of tabs) {
+                    const hero = (tab.blocks || []).find((b) => b.type === 'hero');
+                    if (hero?.data?.bio && typeof hero.data.bio === 'string' && hero.data.bio.trim()) {
+                      return { ...p, bio: hero.data.bio.trim() };
+                    }
+                    if (hero?.data?.tagline && typeof hero.data.tagline === 'string' && hero.data.tagline.trim()) {
+                      return { ...p, bio: hero.data.tagline.trim() };
+                    }
+                  }
+                }
+              } catch (e) {
+                // Keep original profile object
+              }
+              return p;
+            })
+          );
+          setFeaturedProfiles(enriched);
+        }
+      })
       .catch(() => { });
 
     // Patch Notes
@@ -383,39 +928,55 @@ export default function LandingPage() {
 
   return (
     <div className="landing-raw-root">
-      {/* Background Structural Matrix Grid */}
-      <div className="raw-grid-matrix" aria-hidden="true" />
-
       {/* Top Navbar */}
-      <header className="raw-header">
-        <div className="raw-header-container">
-          <Link to="/" className="raw-brand">
-            <img src="/logo.svg" alt="Profilenc Logo" className="brand-logo-img" style={{ width: '26px', height: '26px' }} />
-            <span className="brand-name">PROFILENC</span>
+      <header className="fn-header">
+        <div className="fn-container fn-nav">
+          <Link to="/" className="fn-logo">
+            <span className="fn-logo-mark">
+              <img src="/logo.svg" alt="" aria-hidden="true" />
+            </span>
+            Profilenc
           </Link>
 
-          <div className="raw-nav-actions">
+          <nav className="fn-nav-links" aria-label="Main navigation">
+            <a href="#updates">Updates</a>
+            <a href="#showcase">Showcase</a>
+            <a href="#community">Community</a>
+            <a href="#feedback">Feedback</a>
+          </nav>
+
+          <div className="fn-nav-actions">
+            <button
+              type="button"
+              className="fn-theme-toggle"
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+              <span className="fn-theme-toggle-label">{theme === 'dark' ? 'Light' : 'Dark'}</span>
+            </button>
             {user?.isAdmin && (
-              <Link to="/admin" className="raw-btn-outline admin-badge-btn" style={{ borderColor: '#00f0aa', color: '#00f0aa' }}>
-                ADMIN KERNEL
+              <Link to="/admin" className="fn-btn fn-btn-ghost fn-btn-small">
+                Admin
               </Link>
             )}
             {isAuthenticated ? (
               <>
-                <Link to={`/@${user.username}`} className="raw-btn-outline">
-                  MY PROFILE
+                <Link to={`/@${user.username}`} className="fn-btn fn-btn-ghost fn-btn-small">
+                  My profile
                 </Link>
-                <Link to={`/@${user.username}/edit`} className="raw-btn-solid">
-                  STUDIO EDITOR <ArrowUpRight size={14} />
+                <Link to={`/@${user.username}/edit`} className="fn-btn fn-btn-coral fn-btn-small">
+                  Studio editor <ArrowUpRight size={14} />
                 </Link>
               </>
             ) : (
               <>
-                <Link to="/login" className="raw-btn-outline">
-                  LOG IN
+                <Link to="/login" className="fn-btn fn-btn-ghost fn-btn-small">
+                  Log in
                 </Link>
-                <Link to="/register" className="raw-btn-solid">
-                  GET STARTED <ArrowRight size={14} />
+                <Link to="/register" className="fn-btn fn-btn-coral fn-btn-small">
+                  Get started <ArrowRight size={14} />
                 </Link>
               </>
             )}
@@ -423,425 +984,235 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* HERO SECTION */}
-      <section className="raw-hero-section">
-        {/* Top Info Bar */}
-        <div className="raw-hero-meta-bar">
-          <div className="meta-col">
-            <span className="meta-num">01</span>
-            <span className="meta-txt">{landingData.hero?.badge || 'SIMPLE PERSONAL WEBSITE BUILDER'}</span>
-          </div>
-          <div className="meta-col right">
-            <span className="meta-txt">EASY • MODULAR • NO CODE REQUIRED</span>
-          </div>
-        </div>
+      {/* HERO */}
+      <section className="fn-hero">
+        <div className="fn-container fn-hero-grid">
+          <div>
+            <p className="fn-eyebrow">
+              {landingData.hero?.badge || 'Personal profile builder / 001'}
+            </p>
 
-        {/* Masthead */}
-        <div className="raw-masthead">
-          <div className="masthead-line-wrap">
-            <h1 className="masthead-title">{landingData.hero?.mastheadTop || 'CREATE YOUR'}</h1>
-          </div>
-          <div className="masthead-line-wrap">
-            <h1 className="masthead-title outline-text">{landingData.hero?.mastheadMid || 'PERSONAL PAGE.'}</h1>
-          </div>
-        </div>
+            <h1 className="fn-hero-title">
+              {landingData.hero?.mastheadTop || 'Create your'}
+              <br />
+              <em>{landingData.hero?.mastheadMid || 'personal page.'}</em>
+            </h1>
 
-        {/* Sub-Manifesto & CTA Block */}
-        <div className="raw-hero-manifesto-grid">
-          <div className="manifesto-left">
-            <p className="manifesto-lead">
+            <p className="fn-hero-lead">
               {landingData.hero?.manifestoLead || 'The easiest way to build a clean, customizable profile website. Choose your blocks, customize colors and fonts, and share your link with the world.'}
             </p>
-            <div className="manifesto-actions">
+
+            <div className="fn-hero-actions">
               <button
                 type="button"
-                className="raw-cta-btn-primary"
+                className="fn-btn fn-btn-coral"
                 onClick={() => navigate(isAuthenticated ? `/@${user.username}/edit` : '/register')}
               >
-                <span>{isAuthenticated ? 'OPEN STUDIO EDITOR' : 'CREATE YOUR PROFILE'}</span>
+                {isAuthenticated ? 'Open studio editor' : 'Create your profile'}
                 <ArrowUpRight size={18} />
               </button>
 
-              <a href="#showcase" className="raw-cta-btn-secondary">
-                <span>SEE EXAMPLES</span>
+              <a href="#showcase" className="fn-btn fn-btn-ghost">
+                See examples
                 <ArrowRight size={16} />
               </a>
             </div>
+
+            <p className="fn-hero-note">Free to start / No code required / Share anywhere</p>
           </div>
 
-          <div className="manifesto-right">
-            <div className="spec-dossier-box">
-              <div className="dossier-header">
-                <span className="dossier-tag">{landingData.hero?.claimLabel || 'YOUR PERSONAL LINK'}</span>
-                <span className="dossier-indicator">FREE</span>
+          <div className="fn-hero-art" aria-hidden="true">
+            <div className="fn-poster fn-poster-back">
+              <p className="fn-poster-eyebrow">Issue no. 04</p>
+              <div className="fn-poster-circle is-lavender" />
+              <div className="fn-poster-lines">
+                <span />
+                <span />
+                <span />
               </div>
-              <div className="dossier-url-row">
-                <span className="dossier-host">profilenc.my.id/</span>
-                <span className="dossier-user">@yourname</span>
+              <div className="fn-poster-foot">
+                <span>Profilenc</span>
+                <span>2026</span>
               </div>
-              <div className="dossier-footer">
-                <span>EASY TO SHARE</span>
-                <span>CUSTOMIZABLE BLOCKS</span>
+            </div>
+
+            <div className="fn-poster fn-poster-main">
+              <p className="fn-poster-eyebrow">{landingData.hero?.claimLabel || 'Your personal link'}</p>
+              <p className="fn-poster-url">
+                profilenc.my.id/<em>@yourname</em>
+              </p>
+              <div className="fn-poster-circle" />
+              <div className="fn-poster-lines">
+                <span />
+                <span />
+                <span />
+              </div>
+              <div className="fn-poster-foot">
+                <span>Easy to share</span>
+                <span>Free</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ENGINE PATCH NOTES & RELEASE TIMELINE SECTION */}
-      <section className="raw-patch-notes-section">
-        <div className="patch-notes-container">
-          <div className="patch-notes-header">
-            <div className="patch-badge">[ENGINE_UPDATES]</div>
-            <h2 className="patch-title">WHAT'S NEW IN PROFILENC</h2>
-            <p className="patch-desc">
-              Changelog and latest features added to the profile builder.
+      {/* ENGINE UPDATES / PATCH NOTES BOARD */}
+      <section className="fn-section" id="updates">
+        <div className="fn-container">
+          <div className="fn-section-head">
+            <div>
+              <p className="fn-eyebrow">01 / Engine updates</p>
+              <h2 className="fn-display">What&rsquo;s new in Profilenc.</h2>
+            </div>
+            <p className="fn-section-lead">
+              Changelog and the latest features added to the profile builder.
+              Every release makes it easier to shape a page that feels like yours.
             </p>
           </div>
 
-          {/* 1. DESKTOP VIEW (Shown on > 860px, Hidden on Mobile) */}
-          <div className="patch-desktop-view">
-            <div className="patch-timeline-ledger">
-              {patchNotesList.map((patch, pIdx) => (
-                <div key={patch.version} className={`patch-node-card ${patch.is_current || pIdx === 0 ? 'is-current' : ''}`}>
-                  <div className="patch-node-sidebar">
-                    <div className="patch-ver-box">
-                      <span className="patch-ver-num">{patch.version}</span>
-                      <span className="patch-ver-tag">{patch.status}</span>
-                    </div>
-                    <div className="patch-timestamp">
-                      <span>RELEASE: {patch.date}</span>
-                      {patch.codename && <span>TITLE: {patch.codename}</span>}
-                    </div>
-                  </div>
+          <HowItWorks patches={patchNotesList} />
+        </div>
+      </section>
 
-                  <div className="patch-node-content">
-                    <h3 className="patch-node-headline">{patch.title}</h3>
-                    <div className="patch-changes-list">
-                      {Array.isArray(patch.changes) && patch.changes.map((c, cIdx) => (
-                        <div key={cIdx} className="patch-change-item">
-                          <span className={`change-tag ${(c.type || 'new').toLowerCase()}`}>[{c.type || 'NEW'}]</span>
-                          <span className="change-text">{c.text}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
+      {/* MARQUEE */}
+      <section className="fn-marquee" aria-hidden="true">
+        <div ref={marquee1Ref} className="fn-marquee-track">
+          <span>{landingData.marquee?.text || 'CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //'}</span>
+          <span>{landingData.marquee?.text || 'CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //'}</span>
+        </div>
+      </section>
+
+      {/* SHOWCASE WITH 3D CONTAINER SCROLL ANIMATION */}
+      <section id="showcase" className="fn-showcase">
+        <div className="fn-showcase-static-header">
+          <div className="fn-container">
+            <div className="fn-showcase-header-content">
+              <span className="fn-showcase-tag">[ Section: Showcase ]</span>
+              <h2 className="fn-showcase-title">Live profile preview</h2>
             </div>
           </div>
-
-          {/* 2. MOBILE VIEW (Shown on <= 860px, Hidden on Desktop) */}
-          <div className="patch-mobile-view">
-            {patchNotesList.map((patch, pIdx) => (
-              <div key={patch.version} className={`patch-mobile-card ${patch.is_current || pIdx === 0 ? 'is-current' : ''}`}>
-                <div className="patch-mobile-card-top">
-                  <div className="patch-mobile-ver-wrap">
-                    <span className="patch-mobile-ver">{patch.version}</span>
-                    <span className="patch-mobile-badge">{patch.status}</span>
-                  </div>
-                  <span className="patch-mobile-date">{patch.date}</span>
-                </div>
-
-                <h3 className="patch-mobile-title">{patch.title}</h3>
-
-                <div className="patch-mobile-list">
-                  {Array.isArray(patch.changes) && patch.changes.map((c, cIdx) => (
-                    <div key={cIdx} className="patch-mobile-item">
-                      <span className={`change-tag ${(c.type || 'new').toLowerCase()}`}>[{c.type || 'NEW'}]</span>
-                      <span className="patch-mobile-item-text">{c.text}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
+
+        <ContainerScroll>
+          {({ scrollYProgress }) => (
+            <ShowcaseBrowserPreview
+              profile={MAIN_SHOWCASE_PROFILE}
+              scrollYProgress={scrollYProgress}
+            />
+          )}
+        </ContainerScroll>
       </section>
 
-      {/* CONTINUOUS INDUSTRIAL MARQUEE */}
-      <section className="raw-marquee-section">
-        <div className="marquee-track-wrap">
-          <div ref={marquee1Ref} className="marquee-track left-stream">
-            <span>{landingData.marquee?.text || 'CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //'}</span>
-            <span>{landingData.marquee?.text || 'CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //'}</span>
-          </div>
-        </div>
-      </section>
-
-      {/* HORIZONTAL SHOWCASE SECTION */}
-      <section id="showcase" ref={horizontalSectionRef} className="raw-showcase-section">
-        <div className="raw-showcase-topbar">
-          <div className="showcase-index-tag">
-            <span className="tag-bracket">[</span>
-            <span>SECTION: SHOWCASE</span>
-            <span className="tag-bracket">]</span>
-          </div>
-          <h2 className="showcase-heading">TEMPLATE SHOWCASE</h2>
-          <div className="showcase-scroll-hint">
-            <span>SCROLL TO SEE MORE</span>
-            <ArrowRight size={14} />
-          </div>
-        </div>
-
-        {/* Horizontal Sliding Track */}
-        <div className="raw-track-viewport">
-          <div ref={horizontalTrackRef} className="raw-specimen-track">
-            {SHOWCASE_PERSONAS.map((p) => (
-              <div
-                key={p.id}
-                className="specimen-card"
-                style={{ '--accent': p.accentColor }}
-              >
-                {/* Card Header */}
-                <div className="specimen-card-header">
-                  <div className="specimen-meta-left">
-                    <span className="specimen-index">EXAMPLE {p.index}</span>
-                    <span className="specimen-role">{p.role}</span>
-                  </div>
-                  <div className="specimen-location">{p.location}</div>
-                </div>
-
-                {/* Core Canvas */}
-                <div className="specimen-inner-canvas">
-                  <div className="specimen-masthead">
-                    <div className="specimen-identity">
-                      <h3 className="specimen-name">{p.name}</h3>
-                      <div className="specimen-handle">{p.handle}</div>
-                    </div>
-                    <div className="specimen-status-badge">
-                      <span className="status-ping" />
-                      <span>{p.status}</span>
-                    </div>
-                  </div>
-
-                  <p className="specimen-bio">{p.bio}</p>
-
-                  {/* Persona Specific Content */}
-                  {p.id === 'dev' && (
-                    <div className="specimen-body-grid">
-                      <div className="specimen-block-box">
-                        <div className="block-box-title">SKILLS & TOOLS</div>
-                        <div className="specimen-pills-row">
-                          {p.highlights.map((h, hIdx) => (
-                            <span key={hIdx} className="specimen-pill">
-                              <strong>{h.name}</strong> <small>[{h.tag}]</small>
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="specimen-block-box">
-                        <div className="block-box-title">WORK EXPERIENCE</div>
-                        <div className="specimen-role-title">{p.experience.role}</div>
-                        <div className="specimen-company">{p.experience.company} • {p.experience.period}</div>
-                        <p className="specimen-desc">{p.experience.desc}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {p.id === 'artist' && (
-                    <div className="specimen-body-grid">
-                      <div className="specimen-block-box accent-border">
-                        <div className="block-box-title">SERVICES & RATES</div>
-                        <div className="specimen-service-title">{p.service.title}</div>
-                        <div className="specimen-price">{p.service.price} <small>/ {p.service.period}</small></div>
-                        <ul className="specimen-checklist">
-                          {p.service.features.map((f, fIdx) => (
-                            <li key={fIdx}><Plus size={11} color="var(--accent)" /> {f}</li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className="specimen-block-box">
-                        <div className="block-box-title">PHOTO GALLERY</div>
-                        <div className="specimen-gallery-grid">
-                          {p.galleryPhotos.map((g, gIdx) => (
-                            <div key={gIdx} className="gallery-box-item">
-                              <span className="g-title">{g.title}</span>
-                              <span className="g-tag">{g.tag}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {p.id === 'creator' && (
-                    <div className="specimen-body-grid">
-                      <div className="specimen-block-box live-box">
-                        <div className="block-box-title live-title">
-                          <span className="live-dot-pulse" /> LIVE STREAM SCHEDULE
-                        </div>
-                        <div className="specimen-event-title">{p.event.title}</div>
-                        <div className="specimen-event-meta">{p.event.date} • {p.event.time}</div>
-                        <p className="specimen-desc">{p.event.desc}</p>
-                        <div className="specimen-cal-tag">✓ 1-Click Google Calendar Sync</div>
-                      </div>
-
-                      <div className="specimen-block-box">
-                        <div className="block-box-title">RECENT REVIEW</div>
-                        <div className="specimen-role-title">{p.review.title}</div>
-                        <div className="specimen-rating">RATING: {p.review.rating}</div>
-                        <p className="specimen-desc">{p.review.notes}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {p.id === 'writer' && (
-                    <div className="specimen-body-grid single-col">
-                      <div className="specimen-block-box journal-box">
-                        <div className="journal-header-row">
-                          <span>{p.journal.date}</span>
-                          <span>{p.journal.readTime}</span>
-                        </div>
-                        <div className="specimen-journal-title">{p.journal.title}</div>
-                        <p className="specimen-journal-excerpt">{p.journal.excerpt}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Card Footer */}
-                <div className="specimen-card-footer">
-                  <span className="footer-code">PROFILE PREVIEW</span>
-                  <span className="footer-link">gnc.web.id/{p.handle}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* COMMUNITY REGISTRY */}
+      {/* COMMUNITY / CREATOR SHOWCASE */}
       {featuredProfiles.length > 0 && (
-        <section className="raw-community-section">
-          <div className="raw-catalog-container">
-            <div className="catalog-header">
-              <span className="catalog-badge">[COMMUNITY]</span>
-              <h2 className="catalog-title">PROFILES MADE BY CREATORS</h2>
+        <section className="fn-section fn-community-section" id="community">
+          <div className="fn-container">
+            <div className="fn-section-head">
+              <div>
+                <p className="fn-eyebrow">02 / Community</p>
+                <h2 className="fn-display">Profiles made by creators.</h2>
+              </div>
+              <p className="fn-section-lead">
+                Real pages built with Profilenc. Take a look, borrow an idea,
+                and make it your own.
+              </p>
             </div>
+          </div>
 
-            <div className="raw-community-grid">
-              {featuredProfiles.map((p) => (
-                <Link
-                  key={p.username}
-                  to={`/@${p.username}`}
-                  className="raw-profile-link-card"
-                >
-                  <div className="profile-num-col">
-                    {p.avatarUrl ? (
-                      <img
-                        src={p.avatarUrl}
-                        alt={p.displayName || p.username}
-                        style={{ width: '100%', height: '100%', borderRadius: '0px', objectFit: 'cover', display: 'block' }}
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                      />
-                    ) : (
-                      <span className="avatar-init">{(p.displayName || p.username)[0].toUpperCase()}</span>
-                    )}
-                  </div>
-                  <div className="profile-detail-col">
-                    <div className="profile-p-name">{p.displayName || p.username}</div>
-                    <div className="profile-p-handle">@{p.username}</div>
-                    {p.bio && <p className="profile-p-bio">{p.bio}</p>}
-                  </div>
-                  <ArrowUpRight size={18} className="profile-p-arrow" />
-                </Link>
-              ))}
-            </div>
+          <div className="fn-community-stage-wrapper">
+            <ThreeDTestimonials profiles={featuredProfiles} />
           </div>
         </section>
       )}
 
-      {/* OPEN SUGGESTION BOX SECTION */}
-      <section className="raw-suggestion-section" id="suggestions">
-        <div className="raw-suggestion-container">
-          <div className="suggestion-box-card">
-            <div className="suggestion-card-header">
-              <div className="suggestion-badge-row">
-                <span className="suggestion-badge">[COMMUNITY_INPUT]</span>
-                <span className="suggestion-live-indicator">LIVE FEEDBACK CHANNEL</span>
+      {/* FEEDBACK */}
+      <section className="fn-suggestion" id="feedback">
+        <div className="fn-container">
+          <div className="fn-suggestion-card">
+            <div className="fn-suggestion-head">
+              <div className="fn-suggestion-badges">
+                <span className="fn-badge coral">[ Community input ]</span>
+                <span className="fn-badge mint">Live feedback channel</span>
               </div>
-              <h2 className="suggestion-title">OPEN SUGGESTION BOX</h2>
-              <p className="suggestion-desc">
-                Help us shape the future of Profilenc. Share design ideas, request new modular blocks, or report technical improvements with screenshots.
+              <h2 className="fn-suggestion-title">Open suggestion box</h2>
+              <p className="fn-suggestion-desc">
+                Help shape the future of Profilenc. Share design ideas, request
+                new modular blocks, or report technical improvements with
+                screenshots.
               </p>
             </div>
 
             {suggestionSuccess ? (
-              <div className="suggestion-success-box">
-                <div className="success-icon-wrap">
-                  <CheckCircle2 size={36} />
+              <div className="fn-success">
+                <div className="fn-success-icon">
+                  <CheckCircle2 size={34} />
                 </div>
-                <h3>SUGGESTION DISPATCHED</h3>
+                <h3>Suggestion dispatched</h3>
                 <p>
-                  Thank you! Your feedback has been sent directly to the Profilenc admin dashboard.
+                  Thank you. Your feedback has been sent directly to the
+                  Profilenc admin dashboard.
                 </p>
                 <button
                   type="button"
                   onClick={() => setSuggestionSuccess(false)}
-                  className="raw-btn-outline"
+                  className="fn-btn fn-btn-ghost"
                 >
-                  <Plus size={14} /> Submit Another Suggestion
+                  <Plus size={14} /> Submit another suggestion
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSuggestionSubmit} className="suggestion-form">
+              <form onSubmit={handleSuggestionSubmit} className="fn-form">
                 {suggestionError && (
-                  <div className="suggestion-error-alert">
+                  <div className="fn-error">
                     <AlertCircle size={16} />
                     <span>{suggestionError}</span>
                   </div>
                 )}
 
-                {/* Category Selector */}
-                <div className="form-group">
-                  <label className="suggestion-field-label">SELECT CATEGORY</label>
-                  <div className="category-pills-grid">
+                <div className="fn-field">
+                  <label className="fn-label">Select category</label>
+                  <div className="fn-cats">
                     {[
-                      { id: 'DESIGN', label: 'DESIGN & UI/UX', desc: 'Aesthetics, layouts, animations, typography' },
-                      { id: 'TECHNICALITY', label: 'TECHNICALITY & PERFORMANCE', desc: 'Core engine, speed, editor mechanics' },
-                      { id: 'FEATURE', label: 'NEW FEATURE / BLOCK', desc: 'Ideas for new blocks or custom widgets' },
-                      { id: 'BUG', label: 'BUG / ISSUE REPORT', desc: 'Unexpected behavior or glitches' },
+                      { id: 'DESIGN', label: 'Design & UI/UX', desc: 'Aesthetics, layouts, animations, typography' },
+                      { id: 'TECHNICALITY', label: 'Technicality & performance', desc: 'Core engine, speed, editor mechanics' },
+                      { id: 'FEATURE', label: 'New feature / block', desc: 'Ideas for new blocks or custom widgets' },
+                      { id: 'BUG', label: 'Bug / issue report', desc: 'Unexpected behavior or glitches' },
                     ].map((cat) => (
                       <button
                         type="button"
                         key={cat.id}
                         onClick={() => setSuggestionForm({ ...suggestionForm, category: cat.id })}
-                        className={`cat-pill-btn ${suggestionForm.category === cat.id ? 'active' : ''}`}
+                        className={`fn-cat ${suggestionForm.category === cat.id ? 'active' : ''}`}
                       >
-                        <div className="cat-pill-top">
-                          <span className="cat-pill-tag">[{cat.id}]</span>
-                          {suggestionForm.category === cat.id && <Check size={14} className="cat-check" />}
+                        <div className="fn-cat-top">
+                          <span className="fn-cat-tag">[{cat.id}]</span>
+                          {suggestionForm.category === cat.id && <Check size={14} className="fn-cat-check" />}
                         </div>
-                        <span className="cat-pill-title">{cat.label}</span>
-                        <span className="cat-pill-desc">{cat.desc}</span>
+                        <span className="fn-cat-title">{cat.label}</span>
+                        <span className="fn-cat-desc">{cat.desc}</span>
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Title */}
-                <div className="form-group">
-                  <label className="suggestion-field-label" htmlFor="sug-title">
-                    SUGGESTION HEADLINE <span className="req">*</span>
+                <div className="fn-field">
+                  <label className="fn-label" htmlFor="sug-title">
+                    Suggestion headline <span className="req">*</span>
                   </label>
                   <input
                     id="sug-title"
                     type="text"
                     required
-                    placeholder="e.g. Add Spotify player embed block / Mobile navigation glitch"
+                    placeholder="e.g. Add a Spotify player embed block"
                     value={suggestionForm.title}
                     onChange={(e) => setSuggestionForm({ ...suggestionForm, title: e.target.value })}
-                    className="suggestion-input"
+                    className="fn-input"
                   />
                 </div>
 
-                {/* Message */}
-                <div className="form-group">
-                  <label className="suggestion-field-label" htmlFor="sug-msg">
-                    DETAILS & EXPLANATION <span className="req">*</span>
+                <div className="fn-field">
+                  <label className="fn-label" htmlFor="sug-msg">
+                    Details &amp; explanation <span className="req">*</span>
                   </label>
                   <textarea
                     id="sug-msg"
@@ -850,58 +1221,56 @@ export default function LandingPage() {
                     placeholder="Describe your suggestion in detail. What problem does it solve? How should it look or behave?"
                     value={suggestionForm.message}
                     onChange={(e) => setSuggestionForm({ ...suggestionForm, message: e.target.value })}
-                    className="suggestion-textarea"
+                    className="fn-textarea"
                   />
                 </div>
 
-                {/* Screenshot Upload */}
-                <div className="form-group">
-                  <label className="suggestion-field-label">
-                    ATTACH SCREENSHOT / MOCKUP <span className="opt">(OPTIONAL, MAX 10MB)</span>
+                <div className="fn-field">
+                  <label className="fn-label">
+                    Attach screenshot / mockup <span className="opt">(optional, max 10MB)</span>
                   </label>
 
                   {suggestionPreview ? (
-                    <div className="suggestion-preview-box">
-                      <div className="preview-thumb-wrap">
-                        <img src={suggestionPreview} alt="Upload preview" className="preview-img" />
+                    <div className="fn-preview">
+                      <div className="fn-preview-thumb">
+                        <img src={suggestionPreview} alt="Upload preview" />
                       </div>
-                      <div className="preview-info">
-                        <span className="preview-filename">{suggestionFile?.name}</span>
-                        <span className="preview-filesize">
+                      <div className="fn-preview-info">
+                        <span className="fn-preview-name">{suggestionFile?.name}</span>
+                        <span className="fn-preview-size">
                           {(suggestionFile?.size / 1024 / 1024).toFixed(2)} MB
                         </span>
                       </div>
                       <button
                         type="button"
                         onClick={handleRemoveSuggestionImage}
-                        className="preview-remove-btn"
+                        className="fn-preview-remove"
                         title="Remove image"
                       >
                         <X size={16} />
                       </button>
                     </div>
                   ) : (
-                    <label className="suggestion-upload-dropzone">
+                    <label className="fn-upload">
                       <input
                         type="file"
                         accept="image/*"
                         onChange={handleSuggestionImageChange}
-                        className="hidden-file-input"
+                        className="fn-file-input"
                       />
-                      <Upload size={20} className="upload-icon" />
-                      <div className="upload-text">
-                        <span className="upload-main-txt">Click or drag image file here</span>
-                        <span className="upload-sub-txt">PNG, JPG, WEBP, GIF up to 10MB</span>
+                      <Upload size={20} className="fn-upload-icon" />
+                      <div className="fn-upload-text">
+                        <span className="fn-upload-main">Click or drag an image file here</span>
+                        <span className="fn-upload-sub">PNG, JPG, WEBP, GIF up to 10MB</span>
                       </div>
                     </label>
                   )}
                 </div>
 
-                {/* Submitter Info (Optional) */}
-                <div className="form-row-2">
-                  <div className="form-group">
-                    <label className="suggestion-field-label" htmlFor="sug-name">
-                      YOUR NAME OR @HANDLE <span className="opt">(OPTIONAL)</span>
+                <div className="fn-form-row">
+                  <div className="fn-field">
+                    <label className="fn-label" htmlFor="sug-name">
+                      Your name or @handle <span className="opt">(optional)</span>
                     </label>
                     <input
                       id="sug-name"
@@ -909,13 +1278,13 @@ export default function LandingPage() {
                       placeholder="e.g. Alex or @alexcreator"
                       value={suggestionForm.name}
                       onChange={(e) => setSuggestionForm({ ...suggestionForm, name: e.target.value })}
-                      className="suggestion-input"
+                      className="fn-input"
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label className="suggestion-field-label" htmlFor="sug-email">
-                      EMAIL ADDRESS <span className="opt">(OPTIONAL, FOR UPDATES)</span>
+                  <div className="fn-field">
+                    <label className="fn-label" htmlFor="sug-email">
+                      Email address <span className="opt">(optional, for updates)</span>
                     </label>
                     <input
                       id="sug-email"
@@ -923,70 +1292,114 @@ export default function LandingPage() {
                       placeholder="e.g. alex@example.com"
                       value={suggestionForm.email}
                       onChange={(e) => setSuggestionForm({ ...suggestionForm, email: e.target.value })}
-                      className="suggestion-input"
+                      className="fn-input"
                     />
                   </div>
                 </div>
 
-                {/* Submit button */}
-                <div className="suggestion-submit-wrap">
-                  <button
-                    type="submit"
-                    disabled={suggestionSubmitting}
-                    className="raw-cta-btn-primary big full-width-btn"
-                  >
-                    {suggestionSubmitting ? (
-                      <span>DISPATCHING SUGGESTION...</span>
-                    ) : (
-                      <>
-                        <Send size={18} />
-                        <span>SUBMIT SUGGESTION</span>
-                      </>
-                    )}
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  disabled={suggestionSubmitting}
+                  className="fn-btn fn-btn-coral fn-submit"
+                >
+                  {suggestionSubmitting ? (
+                    <span>Dispatching suggestion&hellip;</span>
+                  ) : (
+                    <>
+                      <Send size={18} />
+                      <span>Submit suggestion</span>
+                    </>
+                  )}
+                </button>
               </form>
             )}
           </div>
         </div>
       </section>
 
-      {/* CTA SECTION */}
-      <section className="raw-cta-section">
-        <div className="raw-cta-container">
-          <div className="raw-cta-box">
-            <div className="cta-meta-tag">{landingData.cta?.badge || '[GET_STARTED]'}</div>
-            <h2 className="cta-big-title">{landingData.cta?.title || 'READY TO BUILD YOUR PAGE?'}</h2>
-            <p className="cta-text">
-              {landingData.cta?.text || "Create a clean, customizable personal page in minutes. It's free and easy to set up."}
-            </p>
-            <div className="cta-action-wrap">
-              <button
-                type="button"
-                className="raw-cta-btn-primary big"
-                onClick={() => navigate(isAuthenticated ? `/@${user.username}/edit` : '/register')}
-              >
-                <span>{isAuthenticated ? 'OPEN STUDIO EDITOR' : (landingData.cta?.btnLabel || 'START BUILDING NOW')}</span>
-                <ArrowRight size={20} />
-              </button>
-            </div>
+      {/* CTA */}
+      <section className="fn-cta">
+        <div className="fn-container">
+          <div className="fn-feature-grid">
+            <article className="fn-feature">
+              <div className="fn-arrow">
+                <Sparkles size={22} />
+              </div>
+              <h2 className="fn-feature-title">
+                {landingData.cta?.title || 'Ready to build your page?'}
+              </h2>
+              <p className="fn-feature-text">
+                {landingData.cta?.text || "Create a clean, customizable personal page in minutes. It's free and easy to set up."}
+              </p>
+              <div className="fn-feature-actions">
+                <button
+                  type="button"
+                  className="fn-btn fn-btn-coral"
+                  onClick={() => navigate(isAuthenticated ? `/@${user.username}/edit` : '/register')}
+                >
+                  {isAuthenticated ? 'Open studio editor' : (landingData.cta?.btnLabel || 'Start building now')}
+                  <ArrowRight size={18} />
+                </button>
+                <a href="#showcase" className="fn-btn fn-btn-ghost">
+                  Browse examples
+                </a>
+              </div>
+            </article>
+
+            <article className="fn-feature secondary">
+              <div>
+                <div className="fn-arrow">
+                  <ArrowUpRight size={22} />
+                </div>
+                <h2 className="fn-feature-title">Keep the useful. Remove the usual.</h2>
+                <ul className="fn-benefits">
+                  <li className="fn-benefit">
+                    <span className="fn-benefit-num">01</span> Modular blocks
+                  </li>
+                  <li className="fn-benefit">
+                    <span className="fn-benefit-num">02</span> Custom colors &amp; fonts
+                  </li>
+                  <li className="fn-benefit">
+                    <span className="fn-benefit-num">03</span> Your own link
+                  </li>
+                </ul>
+              </div>
+              <div className="fn-feature-actions">
+                <Link to="/register" className="fn-btn fn-btn-ghost">
+                  Get started
+                </Link>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* QUOTE */}
+      <section className="fn-quote-section">
+        <div className="fn-container">
+          <div className="fn-quote">
+            <span className="fn-quote-mark" aria-hidden="true">&ldquo;</span>
+            <blockquote className="fn-quote-text">
+              The best pages do not shout for attention. They invite people to
+              stay a little longer.
+            </blockquote>
+            <cite className="fn-quote-cite">&mdash; A note from the Profilenc studio</cite>
           </div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="raw-footer">
-        <div className="raw-footer-container">
-          <div className="footer-left">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <img src="/logo.svg" alt="Profilenc Logo" style={{ width: '20px', height: '20px' }} />
-              <span className="footer-logo">PROFILENC</span>
-            </div>
-            <span className="footer-copy">// SIMPLE & MODULAR PERSONAL PROFILES</span>
+      <footer className="fn-footer">
+        <div className="fn-container fn-footer-inner">
+          <div className="fn-footer-brand">
+            <span className="fn-logo-mark">
+              <img src="/logo.svg" alt="" aria-hidden="true" />
+            </span>
+            <span className="fn-logo" style={{ fontSize: '1.2rem' }}>Profilenc</span>
           </div>
-          <div className="footer-right">
-            <span>© 2026 Profilenc — FREE & OPEN.</span>
-          </div>
+          <span className="fn-footer-note">
+            Built with curiosity / Updated 2026 / &copy; Profilenc
+          </span>
         </div>
       </footer>
     </div>

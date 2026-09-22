@@ -87,15 +87,15 @@ export default function SectionPanel({ config, onSave }) {
             >
               <option value="default">Default Icon</option>
               <option value="none">No Icon (Text Only)</option>
-              <option value="Code2">Code 💻</option>
-              <option value="Gamepad2">Hobbies 🎮</option>
-              <option value="BookHeart">Diary 📖</option>
-              <option value="Sparkles">Sparkles ✨</option>
-              <option value="Star">Star ⭐</option>
-              <option value="Briefcase">Career 💼</option>
-              <option value="Layers">Layers 🗂️</option>
-              <option value="Cpu">Tech ⚙️</option>
-              <option value="Coffee">Coffee ☕</option>
+              <option value="Code2">Code</option>
+              <option value="Gamepad2">Hobbies</option>
+              <option value="BookHeart">Diary</option>
+              <option value="Sparkles">Sparkles</option>
+              <option value="Star">Star</option>
+              <option value="Briefcase">Career</option>
+              <option value="Layers">Layers</option>
+              <option value="Cpu">Tech</option>
+              <option value="Coffee">Coffee</option>
             </select>
 
             <button

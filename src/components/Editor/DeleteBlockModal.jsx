@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { X, Trash2, AlertTriangle, Layers } from 'lucide-react';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 
-export default function DeleteBlockModal({ block, onConfirm, onClose }) {
+export default function DeleteBlockModal({ block, onConfirm, onClose, editorTheme }) {
+  const currentEditorTheme = editorTheme || (typeof window !== 'undefined' ? localStorage.getItem('profilenc_theme') || document.documentElement.getAttribute('data-theme') || 'dark' : 'dark');
   const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(onClose);
 
   if (!block) return null;
@@ -11,7 +12,7 @@ export default function DeleteBlockModal({ block, onConfirm, onClose }) {
   const itemCount = block.data?.items?.length || block.data?.images?.length || 0;
 
   return (
-    <div className="editor-modal-backdrop" onClick={handleBackdropClick}>
+    <div className="editor-modal-backdrop" data-editor-theme={currentEditorTheme} onClick={handleBackdropClick}>
       {hintVisible && (
         <div className="modal-double-click-hint">
           <span>Click once more outside to close (or use ✕)</span>
@@ -26,14 +27,16 @@ export default function DeleteBlockModal({ block, onConfirm, onClose }) {
         style={{ maxWidth: '460px', width: '92vw' }}
       >
         {/* Header */}
-        <div className="editor-modal-header" style={{ padding: '16px 20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="editor-modal-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div
               style={{
                 padding: '8px',
-                borderRadius: '8px',
-                background: 'rgba(239, 68, 68, 0.15)',
-                color: '#ef4444',
+                borderRadius: '50%',
+                background: 'var(--fn-editor-coral)',
+                color: 'var(--fn-editor-ink)',
+                border: '2px solid var(--fn-editor-ink)',
+                boxShadow: 'var(--fn-editor-shadow-xs)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -42,10 +45,10 @@ export default function DeleteBlockModal({ block, onConfirm, onClose }) {
               <Trash2 size={18} />
             </div>
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: '#ffffff' }}>
+              <h3 style={{ margin: 0 }}>
                 Delete Block
               </h3>
-              <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>
+              <span>
                 Confirm removing this block from tab
               </span>
             </div>
@@ -53,7 +56,6 @@ export default function DeleteBlockModal({ block, onConfirm, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
             title="Cancel"
           >
             <X size={18} />
@@ -61,36 +63,36 @@ export default function DeleteBlockModal({ block, onConfirm, onClose }) {
         </div>
 
         {/* Body */}
-        <div className="editor-modal-body" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <p style={{ fontSize: '0.86rem', color: '#cbd5e1', lineHeight: '1.5', margin: 0 }}>
+        <div className="editor-modal-body" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <p style={{ fontSize: '0.9rem', lineHeight: '1.6', margin: 0 }}>
             Are you sure you want to delete this block? All content and settings configured inside it will be removed.
           </p>
 
           {/* Block Preview Card */}
           <div
             style={{
-              padding: '14px',
-              borderRadius: '10px',
-              background: '#06070a',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              padding: '16px',
+              borderRadius: '12px',
+              background: 'var(--fn-editor-paper-light)',
+              border: '2px solid var(--fn-editor-line)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               gap: '12px',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
               <div
                 style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '8px',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '10px',
+                  background: 'var(--fn-editor-paper)',
+                  border: '2px solid var(--fn-editor-line)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#00f0aa',
+                  color: 'var(--fn-editor-coral)',
                   flexShrink: 0,
                 }}
               >
@@ -99,18 +101,19 @@ export default function DeleteBlockModal({ block, onConfirm, onClose }) {
               <div style={{ minWidth: 0 }}>
                 <span
                   style={{
-                    fontSize: '0.88rem',
+                    fontSize: '0.92rem',
                     fontWeight: 700,
-                    color: '#f8fafc',
+                    color: 'var(--fn-editor-ink)',
                     display: 'block',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
+                    fontFamily: 'var(--fn-editor-display)',
                   }}
                 >
                   {block.title || blockTypeLabel}
                 </span>
-                <span style={{ fontSize: '0.72rem', color: '#94a3b8', textTransform: 'capitalize' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--fn-editor-muted)', textTransform: 'capitalize', fontFamily: 'var(--fn-editor-body)' }}>
                   {blockTypeLabel} {itemCount > 0 ? `• ${itemCount} ${itemCount === 1 ? 'item' : 'items'}` : ''}
                 </span>
               </div>
@@ -118,15 +121,16 @@ export default function DeleteBlockModal({ block, onConfirm, onClose }) {
 
             <span
               style={{
-                fontSize: '0.7rem',
-                fontWeight: 600,
-                padding: '3px 8px',
-                borderRadius: '4px',
-                background: 'rgba(239, 68, 68, 0.12)',
-                color: '#ef4444',
-                border: '1px solid rgba(239, 68, 68, 0.25)',
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                padding: '4px 10px',
+                borderRadius: '999px',
+                background: 'var(--fn-editor-coral-dark)',
+                color: '#ffffff',
+                border: '2px solid var(--fn-editor-ink)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
+                fontFamily: 'var(--fn-editor-mono)',
                 flexShrink: 0,
               }}
             >
@@ -136,57 +140,42 @@ export default function DeleteBlockModal({ block, onConfirm, onClose }) {
 
           <div
             style={{
-              padding: '10px 12px',
-              borderRadius: '8px',
-              background: 'rgba(245, 158, 11, 0.08)',
-              border: '1px solid rgba(245, 158, 11, 0.2)',
+              padding: '12px 14px',
+              borderRadius: '10px',
+              background: 'var(--fn-editor-paper-light)',
+              border: '2px solid var(--fn-editor-line)',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
-              fontSize: '0.76rem',
-              color: '#fbbf24',
+              gap: '10px',
+              fontSize: '0.8rem',
+              color: 'var(--fn-editor-ink)',
             }}
           >
-            <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} color="var(--fn-editor-butter)" style={{ flexShrink: 0 }} />
             <span>You can undo this action with <strong>Ctrl+Z</strong> before saving.</span>
           </div>
         </div>
 
         {/* Footer */}
-        <div
-          className="editor-modal-footer"
-          style={{
-            padding: '14px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            gap: '10px',
-          }}
-        >
+        <div className="editor-modal-footer">
           <button
             type="button"
             onClick={onClose}
             className="editor-btn editor-btn-ghost"
-            style={{ fontSize: '0.82rem', padding: '8px 16px' }}
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="editor-btn editor-btn-close"
+            className="editor-btn"
             style={{
-              fontSize: '0.82rem',
-              padding: '8px 18px',
-              background: '#ef4444',
+              background: 'var(--fn-editor-coral-dark)',
               color: '#ffffff',
-              border: '1px solid #ef4444',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
+              borderColor: 'var(--fn-editor-ink)',
             }}
           >
-            <Trash2 size={14} />
+            <Trash2 size={15} />
             <span>Delete Block</span>
           </button>
         </div>

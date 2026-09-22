@@ -38,3 +38,9 @@ DEPLOY_INSTRUCTIONS.txt
 brag-output/*
 brag-output-demo/*
 
+opencode.json
+
+# graphify: commit graph.json so teammates/agents start with a map
+graphify-out/cost.json
+graphify-out/cache/
+!graphify-out/GRAPH_REPORT.md

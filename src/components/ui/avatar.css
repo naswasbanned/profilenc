@@ -1,0 +1,49 @@
+/* ==========================================================================
+   UI AVATAR COMPONENT STYLES
+   Field Notes Editorial System • Tactile Avatars
+   ========================================================================== */
+
+.ui-avatar {
+  position: relative;
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1.5px solid var(--line, #252320);
+  background-color: var(--paper, #f5efdf);
+  overflow: hidden;
+  box-shadow: 1.5px 2px 0 var(--line, #252320);
+}
+
+[data-theme="dark"] .ui-avatar {
+  border-color: var(--line, #44375b);
+  background-color: var(--paper, #191524);
+  box-shadow: 1.5px 2px 0 var(--line, #44375b);
+}
+
+.ui-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ui-avatar-fallback {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--paper-elevated, #ede5d2);
+  color: var(--coral-text, #b83a22);
+  font-family: var(--fn-mono, 'DM Mono', monospace);
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .ui-avatar-fallback {
+  background-color: var(--paper-elevated, #2f2742);
+  color: var(--coral-text, #f1846b);
+}

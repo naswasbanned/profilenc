@@ -35,23 +35,13 @@ export default function SkillsBlock({ data = {} }) {
     <div className="skills-block-wrap">
       {/* Category Pills Filter (if more than 1 category) */}
       {categories.length > 2 && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
+        <div className="skills-filter-bar">
           {categories.map((cat) => (
             <button
               key={cat}
+              type="button"
               onClick={() => setSelectedCategory(cat)}
-              style={{
-                padding: '6px 14px',
-                borderRadius: '8px',
-                border: '1px solid',
-                borderColor: selectedCategory === cat ? 'var(--accent-color, #00d4ff)' : 'rgba(255,255,255,0.08)',
-                background: selectedCategory === cat ? 'color-mix(in srgb, var(--accent-color, #00d4ff) 15%, transparent)' : 'rgba(255,255,255,0.03)',
-                color: selectedCategory === cat ? 'var(--accent-color, #00d4ff)' : '#aaa',
-                fontSize: '0.78rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
+              className={`skills-filter-btn ${selectedCategory === cat ? 'active' : ''}`}
             >
               {cat}
             </button>
@@ -81,34 +71,36 @@ export default function SkillsBlock({ data = {} }) {
           ))}
         </div>
       ) : (
-        grouped.map((group) => (
-          <div key={group.category} className="skills-category">
-            <h4 className="skills-category-title">
-              <Code2 size={16} />
-              <span>{group.category}</span>
-            </h4>
-            <div className="skills-grid">
-              {group.skills.map((skill, idx) => (
-                <div
-                  key={idx}
-                  className="skill-pill"
-                  style={{ '--pill-color': skill.color || '#00d4ff' }}
-                >
-                  <span className="skill-icon" style={{ color: skill.color || '#00d4ff' }}>
-                    <TechIcon
-                      name={skill.name}
-                      icon={skill.icon}
-                      color={skill.color || '#00d4ff'}
-                      size={15}
-                    />
-                  </span>
-                  <span>{skill.name}</span>
-                  {skill.tier && <span className="skill-tier">{skill.tier}</span>}
-                </div>
-              ))}
+        <div className="skills-categories-grid">
+          {grouped.map((group) => (
+            <div key={group.category} className="skills-category">
+              <h4 className="skills-category-title">
+                <Code2 size={15} />
+                <span>{group.category}</span>
+              </h4>
+              <div className="skills-grid">
+                {group.skills.map((skill, idx) => (
+                  <div
+                    key={idx}
+                    className="skill-pill"
+                    style={{ '--pill-color': skill.color || '#00d4ff' }}
+                  >
+                    <span className="skill-icon" style={{ color: skill.color || '#00d4ff' }}>
+                      <TechIcon
+                        name={skill.name}
+                        icon={skill.icon}
+                        color={skill.color || '#00d4ff'}
+                        size={15}
+                      />
+                    </span>
+                    <span>{skill.name}</span>
+                    {skill.tier && <span className="skill-tier">{skill.tier}</span>}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );

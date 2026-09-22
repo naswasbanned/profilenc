@@ -173,7 +173,7 @@ export default function BlockRenderer({
       {/* Editor Controls Bar (when in edit mode) */}
       {isEditing && (
         <div className="block-edit-controls">
-          <span style={{ fontSize: '0.68rem', color: '#777', paddingRight: '4px', textTransform: 'uppercase', fontWeight: 700 }}>
+          <span className="block-edit-type-label">
             {block.type.replace('_', ' ')}
           </span>
           <button
@@ -182,7 +182,7 @@ export default function BlockRenderer({
             onClick={() => onEditBlock(block)}
             title="Edit block content"
           >
-            <Edit3 size={13} /> Edit
+            <Edit3 size={13} /> <span>Edit</span>
           </button>
           {index > 0 && (
             <button
