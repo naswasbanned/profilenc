@@ -1,0 +1,284 @@
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .fn-hero-grid {
+    gap: 40px;
+  }
+
+  .fn-poster {
+    width: 270px;
+    min-height: 350px;
+    padding: 22px;
+  }
+
+  .fn-poster-circle {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 860px) {
+  .fn-nav-links {
+    display: none;
+  }
+
+  .fn-hero {
+    padding: 48px 0 72px;
+  }
+
+  .fn-hero-grid,
+  .fn-section-head,
+  .fn-feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fn-hero-grid {
+    gap: 56px;
+  }
+
+  .fn-hero-art {
+    min-height: 440px;
+    max-width: 520px;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .fn-poster-main {
+    right: 6%;
+  }
+
+  .fn-poster-back {
+    left: 6%;
+  }
+
+  .fn-section,
+  .fn-suggestion,
+  .fn-cta,
+  .fn-quote-section {
+    padding: 72px 0;
+  }
+
+  .fn-update-card {
+    grid-template-columns: 1fr;
+  }
+
+  .fn-update-side {
+    border-right: none;
+    border-bottom: 2px solid var(--ink);
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .fn-update-meta {
+    text-align: right;
+  }
+
+  .fn-showcase {
+    padding: 64px 0 48px;
+  }
+
+  .fn-showcase-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .fn-specimen {
+    width: 84vw;
+    max-width: 460px;
+  }
+
+  .fn-specimen-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fn-suggestion-card {
+    padding: 30px 22px;
+  }
+
+  .fn-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .fn-feature {
+    min-height: auto;
+    padding: 34px 26px;
+  }
+
+  .fn-quote {
+    padding: 56px 28px 40px;
+  }
+
+  .fn-quote-mark {
+    left: 22px;
+  }
+
+}
+
+@media (max-width: 560px) {
+
+  .fn-container,
+  .fn-showcase-top {
+    width: min(calc(100% - 28px), var(--max-width));
+  }
+
+  .fn-logo {
+    font-size: 1.2rem;
+  }
+
+  .fn-nav-actions .fn-btn {
+    min-height: 36px;
+    padding: 0 13px;
+    font-size: 0.74rem;
+  }
+
+  .fn-hero-title {
+    font-size: clamp(2.6rem, 13vw, 3.6rem);
+    letter-spacing: -0.06em;
+  }
+
+  .fn-hero-lead {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .fn-hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .fn-hero-actions .fn-btn {
+    width: 100%;
+  }
+
+  .fn-hero-art {
+    min-height: 360px;
+  }
+
+  /* Centre the poster stack on the axis of the viewport. Each poster is
+     absolutely placed, so the horizontal centring lives in the transform
+     together with its rotation. */
+  .fn-poster {
+    width: min(250px, 74vw);
+    min-height: 300px;
+    padding: 18px;
+    left: 50%;
+    right: auto;
+    box-shadow: 8px 9px 0 var(--ink);
+  }
+
+  .fn-poster-main {
+    top: 34px;
+    transform: translateX(calc(-50% + 20px)) rotate(7deg);
+  }
+
+  .fn-poster-back {
+    top: 80px;
+    left: 50%;
+    transform: translateX(calc(-50% - 20px)) rotate(-10deg);
+  }
+
+  .fn-poster-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+  }
+
+  .fn-poster-url {
+    margin-bottom: 18px;
+    font-size: 1.35rem;
+  }
+
+  .fn-poster-circle {
+    width: 92px;
+    height: 92px;
+    margin-bottom: 20px;
+  }
+
+  .fn-poster-lines span {
+    height: 6px;
+  }
+
+  .fn-poster-foot {
+    padding-top: 14px;
+    font-size: 0.55rem;
+  }
+
+  .fn-poster::before {
+    top: -15px;
+    width: 88px;
+    height: 28px;
+  }
+
+  .fn-update-body {
+    padding: 22px 20px;
+  }
+
+  .fn-update-side {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .fn-update-meta {
+    text-align: left;
+  }
+
+  .fn-update-title {
+    font-size: 1.4rem;
+  }
+
+  .fn-specimen {
+    width: calc(100vw - 40px);
+  }
+
+  .fn-specimen-body {
+    padding: 20px;
+  }
+
+  .fn-specimen-masthead {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .fn-specimen-name {
+    font-size: 1.6rem;
+  }
+
+  .fn-journal-title {
+    font-size: 1.3rem;
+  }
+
+  .fn-suggestion-card {
+    padding: 24px 18px;
+    border-radius: var(--radius-md);
+  }
+
+  .fn-cats {
+    grid-template-columns: 1fr;
+  }
+
+  .fn-quote-text {
+    font-size: 1.9rem;
+  }
+
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .fn-btn:hover,
+  .fn-update-card:hover,
+  .fn-profile-card:hover,
+  .fn-cat:hover,
+  .fn-preview-remove:hover {
+    transform: none;
+  }
+}
+

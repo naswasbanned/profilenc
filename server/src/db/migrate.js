@@ -1,20 +1,11 @@
 import { query } from '../config/db.js';
 
 /**
- * Create all required tables (both legacy and multi-user).
+ * Create all required tables.
  * Idempotent — safe to run multiple times.
  */
 export async function runMigrations() {
   console.log('Running database migrations...');
-
-  // Legacy single-user tables
-  await query(`
-    CREATE TABLE IF NOT EXISTS content (
-      key         TEXT PRIMARY KEY,
-      data        JSONB NOT NULL,
-      updated_at  TIMESTAMPTZ DEFAULT NOW()
-    )
-  `);
 
   await query(`
     CREATE TABLE IF NOT EXISTS images (
@@ -28,15 +19,6 @@ export async function runMigrations() {
     )
   `);
 
-  await query(`
-    CREATE TABLE IF NOT EXISTS admin_user (
-      id              SERIAL PRIMARY KEY,
-      username        TEXT NOT NULL UNIQUE,
-      password_hash   TEXT NOT NULL
-    )
-  `);
-
-  // Multi-user tables
   await query(`
     CREATE TABLE IF NOT EXISTS users (
       id              SERIAL PRIMARY KEY,

@@ -1,0 +1,137 @@
+/* --- Header --- */
+.admin-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--paper);
+  border-bottom: 2px solid var(--line);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.admin-header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.admin-brand {
+  font-family: var(--fn-mono);
+  font-weight: 900;
+  font-size: 0.95rem;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+}
+
+.admin-brand .brand-name {
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.admin-kernel-badge {
+  font-family: var(--fn-mono);
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  background: var(--butter);
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  color: #191524;
+  letter-spacing: 0.05em;
+}
+
+.admin-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Theme Toggle Button (Matches Landing Page Pill Style) */
+.admin-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 14px;
+  background: var(--paper-light);
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-family: var(--fn-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--line);
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.admin-theme-toggle:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--line);
+  background: var(--butter);
+  color: #191524;
+}
+
+.admin-theme-toggle:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.admin-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--fn-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.admin-nav-link:hover {
+  color: var(--coral);
+}
+
+.admin-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 14px;
+  background: var(--paper-light);
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--fn-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--line);
+}
+
+.pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+/* --- Main Layout --- */
+.admin-main {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+

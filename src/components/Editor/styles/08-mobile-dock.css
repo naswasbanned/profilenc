@@ -1,0 +1,153 @@
+/* ==========================================================================
+   8. MOBILE ADJUSTMENTS & FLOATING DOCK
+   ========================================================================== */
+
+.editor-mobile-dock-wrap {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .editor-toolbar {
+    padding: 0 12px;
+    height: 52px;
+  }
+
+  .editor-toolbar-left .editor-label span {
+    display: none; /* Show logo mark on mobile, hide text */
+  }
+
+  .editor-toolbar-center {
+    display: none; /* Replaced by bottom dock on mobile */
+  }
+
+  .editor-mobile-dock-wrap {
+    display: flex;
+    position: fixed;
+    bottom: 18px;
+    left: 0;
+    right: 0;
+    justify-content: center;
+    z-index: 210;
+    pointer-events: none;
+  }
+
+  .editor-mobile-dock {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--fn-editor-paper-light);
+    border: 2px solid var(--fn-editor-ink);
+    border-radius: 999px;
+    box-shadow: var(--fn-editor-shadow-sm);
+    pointer-events: auto;
+  }
+
+  .editor-mobile-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 2px solid var(--fn-editor-line);
+    background: var(--fn-editor-paper);
+    color: var(--fn-editor-ink);
+    font-family: var(--fn-editor-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 150ms ease;
+  }
+
+  .editor-mobile-btn:active {
+    transform: scale(0.96);
+  }
+
+  .editor-mobile-btn.primary {
+    background: var(--fn-editor-coral);
+    color: var(--fn-editor-ink);
+    border-color: var(--fn-editor-ink);
+    box-shadow: var(--fn-editor-shadow-xs);
+  }
+
+  .editor-mobile-btn.active {
+    background: var(--fn-editor-coral);
+    color: var(--fn-editor-ink);
+    border-color: var(--fn-editor-ink);
+  }
+
+  .editor-panel {
+    width: 100%;
+    top: 52px;
+  }
+
+  .editor-modal-backdrop {
+    padding: 12px 8px;
+  }
+
+  .editor-modal-dialog {
+    max-height: 94vh;
+    border-radius: 14px !important;
+  }
+
+  .editor-modal-header {
+    padding: 14px 16px;
+  }
+
+  .editor-modal-body {
+    padding: 16px 14px;
+  }
+
+  .editor-modal-footer {
+    padding: 12px 16px;
+  }
+
+  .account-tab-label-full {
+    display: none;
+  }
+
+  .account-tab-label-short {
+    display: inline;
+  }
+
+  .account-save-label-full {
+    display: none;
+  }
+
+  .account-save-label-short {
+    display: inline;
+  }
+
+  .account-avatar-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .account-toggle-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .account-modal-footer {
+    flex-wrap: wrap;
+  }
+
+  .account-modal-footer .editor-save-status-pill {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .account-modal-footer-actions {
+    width: 100%;
+  }
+
+  .account-modal-footer-actions .editor-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .add-block-grid {
+    grid-template-columns: 1fr;
+  }
+}

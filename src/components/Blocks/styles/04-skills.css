@@ -1,0 +1,173 @@
+/* ==========================================================================
+   3. SKILLS BLOCK
+   ========================================================================== */
+.skills-block-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.skills-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.skills-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 18px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--card-border, var(--color-border-subtle));
+  background: var(--card-bg, var(--color-surface-raised));
+  color: var(--card-text-muted, var(--color-text-secondary));
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.skills-filter-btn:hover {
+  border-color: var(--color-accent-primary, var(--accent-color));
+  color: var(--color-accent-primary, var(--accent-color));
+  transform: translateY(-2px);
+}
+
+.skills-filter-btn.active {
+  border-color: var(--color-accent-primary, var(--accent-color));
+  background: color-mix(in srgb, var(--color-accent-primary, var(--accent-color)) 12%, var(--card-bg, transparent));
+  color: var(--color-accent-primary, var(--accent-color));
+  font-weight: 700;
+}
+
+/* Editorial Tactile / Field Notes filter pills */
+[data-button-style="editorial-tactile"] .skills-filter-btn,
+[data-design-style="field-notes"] .skills-filter-btn {
+  border: 2px solid var(--heading-color, #252320);
+  background: var(--card-bg, #fffaf0);
+  color: var(--heading-color, #252320);
+  box-shadow: 2.5px 3px 0 var(--heading-color, #252320);
+  border-radius: 9999px;
+  padding: 6px 18px;
+}
+
+[data-button-style="editorial-tactile"] .skills-filter-btn:hover,
+[data-design-style="field-notes"] .skills-filter-btn:hover {
+  transform: translate(-1.5px, -2px);
+  box-shadow: 4px 4.5px 0 var(--heading-color, #252320);
+  background: color-mix(in srgb, var(--accent-color, #e96d52) 8%, var(--card-bg, #fffaf0));
+  color: var(--heading-color, #252320);
+}
+
+[data-button-style="editorial-tactile"] .skills-filter-btn.active,
+[data-design-style="field-notes"] .skills-filter-btn.active {
+  background: var(--color-accent-primary, #e96d52);
+  color: #fffaf0;
+  border-color: var(--heading-color, #252320);
+  box-shadow: 2.5px 3px 0 var(--heading-color, #252320);
+}
+
+[data-button-style="editorial-tactile"] .skills-filter-btn.active:hover,
+[data-design-style="field-notes"] .skills-filter-btn.active:hover {
+  transform: translate(-1.5px, -2px);
+  box-shadow: 4px 4.5px 0 var(--heading-color, #252320);
+}
+
+[data-button-style="editorial-tactile"] .skills-filter-btn:active,
+[data-design-style="field-notes"] .skills-filter-btn:active {
+  transform: translate(0, 0);
+  box-shadow: 1.5px 1.5px 0 var(--heading-color, #252320);
+}
+
+.skills-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* Stable main category card - no hover effect since it's a non-interactable container */
+.skills-category {
+  border-radius: var(--radius-md, 12px);
+  background: var(--card-bg, var(--color-surface-raised));
+  border: var(--card-border-width, 1px) var(--card-border-style, solid) var(--card-border, var(--color-border-subtle));
+  padding: 16px 20px;
+  box-shadow: var(--card-shadow, none);
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
+}
+
+[data-button-style="editorial-tactile"] .skills-category,
+[data-design-style="field-notes"] .skills-category {
+  border-width: var(--card-border-width, 2px);
+  border-style: solid;
+  border-color: var(--card-border, #d7ccb8);
+  box-shadow: var(--card-shadow, 4px 5px 0 rgba(37, 35, 32, 0.22));
+}
+
+.skills-category-title {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--card-heading-color, var(--color-card-heading, var(--heading-color, #ffffff)));
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: var(--radius-xs);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border-subtle);
+  font-size: var(--text-xs);
+  color: var(--card-text-color, var(--color-card-text, var(--color-text-primary, #e6edf3)));
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: default;
+}
+
+.skill-pill:hover {
+  border-color: var(--pill-color, var(--color-accent-primary));
+  background: color-mix(in srgb, var(--pill-color, var(--color-accent-primary)) 12%, transparent);
+  transform: translateY(-2px);
+}
+
+.skill-icon {
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  transition: transform var(--transition-fast);
+}
+
+.skill-pill:hover .skill-icon {
+  transform: scale(1.12);
+}
+
+.skill-tier {
+  padding: 2px 6px;
+  border-radius: var(--radius-xs, 4px);
+  background: color-mix(in srgb, var(--card-text-color, #252320) 8%, transparent);
+  font-size: var(--text-2xs, 0.65rem);
+  font-family: var(--font-mono, monospace);
+  color: var(--card-text-muted, var(--color-card-text-muted, var(--color-text-muted, #746e63)));
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: background-color var(--transition-fast);
+}
+
+.skill-pill:hover .skill-tier {
+  background: color-mix(in srgb, var(--card-text-color, #252320) 14%, transparent);
+}
+

@@ -1,0 +1,151 @@
+/* ==========================================================================
+   FOOTER
+
+   Two rows under one hairline: brand and round action buttons on top, legal
+   block and right aligned link rows below.
+   ========================================================================== */
+
+.fn-footer {
+  position: relative;
+  z-index: 1;
+  padding: 40px 0 46px;
+  border-top: 1px solid var(--line);
+}
+
+.fn-footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+/* --- Row 1: brand + actions --- */
+.fn-footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.fn-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fn-footer-wordmark {
+  font-family: var(--fn-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.fn-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fn-footer-icon-btn {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper-light);
+  box-shadow: 2px 2px 0 var(--ink);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.fn-footer-icon-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
+  background: var(--butter);
+}
+
+.fn-footer-icon-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+/* --- Row 2: legal + link rows --- */
+.fn-footer-bottom {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.fn-footer-legal {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: var(--muted);
+  font-family: var(--fn-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.fn-footer-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 9px;
+}
+
+.fn-footer-nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 18px;
+}
+
+.fn-footer-nav-row a {
+  color: var(--ink);
+  font-family: var(--fn-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.fn-footer-nav-row a:hover {
+  color: var(--coral-dark);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.fn-footer-nav-row.is-secondary a {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .fn-footer {
+    padding: 30px 0 36px;
+  }
+
+  .fn-footer-inner {
+    gap: 20px;
+  }
+
+  .fn-footer-bottom {
+    flex-direction: column-reverse;
+    gap: 18px;
+  }
+
+  .fn-footer-nav {
+    align-items: flex-start;
+  }
+
+  .fn-footer-nav-row {
+    justify-content: flex-start;
+    gap: 14px;
+  }
+}

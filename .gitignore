@@ -30,6 +30,7 @@ server/node_modules/
 
 .agents/*
 .claude/*
+.kiro/*
 
 *.md
 !README.md
@@ -43,4 +44,7 @@ opencode.json
 # graphify: commit graph.json so teammates/agents start with a map
 graphify-out/cost.json
 graphify-out/cache/
+graphify-out/*
 !graphify-out/GRAPH_REPORT.md
+
+design_ui.html

@@ -1,0 +1,97 @@
+/* ==========================================================================
+   PROFILENC VISUAL EDITOR — "FIELD NOTES" EDITORIAL DESIGN SYSTEM
+   Tactile 2px borders, hard offset shadows, warm paper tones & Fraunces serif.
+   Matches the exact same aesthetic as the Landing Page (Field Notes).
+   ========================================================================== */
+
+/* Typefaces are theme independent, so they live outside the palette blocks
+   instead of riding along inside the dark palette declaration. */
+:root {
+  --fn-editor-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --fn-editor-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --fn-editor-mono: 'DM Mono', 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Universal & Scoped Dark Mode for Editor UI Chrome */
+:root,
+:root[data-theme="dark"],
+html[data-theme="dark"],
+[data-theme="dark"],
+[data-editor-theme="dark"],
+.editor-page[data-editor-theme="dark"],
+.editor-toolbar,
+.editor-panel,
+.editor-modal-backdrop,
+.editor-modal-dialog,
+.account-settings-modal,
+.editor-mobile-dock-wrap,
+.editor-unsaved-banner,
+[data-theme="dark"] .editor-toolbar,
+[data-theme="dark"] .editor-panel,
+[data-theme="dark"] .editor-modal-backdrop,
+[data-theme="dark"] .editor-modal-dialog,
+[data-theme="dark"] .account-settings-modal,
+[data-theme="dark"] .editor-mobile-dock-wrap,
+[data-theme="dark"] .editor-unsaved-banner {
+  /* Sweet Dark Studio Palette */
+  --fn-editor-paper: #181524;
+  --fn-editor-paper-light: #231e33;
+  --fn-editor-paper-elevated: #2e2742;
+  --fn-editor-paper-sunken: #110d1c;
+  --fn-editor-ink: #f9f3e9;
+  --fn-editor-muted: #b2a5c2;
+  --fn-editor-line: #423659;
+
+  --fn-editor-coral: #f1846b;
+  --fn-editor-coral-dark: #d96351;
+  --fn-editor-butter: #f6d878;
+  --fn-editor-mint: #9ed0b0;
+  --fn-editor-blue: #8ba8e2;
+  --fn-editor-lavender: #cbbbe8;
+
+  --fn-editor-shadow: 6px 7px 0 #0c0914;
+  --fn-editor-shadow-sm: 3px 4px 0 #0c0914;
+  --fn-editor-shadow-xs: 2px 2px 0 #0c0914;
+}
+
+/* Universal & Scoped Warm Paper Light Mode for Editor UI Chrome */
+:root[data-theme="light"],
+html[data-theme="light"],
+[data-theme="light"],
+[data-editor-theme="light"],
+.editor-page[data-editor-theme="light"],
+.editor-toolbar[data-editor-theme="light"],
+.editor-panel[data-editor-theme="light"],
+.editor-modal-backdrop[data-editor-theme="light"],
+.editor-modal-dialog[data-editor-theme="light"],
+.account-settings-modal[data-editor-theme="light"],
+.editor-mobile-dock-wrap[data-editor-theme="light"],
+.editor-unsaved-banner[data-editor-theme="light"],
+[data-theme="light"] .editor-toolbar,
+[data-theme="light"] .editor-panel,
+[data-theme="light"] .editor-modal-backdrop,
+[data-theme="light"] .editor-modal-dialog,
+[data-theme="light"] .account-settings-modal,
+[data-theme="light"] .editor-mobile-dock-wrap,
+[data-theme="light"] .editor-unsaved-banner {
+  /* Warm Editorial Paper (Light Mode) */
+  --fn-editor-paper: #f5efdf;
+  --fn-editor-paper-light: #fffaf0;
+  --fn-editor-paper-elevated: #ffffff;
+  --fn-editor-paper-sunken: #ede5d2;
+  --fn-editor-ink: #252320;
+  --fn-editor-muted: #746e63;
+  --fn-editor-line: #d7ccb8;
+
+  --fn-editor-coral: #e96d52;
+  --fn-editor-coral-dark: #c9503c;
+  --fn-editor-butter: #f4cf62;
+  --fn-editor-mint: #b9d9bb;
+  --fn-editor-blue: #5578bd;
+  --fn-editor-lavender: #c6b9df;
+
+  --fn-editor-shadow: 6px 7px 0 rgba(37, 35, 32, 0.22);
+  --fn-editor-shadow-sm: 3px 4px 0 rgba(37, 35, 32, 0.22);
+  --fn-editor-shadow-xs: 2px 2px 0 rgba(37, 35, 32, 0.18);
+}
+

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
-import { parseVideoUrl } from '../../utils/videoUtils';
+import { parseVideoUrl } from '../../lib/videoUtils';
 
 export default function VideoGalleryBlock({ data = {} }) {
   const {

@@ -1,12 +1,16 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import {
+  apiJson,
+  getStoredToken,
+  storeToken,
+  clearStoredToken,
+} from '../lib/api';
 
 const AuthContext = createContext(null);
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
-
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => localStorage.getItem('auth_token'));
+  const [token, setToken] = useState(() => getStoredToken());
   const [loading, setLoading] = useState(true);
 
   // On mount, verify stored token
@@ -16,19 +20,13 @@ export function AuthProvider({ children }) {
       return;
     }
 
-    fetch(`${API_BASE}/api/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('Invalid token');
-        return res.json();
-      })
+    apiJson('/api/auth/me', { token, errorMessage: 'Invalid token' })
       .then((data) => {
         setUser(data);
         setLoading(false);
       })
       .catch(() => {
-        localStorage.removeItem('auth_token');
+        clearStoredToken();
         setToken(null);
         setUser(null);
         setLoading(false);
@@ -36,45 +34,35 @@ export function AuthProvider({ children }) {
   }, [token]);
 
   const login = useCallback(async (loginId, password) => {
-    const res = await fetch(`${API_BASE}/api/auth/login`, {
+    const data = await apiJson('/api/auth/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ login: loginId, password }),
+      token: null,
+      body: { login: loginId, password },
+      errorMessage: 'Login failed',
     });
 
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Login failed');
-    }
-
-    const data = await res.json();
-    localStorage.setItem('auth_token', data.token);
+    storeToken(data.token);
     setToken(data.token);
     setUser(data.user);
     return data.user;
   }, []);
 
   const register = useCallback(async (username, email, password, templateSlug) => {
-    const res = await fetch(`${API_BASE}/api/auth/register`, {
+    const data = await apiJson('/api/auth/register', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, email, password, templateSlug }),
+      token: null,
+      body: { username, email, password, templateSlug },
+      errorMessage: 'Registration failed',
     });
 
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Registration failed');
-    }
-
-    const data = await res.json();
-    localStorage.setItem('auth_token', data.token);
+    storeToken(data.token);
     setToken(data.token);
     setUser(data.user);
     return data.user;
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem('auth_token');
+    clearStoredToken();
     setToken(null);
     setUser(null);
   }, []);
@@ -82,23 +70,15 @@ export function AuthProvider({ children }) {
   const updateProfile = useCallback(async (profileData) => {
     if (!token) throw new Error('Not authenticated');
 
-    const res = await fetch(`${API_BASE}/api/auth/profile`, {
+    const data = await apiJson('/api/auth/profile', {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(profileData),
+      token,
+      body: profileData,
+      errorMessage: 'Failed to update profile',
     });
 
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to update profile');
-    }
-
-    const data = await res.json();
     if (data.token) {
-      localStorage.setItem('auth_token', data.token);
+      storeToken(data.token);
       setToken(data.token);
     }
     if (data.user) {
@@ -110,54 +90,37 @@ export function AuthProvider({ children }) {
   const changePassword = useCallback(async ({ currentPassword, newPassword }) => {
     if (!token) throw new Error('Not authenticated');
 
-    const res = await fetch(`${API_BASE}/api/auth/change-password`, {
+    return apiJson('/api/auth/change-password', {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ currentPassword, newPassword }),
+      token,
+      body: { currentPassword, newPassword },
+      errorMessage: 'Failed to change password',
     });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to change password');
-    }
-
-    return await res.json();
   }, [token]);
 
   const checkUsername = useCallback(async (username) => {
-    const res = await fetch(`${API_BASE}/api/auth/check-username`, {
+    return apiJson('/api/auth/check-username', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username }),
+      token: null,
+      body: { username },
     });
-    return res.json();
   }, []);
 
   const deleteAccount = useCallback(async (confirmUsername) => {
     if (!token || !user) throw new Error('Not authenticated');
 
-    const res = await fetch(`${API_BASE}/api/u/${user.username}`, {
+    const data = await apiJson(`/api/u/${user.username}`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ confirmUsername }),
+      token,
+      body: { confirmUsername },
+      errorMessage: 'Failed to delete account',
     });
 
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to delete account');
-    }
-
     // Clear session & reset user state
-    localStorage.removeItem('auth_token');
+    clearStoredToken();
     setToken(null);
     setUser(null);
-    return await res.json();
+    return data;
   }, [token, user]);
 
   const value = {

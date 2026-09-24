@@ -1,0 +1,66 @@
+/* --- Denied / Loading --- */
+.admin-loading-screen,
+.admin-denied-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: var(--paper);
+  text-align: center;
+  font-family: var(--fn-mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.admin-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--paper-elevated);
+  border-top-color: var(--coral);
+  border-radius: 50%;
+  animation: adminSpin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes adminSpin {
+  to { transform: rotate(360deg); }
+}
+
+.admin-denied-card {
+  background: var(--paper-light);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-modal);
+  padding: 40px 32px;
+  max-width: 480px;
+  width: 100%;
+}
+
+.denied-icon {
+  color: var(--coral-dark);
+  margin-bottom: 16px;
+}
+
+.admin-denied-card h2 {
+  font-family: var(--fn-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+
+.admin-denied-card p {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.denied-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+

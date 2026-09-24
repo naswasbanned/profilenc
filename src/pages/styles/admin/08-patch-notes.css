@@ -1,0 +1,160 @@
+/* --- Patch Notes Grid in Admin --- */
+.admin-patches-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-patch-card {
+  background: var(--paper-light);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.admin-patch-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-patch-card.current {
+  border-color: var(--line);
+  box-shadow: var(--shadow-lg);
+  background: linear-gradient(135deg, var(--paper-light) 0%, var(--paper-elevated) 100%);
+}
+
+.patch-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.patch-card-version-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.patch-card-ver {
+  font-family: var(--fn-mono);
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--ink);
+}
+
+.patch-card-tag {
+  font-family: var(--fn-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.patch-current-badge {
+  font-family: var(--fn-mono);
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  background: var(--coral);
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  color: #191524;
+}
+
+.patch-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.patch-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--fn-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.patch-card-title {
+  font-family: var(--fn-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.patch-card-changes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.admin-change-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.82rem;
+}
+
+.change-desc {
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+/* Badges for Patch Notes Changes */
+.change-tag,
+.fn-update-badge {
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  font-family: var(--fn-mono);
+  font-size: 0.64rem;
+  font-weight: 800;
+  border: 1px solid var(--line);
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.change-tag.new,
+.fn-update-badge.is-new {
+  background: var(--coral-bg);
+  color: var(--coral-text);
+  border-color: var(--coral-border);
+}
+
+.change-tag.improved,
+.fn-update-badge.is-improved {
+  background: var(--mint-bg);
+  color: var(--mint-text);
+  border-color: var(--mint-border);
+}
+
+.change-tag.fixed,
+.fn-update-badge.is-fixed {
+  background: var(--lavender-bg);
+  color: var(--lavender-text);
+  border-color: var(--lavender-border);
+}
+
+/* Loading & Empty States */
+.admin-table-loading,
+.admin-empty-state {
+  padding: 48px 24px;
+  text-align: center;
+  font-family: var(--fn-mono);
+  font-size: 0.84rem;
+  color: var(--muted);
+  background: var(--paper-light);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+}
+

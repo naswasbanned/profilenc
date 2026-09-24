@@ -498,10 +498,10 @@
     "semantic_hash": "94f7dc376d3639e80c843b3cb7701552"
   },
   "src/pages/LandingPage.jsx": {
-    "mtime": 1790045476.557539,
-    "seen": 1790051323.0565722,
-    "ast_hash": "2de6322ad1226cca2149b3af54fa1f34",
-    "semantic_hash": "2de6322ad1226cca2149b3af54fa1f34"
+    "mtime": 1790052284.9609191,
+    "seen": 1790052320.3171468,
+    "ast_hash": "af964e1a3bdd0dc4d501b0a3e923bd79",
+    "semantic_hash": ""
   },
   "src/pages/LoginPage.jsx": {
     "mtime": 1789872703.4175117,
@@ -544,5 +544,41 @@
     "seen": 1790051323.056592,
     "ast_hash": "f1e6a0558fdefede8cccc3d55b090460",
     "semantic_hash": "f1e6a0558fdefede8cccc3d55b090460"
+  },
+  ".opencode/plugins/graphify.js": {
+    "mtime": 1790051668.7373173,
+    "seen": 1790051701.356301,
+    "ast_hash": "3ea725724bc8ebe483c9f13d6aa1124f",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1788445090.7996955,
+    "seen": 1790051701.356523,
+    "ast_hash": "3f01850e9fce601d04d6dba39204c1d8",
+    "semantic_hash": ""
+  },
+  "design_ui.html": {
+    "mtime": 1789834915.2861176,
+    "seen": 1790051701.3565257,
+    "ast_hash": "bc2d26464044da7df3a188641afb3a80",
+    "semantic_hash": ""
+  },
+  "docker-compose.yml": {
+    "mtime": 1788445090.7997758,
+    "seen": 1790051701.3565273,
+    "ast_hash": "d2001f934ed3fb84d2026849467c09cc",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1789869242.8910718,
+    "seen": 1790051701.356529,
+    "ast_hash": "1d6cb0c394e01fd1a43df8b5ed14cabd",
+    "semantic_hash": ""
+  },
+  "src/assets/react.svg": {
+    "mtime": 1788445091.0502336,
+    "seen": 1790051701.3565307,
+    "ast_hash": "f0402b67b6ce880f65666bb49e841696",
+    "semantic_hash": ""
   }
 }

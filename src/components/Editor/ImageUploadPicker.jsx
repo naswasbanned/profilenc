@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Upload, Image as ImageIcon, Check, Loader2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-
-const API_BASE = import.meta.env.VITE_API_URL || '';
+import { apiFetch } from '../../lib/api';
 
 export default function ImageUploadPicker({ value, onChange, label = 'Image' }) {
   const { token } = useAuth();
@@ -23,9 +22,9 @@ export default function ImageUploadPicker({ value, onChange, label = 'Image' }) 
     formData.append('image', file);
 
     try {
-      const res = await fetch(`${API_BASE}/api/images`, {
+      const res = await apiFetch('/api/images', {
         method: 'POST',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        token: token || null,
         body: formData,
       });
 

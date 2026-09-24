@@ -1,0 +1,136 @@
+/* ==========================================================================
+   UPDATES / PATCH NOTES
+   ========================================================================== */
+
+.fn-updates-grid {
+  display: grid;
+  gap: 22px;
+}
+
+.fn-update-card {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-md);
+  background: var(--paper-light);
+  box-shadow: var(--shadow-small);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.fn-update-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 5px 7px 0 var(--ink);
+}
+
+.fn-update-card.is-current {
+  box-shadow: var(--shadow);
+}
+
+.fn-update-side {
+  padding: 26px 24px;
+  border-right: 2px solid var(--ink);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.fn-update-card.is-current .fn-update-side {
+  background: var(--butter);
+}
+
+.fn-update-version {
+  display: block;
+  font-family: var(--fn-display);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.fn-update-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper-light);
+  font-family: var(--fn-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.fn-update-card.is-current .fn-update-status {
+  background: var(--coral);
+}
+
+.fn-update-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: var(--fn-mono);
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.fn-update-body {
+  padding: 26px 30px;
+}
+
+.fn-update-title {
+  margin: 0 0 16px;
+  font-family: var(--fn-display);
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 1.02;
+}
+
+.fn-update-changes {
+  display: grid;
+  gap: 10px;
+}
+
+.fn-change {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.fn-change-tag {
+  flex-shrink: 0;
+  margin-top: 2px;
+  padding: 1px 8px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--butter);
+  color: var(--ink);
+  font-family: var(--fn-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.fn-change-tag.is-new {
+  background: var(--coral);
+}
+
+.fn-change-tag.is-improved {
+  background: var(--mint);
+}
+
+.fn-change-tag.is-fixed,
+.fn-change-tag.is-fix {
+  background: var(--blue);
+  color: var(--paper-light);
+}
+

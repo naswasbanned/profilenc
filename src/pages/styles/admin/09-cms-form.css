@@ -1,0 +1,116 @@
+/* --- CMS Form --- */
+.admin-cms-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cms-section-card {
+  background: var(--paper-light);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  padding: 28px;
+}
+
+.cms-section-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.cms-sec-badge {
+  font-family: var(--fn-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--coral-text);
+  letter-spacing: 0.05em;
+}
+
+.cms-section-header h3 {
+  font-family: var(--fn-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 4px 0 0;
+  letter-spacing: -0.02em;
+}
+
+.cms-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.cms-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cms-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.cms-field label {
+  font-family: var(--fn-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.label-with-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-change-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--coral);
+  font-family: var(--fn-mono);
+  font-size: 0.7rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.add-change-btn:hover {
+  color: var(--coral-dark);
+}
+
+.cms-field input,
+.cms-field textarea,
+.cms-field select {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-family: var(--fn-body);
+  outline: none !important;
+  transition: box-shadow 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.cms-field input:focus,
+.cms-field textarea:focus,
+.cms-field select:focus {
+  border-color: var(--coral);
+  background: var(--paper-light);
+  box-shadow: 4px 4px 0 var(--coral);
+  outline: none !important;
+}
+
+.cms-save-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+

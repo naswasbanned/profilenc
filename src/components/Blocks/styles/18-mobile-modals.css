@@ -1,0 +1,167 @@
+/* ==========================================================================
+   18. PHONE MODALS & LIGHTBOXES
+
+   Every block overlay (gallery lightbox, journal reader, card zoom, timeline
+   zoom, video cinema) is sized for a desktop viewport. These rules give the
+   overlays full width, touch-sized controls, and room for the close button.
+
+   Note: the older rules in 13-mobile-responsive.css target
+   `.gallery-lightbox-modal` / `-content` / `-meta`, which the markup does not
+   use. The live class names are `-container`, `-stage`, `-image-wrap` and
+   `-footer`, handled below.
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+  /* --- Shared overlay chrome --- */
+  .gallery-lightbox-backdrop,
+  .timeline-lightbox-backdrop,
+  .video-lightbox-backdrop,
+  .image-zoom-backdrop,
+  .article-modal-backdrop {
+    padding: 8px;
+  }
+
+  .gallery-lightbox-close,
+  .timeline-lightbox-close,
+  .video-lightbox-close,
+  .image-zoom-close,
+  .article-modal-close-btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  /* --- Gallery lightbox --- */
+  .gallery-lightbox-container {
+    width: 100%;
+    max-width: none;
+    border-radius: 14px;
+  }
+
+  .gallery-lightbox-header {
+    padding: 10px 12px;
+  }
+
+  .gallery-lightbox-stage {
+    padding: 6px;
+  }
+
+  .gallery-lightbox-img {
+    max-height: 58vh;
+  }
+
+  .gallery-lightbox-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 13px calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .gallery-lightbox-title {
+    font-size: 1.1rem;
+  }
+
+  .gallery-lightbox-meta {
+    flex-wrap: wrap;
+    gap: 6px 12px;
+  }
+
+  .gallery-lightbox-link {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* --- Timeline image zoom --- */
+  .timeline-lightbox-dialog {
+    width: 100%;
+    max-width: none;
+  }
+
+  .timeline-lightbox-img {
+    max-height: 66vh;
+  }
+
+  /* --- Cards grid image zoom --- */
+  .image-zoom-dialog {
+    width: 100%;
+    max-width: none;
+  }
+
+  .image-zoom-img {
+    max-height: 66vh;
+  }
+
+  .image-zoom-caption {
+    font-size: 0.82rem;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* --- Video cinema --- */
+  .video-lightbox-cinema {
+    width: 100%;
+    max-width: none;
+    border-radius: 14px;
+  }
+
+  .video-lightbox-header,
+  .video-lightbox-footer {
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .video-lightbox-footer {
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .video-lightbox-caption {
+    font-size: 0.85rem;
+  }
+
+  /* --- Journal reader --- */
+  .article-modal {
+    width: 100%;
+    max-width: none;
+    max-height: 94vh;
+    border-radius: 14px;
+  }
+
+  .article-modal-header {
+    padding: 14px 14px 10px;
+  }
+
+  .article-modal-title {
+    font-size: 1.45rem;
+    line-height: 1.12;
+  }
+
+  .article-modal-meta {
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+
+  .article-modal-body {
+    padding: 14px 14px calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .journal-article-prose {
+    font-size: 1rem;
+  }
+
+  .journal-article-prose h2 {
+    font-size: 1.3rem;
+  }
+
+  .journal-article-prose h3 {
+    font-size: 1.12rem;
+  }
+
+  .journal-modal-cover-wrap {
+    max-height: 200px;
+  }
+
+  .journal-toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}

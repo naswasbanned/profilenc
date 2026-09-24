@@ -1,0 +1,97 @@
+/* --- Buttons --- */
+.admin-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--coral);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  color: #191524;
+  font-family: var(--fn-mono);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  transition: all 120ms ease;
+}
+
+.admin-btn-primary:hover:not(:disabled) {
+  background: var(--butter);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-btn-primary:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--line);
+}
+
+.admin-btn-primary.big {
+  padding: 14px 28px;
+  font-size: 0.88rem;
+}
+
+.admin-btn-primary.success {
+  background: var(--mint);
+  color: #191524;
+}
+
+.admin-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--paper-light);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-family: var(--fn-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  transition: all 120ms ease;
+}
+
+.admin-btn-secondary:hover {
+  background: var(--paper-elevated);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-btn-secondary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--line);
+}
+
+.admin-btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--coral-dark);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  color: #ffffff;
+  font-family: var(--fn-mono);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: all 120ms ease;
+}
+
+.admin-btn-danger:hover {
+  background: #c54836;
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-btn-danger:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--line);
+}
+

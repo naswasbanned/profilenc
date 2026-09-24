@@ -1,0 +1,75 @@
+/* ==========================================================================
+   7. FLOATING UNSAVED CHANGES TOAST
+   ========================================================================== */
+
+.editor-unsaved-banner {
+  position: fixed;
+  top: 66px;
+  right: 20px;
+  left: auto;
+  transform: none;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--fn-editor-paper-light);
+  border: 2px solid var(--fn-editor-ink);
+  border-radius: 999px;
+  box-shadow: var(--fn-editor-shadow-sm);
+  max-width: 90vw;
+  box-sizing: border-box;
+}
+
+.editor-unsaved-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.editor-unsaved-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--fn-editor-coral);
+  border: 2px solid var(--fn-editor-ink);
+  box-shadow: 0 0 8px var(--fn-editor-coral);
+  flex-shrink: 0;
+}
+
+.editor-unsaved-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.editor-unsaved-text strong {
+  color: var(--fn-editor-ink);
+  font-family: var(--fn-editor-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.editor-unsaved-text span {
+  color: var(--fn-editor-muted);
+  font-size: 0.72rem;
+}
+
+.editor-unsaved-dismiss {
+  background: none;
+  border: none;
+  color: var(--fn-editor-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.editor-unsaved-dismiss:hover {
+  color: var(--fn-editor-ink);
+  transform: scale(1.1);
+}
+

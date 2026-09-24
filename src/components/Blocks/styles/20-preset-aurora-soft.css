@@ -1,0 +1,188 @@
+/* ==========================================================================
+   PRESET: AURORA SOFT
+
+   Borderless cloud cards, depth from diffuse shadow, generous radii. Colours,
+   fonts and shadow values come from the profile tokens, so everything here is
+   structure: what the preset removes (borders, hard edges) and what it adds
+   (soft lift on hover, tinted parts).
+
+   Ships with three part styles that can also be mixed into other presets:
+   `soft-cloud` pills, `soft-raised` buttons, `soft-tint` icons.
+   ========================================================================== */
+
+/* --- Surfaces ----------------------------------------------------------- */
+
+[data-design-style="aurora-soft"] .card-item,
+[data-design-style="aurora-soft"] .service-card,
+[data-design-style="aurora-soft"] .spec-card,
+[data-design-style="aurora-soft"] .review-card,
+[data-design-style="aurora-soft"] .journal-entry-card,
+[data-design-style="aurora-soft"] .event-card,
+[data-design-style="aurora-soft"] .gallery-card,
+[data-design-style="aurora-soft"] .video-card,
+[data-design-style="aurora-soft"] .timeline-card,
+[data-design-style="aurora-soft"] .music-player-block,
+[data-design-style="aurora-soft"] .github-heatmap-block,
+[data-design-style="aurora-soft"] .milestones-block {
+  border: none;
+  border-radius: var(--card-border-radius, 24px);
+  box-shadow: var(--card-shadow, 0 14px 30px rgba(47, 43, 58, 0.12));
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+[data-design-style="aurora-soft"] .card-item:hover,
+[data-design-style="aurora-soft"] .service-card:hover,
+[data-design-style="aurora-soft"] .review-card:hover,
+[data-design-style="aurora-soft"] .journal-entry-card:hover,
+[data-design-style="aurora-soft"] .event-card:hover,
+[data-design-style="aurora-soft"] .gallery-card:hover,
+[data-design-style="aurora-soft"] .video-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--card-shadow-hover, 0 20px 44px rgba(47, 43, 58, 0.18));
+}
+
+/* Media corners follow the card, with no border seam between them */
+[data-design-style="aurora-soft"] .card-media,
+[data-design-style="aurora-soft"] .review-media,
+[data-design-style="aurora-soft"] .journal-entry-cover-wrap,
+[data-design-style="aurora-soft"] .gallery-media {
+  border: none;
+  border-radius: calc(var(--card-border-radius, 24px) - 6px);
+  overflow: hidden;
+}
+
+/* Section dividers are dropped: spacing carries the rhythm instead */
+[data-design-style="aurora-soft"] .block-header {
+  border-bottom: none;
+  padding-bottom: 6px;
+}
+
+/* --- Photo deck --------------------------------------------------------- */
+
+[data-design-style="aurora-soft"] .deck-main-card {
+  border: none;
+  border-radius: var(--card-border-radius, 24px);
+  box-shadow: var(--card-shadow, 0 14px 30px rgba(47, 43, 58, 0.12));
+}
+
+[data-design-style="aurora-soft"] .deck-layer {
+  border: none;
+  border-radius: var(--card-border-radius, 24px);
+  box-shadow: 0 8px 20px rgba(47, 43, 58, 0.1);
+  background: var(--card-bg, #ffffff);
+}
+
+/* --- Tab navigation ----------------------------------------------------- */
+
+[data-design-style="aurora-soft"] .profile-tabs-nav {
+  border-bottom: none;
+  backdrop-filter: blur(var(--glass-blur, 6px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 6px));
+}
+
+[data-design-style="aurora-soft"] .profile-tab-btn {
+  border: none;
+  border-radius: 999px;
+  box-shadow: none;
+}
+
+[data-design-style="aurora-soft"] .profile-tab-btn.active {
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--accent-color, #f472b6) 38%, transparent);
+}
+
+/* ==========================================================================
+   PART STYLE: SOFT CLOUD PILLS
+   ========================================================================== */
+
+[data-pill-style="soft-cloud"] .skill-pill,
+[data-pill-style="soft-cloud"] .card-tag,
+[data-pill-style="soft-cloud"] .card-badge,
+[data-pill-style="soft-cloud"] .timeline-tag,
+[data-pill-style="soft-cloud"] .event-tag,
+[data-pill-style="soft-cloud"] .service-status-pill,
+[data-pill-style="soft-cloud"] .service-featured-pill,
+[data-pill-style="soft-cloud"] .service-delivery-pill {
+  border: none;
+  border-radius: 999px;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--pill-color, var(--accent-color, #f472b6)) 14%, transparent);
+  color: var(--card-text-color, #2f2b3a);
+  font-weight: 600;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+[data-pill-style="soft-cloud"] .skill-pill:hover,
+[data-pill-style="soft-cloud"] .card-tag:hover,
+[data-pill-style="soft-cloud"] .timeline-tag:hover {
+  background: color-mix(in srgb, var(--pill-color, var(--accent-color, #f472b6)) 26%, transparent);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   PART STYLE: SOFT RAISED BUTTONS
+   ========================================================================== */
+
+[data-button-style="soft-raised"] .hero-btn,
+[data-button-style="soft-raised"] .hero-social-link,
+[data-button-style="soft-raised"] .service-cta-btn,
+[data-button-style="soft-raised"] .event-btn-cta,
+[data-button-style="soft-raised"] .card-action-btn,
+[data-button-style="soft-raised"] .journal-quick-add-btn,
+[data-button-style="soft-raised"] .journal-card-btn,
+[data-button-style="soft-raised"] .journal-read-btn,
+[data-button-style="soft-raised"] .review-link-btn {
+  border: none !important;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(47, 43, 58, 0.14) !important;
+  font-weight: 600 !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+[data-button-style="soft-raised"] .hero-btn.primary {
+  background: var(--btn-primary-bg, #221f2d);
+  color: var(--btn-primary-text, #ffffff);
+}
+
+[data-button-style="soft-raised"] .hero-btn.secondary {
+  background: var(--card-bg, #ffffff);
+  color: var(--heading-color, #221f2d);
+}
+
+[data-button-style="soft-raised"] .hero-btn:hover,
+[data-button-style="soft-raised"] .hero-social-link:hover,
+[data-button-style="soft-raised"] .service-cta-btn:hover,
+[data-button-style="soft-raised"] .event-btn-cta:hover,
+[data-button-style="soft-raised"] .card-action-btn:hover,
+[data-button-style="soft-raised"] .journal-read-btn:hover,
+[data-button-style="soft-raised"] .review-link-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 26px rgba(47, 43, 58, 0.2) !important;
+}
+
+[data-button-style="soft-raised"] .hero-btn:active,
+[data-button-style="soft-raised"] .hero-social-link:active,
+[data-button-style="soft-raised"] .service-cta-btn:active,
+[data-button-style="soft-raised"] .card-action-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 5px 12px rgba(47, 43, 58, 0.16) !important;
+}
+
+/* ==========================================================================
+   PART STYLE: SOFT TINT ICONS
+   ========================================================================== */
+
+[data-icon-style="soft-tint"] .block-title-icon {
+  border: none;
+  border-radius: 50%;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--accent-color, #f472b6) 16%, transparent);
+  color: var(--accent-color, #f472b6);
+}
+
+[data-icon-style="soft-tint"] .spec-icon {
+  border: none;
+  border-radius: 50%;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--accent-color, #f472b6) 14%, transparent);
+}

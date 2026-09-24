@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
+import EditorModal from '../primitives/EditorModal';
 import {
   X,
   Layers,
@@ -238,6 +238,8 @@ const BLOCK_PRESETS = [
     defaultTitle: 'Photo Highlights',
     defaultData: {
       caption: 'Gallery Stack',
+      aspectRatio: 'landscape',
+      size: 'medium',
       images: [
         '/images/projects/template.png',
         '/images/projects/advance-quiz-platform.png',
@@ -469,22 +471,9 @@ export default function AddBlockModal({ onAddBlock, onClose, editorTheme = 'dark
     onClose();
   };
 
-  const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(onClose);
 
   return (
-    <div className="editor-modal-backdrop" data-editor-theme={editorTheme} onClick={handleBackdropClick}>
-      {hintVisible && (
-        <div className="modal-double-click-hint">
-          <span>Click once more outside to close (or use ✕)</span>
-        </div>
-      )}
-      <motion.div
-        className="editor-modal-dialog modal-md"
-        initial={{ opacity: 0, scale: 0.95, y: 15 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 15 }}
-        onClick={(e) => e.stopPropagation()}
-      >
+    <EditorModal onClose={onClose} editorTheme={editorTheme} size="modal-md">
         <div className="editor-modal-header">
           <div>
             <h3>Block Library</h3>
@@ -523,7 +512,6 @@ export default function AddBlockModal({ onAddBlock, onClose, editorTheme = 'dark
             </motion.div>
           ))}
         </div>
-      </motion.div>
-    </div>
+    </EditorModal>
   );
 }

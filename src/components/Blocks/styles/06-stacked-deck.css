@@ -1,0 +1,269 @@
+/* ==========================================================================
+   5. STACKED MEDIA DECK BLOCK
+   ========================================================================== */
+.stacked-deck-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+.deck-container {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 16/10;
+  cursor: pointer;
+}
+
+.deck-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: var(--card-bg, var(--color-surface-raised));
+  border: 1px solid var(--card-border, var(--color-border-subtle));
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal);
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
+}
+
+.deck-layer.layer-back {
+  transform: rotate(-3deg) scale(0.96) translateY(8px);
+  opacity: 0.6;
+}
+
+.deck-layer.layer-mid {
+  transform: rotate(2deg) scale(0.98) translateY(4px);
+  opacity: 0.85;
+}
+
+.deck-main-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--card-border-radius, var(--radius-md, 12px));
+  overflow: hidden;
+  border: var(--card-border-width, 1px) var(--card-border-style, solid) var(--card-border, var(--color-border-normal));
+  box-shadow: var(--card-shadow, var(--shadow-lg));
+  background: var(--card-bg, var(--color-surface-sunken));
+}
+
+[data-design-style="field-notes"] .deck-main-card {
+  border-width: var(--card-border-width, 2px);
+  border-color: var(--card-border, #d7ccb8);
+  box-shadow: var(--card-shadow, 4px 5px 0 rgba(37, 35, 32, 0.22));
+}
+
+[data-design-style="field-notes"] .deck-layer {
+  border-width: var(--card-border-width, 2px);
+  border-color: var(--card-border, #d7ccb8);
+  box-shadow: 3px 4px 0 rgba(37, 35, 32, 0.18);
+  background: var(--card-bg, #fffaf0);
+}
+
+[data-design-style="neo-brutalist"] .deck-main-card {
+  border: 3px solid #000000 !important;
+  box-shadow: 6px 6px 0 #000000 !important;
+  border-radius: 0 !important;
+}
+
+[data-design-style="neo-brutalist"] .deck-layer {
+  border: 3px solid #000000 !important;
+  box-shadow: 4px 4px 0 #000000 !important;
+  border-radius: 0 !important;
+  background: #ffffff !important;
+}
+
+[data-design-style="midnight-violet"] .deck-main-card {
+  border-radius: var(--card-border-radius, 16px);
+  box-shadow: var(--card-shadow, 0 8px 30px rgba(0, 0, 0, 0.45));
+  border-color: var(--card-border, rgba(139, 92, 246, 0.2));
+}
+
+[data-design-style="midnight-violet"] .deck-layer {
+  border-radius: var(--card-border-radius, 16px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border-color: rgba(139, 92, 246, 0.15);
+}
+
+.deck-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.deck-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: var(--radius-xs, 6px);
+  background: var(--card-bg, rgba(9, 10, 15, 0.85));
+  border: var(--card-border-width, 1px) var(--card-border-style, solid) var(--card-border, rgba(255, 255, 255, 0.15));
+  font-size: var(--text-2xs, 0.72rem);
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--card-text-color, #fff);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 5;
+}
+
+[data-design-style="field-notes"] .deck-badge {
+  background: var(--card-bg, #fffaf0);
+  color: var(--card-border, #252320);
+  border: var(--card-border-width, 1.5px) solid var(--card-border, #252320);
+  box-shadow: 2px 2px 0 var(--card-border, #252320);
+  border-radius: var(--radius-xs, 6px);
+}
+
+[data-design-style="neo-brutalist"] .deck-badge {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 2px 2px 0 #000000 !important;
+  border-radius: 0 !important;
+}
+
+[data-design-style="midnight-violet"] .deck-badge {
+  background: rgba(26, 16, 48, 0.85);
+  color: #e9d5ff;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+}
+
+.deck-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 5;
+}
+
+.deck-nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--button-border-radius, var(--radius-xs, 6px));
+  background: var(--card-bg, rgba(9, 10, 15, 0.82));
+  border: var(--card-border-width, 1px) var(--card-border-style, solid) var(--card-border, rgba(255, 255, 255, 0.18));
+  color: var(--card-text-color, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.deck-nav-btn:hover {
+  transform: translateY(-2px);
+  background: var(--color-accent-primary);
+  color: #090a0f;
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--color-accent-primary) 40%, transparent);
+}
+
+.deck-nav-btn:active {
+  transform: translateY(0);
+}
+
+/* Preset Overrides for Photo Highlight Nav Buttons */
+[data-design-style="field-notes"] .deck-nav-btn,
+[data-button-style="editorial-tactile"] .deck-nav-btn {
+  background: var(--card-bg, #fffaf0);
+  color: var(--card-border, #252320);
+  border: var(--card-border-width, 1.5px) solid var(--card-border, #252320);
+  box-shadow: 2px 2px 0 var(--card-border, #252320);
+  border-radius: var(--radius-xs, 6px);
+}
+
+[data-design-style="field-notes"] .deck-nav-btn:hover,
+[data-button-style="editorial-tactile"] .deck-nav-btn:hover {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 3.5px 3.5px 0 var(--card-border, #252320);
+  background: color-mix(in srgb, var(--color-accent-primary, #e96d52) 15%, var(--card-bg, #fffaf0));
+  color: var(--color-accent-primary, #e96d52);
+  border-color: var(--card-border, #252320);
+}
+
+[data-design-style="field-notes"] .deck-nav-btn:active,
+[data-button-style="editorial-tactile"] .deck-nav-btn:active {
+  transform: translate(0, 0);
+  box-shadow: 1px 1px 0 var(--card-border, #252320);
+}
+
+[data-design-style="neo-brutalist"] .deck-nav-btn,
+[data-button-style="neo-brutalist"] .deck-nav-btn {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 3px 3px 0 #000000 !important;
+  border-radius: 0 !important;
+}
+
+[data-design-style="neo-brutalist"] .deck-nav-btn:hover,
+[data-button-style="neo-brutalist"] .deck-nav-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 #000000 !important;
+  background: #ffeb3b !important;
+  color: #000000 !important;
+}
+
+[data-design-style="neo-brutalist"] .deck-nav-btn:active,
+[data-button-style="neo-brutalist"] .deck-nav-btn:active {
+  transform: translate(0, 0);
+  box-shadow: 1px 1px 0 #000000 !important;
+}
+
+[data-design-style="midnight-violet"] .deck-nav-btn,
+[data-button-style="rounded-glow"] .deck-nav-btn {
+  background: rgba(26, 16, 48, 0.85);
+  color: #e9d5ff;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 50%;
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25);
+}
+
+[data-design-style="midnight-violet"] .deck-nav-btn:hover,
+[data-button-style="rounded-glow"] .deck-nav-btn:hover {
+  transform: translateY(-2px) scale(1.08);
+  background: var(--color-accent-primary, #a78bfa);
+  color: #0f0a1c;
+  box-shadow: 0 0 18px rgba(167, 139, 250, 0.55);
+  border-color: rgba(167, 139, 250, 0.8);
+}
+
+[data-design-style="midnight-violet"] .deck-nav-btn:active,
+[data-button-style="rounded-glow"] .deck-nav-btn:active {
+  transform: translateY(0) scale(1);
+}
+
+
+/* --- Deck shape and size ------------------------------------------------
+   The ratio and max width come from the block data as inline styles, so these
+   rules only handle what inline styles cannot: phones always take the full
+   width, and a full-width deck drops its own cap. */
+
+.deck-container[data-deck-size="full"] {
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .deck-container {
+    max-width: 100% !important;
+  }
+
+  /* Very tall shapes get cramped on a narrow screen */
+  .deck-container[data-deck-ratio="portrait"] {
+    aspect-ratio: 4 / 5;
+  }
+}

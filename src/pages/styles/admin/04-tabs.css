@@ -1,0 +1,78 @@
+/* --- Tab Navigation (Field Notes Tactile Pill Segmented Control) --- */
+.admin-tab-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 2px;
+}
+
+.admin-tab-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  background: var(--paper-light);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-family: var(--fn-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 2px 2px 0 var(--line);
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.admin-tab-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--line);
+  color: var(--ink);
+  background: var(--paper-elevated);
+}
+
+.admin-tab-btn.active {
+  background: var(--butter);
+  color: #191524;
+  border-color: var(--line);
+  box-shadow: 3px 3px 0 var(--line);
+  font-weight: 800;
+}
+
+.tab-count {
+  padding: 1px 7px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.admin-tab-btn.active .tab-count {
+  background: #191524;
+  color: var(--butter);
+  border-color: #191524;
+}
+
+.tab-count.highlight {
+  background: var(--coral);
+  color: #191524;
+  border-color: var(--line);
+  font-weight: 800;
+  animation: pulseHighlight 2s infinite ease-in-out;
+}
+
+@keyframes pulseHighlight {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.06); }
+}
+

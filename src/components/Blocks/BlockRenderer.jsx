@@ -45,6 +45,7 @@ import VideoGalleryBlock from './VideoGalleryBlock';
 import GitHubHeatmapBlock from './GitHubHeatmapBlock';
 import MusicPlayerBlock from './MusicPlayerBlock';
 import MilestonesBlock from './MilestonesBlock';
+import { getIcon, isIconDisabled } from '../../lib/icons';
 import './Blocks.css';
 
 const blockComponentMap = {
@@ -91,40 +92,13 @@ const blockIconMap = {
   milestones: Star,
 };
 
-const iconLibrary = {
-  Sparkles,
-  Code2,
-  Briefcase,
-  Layers,
-  Cpu,
-  Gamepad2,
-  BookOpen,
-  Film,
-  Music,
-  Video,
-  Play,
-  Star,
-  Heart,
-  Zap,
-  Globe,
-  Award,
-  Terminal,
-  Folder,
-  Coffee,
-  Shield,
-  Activity,
-  Flame,
-  Rocket,
-  User,
-};
-
 function renderBlockIcon(iconName, blockType) {
-  if (iconName === 'none' || iconName === false || iconName === 'text-only') {
+  if (isIconDisabled(iconName)) {
     return null;
   }
-  if (iconName && iconLibrary[iconName]) {
-    const IconComponent = iconLibrary[iconName];
-    return <IconComponent size={18} />;
+  const LibraryIcon = iconName ? getIcon(iconName) : null;
+  if (LibraryIcon) {
+    return <LibraryIcon size={18} />;
   }
   const DefaultIcon = blockIconMap[blockType] || Sparkles;
   return <DefaultIcon size={18} />;
@@ -144,6 +118,9 @@ export default function BlockRenderer({
   onMoveBlock,
   onDeleteBlock,
   onUpdateBlock,
+  // Skip the scroll reveal: used by the editor preview, where the block sits in
+  // a small pane and must be visible immediately.
+  disableReveal = false,
 }) {
   if (!block || block.hidden) return null;
 
@@ -166,9 +143,10 @@ export default function BlockRenderer({
     <motion.section
       className={`block-wrapper ${isEditing ? 'is-editing' : ''}`}
       variants={blockVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-60px' }}
+      initial={disableReveal ? 'visible' : 'hidden'}
+      {...(disableReveal
+        ? {}
+        : { whileInView: 'visible', viewport: { once: true, margin: '-60px' } })}
     >
       {/* Editor Controls Bar (when in edit mode) */}
       {isEditing && (

@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import './AuthPages.css';
+import { useUiTheme } from '../hooks/useUiTheme';
 
 const TEMPLATE_OPTIONS = [
   { slug: 'developer', name: 'Developer', icon: <Code2 size={20} />, color: 'var(--mint)', desc: 'Code stack, work experience & repositories' },
@@ -43,61 +44,12 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [usernameStatus, setUsernameStatus] = useState(null); // null, 'checking', 'available', 'taken'
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('profilenc_theme') || 'dark';
-    }
-    return 'dark';
-  });
+  const { theme, toggleTheme } = useUiTheme();
 
   useEffect(() => {
     document.title = 'Profilenc — Create Account';
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
+  }, []);
 
-  const toggleTheme = (e) => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-
-    if (!document.startViewTransition) {
-      setTheme(nextTheme);
-      localStorage.setItem('profilenc_theme', nextTheme);
-      document.documentElement.setAttribute('data-theme', nextTheme);
-      return;
-    }
-
-    const rect = e?.currentTarget?.getBoundingClientRect();
-    const x = rect ? rect.left + rect.width / 2 : window.innerWidth;
-    const y = rect ? rect.top + rect.height / 2 : 0;
-
-    const maxDist = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    );
-    const endRadius = Math.ceil(maxDist) + 40;
-
-    const transition = document.startViewTransition(() => {
-      setTheme(nextTheme);
-      localStorage.setItem('profilenc_theme', nextTheme);
-      document.documentElement.setAttribute('data-theme', nextTheme);
-    });
-
-    transition.ready.then(() => {
-      document.documentElement.animate(
-        {
-          clipPath: [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${endRadius}px at ${x}px ${y}px)`,
-          ],
-        },
-        {
-          duration: 650,
-          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-          fill: 'forwards',
-          pseudoElement: '::view-transition-new(root)',
-        }
-      );
-    });
-  };
 
   // Debounced username check
   useEffect(() => {

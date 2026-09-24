@@ -1,4 +1,4 @@
-import { GearIcon } from '../../utils/gearIconUtils';
+import { GearIcon } from '../../lib/gearIconUtils';
 
 export default function SpecsGridBlock({ data = {} }) {
   const { items = [] } = data;

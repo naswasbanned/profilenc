@@ -1,8 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
+import { apiJson } from '../lib/api';
 
 const ThemeContext = createContext(null);
-
-const API_BASE = import.meta.env.VITE_API_URL || '';
 
 // Default theme values — aligned with Technical Obsidian design system (legacy / fallback)
 const DEFAULT_THEME = {
@@ -455,19 +454,12 @@ export function ThemeProvider({ children, username, initialTheme }) {
   const saveTheme = useCallback(async (token) => {
     if (!username || !token) return;
 
-    const res = await fetch(`${API_BASE}/api/u/${username}/theme`, {
+    await apiJson(`/api/u/${username}/theme`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(theme),
+      token,
+      body: theme,
+      errorMessage: 'Failed to save theme',
     });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to save theme');
-    }
 
     setIsDirty(false);
   }, [username, theme]);

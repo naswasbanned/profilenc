@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react';
-import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -21,7 +20,7 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
+import EditorModal from '../primitives/EditorModal';
 import ImageUploadPicker from './ImageUploadPicker';
 import './Editor.css';
 
@@ -231,15 +230,6 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged, edito
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeTab, isProfileDirty, savingProfile, isSecurityDirty, savingPassword]);
 
-  // Lock body scroll while modal is mounted
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
-
   // Close modal on Escape key
   useEffect(() => {
     const handleEsc = (e) => {
@@ -249,38 +239,24 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged, edito
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
-  const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(onClose);
-
-  const modalContent = (
-    <motion.div
-      className="editor-modal-backdrop"
-      data-editor-theme={currentEditorTheme}
-      onClick={handleBackdropClick}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.18 }}
-    >
-      {hintVisible && (
-        <div className="modal-double-click-hint">
-          <span>Click once more outside to close (or use ✕)</span>
-        </div>
-      )}
-      <motion.div
-        layout
-        className="editor-modal-dialog account-settings-modal"
-        initial={{ opacity: 0, scale: 0.95, y: 15 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 15 }}
-        transition={{
+  return (
+    <EditorModal
+      onClose={onClose}
+      editorTheme={currentEditorTheme}
+      dialogClassName="account-settings-modal"
+      dialogStyle={{ borderRadius: 18 }}
+      fadeBackdrop
+      portal
+      dialogMotionProps={{
+        layout: true,
+        transition: {
           layout: { duration: 0.32, ease: [0.16, 1, 0.3, 1] },
           opacity: { duration: 0.2, ease: 'easeOut' },
           scale: { duration: 0.2, ease: 'easeOut' },
           y: { duration: 0.2, ease: 'easeOut' },
-        }}
-        style={{ borderRadius: 18 }}
-        onClick={(e) => e.stopPropagation()}
-      >
+        },
+      }}
+    >
         {/* Header */}
         <motion.div layout="position" className="editor-modal-header account-modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -349,7 +325,7 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged, edito
         </motion.div>
 
         {/* Modal Body */}
-        <motion.div layout className="editor-modal-body" style={{ padding: '20px', flex: 1, overflowY: 'auto' }}>
+        <motion.div layout className="editor-modal-body" style={{ padding: '20px', flex: 1, minHeight: 0, overflowY: 'auto' }}>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={activeTab}
@@ -973,11 +949,6 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged, edito
             </button>
           </div>
         </motion.div>
-      </motion.div>
-    </motion.div>
+    </EditorModal>
   );
-
-  return typeof document !== 'undefined'
-    ? createPortal(modalContent, document.body)
-    : modalContent;
 }

@@ -1,0 +1,43 @@
+/* ==========================================================================
+   4. ADD BLOCK MODAL (Block Library Cards)
+   ========================================================================== */
+
+.add-block-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+
+.add-block-card {
+  padding: 20px;
+  border-radius: 14px;
+  background: var(--fn-editor-paper-light);
+  border: 2px solid var(--fn-editor-line);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.add-block-card:hover {
+  border-color: var(--fn-editor-ink);
+  transform: translate(-3px, -3px) !important;
+  box-shadow: var(--fn-editor-shadow-sm);
+}
+
+.add-block-card h4 {
+  font-family: var(--fn-editor-display) !important;
+  font-size: 1.02rem !important;
+  font-weight: 700 !important;
+  color: var(--fn-editor-ink) !important;
+  margin: 0;
+}
+
+.add-block-card p {
+  font-family: var(--fn-editor-body);
+  font-size: 0.82rem;
+  color: var(--fn-editor-muted) !important;
+  line-height: 1.5;
+}
+

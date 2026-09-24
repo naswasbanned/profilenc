@@ -1,0 +1,214 @@
+/* ==========================================================================
+   14. PHONE REFINEMENTS
+
+   The admin kernel is a dense desktop tool: a nine column users table, tab
+   strip, stat grid and wide modals. On a phone the table becomes a stack of
+   labelled cards, modals use the full width, and the header plus tab strip give
+   way to the MobileDock.
+   ========================================================================== */
+
+/* --- Navigation handover: the MobileDock replaces the header and tab strip.
+       See src/components/primitives/MobileDock.css --- */
+@media (max-width: 768px) {
+  .admin-header,
+  .admin-tab-nav {
+    display: none;
+  }
+
+  .admin-page {
+    padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .admin-main {
+    padding-top: 18px;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-main {
+    padding: 18px 12px 40px;
+  }
+
+  /* --- Stats --- */
+  .admin-stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .admin-stat-box {
+    padding: 12px 13px;
+  }
+
+  /* --- Toolbars --- */
+  .content-toolbar {
+    gap: 10px;
+  }
+
+  .content-toolbar .admin-btn-primary,
+  .content-toolbar .admin-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* --- Users table becomes labelled cards --- */
+  .admin-table-responsive {
+    overflow-x: visible;
+    border: none;
+    box-shadow: none;
+    background: none;
+  }
+
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table,
+  .admin-table tbody,
+  .admin-table tr,
+  .admin-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-table tr {
+    margin-bottom: 12px;
+    padding: 6px 10px;
+    border: 2px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper-light);
+    box-shadow: var(--shadow);
+  }
+
+  .admin-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 9px 2px;
+    border-bottom: 1px dashed var(--table-cell-border);
+  }
+
+  .admin-table tr td:last-child,
+  .admin-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* The header text moves into each row as a label */
+  .admin-table td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    font-family: var(--fn-mono);
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--table-cell-muted);
+  }
+
+  /* The identity cell reads better as a full-width header row */
+  .admin-table td[data-label="User"] {
+    padding-top: 6px;
+  }
+
+  .admin-table td[data-label="User"]::before {
+    display: none;
+  }
+
+  .admin-table td[data-label="Email"] .monospace-cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 58vw;
+    white-space: nowrap;
+  }
+
+  /* --- Patch notes + suggestions cards --- */
+  .admin-patch-card,
+  .admin-sug-card {
+    padding: 14px 13px;
+  }
+
+  .patch-card-top,
+  .patch-card-actions,
+  .sug-card-top,
+  .sug-card-footer,
+  .sug-badge-group,
+  .sug-meta-right {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .patch-card-version-wrap {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .patch-item-edit-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .patch-item-edit-row input,
+  .patch-item-edit-row select {
+    flex: 1 1 100%;
+  }
+
+  /* --- Filters --- */
+  .filter-group {
+    width: 100%;
+  }
+
+  .filter-pills {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  /* --- CMS form --- */
+  .cms-section-card {
+    padding: 16px 13px;
+  }
+
+  .cms-save-toolbar {
+    justify-content: stretch;
+  }
+
+  .cms-save-toolbar .admin-btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* --- Modals --- */
+  .admin-modal-overlay {
+    padding: 12px 10px;
+    align-items: flex-end;
+  }
+
+  .admin-modal-box {
+    padding: 18px 15px calc(18px + env(safe-area-inset-bottom, 0px));
+    max-width: none;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .modal-actions > * {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  /* 16px inputs stop iOS from zooming on focus */
+  .cms-field input,
+  .cms-field textarea,
+  .admin-modal-box input,
+  .admin-modal-box textarea,
+  .admin-modal-box select,
+  .toolbar-search input,
+  .filter-search-box input {
+    min-height: 44px;
+    font-size: 1rem;
+  }
+}

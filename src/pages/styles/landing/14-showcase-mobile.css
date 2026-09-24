@@ -1,0 +1,141 @@
+/* ==========================================================================
+   SHOWCASE — SMALL SCREEN TUNING
+
+   The 3D scroll card holds a full profile preview inside a viewport-height
+   sticky frame. Desktop paddings leave almost no room for content on a phone,
+   so everything inside the frame is tightened here. Layout only: colors and
+   type styles stay with the base rules. The 768px cut matches the `isMobile`
+   check inside ContainerScroll, so JS scaling and CSS spacing switch together.
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+  /* --- Section header above the card --- */
+  .fn-showcase-static-header {
+    padding: 44px 0 14px;
+  }
+
+  .fn-showcase-title {
+    font-size: 1.55rem;
+  }
+
+  .fn-showcase-subtitle {
+    font-size: 0.8rem;
+  }
+
+  /* --- Browser chrome: dots + URL only, badge has no room --- */
+  .fn-browser-chrome {
+    gap: 8px;
+    padding: 7px 11px;
+  }
+
+  .fn-browser-dots {
+    gap: 5px;
+  }
+
+  .fn-dot {
+    width: 9px;
+    height: 9px;
+  }
+
+  .fn-browser-url-bar {
+    flex: 1;
+    min-width: 0;
+    padding: 3px 10px;
+    font-size: 0.62rem;
+  }
+
+  .fn-url-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .fn-browser-badge {
+    display: none;
+  }
+
+  /* --- Preview viewport --- */
+  .fn-browser-body {
+    padding: 13px 12px;
+    height: clamp(320px, 52vh, 440px);
+  }
+
+  .fn-specimen-scroll-track {
+    padding-bottom: 20px;
+  }
+
+  /* --- Specimen shell --- */
+  .fn-specimen-head {
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    padding: 9px 12px;
+    font-size: 0.6rem;
+  }
+
+  .fn-specimen-body {
+    padding: 18px 14px;
+    gap: 20px;
+  }
+
+  .fn-specimen-name {
+    font-size: 1.5rem;
+  }
+
+  .fn-specimen-handle {
+    font-size: 0.74rem;
+  }
+
+  /* --- Preview blocks --- */
+  .fn-preview-block {
+    padding: 15px 14px;
+  }
+
+  .fn-preview-block-header {
+    gap: 9px;
+    margin-bottom: 13px;
+    padding-bottom: 9px;
+  }
+
+  .fn-preview-block-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .fn-preview-block-title {
+    font-size: 0.95rem;
+  }
+
+  .fn-preview-hero {
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+  }
+
+  .fn-preview-hero-top {
+    gap: 12px;
+  }
+
+  .fn-preview-avatar {
+    width: 42px;
+    height: 42px;
+    font-size: 0.95rem;
+  }
+
+  .fn-preview-journal-card {
+    padding: 13px 14px;
+  }
+
+  .fn-journal-meta {
+    font-size: 0.6rem;
+  }
+
+  /* 14 columns need a smaller gutter to stay inside a phone viewport */
+  .fn-preview-heatmap-matrix {
+    gap: 3px;
+  }
+
+  .fn-heatmap-cell {
+    height: 13px;
+    border-radius: 3px;
+  }
+}

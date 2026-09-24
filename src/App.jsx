@@ -7,7 +7,7 @@ import DashboardPage from './pages/DashboardPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import EditorPage from './pages/EditorPage';
-import './App.css';
+import './styles/app.css';
 
 function App() {
   return (

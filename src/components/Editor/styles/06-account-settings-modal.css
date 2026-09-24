@@ -1,0 +1,126 @@
+/* ==========================================================================
+   6. ACCOUNT & PROFILE SETTINGS MODAL
+   ========================================================================== */
+
+.account-settings-modal {
+  max-width: 640px;
+  width: 92vw;
+  display: flex;
+  flex-direction: column;
+  max-height: 88vh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.account-modal-header {
+  padding: 18px 24px;
+}
+
+.account-tabs-nav-wrapper {
+  padding: 12px 20px 0;
+  background: var(--fn-editor-paper-light);
+  border-bottom: 2px solid var(--fn-editor-line);
+}
+
+.account-tabs-nav {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--fn-editor-paper);
+  border: 2px solid var(--fn-editor-line);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.account-tabs-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.account-tab-btn {
+  flex: 1 0 auto;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: none;
+  border: 2px solid transparent;
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-body);
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 150ms ease;
+  text-align: center;
+}
+
+.account-tab-btn:hover {
+  color: var(--fn-editor-ink);
+}
+
+.account-tab-btn.active {
+  color: #110d1c !important;
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.account-avatar-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px;
+  background: var(--fn-editor-paper-light);
+  border-radius: 12px;
+  border: 2px solid var(--fn-editor-line);
+}
+
+.account-avatar-preview {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--fn-editor-paper);
+  border: 2px solid var(--fn-editor-ink);
+  box-shadow: var(--fn-editor-shadow-xs);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-toggle-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--fn-editor-paper-light);
+  border-radius: 10px;
+  border: 2px solid var(--fn-editor-line);
+  gap: 12px;
+}
+
+.account-modal-footer {
+  padding: 16px 24px;
+  border-top: 2px solid var(--fn-editor-line);
+  background: var(--fn-editor-paper-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.account-modal-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+

@@ -1,0 +1,188 @@
+/* ==========================================================================
+   9. PHONE REFINEMENTS
+
+   The editor keeps its full desktop chrome down to 768px, where the toolbar
+   and the floating dock start to run out of room. These rules trade labels for
+   icons, turn the dock into an even grid, and give every modal and form field
+   a touch-sized target.
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+  /* The bottom dock floats over the canvas, so the page reserves room for it */
+  .editor-page {
+    padding-top: 52px;
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* --- Top toolbar: identity + save, nothing else --- */
+  .editor-toolbar {
+    padding: 0 10px;
+    gap: 8px;
+  }
+
+  .editor-toolbar-left {
+    gap: 6px;
+    min-width: 0;
+  }
+
+  /* The dock carries navigation, so the wordmark is dropped here */
+  .editor-toolbar-left .editor-label {
+    display: none;
+  }
+
+  .editor-toolbar-right {
+    gap: 6px;
+  }
+
+  .editor-toolbar-right .editor-btn {
+    min-height: 36px;
+    padding: 0 9px;
+  }
+
+  .editor-user-profile-pill {
+    padding: 4px 8px 4px 4px;
+    max-width: 44vw;
+  }
+
+  .editor-user-handle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* --- Bottom dock: four equal touch targets, icon over label --- */
+  .editor-mobile-dock-wrap {
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    padding: 0 12px;
+  }
+
+  .editor-mobile-dock {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    width: min(420px, 100%);
+    padding: 7px 8px;
+    border-radius: 22px;
+  }
+
+  .editor-mobile-btn {
+    flex-direction: column;
+    gap: 3px;
+    min-height: 50px;
+    padding: 6px 2px;
+    border-radius: 15px;
+    font-family: var(--fn-editor-mono);
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.1;
+  }
+
+  /* --- Theme drawer --- */
+  .editor-panel {
+    border-left: none;
+  }
+
+  .theme-panel-content,
+  .editor-panel-body {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* --- Modals --- */
+  .editor-modal-backdrop {
+    padding: 10px 8px calc(14px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .editor-modal-dialog {
+    width: 100%;
+    max-width: none !important;
+    max-height: 92vh;
+  }
+
+  .editor-modal-header {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .editor-modal-header h3 {
+    font-size: 1.02rem;
+  }
+
+  .editor-modal-body {
+    padding: 14px 12px;
+  }
+
+  .editor-modal-footer {
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    gap: 8px;
+  }
+
+  .editor-modal-footer .editor-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* --- Form controls: 16px text stops iOS from zooming on focus --- */
+  .editor-text-input,
+  .editor-select,
+  .editor-modal-body textarea {
+    min-height: 44px;
+    font-size: 1rem;
+  }
+
+  .editor-modal-body textarea {
+    min-height: 96px;
+  }
+
+  .editor-icon-btn {
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .editor-item-card {
+    padding: 12px;
+  }
+
+  .editor-item-card-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .editor-subitem-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .editor-section-heading {
+    font-size: 0.82rem;
+  }
+
+}
+
+/* Very narrow phones: drop the remaining toolbar labels */
+@media (max-width: 430px) {
+  .editor-user-handle {
+    display: none;
+  }
+
+  .editor-btn-save span {
+    display: none;
+  }
+
+  .editor-mobile-btn {
+    font-size: 0.52rem;
+  }
+}
+
+/* Drag handles need a comfortable touch target on phones, and the rest of the
+   row must keep scrolling the list. */
+@media (max-width: 768px) {
+  .bf-row-grip {
+    width: 34px;
+    height: 40px;
+  }
+}

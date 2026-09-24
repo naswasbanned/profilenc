@@ -6,7 +6,7 @@ const pool = new pg.Pool({
 
 /**
  * Run a parameterised SQL query.
- * Usage: const { rows } = await query('SELECT * FROM content WHERE key = $1', ['profile']);
+ * Usage: const { rows } = await query('SELECT * FROM users WHERE username = $1', ['jane']);
  */
 export async function query(text, params) {
   return pool.query(text, params);

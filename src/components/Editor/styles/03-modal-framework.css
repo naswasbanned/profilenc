@@ -1,0 +1,447 @@
+/* ==========================================================================
+   3. RESPONSIVE MODAL FRAMEWORK (Field Notes Editorial System)
+   ========================================================================== */
+
+.editor-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  background: rgba(14, 11, 22, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+[data-theme="light"] .editor-modal-backdrop,
+[data-editor-theme="light"] .editor-modal-backdrop,
+.editor-modal-backdrop[data-editor-theme="light"] {
+  background: rgba(37, 35, 32, 0.6);
+}
+
+.editor-modal-dialog {
+  width: 100%;
+  background: var(--fn-editor-paper) !important;
+  border: 2px solid var(--fn-editor-line) !important;
+  border-radius: 18px !important;
+  box-shadow: var(--fn-editor-shadow, 6px 7px 0 #0c0914) !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 88vh;
+  box-sizing: border-box;
+  font-family: var(--fn-editor-body);
+  color: var(--fn-editor-ink);
+}
+
+.editor-modal-dialog.modal-lg {
+  max-width: 860px;
+}
+
+.editor-modal-dialog.modal-md {
+  max-width: 740px;
+}
+
+.editor-modal-dialog.modal-sm {
+  max-width: 580px;
+}
+
+.editor-modal-header {
+  padding: 18px 24px;
+  border-bottom: 2px solid var(--fn-editor-line) !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--fn-editor-paper-light) !important;
+  flex-shrink: 0;
+}
+
+.editor-modal-header h3 {
+  font-family: var(--fn-editor-display) !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em;
+  color: var(--fn-editor-ink) !important;
+  margin: 0;
+}
+
+.editor-modal-header p,
+.editor-modal-header span {
+  font-family: var(--fn-editor-body) !important;
+  font-size: 0.82rem !important;
+  color: var(--fn-editor-muted) !important;
+}
+
+.editor-modal-header button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50% !important;
+  border: 2px solid var(--fn-editor-line) !important;
+  background: var(--fn-editor-paper) !important;
+  color: var(--fn-editor-ink) !important;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+  padding: 0 !important;
+}
+
+.editor-modal-header button:hover {
+  border-color: var(--fn-editor-ink) !important;
+  background: var(--fn-editor-coral) !important;
+  color: var(--fn-editor-ink) !important;
+  transform: translate(-2px, -2px);
+  box-shadow: var(--fn-editor-shadow-xs);
+}
+
+.editor-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  /* min-height lets the flex child shrink so it scrolls itself, and
+     overscroll-behavior stops the page behind it from taking over */
+  min-height: 0;
+  overscroll-behavior: contain;
+  flex: 1;
+  box-sizing: border-box;
+  background: var(--fn-editor-paper);
+  color: var(--fn-editor-ink);
+}
+
+.editor-modal-footer {
+  padding: 16px 24px;
+  border-top: 2px solid var(--fn-editor-line) !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  background: var(--fn-editor-paper-light) !important;
+  flex-shrink: 0;
+}
+
+/* Ensure all labels and inputs in modals follow Field Notes styles */
+.editor-modal-dialog label {
+  color: var(--fn-editor-ink) !important;
+  font-family: var(--fn-editor-body);
+  font-weight: 700;
+}
+
+.editor-modal-dialog textarea,
+.editor-modal-dialog input[type="text"],
+.editor-modal-dialog input[type="url"],
+.editor-modal-dialog input[type="password"],
+.editor-modal-dialog input[type="number"],
+.editor-modal-dialog select {
+  background: var(--fn-editor-paper-light) !important;
+  border: 2px solid var(--fn-editor-line) !important;
+  color: var(--fn-editor-ink) !important;
+  border-radius: 8px;
+  font-family: var(--fn-editor-body);
+}
+
+.editor-modal-dialog textarea:focus,
+.editor-modal-dialog input[type="text"]:focus,
+.editor-modal-dialog input[type="url"]:focus,
+.editor-modal-dialog input[type="password"]:focus,
+.editor-modal-dialog input[type="number"]:focus,
+.editor-modal-dialog select:focus {
+  border-color: var(--fn-editor-ink) !important;
+  box-shadow: var(--fn-editor-shadow-xs) !important;
+  outline: none !important;
+}
+
+/* Item Cards & Accordions inside Block Editor Modals */
+.editor-item-card {
+  border-radius: 12px;
+  background: var(--fn-editor-paper-light) !important;
+  border: 2px solid var(--fn-editor-line) !important;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.editor-item-card:hover {
+  border-color: var(--fn-editor-ink);
+}
+
+.editor-item-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--fn-editor-line);
+}
+
+.editor-item-card-title {
+  font-family: var(--fn-editor-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--fn-editor-ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editor-item-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Accordion Item Card */
+.editor-accordion-card {
+  border-radius: 12px;
+  background: var(--fn-editor-paper-light);
+  border: 2px solid var(--fn-editor-line);
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.editor-accordion-card.is-expanded {
+  border-color: var(--fn-editor-ink);
+  box-shadow: var(--fn-editor-shadow-xs);
+}
+
+.editor-accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  background: var(--fn-editor-paper-light);
+  user-select: none;
+  transition: background 180ms ease;
+}
+
+.editor-accordion-header:hover {
+  background: var(--fn-editor-paper-elevated);
+}
+
+.editor-accordion-header-title {
+  font-family: var(--fn-editor-display);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--fn-editor-ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editor-accordion-body {
+  padding: 16px;
+  border-top: 2px solid var(--fn-editor-line);
+  background: var(--fn-editor-paper);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Add / Create Item Button (Replaces legacy cyber emerald #00f0aa) */
+.editor-btn-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  background: var(--fn-editor-paper-light);
+  color: var(--fn-editor-coral-dark);
+  border: 2px solid var(--fn-editor-coral);
+  font-family: var(--fn-editor-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.editor-btn-add:hover {
+  background: var(--fn-editor-coral);
+  color: var(--fn-editor-ink);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: var(--fn-editor-shadow-xs);
+}
+
+.editor-btn-add:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+/* Icon / Action Button in Item Cards (Reorder, Delete, Toggle) */
+.editor-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1.5px solid var(--fn-editor-line);
+  background: var(--fn-editor-paper);
+  color: var(--fn-editor-ink);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 150ms ease, background 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.editor-icon-btn:hover:not(:disabled) {
+  border-color: var(--fn-editor-ink);
+  transform: translateY(-1px);
+}
+
+.editor-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.editor-icon-btn.is-delete {
+  color: var(--fn-editor-coral-dark);
+}
+
+.editor-icon-btn.is-delete:hover {
+  background: var(--fn-editor-coral-dark);
+  color: #ffffff;
+  border-color: var(--fn-editor-coral-dark);
+}
+
+/* Sub-items / nested list rows (e.g. bullets, sub-tasks, features) */
+.editor-subitem-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--fn-editor-paper-light);
+  border: 1.5px solid var(--fn-editor-line);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* Markdown Toolbar for Journal Editor */
+.editor-md-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  background: var(--fn-editor-paper-light);
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 8px 8px 0 0;
+  border-bottom: none;
+  flex-wrap: wrap;
+}
+
+.editor-md-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--fn-editor-ink);
+  cursor: pointer;
+  padding: 0;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.editor-md-btn:hover {
+  background: var(--fn-editor-paper);
+  border-color: var(--fn-editor-line);
+}
+
+.editor-md-btn.is-active {
+  background: var(--fn-editor-paper-elevated);
+  border-color: var(--fn-editor-ink);
+  color: var(--fn-editor-coral);
+}
+
+/* Ensure textarea attached to md toolbar has seamless top border */
+.editor-textarea-with-toolbar {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+/* Pill / Toggle Selector (e.g. alignment: left, center, right, split) */
+.editor-pill-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px;
+  background: var(--fn-editor-paper-sunken);
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 10px;
+}
+
+.editor-pill-btn {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.editor-pill-btn.is-active {
+  background: var(--fn-editor-paper-light);
+  color: var(--fn-editor-ink);
+  box-shadow: var(--fn-editor-shadow-xs);
+}
+
+/* Section Subheader in Modals */
+.editor-section-heading {
+  font-family: var(--fn-editor-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--fn-editor-ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 0 6px;
+}
+
+.editor-helper-text {
+  font-family: var(--fn-editor-body);
+  font-size: 0.78rem;
+  color: var(--fn-editor-muted);
+  margin-top: 4px;
+}
+
+
+/* --- Field rows used by the legacy block forms ---------------------------
+   These class names were in the markup with no rules anywhere, so every row
+   stacked. Two and three column layouts collapse to one column on phones. */
+
+.editor-form-row-2,
+.editor-form-row-3,
+.editor-form-grid-3 {
+  display: grid;
+  gap: 10px;
+}
+
+.editor-form-row-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.editor-form-row-3,
+.editor-form-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 768px) {
+
+  .editor-form-row-2,
+  .editor-form-row-3,
+  .editor-form-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}

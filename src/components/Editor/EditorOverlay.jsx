@@ -28,7 +28,8 @@ import BlockEditorModal from './BlockEditorModal';
 import AddBlockModal from './AddBlockModal';
 import TabManagerModal from './TabManagerModal';
 import AccountSettingsModal from './AccountSettingsModal';
-import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
+import EditorModal from '../primitives/EditorModal';
+import { useSyncedUiTheme } from '../../hooks/useUiTheme';
 import './Editor.css';
 
 export default function EditorOverlay({
@@ -65,56 +66,10 @@ export default function EditorOverlay({
   const [saving, setSaving] = useState(false);
 
   // Universal Dark/Light Theme State synchronized with Landing Page & entire app
-  const [localEditorTheme, setLocalEditorTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('profilenc_theme');
-      if (saved) return saved;
-      const htmlTheme = document.documentElement.getAttribute('data-theme');
-      if (htmlTheme) return htmlTheme;
-    }
-    return 'dark';
+  const { theme: editorTheme, toggleTheme: toggleEditorTheme } = useSyncedUiTheme({
+    value: propEditorTheme,
+    onChange: propSetEditorTheme,
   });
-
-  const editorTheme = propEditorTheme || localEditorTheme;
-
-  // Keep documentElement data-theme and universal storage in sync
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.documentElement.setAttribute('data-theme', editorTheme);
-    }
-  }, [editorTheme]);
-
-  // Real-time synchronization if changed in another window/tab
-  useEffect(() => {
-    const handleStorage = (e) => {
-      if (e.key === 'profilenc_theme' && e.newValue && (e.newValue === 'dark' || e.newValue === 'light')) {
-        if (propSetEditorTheme) {
-          propSetEditorTheme(e.newValue);
-        } else {
-          setLocalEditorTheme(e.newValue);
-        }
-      }
-    };
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
-  }, [propSetEditorTheme]);
-
-  const toggleEditorTheme = useCallback(() => {
-    const next = editorTheme === 'dark' ? 'light' : 'dark';
-    if (propSetEditorTheme) {
-      propSetEditorTheme(next);
-    } else {
-      setLocalEditorTheme(next);
-    }
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('profilenc_theme', next);
-      document.documentElement.setAttribute('data-theme', next);
-    }
-  }, [editorTheme, propSetEditorTheme]);
-
-  const { handleBackdropClick: handleExitBackdropClick, hintVisible: exitHintVisible } = useDoubleBackdropClose(
-    () => setShowExitModal(false)
-  );
 
   const isDirty = hasChanges;
 
@@ -379,6 +334,7 @@ export default function EditorOverlay({
           <BlockEditorModal
             block={editingBlock}
             editorTheme={editorTheme}
+            activeTabId={activeTabId}
             onSave={(updatedBlock) => onEditBlock(updatedBlock)}
             onClose={() => setEditingBlock(null)}
           />
@@ -449,20 +405,12 @@ export default function EditorOverlay({
       {/* Unsaved Changes Exit Confirmation Guard Modal */}
       <AnimatePresence>
         {showExitModal && (
-          <div className="editor-modal-backdrop" data-editor-theme={editorTheme} onClick={handleExitBackdropClick}>
-            {exitHintVisible && (
-              <div className="modal-double-click-hint">
-                <span>Click once more outside to close (or use ✕)</span>
-              </div>
-            )}
-            <motion.div
-              className="editor-modal-dialog modal-sm"
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              onClick={(e) => e.stopPropagation()}
-              style={{ maxWidth: '480px' }}
-            >
+          <EditorModal
+            onClose={() => setShowExitModal(false)}
+            editorTheme={editorTheme}
+            size="modal-sm"
+            dialogStyle={{ maxWidth: '480px' }}
+          >
               <div className="editor-modal-header">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{ padding: '8px', borderRadius: '50%', background: 'var(--fn-editor-butter)', color: 'var(--fn-editor-ink)', border: '2px solid var(--fn-editor-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -525,8 +473,7 @@ export default function EditorOverlay({
                   </button>
                 </div>
               </div>
-            </motion.div>
-          </div>
+          </EditorModal>
         )}
       </AnimatePresence>
     </>

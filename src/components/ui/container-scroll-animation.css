@@ -88,3 +88,35 @@
   border: 1.5px solid var(--line);
   position: relative;
 }
+
+/* --------------------------------------------------------------------------
+   Small screens: the sticky frame is only as tall as the viewport, so the
+   card chrome gives its space back to the content inside.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .fn-scroll-sticky-wrap {
+    /* The landing top header is hidden on phones, so the frame starts higher */
+    top: 10px;
+    height: calc(100vh - 10px);
+    /* Bottom room keeps the card clear of the phone tab bar */
+    padding: 8px 10px calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .fn-scroll-header {
+    margin-bottom: 10px;
+  }
+
+  .fn-scroll-card {
+    padding: 6px;
+    border-radius: var(--radius-md, 18px);
+    box-shadow:
+      0 3px 5px -1px rgba(0, 0, 0, 0.05),
+      0 14px 24px -4px rgba(0, 0, 0, 0.1),
+      4px 5px 0 var(--line);
+  }
+
+  .fn-scroll-card-inner {
+    border-radius: var(--radius-sm, 10px);
+  }
+}

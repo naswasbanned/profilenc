@@ -29,11 +29,16 @@ import {
   Clock,
   Sun,
   Moon,
+  Globe,
+  LogOut,
+  Settings,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import MobileDock from '../components/primitives/MobileDock';
+import MobileBrandBar from '../components/primitives/MobileBrandBar';
+import { apiFetch } from '../lib/api';
 import './AdminDashboardPage.css';
-
-const API_BASE = import.meta.env.VITE_API_URL || '';
+import { useUiTheme } from '../hooks/useUiTheme';
 
 function formatLastChange(dateStr) {
   if (!dateStr) return 'Never';
@@ -57,64 +62,13 @@ function formatLastChange(dateStr) {
 }
 
 export default function AdminDashboardPage() {
-  const { user, token, isAuthenticated, loading: authLoading } = useAuth();
+  const { user, token, isAuthenticated, loading: authLoading, logout } = useAuth();
   const navigate = useNavigate();
 
   // Theme State
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('profilenc_theme') || 'dark';
-    }
-    return 'dark';
-  });
+  const { theme, toggleTheme } = useUiTheme();
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
 
-  const toggleTheme = (e) => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-
-    if (!document.startViewTransition) {
-      setTheme(nextTheme);
-      localStorage.setItem('profilenc_theme', nextTheme);
-      document.documentElement.setAttribute('data-theme', nextTheme);
-      return;
-    }
-
-    const rect = e?.currentTarget?.getBoundingClientRect();
-    const x = rect ? rect.left + rect.width / 2 : window.innerWidth;
-    const y = rect ? rect.top + rect.height / 2 : 0;
-
-    const maxDist = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    );
-    const endRadius = Math.ceil(maxDist) + 40;
-
-    const transition = document.startViewTransition(() => {
-      setTheme(nextTheme);
-      localStorage.setItem('profilenc_theme', nextTheme);
-      document.documentElement.setAttribute('data-theme', nextTheme);
-    });
-
-    transition.ready.then(() => {
-      document.documentElement.animate(
-        {
-          clipPath: [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${endRadius}px at ${x}px ${y}px)`,
-          ],
-        },
-        {
-          duration: 650,
-          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-          fill: 'forwards',
-          pseudoElement: '::view-transition-new(root)',
-        }
-      );
-    });
-  };
 
   // Active Tab
   const [activeTab, setActiveTab] = useState('users'); // 'users' | 'patches' | 'landing' | 'suggestions'
@@ -174,8 +128,8 @@ export default function AdminDashboardPage() {
   const fetchStats = useCallback(async () => {
     if (!token) return;
     try {
-      const res = await fetch(`${API_BASE}/api/admin/stats`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await apiFetch(`/api/admin/stats`, {
+        token,
       });
       if (res.ok) {
         const data = await res.json();
@@ -192,8 +146,8 @@ export default function AdminDashboardPage() {
     setUsersLoading(true);
     try {
       const query = userSearch ? `?search=${encodeURIComponent(userSearch)}` : '';
-      const res = await fetch(`${API_BASE}/api/admin/users${query}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await apiFetch(`/api/admin/users${query}`, {
+        token,
       });
       if (res.ok) {
         const data = await res.json();
@@ -212,8 +166,8 @@ export default function AdminDashboardPage() {
     if (!token) return;
     setPatchesLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/admin/patch-notes`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await apiFetch(`/api/admin/patch-notes`, {
+        token,
       });
       if (res.ok) {
         const data = await res.json();
@@ -232,8 +186,8 @@ export default function AdminDashboardPage() {
     if (!token) return;
     setLandingLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/admin/landing`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await apiFetch(`/api/admin/landing`, {
+        token,
       });
       if (res.ok) {
         const data = await res.json();
@@ -280,8 +234,8 @@ export default function AdminDashboardPage() {
       if (suggestionStatus !== 'ALL') params.append('status', suggestionStatus);
       if (suggestionSearch.trim()) params.append('search', suggestionSearch.trim());
 
-      const res = await fetch(`${API_BASE}/api/admin/suggestions?${params.toString()}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await apiFetch(`/api/admin/suggestions?${params.toString()}`, {
+        token,
       });
       if (res.ok) {
         const data = await res.json();
@@ -308,12 +262,9 @@ export default function AdminDashboardPage() {
   // --- Handlers: Suggestion Actions ---
   const handleUpdateSuggestionStatus = async (id, newStatus) => {
     try {
-      const res = await fetch(`${API_BASE}/api/admin/suggestions/${id}`, {
+      const res = await apiFetch(`/api/admin/suggestions/${id}`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        token,
         body: JSON.stringify({ status: newStatus }),
       });
 
@@ -333,9 +284,9 @@ export default function AdminDashboardPage() {
   const handleDeleteSuggestion = async () => {
     if (!deleteSuggestionModal) return;
     try {
-      const res = await fetch(`${API_BASE}/api/admin/suggestions/${deleteSuggestionModal.id}`, {
+      const res = await apiFetch(`/api/admin/suggestions/${deleteSuggestionModal.id}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
+        token,
       });
 
       if (!res.ok) {
@@ -355,12 +306,9 @@ export default function AdminDashboardPage() {
   // --- Handlers: User Actions ---
   const handleToggleUserAdmin = async (targetUser) => {
     try {
-      const res = await fetch(`${API_BASE}/api/admin/users/${targetUser.id}`, {
+      const res = await apiFetch(`/api/admin/users/${targetUser.id}`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        token,
         body: JSON.stringify({ is_admin: !targetUser.is_admin }),
       });
 
@@ -379,12 +327,9 @@ export default function AdminDashboardPage() {
 
   const handleToggleUserPublic = async (targetUser) => {
     try {
-      const res = await fetch(`${API_BASE}/api/admin/users/${targetUser.id}`, {
+      const res = await apiFetch(`/api/admin/users/${targetUser.id}`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        token,
         body: JSON.stringify({ is_public: !targetUser.is_public }),
       });
 
@@ -404,9 +349,9 @@ export default function AdminDashboardPage() {
   const handleDeleteUser = async () => {
     if (!deleteUserModal) return;
     try {
-      const res = await fetch(`${API_BASE}/api/admin/users/${deleteUserModal.id}`, {
+      const res = await apiFetch(`/api/admin/users/${deleteUserModal.id}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
+        token,
       });
 
       if (!res.ok) {
@@ -452,15 +397,12 @@ export default function AdminDashboardPage() {
 
     try {
       const isNew = !editingPatch.id;
-      const url = isNew ? `${API_BASE}/api/admin/patch-notes` : `${API_BASE}/api/admin/patch-notes/${editingPatch.id}`;
+      const url = isNew ? '/api/admin/patch-notes' : `/api/admin/patch-notes/${editingPatch.id}`;
       const method = isNew ? 'POST' : 'PUT';
 
-      const res = await fetch(url, {
+      const res = await apiFetch(url, {
         method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        token,
         body: JSON.stringify(editingPatch),
       });
 
@@ -482,9 +424,9 @@ export default function AdminDashboardPage() {
   const handleDeletePatch = async (patchId) => {
     if (!confirm('Are you sure you want to delete this patch note?')) return;
     try {
-      const res = await fetch(`${API_BASE}/api/admin/patch-notes/${patchId}`, {
+      const res = await apiFetch(`/api/admin/patch-notes/${patchId}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
+        token,
       });
 
       if (!res.ok) {
@@ -505,12 +447,9 @@ export default function AdminDashboardPage() {
     if (!landingConfig) return;
     setSavingLanding(true);
     try {
-      const res = await fetch(`${API_BASE}/api/admin/landing`, {
+      const res = await apiFetch(`/api/admin/landing`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        token,
         body: JSON.stringify({ config: landingConfig }),
       });
 
@@ -606,6 +545,9 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       </header>
+
+      {/* Centered brand, phone only. Static: the dock handles navigation. */}
+      <MobileBrandBar />
 
       {/* Main Admin Container */}
       <main className="admin-main">
@@ -724,7 +666,7 @@ export default function AdminDashboardPage() {
                   <tbody>
                     {usersList.map((u) => (
                       <tr key={u.id}>
-                        <td>
+                        <td data-label="User">
                           <div className="user-cell">
                             <div className="user-avatar-mini">
                               {u.avatar_url ? (
@@ -741,18 +683,18 @@ export default function AdminDashboardPage() {
                             </div>
                           </div>
                         </td>
-                        <td>
+                        <td data-label="Email">
                           <span className="monospace-cell">{u.email}</span>
                         </td>
-                        <td>
+                        <td data-label="Template">
                           <span className="template-tag">[{u.template_slug || 'CUSTOM'}]</span>
                         </td>
-                        <td>
+                        <td data-label="Blocks">
                           <span className="admin-blocks-badge">
                             {u.block_count || 0} {u.block_count === 1 ? 'block' : 'blocks'}
                           </span>
                         </td>
-                        <td>
+                        <td data-label="Recent change">
                           <div className="admin-recent-cell">
                             <span className="admin-recent-time">
                               {formatLastChange(u.last_changed_at || u.updated_at || u.created_at)}
@@ -766,7 +708,7 @@ export default function AdminDashboardPage() {
                             </span>
                           </div>
                         </td>
-                        <td>
+                        <td data-label="Joined">
                           <span className="monospace-cell">
                             {new Date(u.created_at).toLocaleDateString('en-US', {
                               month: 'short',
@@ -775,7 +717,7 @@ export default function AdminDashboardPage() {
                             })}
                           </span>
                         </td>
-                        <td>
+                        <td data-label="Visibility">
                           <button
                             type="button"
                             onClick={() => handleToggleUserPublic(u)}
@@ -786,7 +728,7 @@ export default function AdminDashboardPage() {
                             <span>{u.is_public ? 'PUBLIC' : 'PRIVATE'}</span>
                           </button>
                         </td>
-                        <td>
+                        <td data-label="Role">
                           <button
                             type="button"
                             onClick={() => handleToggleUserAdmin(u)}
@@ -797,7 +739,7 @@ export default function AdminDashboardPage() {
                             <span>{u.is_admin ? 'ADMIN' : 'USER'}</span>
                           </button>
                         </td>
-                        <td>
+                        <td data-label="Actions">
                           <div className="action-btns">
                             <Link to={`/@${u.username}`} target="_blank" className="action-btn" title="View Profile">
                               <ExternalLink size={14} />
@@ -1492,6 +1434,69 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       )}
+
+      {/* Phone dock: the only navigation on phones. Four section tabs replace
+          the hidden tab strip, and the sheet carries the header actions */}
+      <MobileDock
+        ariaLabel="Admin navigation"
+        brand={{ label: 'Other settings', Icon: Settings }}
+        items={[
+          {
+            id: 'users',
+            label: 'Users',
+            Icon: Users,
+            active: activeTab === 'users',
+            onClick: () => setActiveTab('users'),
+          },
+          {
+            id: 'patches',
+            label: 'Patches',
+            Icon: FileText,
+            active: activeTab === 'patches',
+            onClick: () => setActiveTab('patches'),
+          },
+          {
+            id: 'landing',
+            label: 'CMS',
+            Icon: Layers,
+            active: activeTab === 'landing',
+            onClick: () => setActiveTab('landing'),
+          },
+          {
+            id: 'suggestions',
+            label: 'Inbox',
+            Icon: MessageSquare,
+            active: activeTab === 'suggestions',
+            badge: stats.newSuggestions || 0,
+            onClick: () => setActiveTab('suggestions'),
+          },
+        ]}
+        sheet={{
+          title: `@${user.username} · kernel admin`,
+          rows: [
+            { id: 'dashboard', label: 'My dashboard', Icon: Layout, to: '/dashboard' },
+            { id: 'live', label: 'View live site', Icon: ExternalLink, to: '/', target: '_blank' },
+            { id: 'site', label: 'Landing page', Icon: Globe, to: '/' },
+            {
+              id: 'theme',
+              label: theme === 'dark' ? 'Light appearance' : 'Dark appearance',
+              Icon: theme === 'dark' ? Sun : Moon,
+              keepOpen: true,
+              onClick: toggleTheme,
+            },
+            {
+              id: 'logout',
+              label: 'Log out',
+              Icon: LogOut,
+              variant: 'danger',
+              onClick: () => {
+                logout();
+                navigate('/');
+              },
+            },
+          ],
+        }}
+      />
     </div>
   );
 }

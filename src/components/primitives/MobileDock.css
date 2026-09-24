@@ -1,0 +1,243 @@
+/* ==========================================================================
+   MOBILE DOCK (phone only)
+
+   Shared with the landing page tab bar in look and behaviour, but driven by
+   plain actions so the admin and dashboard pages can use it for tab switching
+   and navigation. Colours come from whichever page palette is in scope, so the
+   dock follows dark and light mode on every surface.
+
+   The dock is the only navigation on phones, so it carries a second layer: an
+   action sheet behind the raised brand button holding the actions that used to
+   live in each page header.
+
+   Pages adopting the dock own two rules of their own, at this same breakpoint:
+     - hide their top header
+     - reserve bottom padding: calc(86px + env(safe-area-inset-bottom, 0px))
+   ========================================================================== */
+
+.app-dock,
+.app-sheet-backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .app-dock {
+    display: block;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 60;
+    padding: 0 14px calc(12px + env(safe-area-inset-bottom, 0px));
+    pointer-events: none;
+  }
+
+  .app-dock-bar {
+    display: grid;
+    align-items: end;
+    gap: 2px;
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 8px 6px 7px;
+    border: 2px solid var(--ink, #252320);
+    border-radius: 26px;
+    background: color-mix(in srgb, var(--paper-light, #fffaf0) 92%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 4px 5px 0 var(--ink, #252320);
+    pointer-events: auto;
+  }
+
+  /* --- Tabs --- */
+  .app-dock-tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 5px 2px 4px;
+    border: none;
+    border-radius: 18px;
+    background: none;
+    color: var(--muted, #746e63);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 160ms ease;
+  }
+
+  .app-dock-tab.is-active {
+    color: var(--ink, #252320);
+  }
+
+  .app-dock-active-pill {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: var(--paper-elevated, #ede5d2);
+    border: 1.5px solid var(--line, #d7ccb8);
+  }
+
+  .app-dock-tab-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .app-dock-tab-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+
+  /* Counts the hidden desktop tab strip used to show */
+  .app-dock-badge {
+    position: absolute;
+    top: -5px;
+    left: 11px;
+    min-width: 15px;
+    height: 15px;
+    padding: 0 3px;
+    border: 1.5px solid var(--ink, #252320);
+    border-radius: 999px;
+    background: var(--coral, #e96d52);
+    color: #fffaf0;
+    font-family: var(--fn-mono, ui-monospace, monospace);
+    font-size: 0.5rem;
+    font-weight: 800;
+    line-height: 12px;
+    text-align: center;
+  }
+
+  .app-dock-tab-label {
+    font-family: var(--fn-mono, ui-monospace, monospace);
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  /* --- Raised brand button --- */
+  .app-dock-brand-slot {
+    display: block;
+    transform: translateY(-15px);
+  }
+
+  .app-dock-brand {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    margin: 0 auto;
+    padding: 0;
+    border: 2px solid var(--ink, #252320);
+    border-radius: 50%;
+    background: var(--butter, #f4cf62);
+    /* The brand sits on butter in both themes, so pin the mark to the dark ink
+       instead of inheriting the page colour */
+    color: #252320;
+    box-shadow: 3px 4px 0 var(--ink, #252320);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 160ms ease;
+  }
+
+  .app-dock-brand img {
+    width: 26px;
+    height: 26px;
+  }
+
+  .app-dock-brand:active,
+  .app-dock-brand.is-open {
+    background: var(--coral, #e96d52);
+  }
+
+  /* --- Action sheet --- */
+  .app-sheet-backdrop {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    align-items: flex-end;
+    background: rgba(9, 7, 14, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+
+  .app-sheet {
+    width: 100%;
+    max-height: 82vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 14px calc(22px + env(safe-area-inset-bottom, 0px));
+    border-top: 2px solid var(--ink, #252320);
+    border-radius: 26px 26px 0 0;
+    background: var(--paper-light, #fffaf0);
+    box-shadow: 0 -10px 30px rgba(9, 7, 14, 0.25);
+  }
+
+  .app-sheet-grabber {
+    width: 44px;
+    height: 4px;
+    margin: 2px auto 8px;
+    border-radius: 999px;
+    background: var(--line, #d7ccb8);
+  }
+
+  .app-sheet-title {
+    margin: 0 0 2px;
+    padding: 0 4px;
+    font-family: var(--fn-mono, ui-monospace, monospace);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted, #746e63);
+  }
+
+  .app-sheet-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 50px;
+    padding: 0 16px;
+    border: 2px solid var(--line, #d7ccb8);
+    border-radius: 16px;
+    background: var(--paper, #fdf6e8);
+    color: var(--ink, #252320);
+    font-family: var(--fn-body, inherit);
+    font-size: 0.94rem;
+    font-weight: 600;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .app-sheet-row:active {
+    transform: scale(0.99);
+    background: var(--paper-elevated, #ede5d2);
+  }
+
+  .app-sheet-row.is-primary {
+    background: var(--butter, #f4cf62);
+    border-color: var(--ink, #252320);
+    color: #211f24;
+  }
+
+  .app-sheet-row.is-danger {
+    color: var(--coral-dark, #c94f34);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-dock-brand,
+  .app-dock-tab {
+    transition: none;
+  }
+}

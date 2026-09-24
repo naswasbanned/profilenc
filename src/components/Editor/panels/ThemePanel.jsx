@@ -267,6 +267,40 @@ const CURATED_PALETTES = [
     btnBg: '#a78bfa',
     btnText: '#0a0714',
   },
+  {
+    name: 'Aurora Soft',
+    tag: 'Soft Light',
+    bg: '#eef0f8',
+    heading: '#221f2d',
+    text: '#2f2b3a',
+    textMuted: '#6f6a80',
+    card: '#ffffff',
+    cardBorder: 'transparent',
+    cardHeading: '#221f2d',
+    cardText: '#2f2b3a',
+    cardTextMuted: '#6f6a80',
+    accent: '#f472b6',
+    accentSec: '#38bdf8',
+    btnBg: '#221f2d',
+    btnText: '#ffffff',
+  },
+  {
+    name: 'Press Mono',
+    tag: 'Typographic',
+    bg: '#f2f2f0',
+    heading: '#17171a',
+    text: '#17171a',
+    textMuted: '#6b6b70',
+    card: 'transparent',
+    cardBorder: '#d6d6d2',
+    cardHeading: '#17171a',
+    cardText: '#17171a',
+    cardTextMuted: '#6b6b70',
+    accent: '#2b4bff',
+    accentSec: '#17171a',
+    btnBg: '#17171a',
+    btnText: '#f2f2f0',
+  },
 ];
 
 const DESIGN_PRESETS = [
@@ -274,6 +308,7 @@ const DESIGN_PRESETS = [
     id: 'field-notes',
     name: 'Field Notes Editorial',
     tag: 'New Default',
+    badge: 'New',
     desc: 'Tactile warm paper, deep ink, rich serif Fraunces typography, and offset frame shadows.',
     preview: {
       bg: '#f5efdf',
@@ -324,6 +359,120 @@ const DESIGN_PRESETS = [
       'global.tabButtonActiveBackground': '#e96d52',
       'global.tabButtonActiveTextColor': '#fffaf0',
       'global.glassBlur': 0,
+    },
+  },
+  {
+    id: 'press-mono',
+    name: 'Press Mono',
+    tag: 'Typographic',
+    badge: 'New',
+    desc: 'Monospace wire, hairline rules, transparent cards, and one electric accent.',
+    preview: {
+      bg: '#f2f2f0',
+      card: 'transparent',
+      border: '#d6d6d2',
+      accent: '#2b4bff',
+      text: '#17171a',
+      shadow: 'none',
+    },
+    theme: {
+      'global.designStyle': 'press-mono',
+      'global.fontFamily': "'DM Mono', ui-monospace, monospace",
+      'global.headingFont': "'DM Mono', ui-monospace, monospace",
+      'global.monoFont': "'DM Mono', ui-monospace, monospace",
+      'global.serifFont': "'Fraunces', Georgia, serif",
+      'global.backgroundColor': '#f2f2f0',
+      'global.headingColor': '#17171a',
+      'global.textColor': '#17171a',
+      'global.textColorMuted': '#6b6b70',
+      'global.cardBackground': 'transparent',
+      'global.cardBorder': '#d6d6d2',
+      'global.cardHeadingColor': '#17171a',
+      'global.cardTextColor': '#17171a',
+      'global.cardTextMuted': '#6b6b70',
+      'global.accentColor': '#2b4bff',
+      'global.accentColorSecondary': '#17171a',
+      'global.buttonBackground': '#17171a',
+      'global.buttonTextColor': '#f2f2f0',
+      'global.borderRadius': 2,
+      'global.cardBorderWidth': 1,
+      'global.cardBorderStyle': 'solid',
+      'global.cardBoxShadow': 'none',
+      'global.cardShadow': 'none',
+      'global.cardShadowHover': 'none',
+      'global.blockGap': 44,
+      'global.blockPadding': 20,
+      'global.blockDividerStyle': 'solid',
+      'global.blockDividerColor': '#17171a',
+      'global.headingFontWeight': 500,
+      'global.pillStyle': 'rule-tag',
+      'global.buttonStyle': 'press-outline',
+      'global.iconStyle': 'none',
+      'global.tabNavBackground': 'rgba(242, 242, 240, 0.92)',
+      'global.tabNavBorder': '#17171a',
+      'global.tabButtonBackground': 'transparent',
+      'global.tabButtonTextColor': '#6b6b70',
+      'global.tabButtonBorder': 'transparent',
+      'global.tabButtonActiveBackground': '#17171a',
+      'global.tabButtonActiveTextColor': '#f2f2f0',
+      'global.glassBlur': 0,
+    },
+  },
+  {
+    id: 'aurora-soft',
+    name: 'Aurora Soft',
+    tag: 'Soft Light',
+    badge: 'New',
+    desc: 'Borderless cloud cards, diffuse depth, generous curves, and a cool lilac canvas.',
+    preview: {
+      bg: '#eef0f8',
+      card: '#ffffff',
+      border: 'transparent',
+      accent: '#f472b6',
+      text: '#2f2b3a',
+      shadow: '0 14px 30px rgba(47, 43, 58, 0.12)',
+    },
+    theme: {
+      'global.designStyle': 'aurora-soft',
+      'global.fontFamily': "'Outfit', system-ui, sans-serif",
+      'global.headingFont': "'Outfit', system-ui, sans-serif",
+      'global.monoFont': "'DM Mono', monospace",
+      'global.serifFont': "'Fraunces', Georgia, serif",
+      'global.backgroundColor': '#eef0f8',
+      'global.headingColor': '#221f2d',
+      'global.textColor': '#2f2b3a',
+      'global.textColorMuted': '#6f6a80',
+      'global.cardBackground': '#ffffff',
+      'global.cardBorder': 'transparent',
+      'global.cardHeadingColor': '#221f2d',
+      'global.cardTextColor': '#2f2b3a',
+      'global.cardTextMuted': '#6f6a80',
+      'global.accentColor': '#f472b6',
+      'global.accentColorSecondary': '#38bdf8',
+      'global.buttonBackground': '#221f2d',
+      'global.buttonTextColor': '#ffffff',
+      'global.borderRadius': 24,
+      'global.cardBorderWidth': 0,
+      'global.cardBorderStyle': 'none',
+      'global.cardBoxShadow': '0 14px 30px rgba(47, 43, 58, 0.12)',
+      'global.cardShadow': '0 14px 30px rgba(47, 43, 58, 0.12)',
+      'global.cardShadowHover': '0 20px 44px rgba(47, 43, 58, 0.18)',
+      'global.blockGap': 36,
+      'global.blockPadding': 22,
+      'global.blockDividerStyle': 'none',
+      'global.blockDividerColor': 'transparent',
+      'global.headingFontWeight': 600,
+      'global.pillStyle': 'soft-cloud',
+      'global.buttonStyle': 'soft-raised',
+      'global.iconStyle': 'soft-tint',
+      'global.tabNavBackground': 'rgba(255, 255, 255, 0.72)',
+      'global.tabNavBorder': 'transparent',
+      'global.tabButtonBackground': 'rgba(255, 255, 255, 0.6)',
+      'global.tabButtonTextColor': '#6f6a80',
+      'global.tabButtonBorder': 'transparent',
+      'global.tabButtonActiveBackground': '#f472b6',
+      'global.tabButtonActiveTextColor': '#ffffff',
+      'global.glassBlur': 6,
     },
   },
   {
@@ -380,62 +529,6 @@ const DESIGN_PRESETS = [
       'global.tabButtonActiveBackground': 'rgba(0, 240, 170, 0.15)',
       'global.tabButtonActiveTextColor': '#00f0aa',
       'global.glassBlur': 12,
-    },
-  },
-  {
-    id: 'clean-light',
-    name: 'Clean Studio Light',
-    tag: 'Minimal Light',
-    desc: 'Crisp white cards, balanced slate typography, subtle shadows, and emerald accents.',
-    preview: {
-      bg: '#f8fafc',
-      card: '#ffffff',
-      border: 'rgba(15, 23, 42, 0.08)',
-      accent: '#059669',
-      text: '#334155',
-      shadow: '0 4px 12px rgba(0,0,0,0.06)',
-    },
-    theme: {
-      'global.designStyle': 'clean-light',
-      'global.fontFamily': "'Inter', sans-serif",
-      'global.headingFont': "'Space Grotesk', sans-serif",
-      'global.monoFont': "'JetBrains Mono', monospace",
-      'global.serifFont': "'Crimson Text', Georgia, serif",
-      'global.backgroundColor': '#f8fafc',
-      'global.headingColor': '#0f172a',
-      'global.textColor': '#334155',
-      'global.textColorMuted': '#64748b',
-      'global.cardBackground': '#ffffff',
-      'global.cardBorder': 'rgba(15, 23, 42, 0.08)',
-      'global.cardHeadingColor': '#0f172a',
-      'global.cardTextColor': '#334155',
-      'global.cardTextMuted': '#64748b',
-      'global.accentColor': '#059669',
-      'global.accentColorSecondary': '#d97706',
-      'global.buttonBackground': '#0f172a',
-      'global.buttonTextColor': '#ffffff',
-      'global.borderRadius': 12,
-      'global.cardBorderWidth': 1,
-      'global.cardBorderStyle': 'solid',
-      'global.cardBoxShadow': '0 4px 12px rgba(15, 23, 42, 0.06)',
-      'global.cardShadow': '0 4px 12px rgba(15, 23, 42, 0.06)',
-      'global.cardShadowHover': '0 8px 20px rgba(15, 23, 42, 0.12)',
-      'global.blockGap': 28,
-      'global.blockPadding': 20,
-      'global.blockDividerStyle': 'solid',
-      'global.blockDividerColor': 'rgba(15, 23, 42, 0.08)',
-      'global.headingFontWeight': 700,
-      'global.pillStyle': 'flat-minimal',
-      'global.buttonStyle': 'flat-border',
-      'global.iconStyle': 'glass-accent',
-      'global.tabNavBackground': 'rgba(255, 255, 255, 0.92)',
-      'global.tabNavBorder': 'rgba(15, 23, 42, 0.08)',
-      'global.tabButtonBackground': '#ffffff',
-      'global.tabButtonTextColor': '#64748b',
-      'global.tabButtonBorder': 'rgba(15, 23, 42, 0.08)',
-      'global.tabButtonActiveBackground': '#059669',
-      'global.tabButtonActiveTextColor': '#ffffff',
-      'global.glassBlur': 8,
     },
   },
   {
@@ -579,6 +672,8 @@ const PILL_STYLE_OPTIONS = [
   { label: 'Rounded Glow (Classic Obsidian)', value: 'rounded-glow' },
   { label: 'Editorial Bordered (Field Notes)', value: 'editorial-bordered' },
   { label: 'Flat Minimal (Clean)', value: 'flat-minimal' },
+  { label: 'Soft Cloud (Aurora Soft)', value: 'soft-cloud' },
+  { label: 'Rule Tag (Press Mono)', value: 'rule-tag' },
 ];
 
 const BUTTON_STYLE_OPTIONS = [
@@ -586,11 +681,14 @@ const BUTTON_STYLE_OPTIONS = [
   { label: 'Classic Border (Obsidian / Minimal)', value: 'flat-border' },
   { label: 'Rounded Glow Pill', value: 'rounded-glow' },
   { label: 'Raw Heavy Border (Neo-Brutalist)', value: 'neo-brutalist' },
+  { label: 'Soft Raised (Aurora Soft)', value: 'soft-raised' },
+  { label: 'Press Outline (Press Mono)', value: 'press-outline' },
 ];
 
 const ICON_STYLE_OPTIONS = [
   { label: 'Glass Accent (Classic Obsidian)', value: 'glass-accent' },
   { label: 'Bordered Box (Field Notes)', value: 'bordered-box' },
+  { label: 'Soft Tint (Aurora Soft)', value: 'soft-tint' },
   { label: 'Hidden / None', value: 'none' },
 ];
 
@@ -865,7 +963,7 @@ export default function ThemePanel({ tabs = [] }) {
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                           <span style={{ fontSize: '0.88rem', fontWeight: 700, color: isActive ? 'var(--fn-editor-coral)' : 'var(--fn-editor-ink)' }}>
                             {preset.name}
                           </span>
@@ -883,11 +981,30 @@ export default function ThemePanel({ tabs = [] }) {
                             {preset.tag}
                           </span>
                         </div>
-                        {isActive && (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.74rem', color: 'var(--fn-editor-coral)', fontWeight: 600 }}>
-                            <Check size={13} /> Active
-                          </div>
-                        )}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                          {isActive && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.74rem', color: 'var(--fn-editor-coral)', fontWeight: 600 }}>
+                              <Check size={13} /> Active
+                            </div>
+                          )}
+                          {preset.badge && (
+                            <span
+                              style={{
+                                fontSize: '0.6rem',
+                                padding: '2px 7px',
+                                borderRadius: '999px',
+                                background: 'var(--fn-editor-coral)',
+                                color: '#ffffff',
+                                border: '1px solid var(--fn-editor-ink)',
+                                fontWeight: 800,
+                                letterSpacing: '0.08em',
+                                textTransform: 'uppercase',
+                              }}
+                            >
+                              {preset.badge}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--fn-editor-muted)', lineHeight: 1.4 }}>

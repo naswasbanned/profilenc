@@ -36,17 +36,20 @@ import {
   Radio,
   Star,
   Globe,
+  MessageSquare,
+  ArrowUp,
 } from 'lucide-react';
 import { motion, useTransform } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { ContainerScroll } from '../components/ui/container-scroll-animation';
 import HowItWorks from '../components/ui/how-it-works';
-import ThreeDTestimonials from '../components/ui/3d-testimonails';
+import ThreeDTestimonials from '../components/ui/3d-testimonials';
+import LandingBottomNav from '../components/Landing/LandingBottomNav';
+import { apiFetch } from '../lib/api';
 import './LandingPage.css';
+import { useUiTheme } from '../hooks/useUiTheme';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const API_BASE = import.meta.env.VITE_API_URL || '';
 
 
 // Comprehensive showcase profile featuring all core modular blocks
@@ -630,64 +633,9 @@ function ShowcaseBrowserPreview({ profile, scrollYProgress }) {
 export default function LandingPage() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('profilenc_theme') || 'dark';
-    }
-    return 'dark';
-  });
+  const { theme, toggleTheme } = useUiTheme();
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
 
-  const toggleTheme = (e) => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-
-    // Fallback if View Transitions API is not available
-    if (!document.startViewTransition) {
-      setTheme(nextTheme);
-      localStorage.setItem('profilenc_theme', nextTheme);
-      document.documentElement.setAttribute('data-theme', nextTheme);
-      return;
-    }
-
-    // Get origin coordinates from the button (or corner top-right)
-    const rect = e?.currentTarget?.getBoundingClientRect();
-    const x = rect ? rect.left + rect.width / 2 : window.innerWidth;
-    const y = rect ? rect.top + rect.height / 2 : 0;
-
-    // Calculate maximum radius to cover the entire viewport plus safety margin to prevent edge clipping
-    const maxDist = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    );
-    const endRadius = Math.ceil(maxDist) + 40;
-
-    const transition = document.startViewTransition(() => {
-      setTheme(nextTheme);
-      localStorage.setItem('profilenc_theme', nextTheme);
-      document.documentElement.setAttribute('data-theme', nextTheme);
-    });
-
-    transition.ready.then(() => {
-      // Circular wave expanding from top corner / button smoothly over the entire viewport
-      document.documentElement.animate(
-        {
-          clipPath: [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${endRadius}px at ${x}px ${y}px)`,
-          ],
-        },
-        {
-          duration: 650,
-          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-          fill: 'forwards',
-          pseudoElement: '::view-transition-new(root)',
-        }
-      );
-    });
-  };
 
   const [featuredProfiles, setFeaturedProfiles] = useState([]);
   const [patchNotesList, setPatchNotesList] = useState(ENGINE_PATCH_NOTES);
@@ -764,8 +712,9 @@ export default function LandingPage() {
         formData.append('image', suggestionFile);
       }
 
-      const res = await fetch(`${API_BASE}/api/site/suggestions`, {
+      const res = await apiFetch('/api/site/suggestions', {
         method: 'POST',
+        token: null,
         body: formData,
       });
 
@@ -785,6 +734,7 @@ export default function LandingPage() {
   };
 
   const marquee1Ref = useRef(null);
+  const lenisRef = useRef(null);
 
   useEffect(() => {
     // Set document title
@@ -797,6 +747,8 @@ export default function LandingPage() {
       smoothWheel: true,
       smoothTouch: false,
     });
+
+    lenisRef.current = lenis;
 
     lenis.on('scroll', ScrollTrigger.update);
 
@@ -845,11 +797,23 @@ export default function LandingPage() {
     return () => {
       window.removeEventListener('resize', onResize);
       document.removeEventListener('click', handleAnchorClick);
+      lenisRef.current = null;
       lenis.destroy();
       gsap.ticker.remove(tickerCb);
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
+
+  // Lenis owns the scroll position on pointer devices, so ask it first and fall
+  // back to the native scroll on touch, where Lenis stays passive.
+  const scrollToTop = () => {
+    const lenis = lenisRef.current;
+    if (lenis) {
+      lenis.scrollTo(0, { duration: 0.9 });
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Refresh ScrollTrigger when dynamic landing data finishes loading
   useEffect(() => {
@@ -862,7 +826,7 @@ export default function LandingPage() {
   // Fetch Live Site Data (Landing Config & Patch Notes & Featured Profiles)
   useEffect(() => {
     // Featured Profiles (with dynamic Account Bio / Headline)
-    fetch(`${API_BASE}/api/templates/featured/profiles`)
+    apiFetch('/api/templates/featured/profiles', { token: null })
       .then((r) => (r.ok ? r.json() : []))
       .then(async (profiles) => {
         if (!Array.isArray(profiles)) return;
@@ -875,7 +839,7 @@ export default function LandingPage() {
             profiles.map(async (p) => {
               if (p.bio) return p;
               try {
-                const cRes = await fetch(`${API_BASE}/api/u/${p.username}/content`);
+                const cRes = await apiFetch(`/api/u/${p.username}/content`, { token: null });
                 if (cRes.ok) {
                   const content = await cRes.json();
                   const profileData = content.modular_profile || content;
@@ -902,7 +866,7 @@ export default function LandingPage() {
       .catch(() => { });
 
     // Patch Notes
-    fetch(`${API_BASE}/api/site/patch-notes`)
+    apiFetch('/api/site/patch-notes', { token: null })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (data?.patchNotes && data.patchNotes.length > 0) {
@@ -912,7 +876,7 @@ export default function LandingPage() {
       .catch(() => { });
 
     // Landing CMS Settings
-    fetch(`${API_BASE}/api/site/landing`)
+    apiFetch('/api/site/landing', { token: null })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (data?.config) {
@@ -984,13 +948,23 @@ export default function LandingPage() {
         </div>
       </header>
 
+      {/* Centered brand, phone only. Static: the tab bar handles navigation. */}
+      <div className="fn-mobile-brand">
+        <span className="fn-logo-mark">
+          <img src="/logo.svg" alt="" aria-hidden="true" />
+        </span>
+        <span className="fn-mobile-brand-name">Profilenc</span>
+      </div>
+
       {/* HERO */}
       <section className="fn-hero">
         <div className="fn-container fn-hero-grid">
           <div>
-            <p className="fn-eyebrow">
-              {landingData.hero?.badge || 'Personal profile builder / 001'}
-            </p>
+            {/* No fallback on purpose: an admin who clears the CMS badge field
+                gets no badge at all, rather than the seeded default back */}
+            {landingData.hero?.badge?.trim() && (
+              <p className="fn-eyebrow">{landingData.hero.badge}</p>
+            )}
 
             <h1 className="fn-hero-title">
               {landingData.hero?.mastheadTop || 'Create your'}
@@ -1018,7 +992,6 @@ export default function LandingPage() {
               </a>
             </div>
 
-            <p className="fn-hero-note">Free to start / No code required / Share anywhere</p>
           </div>
 
           <div className="fn-hero-art" aria-hidden="true">
@@ -1391,17 +1364,64 @@ export default function LandingPage() {
       {/* FOOTER */}
       <footer className="fn-footer">
         <div className="fn-container fn-footer-inner">
-          <div className="fn-footer-brand">
-            <span className="fn-logo-mark">
-              <img src="/logo.svg" alt="" aria-hidden="true" />
-            </span>
-            <span className="fn-logo" style={{ fontSize: '1.2rem' }}>Profilenc</span>
+          {/* Row 1: brand on the left, round action buttons on the right */}
+          <div className="fn-footer-top">
+            <div className="fn-footer-brand">
+              <span className="fn-logo-mark">
+                <img src="/logo.svg" alt="" aria-hidden="true" />
+              </span>
+              <span className="fn-footer-wordmark">Profilenc</span>
+            </div>
+
+            <div className="fn-footer-actions">
+              <a href="#feedback" className="fn-footer-icon-btn" aria-label="Send feedback">
+                <MessageSquare size={17} />
+              </a>
+              <button
+                type="button"
+                className="fn-footer-icon-btn"
+                onClick={scrollToTop}
+                aria-label="Back to top"
+              >
+                <ArrowUp size={17} />
+              </button>
+            </div>
           </div>
-          <span className="fn-footer-note">
-            Built with curiosity / Updated 2026 / &copy; Profilenc
-          </span>
+
+          {/* Row 2: legal on the left, two right aligned link rows */}
+          <div className="fn-footer-bottom">
+            <div className="fn-footer-legal">
+              <span>&copy; {new Date().getFullYear()} Profilenc</span>
+              <span>All rights reserved</span>
+            </div>
+
+            <nav className="fn-footer-nav" aria-label="Footer">
+              <div className="fn-footer-nav-row">
+                <a href="#updates">Updates</a>
+                <a href="#showcase">Showcase</a>
+                <a href="#community">People</a>
+                <a href="#feedback">Feedback</a>
+              </div>
+              <div className="fn-footer-nav-row is-secondary">
+                {isAuthenticated ? (
+                  <>
+                    <Link to="/dashboard">Dashboard</Link>
+                    <Link to={`/@${user.username}/edit`}>Studio</Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/login">Log in</Link>
+                    <Link to="/register">Get started</Link>
+                  </>
+                )}
+              </div>
+            </nav>
+          </div>
         </div>
       </footer>
+
+      {/* Phone tab bar — replaces the top header on small screens */}
+      <LandingBottomNav lenisRef={lenisRef} theme={theme} onToggleTheme={toggleTheme} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Code2 } from 'lucide-react';
-import { TechIcon } from '../../utils/techIconUtils';
+import { TechIcon } from '../../lib/techIconUtils';
 
 export default function SkillsBlock({ data = {} }) {
   const { items = [] } = data;

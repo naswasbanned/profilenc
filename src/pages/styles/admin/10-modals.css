@@ -1,0 +1,116 @@
+/* --- Modals --- */
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(10, 7, 18, 0.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.admin-modal-box {
+  background: var(--paper-light);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 32px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: var(--shadow-modal);
+}
+
+.admin-modal-box.wide {
+  max-width: 680px;
+}
+
+.modal-header {
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.modal-badge {
+  font-family: var(--fn-mono);
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--coral-text);
+  letter-spacing: 0.05em;
+}
+
+.modal-header h3 {
+  font-family: var(--fn-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 4px 0 0;
+}
+
+.modal-text {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.patch-items-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.patch-item-edit-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 36px;
+  gap: 8px;
+  align-items: center;
+}
+
+.remove-change-btn {
+  background: var(--paper);
+  border: 1.5px solid var(--coral-dark);
+  border-radius: var(--radius-sm);
+  color: var(--coral);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.remove-change-btn:hover {
+  background: var(--coral-dark);
+  color: #ffffff;
+}
+
+.cms-checkbox-field {
+  margin-top: 16px;
+}
+
+.cms-checkbox-field label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--fn-mono);
+  font-size: 0.78rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+

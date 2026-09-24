@@ -1,0 +1,137 @@
+/* ==========================================================================
+   PROFILENC ADMIN KERNEL DASHBOARD STYLES
+   Field Notes Editorial System • Fraunces & DM Sans • Tactile Precision
+   Consistent Radii: 8px for cards/boxes, 999px for pills/buttons
+   ========================================================================== */
+
+:root {
+  --fn-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --fn-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --fn-mono: 'DM Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Field Notes Editorial Light Palette (Matches Landing Page) */
+  --paper: #f5efdf;
+  --paper-light: #fffaf0;
+  --paper-elevated: #ede5d2;
+  --ink: #252320;
+  --muted: #746e63;
+  --line: #252320;
+
+  --coral: #e96d52;
+  --coral-dark: #c9503c;
+  --butter: #f4cf62;
+  --mint: #b9d9bb;
+  --blue: #5578bd;
+  --lavender: #c6b9df;
+
+  /* High-Contrast Accessible Semantic Tokens (Light Mode) */
+  --coral-text: #b83a22;
+  --coral-bg: rgba(233, 109, 82, 0.12);
+  --coral-border: #d95338;
+
+  --mint-text: #166534;
+  --mint-bg: rgba(22, 101, 52, 0.12);
+  --mint-border: #22c55e;
+
+  --lavender-text: #5b21b6;
+  --lavender-bg: rgba(91, 33, 182, 0.1);
+  --lavender-border: #8b5cf6;
+
+  --blue-text: #1e40af;
+  --blue-bg: rgba(30, 64, 175, 0.1);
+  --blue-border: #3b82f6;
+
+  --amber-text: #92400e;
+  --amber-bg: rgba(146, 64, 14, 0.12);
+  --amber-border: #f59e0b;
+
+  --table-th-bg: #ede5d2;
+  --table-th-text: #252320;
+  --table-cell-text: #252320;
+  --table-cell-muted: #544e45;
+  --table-cell-border: #d7ccb8;
+  --table-row-hover: #f7f1e3;
+
+  --radius-sm: 8px;
+  --radius-md: 18px;
+  --radius-lg: 34px;
+  --shadow: 3px 4px 0 var(--ink);
+  --shadow-lg: 5px 6px 0 var(--ink);
+  --shadow-modal: 7px 8px 0 var(--ink);
+  --bg-dots: rgba(37, 35, 32, 0.07);
+}
+
+[data-theme="dark"],
+.admin-page[data-theme="dark"] {
+  /* Sweet Dark Purple (Matches Landing Page) */
+  --paper: #191524;
+  --paper-light: #241e33;
+  --paper-elevated: #2f2742;
+  --ink: #f9f3e9;
+  --muted: #b2a5c2;
+  --line: #44375b;
+
+  --coral: #f1846b;
+  --coral-dark: #d96351;
+  --butter: #f6d878;
+  --mint: #9ed0b0;
+  --blue: #8ba8e2;
+  --lavender: #cbbbe8;
+
+  /* High-Contrast Accessible Semantic Tokens (Dark Mode) */
+  --coral-text: #f1846b;
+  --coral-bg: rgba(241, 132, 107, 0.18);
+  --coral-border: #f1846b;
+
+  --mint-text: #86efac;
+  --mint-bg: rgba(134, 239, 172, 0.15);
+  --mint-border: #86efac;
+
+  --lavender-text: #cbbbe8;
+  --lavender-bg: rgba(203, 187, 232, 0.18);
+  --lavender-border: #cbbbe8;
+
+  --blue-text: #93c5fd;
+  --blue-bg: rgba(147, 197, 253, 0.15);
+  --blue-border: #93c5fd;
+
+  --amber-text: #fde047;
+  --amber-bg: rgba(253, 224, 71, 0.15);
+  --amber-border: #fde047;
+
+  --table-th-bg: #2f2742;
+  --table-th-text: #f9f3e9;
+  --table-cell-text: #f9f3e9;
+  --table-cell-muted: #b2a5c2;
+  --table-cell-border: #44375b;
+  --table-row-hover: #2b223e;
+
+  --shadow: 3px 4px 0 var(--line);
+  --shadow-lg: 5px 6px 0 var(--line);
+  --shadow-modal: 7px 8px 0 var(--line);
+  --bg-dots: rgba(249, 243, 233, 0.07);
+}
+
+/* Base Page Layout */
+.admin-page {
+  min-height: 100vh;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--fn-body);
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: 80px;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* Background Matrix Texture */
+.admin-page .raw-grid-matrix {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(var(--bg-dots) 0.8px, transparent 0.8px);
+  background-size: 8px 8px;
+}
+

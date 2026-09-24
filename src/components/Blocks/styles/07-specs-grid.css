@@ -1,0 +1,142 @@
+/* ==========================================================================
+   6. SPECS & GEAR GRID BLOCK
+   ========================================================================== */
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.spec-card {
+  padding: 16px 18px;
+  border-radius: var(--card-border-radius, var(--radius-md, 12px));
+  background: var(--card-bg, var(--color-surface-raised));
+  border: var(--card-border-width, 1px) var(--card-border-style, solid) var(--card-border, var(--color-border-subtle));
+  box-shadow: var(--card-shadow, none);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
+  /* Strictly static showcase card: no hover lift, translation, or shadow expansion */
+  transform: none !important;
+}
+
+.spec-card:hover {
+  transform: none !important;
+  box-shadow: var(--card-shadow, none) !important;
+}
+
+/* Preset Overrides for Specs Card (Static, strictly no hover effect) */
+[data-design-style="field-notes"] .spec-card,
+[data-button-style="editorial-tactile"] .spec-card {
+  border-width: var(--card-border-width, 2px);
+  border-color: var(--card-border, #d7ccb8);
+  box-shadow: var(--card-shadow, 4px 5px 0 rgba(37, 35, 32, 0.22));
+  background: var(--card-bg, #fdfbf7);
+}
+
+[data-design-style="field-notes"] .spec-card:hover,
+[data-button-style="editorial-tactile"] .spec-card:hover {
+  transform: none !important;
+  box-shadow: var(--card-shadow, 4px 5px 0 rgba(37, 35, 32, 0.22)) !important;
+}
+
+[data-design-style="neo-brutalist"] .spec-card,
+[data-button-style="neo-brutalist"] .spec-card {
+  border: 3px solid #000000 !important;
+  box-shadow: 5px 5px 0 #000000 !important;
+  border-radius: 0 !important;
+  background: var(--card-bg, #ffffff) !important;
+}
+
+[data-design-style="neo-brutalist"] .spec-card:hover,
+[data-button-style="neo-brutalist"] .spec-card:hover {
+  transform: none !important;
+  box-shadow: 5px 5px 0 #000000 !important;
+}
+
+[data-design-style="midnight-violet"] .spec-card,
+[data-button-style="rounded-glow"] .spec-card {
+  border-radius: var(--card-border-radius, 16px);
+  box-shadow: var(--card-shadow, 0 4px 20px rgba(0, 0, 0, 0.3));
+  border-color: var(--card-border, rgba(139, 92, 246, 0.15));
+}
+
+[data-design-style="midnight-violet"] .spec-card:hover,
+[data-button-style="rounded-glow"] .spec-card:hover {
+  transform: none !important;
+  box-shadow: var(--card-shadow, 0 4px 20px rgba(0, 0, 0, 0.3)) !important;
+}
+
+.spec-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm, 8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-dim, rgba(255, 255, 255, 0.05));
+  color: var(--color-accent-primary);
+  border: 1px solid color-mix(in srgb, var(--color-accent-primary) 25%, transparent);
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+[data-icon-style="bordered-box"] .spec-icon,
+[data-design-style="field-notes"] .spec-icon {
+  background: var(--card-bg, #fffaf0);
+  color: var(--color-accent-primary, #e96d52);
+  border: var(--card-border-width, 1.5px) solid var(--card-border, #252320);
+  box-shadow: 2px 2px 0 var(--card-border, #252320);
+  border-radius: var(--radius-xs, 6px);
+}
+
+[data-design-style="neo-brutalist"] .spec-icon {
+  background: #ffeb3b !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 2px 2px 0 #000000 !important;
+  border-radius: 0 !important;
+}
+
+[data-design-style="midnight-violet"] .spec-icon {
+  background: rgba(139, 92, 246, 0.12);
+  color: var(--color-accent-primary, #a78bfa);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: var(--radius-sm, 10px);
+}
+
+.spec-info {
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.spec-category {
+  font-size: var(--text-2xs, 0.68rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-accent-primary);
+  margin-bottom: 3px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+}
+
+.spec-name {
+  font-family: var(--font-display);
+  font-size: var(--text-sm, 0.92rem);
+  font-weight: 700;
+  color: var(--card-heading-color, var(--color-card-heading, var(--heading-color, #ffffff)));
+  margin-bottom: 4px;
+  line-height: 1.35;
+}
+
+.spec-detail {
+  font-size: var(--text-xs, 0.8rem);
+  color: var(--card-text-muted, var(--color-card-text-muted, var(--color-text-secondary, #8b949e)));
+  font-family: var(--font-mono);
+  line-height: 1.45;
+  word-break: break-word;
+}
+

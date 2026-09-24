@@ -1,0 +1,440 @@
+/* ==========================================================================
+   GitHub Contribution Heatmap Block
+   ========================================================================== */
+
+.github-heatmap-block {
+  background: var(--card-bg, #12151e);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-md, 10px);
+  padding: 24px;
+  overflow: hidden;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
+}
+
+.github-heatmap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.github-heatmap-profile-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent-color, #00f0aa);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: var(--font-mono, monospace);
+  transition: opacity 0.2s;
+}
+
+.github-heatmap-profile-link:hover { opacity: 0.8; }
+
+.github-heatmap-year {
+  font-size: 0.75rem;
+  color: var(--text-muted, #8b949e);
+  font-family: var(--font-mono, monospace);
+}
+
+.github-heatmap-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.github-heatmap-grid {
+  min-width: 720px;
+}
+
+.github-heatmap-months {
+  display: grid;
+  grid-template-columns: 32px repeat(53, 1fr);
+  margin-bottom: 4px;
+}
+
+.heatmap-day-label-spacer { width: 32px; }
+
+.heatmap-month-label {
+  font-size: 0.65rem;
+  color: var(--text-muted, #8b949e);
+  font-family: var(--font-mono, monospace);
+}
+
+.github-heatmap-body {
+  display: flex;
+  gap: 4px;
+}
+
+.heatmap-day-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 28px;
+  padding-top: 1px;
+}
+
+.heatmap-day-labels span {
+  height: 11px;
+  font-size: 0.58rem;
+  color: var(--text-muted, #8b949e);
+  display: flex;
+  align-items: center;
+  font-family: var(--font-mono, monospace);
+}
+
+.heatmap-cells {
+  display: flex;
+  gap: 3px;
+  flex: 1;
+}
+
+.heatmap-week-column {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.heatmap-cell-wrapper {
+  position: relative;
+}
+
+.heatmap-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  transition: background-color 0.15s, transform 0.15s;
+}
+
+.heatmap-cell-empty { background: transparent; }
+.heatmap-level-0 {
+  background: var(--color-surface-sunken, rgba(255, 255, 255, 0.06));
+  border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.04));
+}
+.heatmap-level-1 { background: color-mix(in srgb, var(--accent-color, #00f0aa) 20%, transparent); }
+.heatmap-level-2 { background: color-mix(in srgb, var(--accent-color, #00f0aa) 40%, transparent); }
+.heatmap-level-3 { background: color-mix(in srgb, var(--accent-color, #00f0aa) 65%, transparent); }
+.heatmap-level-4 { background: var(--accent-color, #00f0aa); }
+
+.heatmap-tooltip {
+  background: #1a1d28;
+  color: #e2e8f0;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-family: var(--font-mono, monospace);
+  white-space: nowrap;
+  z-index: 100;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.heatmap-legend-label {
+  font-size: 0.62rem;
+  color: var(--text-muted, #8b949e);
+  font-family: var(--font-mono, monospace);
+  margin: 0 4px;
+}
+
+.heatmap-legend-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+}
+
+.github-heatmap-stats {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+}
+
+.heatmap-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted, #8b949e);
+  font-size: 0.78rem;
+}
+
+.heatmap-stat svg { color: var(--accent-color, #00f0aa); flex-shrink: 0; }
+
+.heatmap-stat-value {
+  font-weight: 700;
+  color: var(--text-color, #e6edf3);
+  font-family: var(--font-mono, monospace);
+}
+
+.heatmap-stat-label {
+  color: var(--text-muted, #8b949e);
+  font-size: 0.72rem;
+}
+
+.github-heatmap-empty,
+.github-heatmap-loading,
+.github-heatmap-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 20px;
+  background: var(--card-bg, #12151e);
+  border: 1px dashed var(--card-border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-md, 10px);
+  color: var(--text-muted, #8b949e);
+  font-size: 0.85rem;
+  text-align: center;
+  backdrop-filter: blur(var(--glass-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
+}
+
+.github-heatmap-loading { flex-direction: row; }
+
+@media (max-width: 640px) {
+  .github-heatmap-block { padding: 16px; }
+  .github-heatmap-stats { gap: 16px; }
+}
+
+/* ==========================================================================
+   GitHubHeatmapBlock - Theme Matching Styles
+   ========================================================================== */
+
+/* --- Field Notes Editorial --- */
+[data-design-style="field-notes"] .github-heatmap-block {
+  background: var(--card-bg, #fffaf0);
+  border: var(--card-border-width, 2px) solid var(--card-border, #d7ccb8);
+  border-radius: var(--card-border-radius, 14px);
+  box-shadow: var(--card-shadow, 4px 5px 0 rgba(37, 35, 32, 0.22));
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[data-design-style="field-notes"] .github-heatmap-profile-link {
+  color: var(--color-accent-primary, #e96d52);
+  font-family: var(--font-mono, 'DM Mono', monospace);
+}
+
+[data-design-style="field-notes"] .github-heatmap-year,
+[data-design-style="field-notes"] .heatmap-month-label,
+[data-design-style="field-notes"] .heatmap-day-labels span,
+[data-design-style="field-notes"] .heatmap-legend-label {
+  color: var(--card-text-muted, #746e63);
+  font-family: var(--font-mono, 'DM Mono', monospace);
+}
+
+[data-design-style="field-notes"] .heatmap-level-0 {
+  background: #ede5d0;
+  border: 1px solid #e2d7c0;
+}
+
+[data-design-style="field-notes"] .heatmap-level-1 {
+  background: #f7cebe;
+  border: 1px solid #f0b9a3;
+}
+
+[data-design-style="field-notes"] .heatmap-level-2 {
+  background: #f19f86;
+  border: 1px solid #e78466;
+}
+
+[data-design-style="field-notes"] .heatmap-level-3 {
+  background: #e96d52;
+  border: 1px solid #d9563a;
+}
+
+[data-design-style="field-notes"] .heatmap-level-4 {
+  background: #bd432a;
+  border: 1px solid #a3321b;
+}
+
+[data-design-style="field-notes"] .github-heatmap-stats {
+  border-top: 1.5px solid var(--card-border, #d7ccb8);
+}
+
+[data-design-style="field-notes"] .heatmap-stat-value {
+  color: var(--card-heading-color, #252320);
+  font-family: var(--font-mono, 'DM Mono', monospace);
+}
+
+[data-design-style="field-notes"] .heatmap-stat-label {
+  color: var(--card-text-muted, #746e63);
+}
+
+[data-design-style="field-notes"] .heatmap-stat svg {
+  color: var(--color-accent-primary, #e96d52);
+}
+
+[data-design-style="field-notes"] .heatmap-tooltip {
+  background: #252320;
+  color: #fffaf0;
+  border: 1.5px solid #d7ccb8;
+  box-shadow: 3px 3px 0 #252320;
+}
+
+/* --- Neo-Brutalist --- */
+[data-design-style="neo-brutalist"] .github-heatmap-block {
+  background: #ffffff;
+  border: 3px solid #000000 !important;
+  border-radius: 0 !important;
+  box-shadow: 5px 5px 0 #000000 !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[data-design-style="neo-brutalist"] .github-heatmap-profile-link {
+  color: #000000;
+  font-weight: 800;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+}
+
+[data-design-style="neo-brutalist"] .github-heatmap-year,
+[data-design-style="neo-brutalist"] .heatmap-month-label,
+[data-design-style="neo-brutalist"] .heatmap-day-labels span,
+[data-design-style="neo-brutalist"] .heatmap-legend-label {
+  color: #000000;
+  font-weight: 700;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+}
+
+[data-design-style="neo-brutalist"] .heatmap-cell {
+  border-radius: 0;
+}
+
+[data-design-style="neo-brutalist"] .heatmap-level-0 {
+  background: #ededed;
+  border: 1px solid #cccccc;
+}
+
+[data-design-style="neo-brutalist"] .heatmap-level-1 {
+  background: #bbf7d0;
+  border: 1px solid #000000;
+}
+
+[data-design-style="neo-brutalist"] .heatmap-level-2 {
+  background: #6ee7b7;
+  border: 1px solid #000000;
+}
+
+[data-design-style="neo-brutalist"] .heatmap-level-3 {
+  background: #00f0aa;
+  border: 1px solid #000000;
+}
+
+[data-design-style="neo-brutalist"] .heatmap-level-4 {
+  background: #ffdd00;
+  border: 1px solid #000000;
+}
+
+[data-design-style="neo-brutalist"] .github-heatmap-stats {
+  border-top: 2px solid #000000;
+}
+
+[data-design-style="neo-brutalist"] .heatmap-stat-value {
+  color: #000000;
+  font-weight: 800;
+}
+
+[data-design-style="neo-brutalist"] .heatmap-stat-label {
+  color: #333333;
+  font-weight: 700;
+}
+
+[data-design-style="neo-brutalist"] .heatmap-stat svg {
+  color: #000000;
+}
+
+[data-design-style="neo-brutalist"] .heatmap-tooltip {
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
+  border-radius: 0;
+  box-shadow: 3px 3px 0 #000000;
+  font-weight: 700;
+}
+
+/* --- Midnight Violet --- */
+[data-design-style="midnight-violet"] .github-heatmap-block {
+  background: rgba(19, 13, 36, 0.75);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+[data-design-style="midnight-violet"] .github-heatmap-profile-link {
+  color: #a78bfa;
+}
+
+[data-design-style="midnight-violet"] .github-heatmap-year,
+[data-design-style="midnight-violet"] .heatmap-month-label,
+[data-design-style="midnight-violet"] .heatmap-day-labels span,
+[data-design-style="midnight-violet"] .heatmap-legend-label {
+  color: #c4b5fd;
+}
+
+[data-design-style="midnight-violet"] .heatmap-level-0 {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(167, 139, 250, 0.12);
+}
+
+[data-design-style="midnight-violet"] .heatmap-level-1 {
+  background: rgba(167, 139, 250, 0.25);
+  border: 1px solid rgba(167, 139, 250, 0.35);
+}
+
+[data-design-style="midnight-violet"] .heatmap-level-2 {
+  background: rgba(167, 139, 250, 0.5);
+  border: 1px solid rgba(167, 139, 250, 0.6);
+}
+
+[data-design-style="midnight-violet"] .heatmap-level-3 {
+  background: #a78bfa;
+  border: 1px solid #c4b5fd;
+}
+
+[data-design-style="midnight-violet"] .heatmap-level-4 {
+  background: #c4b5fd;
+  border: 1px solid #ffffff;
+  box-shadow: 0 0 8px rgba(196, 181, 253, 0.5);
+}
+
+[data-design-style="midnight-violet"] .github-heatmap-stats {
+  border-top: 1px solid rgba(167, 139, 250, 0.15);
+}
+
+[data-design-style="midnight-violet"] .heatmap-stat-value {
+  color: #f5f3ff;
+}
+
+[data-design-style="midnight-violet"] .heatmap-stat-label {
+  color: #c4b5fd;
+}
+
+[data-design-style="midnight-violet"] .heatmap-stat svg {
+  color: #a78bfa;
+}
+
+[data-design-style="midnight-violet"] .heatmap-tooltip {
+  background: #130d24;
+  color: #f5f3ff;
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+}

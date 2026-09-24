@@ -1,0 +1,51 @@
+/* ==========================================================================
+   MOBILE BRAND BAR (phone only)
+
+   Mirrors the landing page's centered brand row (.fn-mobile-brand in
+   src/pages/styles/landing/01-header.css). Static, not sticky: the MobileDock
+   owns navigation on phones, so this row only carries identity.
+
+   Colours come from whichever page palette is in scope, so it follows dark and
+   light mode on every surface.
+   ========================================================================== */
+
+.app-brandbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .app-brandbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px 16px 4px;
+  }
+
+  .app-brandbar-mark {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 2px solid var(--ink, #252320);
+    border-radius: 50%;
+    background: var(--paper-light, #fffaf0);
+    box-shadow: var(--shadow-small, 2px 2px 0 var(--ink, #252320));
+    transform: rotate(-8deg);
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .app-brandbar-mark img {
+    width: 19px;
+    height: 19px;
+  }
+
+  .app-brandbar-name {
+    font-family: var(--fn-display, inherit);
+    font-size: 1.32rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--ink, #252320);
+  }
+}

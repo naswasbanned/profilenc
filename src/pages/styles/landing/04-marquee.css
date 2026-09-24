@@ -1,0 +1,27 @@
+/* ==========================================================================
+   MARQUEE
+   ========================================================================== */
+
+.fn-marquee {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding: 20px 0;
+  background: var(--ink);
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+
+.fn-marquee-track {
+  display: flex;
+  gap: 48px;
+  width: max-content;
+  white-space: nowrap;
+  color: var(--paper);
+  font-family: var(--fn-display);
+  font-size: clamp(1.3rem, 3.4vw, 2.3rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  will-change: transform;
+}
+

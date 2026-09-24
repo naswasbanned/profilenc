@@ -5,7 +5,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import authRoutes from './routes/auth.js';
-import contentRoutes from './routes/content.js';
 import imageRoutes from './routes/images.js';
 import userRoutes from './routes/users.js';
 import templateRoutes from './routes/templates.js';
@@ -14,7 +13,7 @@ import siteRoutes from './routes/site.js';
 import { ensureUploadDirs } from './services/imageService.js';
 import { runMigrations } from './db/migrate.js';
 import { seedTemplates } from './db/seeds/templates.js';
-import { migrateExisting } from './db/migrations/002_migrate_existing.js';
+import { seedBootstrap } from './db/seeds/bootstrap.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const uploadsDir = path.join(__dirname, '..', 'uploads');
@@ -37,7 +36,6 @@ app.use('/uploads', express.static(uploadsDir, {
 
 // API routes
 app.use('/api/auth', authRoutes);
-app.use('/api/content', contentRoutes);     // Legacy single-user (kept for backward compatibility)
 app.use('/api/images', imageRoutes);
 app.use('/api/u', userRoutes);              // Multi-user profile routes
 app.use('/api/templates', templateRoutes);  // Template browsing & featured profiles
@@ -67,7 +65,7 @@ async function initDatabase(retries = 5, delay = 2000) {
     try {
       await runMigrations();
       await seedTemplates();
-      await migrateExisting();
+      await seedBootstrap();
       return;
     } catch (err) {
       console.warn(`Database init attempt ${i + 1}/${retries} failed: ${err.message}`);

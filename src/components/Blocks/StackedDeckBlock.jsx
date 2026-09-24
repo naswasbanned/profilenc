@@ -3,10 +3,29 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Layers, ChevronLeft, ChevronRight } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 
+// Deck shape and width are set per block from the editor. The stack layers are
+// absolutely positioned, so the container needs a concrete ratio rather than
+// following the image.
+const DECK_RATIOS = {
+  landscape: '16 / 10',
+  wide: '21 / 9',
+  square: '1 / 1',
+  portrait: '4 / 5',
+};
+
+const DECK_SIZES = {
+  small: '340px',
+  medium: '480px',
+  large: '640px',
+  full: '100%',
+};
+
 export default function StackedDeckBlock({ data = {} }) {
   const {
     images = [],
     caption = '',
+    aspectRatio = 'landscape',
+    size = 'medium',
   } = data;
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -38,7 +57,15 @@ export default function StackedDeckBlock({ data = {} }) {
 
   return (
     <div className="stacked-deck-wrap">
-      <div className="deck-container">
+      <div
+        className="deck-container"
+        data-deck-ratio={aspectRatio}
+        data-deck-size={size}
+        style={{
+          aspectRatio: DECK_RATIOS[aspectRatio] || DECK_RATIOS.landscape,
+          maxWidth: DECK_SIZES[size] || DECK_SIZES.medium,
+        }}
+      >
         {/* Layer cards mimicking stack thickness */}
         <div className="deck-layer layer-back" />
         <div className="deck-layer layer-mid" />

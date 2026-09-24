@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { LogIn, Eye, EyeOff, ArrowLeft, AlertCircle, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import './AuthPages.css';
+import { useUiTheme } from '../hooks/useUiTheme';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -12,61 +13,12 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('profilenc_theme') || 'dark';
-    }
-    return 'dark';
-  });
+  const { theme, toggleTheme } = useUiTheme();
 
   useEffect(() => {
     document.title = 'Profilenc — Log In';
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
+  }, []);
 
-  const toggleTheme = (e) => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-
-    if (!document.startViewTransition) {
-      setTheme(nextTheme);
-      localStorage.setItem('profilenc_theme', nextTheme);
-      document.documentElement.setAttribute('data-theme', nextTheme);
-      return;
-    }
-
-    const rect = e?.currentTarget?.getBoundingClientRect();
-    const x = rect ? rect.left + rect.width / 2 : window.innerWidth;
-    const y = rect ? rect.top + rect.height / 2 : 0;
-
-    const maxDist = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    );
-    const endRadius = Math.ceil(maxDist) + 40;
-
-    const transition = document.startViewTransition(() => {
-      setTheme(nextTheme);
-      localStorage.setItem('profilenc_theme', nextTheme);
-      document.documentElement.setAttribute('data-theme', nextTheme);
-    });
-
-    transition.ready.then(() => {
-      document.documentElement.animate(
-        {
-          clipPath: [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${endRadius}px at ${x}px ${y}px)`,
-          ],
-        },
-        {
-          duration: 650,
-          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-          fill: 'forwards',
-          pseudoElement: '::view-transition-new(root)',
-        }
-      );
-    });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

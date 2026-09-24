@@ -1,0 +1,355 @@
+/* ==========================================================================
+   1. HERO BLOCK
+   ========================================================================== */
+.hero-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 48px 24px 32px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.hero-block.align-left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.hero-block.align-left .hero-status-badge {
+  left: 0;
+  transform: none;
+}
+
+.hero-block.align-left .hero-socials,
+.hero-block.align-left .hero-actions {
+  justify-content: flex-start;
+}
+
+.hero-block.align-right {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.hero-block.align-right .hero-status-badge {
+  right: 0;
+  left: auto;
+  transform: none;
+}
+
+.hero-block.align-right .hero-socials,
+.hero-block.align-right .hero-actions {
+  justify-content: flex-end;
+}
+
+.hero-block.layout-split {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  text-align: left;
+  gap: 40px;
+  max-width: 960px;
+}
+
+.hero-block.layout-split-right {
+  grid-template-columns: 1fr auto;
+  text-align: left;
+}
+
+.hero-block.layout-split .hero-avatar-wrap {
+  margin-bottom: 0;
+}
+
+.hero-block.layout-split .hero-avatar-img-wrap,
+.hero-block.layout-split .hero-avatar-wrap .optimized-image-wrapper,
+.hero-block.layout-split .hero-avatar,
+.hero-block.layout-split .hero-avatar-fallback {
+  width: 140px;
+  height: 140px;
+}
+
+.hero-block.layout-split .hero-socials,
+.hero-block.layout-split .hero-actions {
+  justify-content: flex-start;
+}
+
+.hero-avatar-wrap {
+  position: relative;
+  margin-bottom: 24px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-avatar-img-wrap,
+.hero-avatar-wrap .optimized-image-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 2px solid var(--color-border-normal);
+  background: transparent;
+  flex-shrink: 0;
+  display: block;
+}
+
+.hero-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  display: block;
+}
+
+img.hero-avatar:not(.optimized-image) {
+  width: 120px;
+  height: 120px;
+  border: 2px solid var(--color-border-normal);
+}
+
+.hero-avatar-fallback {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: var(--btn-primary-text, #090a0f);
+  background: var(--color-accent-primary);
+  box-shadow: 0 0 20px var(--color-accent-dim);
+}
+
+.hero-status-badge {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-sunken, rgba(9, 10, 15, 0.95));
+  backdrop-filter: blur(var(--glass-blur, 8px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 8px));
+  border: 1px solid var(--color-accent-dim, rgba(0, 240, 170, 0.3));
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--color-accent-primary);
+  white-space: nowrap;
+}
+
+.hero-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-primary);
+}
+
+.hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 700;
+  color: var(--heading-color, var(--color-heading, var(--color-text-bright, #ffffff)));
+  margin-bottom: 8px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero-tagline {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-accent-primary);
+  margin-bottom: 16px;
+  letter-spacing: 0.02em;
+}
+
+.hero-bio {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+  max-width: 620px;
+  margin-bottom: 28px;
+  font-family: var(--font-body);
+}
+
+.hero-socials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+/* >3 social links: compact 2-col grid, icon-first pills */
+.hero-socials:has(.hero-social-link:nth-child(4)) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.hero-socials:has(.hero-social-link:nth-child(4)) .hero-social-link {
+  justify-content: flex-start;
+  padding: 6px 12px;
+}
+
+/* Even number of items: last lone child spans full width */
+.hero-socials:has(.hero-social-link:nth-child(4)):not(:has(.hero-social-link:nth-child(5))):not(:has(.hero-social-link:nth-child(6))) .hero-social-link:last-child,
+.hero-socials:has(.hero-social-link:nth-child(6)):not(:has(.hero-social-link:nth-child(7))) .hero-social-link:last-child {
+  /* even count — no orphan */
+}
+
+/* Odd count >3: last item spans full row */
+.hero-socials:has(.hero-social-link:nth-child(5)):not(:has(.hero-social-link:nth-child(6))) .hero-social-link:last-child,
+.hero-socials:has(.hero-social-link:nth-child(7)):not(:has(.hero-social-link:nth-child(8))) .hero-social-link:last-child {
+  grid-column: 1 / -1;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.hero-social-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  transition: color var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.hero-social-link:hover {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: var(--btn-radius, var(--radius-sm));
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+  text-decoration: none;
+}
+
+.hero-btn.primary {
+  background: var(--btn-primary-bg, var(--color-accent-primary));
+  color: var(--btn-primary-text, #090a0f);
+  border: 1px solid var(--btn-primary-border, var(--color-accent-primary));
+}
+
+.hero-btn.primary:hover {
+  filter: brightness(1.12);
+  background: var(--btn-primary-bg, var(--color-accent-primary));
+  border-color: var(--btn-primary-border, var(--color-accent-primary));
+}
+
+.hero-btn.primary:active {
+  transform: scale(0.98);
+}
+
+.hero-btn.secondary {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-normal);
+}
+
+.hero-btn.secondary:hover {
+  background: var(--color-surface-overlay);
+  border-color: var(--color-border-strong);
+}
+
+/* ==========================================================================
+   HERO BLOCK — Mobile Responsive (force center on ≤640px)
+   ========================================================================== */
+@media (max-width: 640px) {
+  /* Collapse split layouts to stacked center */
+  .hero-block.layout-split,
+  .hero-block.layout-split-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0;
+  }
+
+  .hero-block.layout-split .hero-split-media,
+  .hero-block.layout-split-right .hero-split-media {
+    display: contents; /* let avatar-wrap render inline in flex column */
+  }
+
+  .hero-block.layout-split .hero-split-body,
+  .hero-block.layout-split-right .hero-split-body {
+    display: contents;
+  }
+
+  .hero-block.layout-split .hero-avatar-img-wrap,
+  .hero-block.layout-split .hero-avatar-wrap .optimized-image-wrapper,
+  .hero-block.layout-split .hero-avatar,
+  .hero-block.layout-split .hero-avatar-fallback,
+  .hero-block.layout-split-right .hero-avatar-img-wrap,
+  .hero-block.layout-split-right .hero-avatar-wrap .optimized-image-wrapper,
+  .hero-block.layout-split-right .hero-avatar,
+  .hero-block.layout-split-right .hero-avatar-fallback {
+    width: 120px;
+    height: 120px;
+  }
+
+  .hero-block.layout-split .hero-avatar-wrap,
+  .hero-block.layout-split-right .hero-avatar-wrap {
+    margin-bottom: 24px;
+  }
+
+  /* Force left/right align to center */
+  .hero-block.align-left,
+  .hero-block.align-right {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-block.align-left .hero-status-badge,
+  .hero-block.align-right .hero-status-badge {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+
+  .hero-block.align-left .hero-socials,
+  .hero-block.align-left .hero-actions,
+  .hero-block.align-right .hero-socials,
+  .hero-block.align-right .hero-actions,
+  .hero-block.layout-split .hero-socials,
+  .hero-block.layout-split .hero-actions,
+  .hero-block.layout-split-right .hero-socials,
+  .hero-block.layout-split-right .hero-actions {
+    justify-content: center;
+  }
+
+  /* Socials grid stays 2-col on mobile but caps nicely */
+  .hero-socials:has(.hero-social-link:nth-child(4)) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+

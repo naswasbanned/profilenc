@@ -1,0 +1,171 @@
+/* ==========================================================================
+   Modular Block Engine — Core Styles
+   Theme: Technical Obsidian & Precision Luminescence
+   ========================================================================== */
+
+/* --- Block Container --- */
+.block-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto var(--block-gap, 56px);
+  padding: 0 var(--block-padding, 20px);
+}
+
+.block-wrapper.is-editing:first-of-type {
+  margin-top: 14px;
+}
+
+.block-header {
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: var(--block-divider-style, none) var(--card-border-width, 1px) var(--block-divider-color, var(--card-border, rgba(255, 255, 255, 0.08)));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.block-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.block-title-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-dim);
+  color: var(--color-accent-primary);
+  border: 1px solid rgba(0, 240, 170, 0.2);
+  transition: all var(--transition-normal);
+}
+
+/* Icon style overrides */
+[data-icon-style="bordered-box"] .block-title-icon {
+  background: var(--card-bg, #fffaf0);
+  color: var(--color-accent-primary, #e96d52);
+  border: var(--card-border-width, 2px) solid var(--card-border, #d7ccb8);
+  box-shadow: 2px 3px 0 var(--card-border, #252320);
+  border-radius: var(--radius-sm, 8px);
+}
+
+[data-icon-style="none"] .block-title-icon {
+  display: none;
+}
+
+.block-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--heading-font-weight, 700);
+  color: var(--heading-color, var(--color-heading, var(--color-text-bright, #ffffff)));
+  letter-spacing: -0.02em;
+}
+
+.block-subtitle {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+  font-family: var(--font-body);
+}
+
+/* --- Global Card Surface & Treatment System --- */
+.card-item,
+.skills-category,
+.timeline-card,
+.deck-layer,
+.review-card,
+.service-card,
+.services-card,
+.commission-card,
+.calendar-card,
+.event-card,
+.journal-card,
+.journal-entry-card,
+.video-card,
+.gear-item,
+.spec-card,
+.gallery-card,
+.stat-box,
+.stat-card,
+.contact-form-card,
+.contact-method-card,
+.faq-item,
+.testimonial-card,
+.metric-card,
+.reading-card,
+.movie-card,
+.game-card,
+.project-card,
+.custom-card {
+  border-width: var(--card-border-width, 1px);
+  border-style: var(--card-border-style, solid);
+  box-shadow: var(--card-shadow, none);
+}
+
+/* On hover when card-shadow is active */
+.card-item:hover,
+.services-card:hover,
+.commission-card:hover,
+.event-card:hover,
+.journal-card:hover,
+.video-card:hover,
+.gear-item:hover,
+.gallery-card:hover,
+.faq-item:hover {
+  box-shadow: var(--card-shadow-hover, var(--card-shadow, var(--shadow-md)));
+}
+
+/* --- Pill / Tag / Badge Styles --- */
+[data-pill-style="editorial-bordered"] .skill-pill,
+[data-pill-style="editorial-bordered"] .card-tag,
+[data-pill-style="editorial-bordered"] .card-badge,
+[data-pill-style="editorial-bordered"] .timeline-tag,
+[data-pill-style="editorial-bordered"] .event-tag,
+[data-pill-style="editorial-bordered"] .service-status-pill,
+[data-pill-style="editorial-bordered"] .service-featured-pill,
+[data-pill-style="editorial-bordered"] .service-delivery-pill {
+  border: var(--card-border-width, 1.5px) solid var(--card-border, #252320);
+  box-shadow: 1.5px 2px 0 var(--card-border, #252320);
+  border-radius: var(--radius-xs, 6px);
+  background: var(--card-bg, #fffaf0);
+  color: var(--card-text-color, #252320);
+  font-weight: 600;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+[data-pill-style="editorial-bordered"] .skill-pill,
+[data-pill-style="editorial-bordered"] .card-tag,
+[data-pill-style="editorial-bordered"] .timeline-tag {
+  cursor: default;
+}
+
+[data-pill-style="editorial-bordered"] .skill-pill:hover,
+[data-pill-style="editorial-bordered"] .card-tag:hover,
+[data-pill-style="editorial-bordered"] .timeline-tag:hover {
+  transform: translate(-1.5px, -2px);
+  box-shadow: 3px 3.5px 0 var(--card-border, #252320);
+  border-color: var(--card-border, #252320);
+  background: color-mix(in srgb, var(--pill-color, var(--color-accent-primary, #e96d52)) 14%, var(--card-bg, #fffaf0));
+}
+
+[data-pill-style="editorial-bordered"] .skill-pill:hover .skill-icon {
+  transform: scale(1.15);
+}
+
+[data-pill-style="flat-minimal"] .skill-pill,
+[data-pill-style="flat-minimal"] .card-tag,
+[data-pill-style="flat-minimal"] .card-badge,
+[data-pill-style="flat-minimal"] .timeline-tag,
+[data-pill-style="flat-minimal"] .event-tag {
+  border: none;
+  box-shadow: none;
+  border-radius: var(--radius-xs, 4px);
+  background: color-mix(in srgb, var(--card-text-color, #334155) 8%, transparent);
+  color: var(--card-text-color, #334155);
+}
+

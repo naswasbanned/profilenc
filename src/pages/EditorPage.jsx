@@ -1,16 +1,17 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { LogIn, ArrowLeft, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
-import { ProfileCanvas, normalizeModularContent } from './ProfilePage';
+import ProfileCanvas from '../components/Profile/ProfileCanvas';
+import { normalizeModularContent } from '../lib/profileContent';
 import EditorOverlay from '../components/Editor/EditorOverlay';
 import DeleteBlockModal from '../components/Editor/DeleteBlockModal';
+import { useSyncedUiTheme } from '../hooks/useUiTheme';
+import { apiFetch } from '../lib/api';
 import '../pages/DashboardPage.css';
 import '../pages/AuthPages.css';
-
-const API_BASE = import.meta.env.VITE_API_URL || '';
 
 function EditorCanvasInner({
   username,
@@ -24,28 +25,7 @@ function EditorCanvasInner({
   const [deletingBlock, setDeletingBlock] = useState(null);
 
   // Universal Editor UI Light / Dark Mode sync
-  const [editorTheme, setEditorTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('profilenc_theme') || document.documentElement.getAttribute('data-theme') || 'dark';
-    }
-    return 'dark';
-  });
-
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.documentElement.setAttribute('data-theme', editorTheme);
-    }
-  }, [editorTheme]);
-
-  useEffect(() => {
-    const handleStorage = (e) => {
-      if (e.key === 'profilenc_theme' && (e.newValue === 'dark' || e.newValue === 'light')) {
-        setEditorTheme(e.newValue);
-      }
-    };
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
-  }, []);
+  const { theme: editorTheme, setTheme: setEditorTheme } = useSyncedUiTheme();
 
   // State snapshots for real-time dirty state tracking with reactive re-render
   const [savedContentStr, setSavedContentStr] = useState(() => JSON.stringify(content));
@@ -246,25 +226,19 @@ function EditorCanvasInner({
   // Master Save Handler
   const handleSaveAll = useCallback(async () => {
     // 1. Save modular tabs structure
-    const contentRes = await fetch(`${API_BASE}/api/u/${username}/content/modular_profile`, {
+    const contentRes = await apiFetch(`/api/u/${username}/content/modular_profile`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(content),
+      token,
+      body: content,
     });
 
     if (!contentRes.ok) throw new Error('Failed to save profile content');
 
     // 2. Also save current live theme
-    const themeRes = await fetch(`${API_BASE}/api/u/${username}/theme`, {
+    const themeRes = await apiFetch(`/api/u/${username}/theme`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(currentTheme),
+      token,
+      body: currentTheme,
     });
 
     if (!themeRes.ok) throw new Error('Failed to save theme');
@@ -276,7 +250,7 @@ function EditorCanvasInner({
   }, [username, token, content, currentTheme, setThemeIsDirty]);
 
   return (
-    <div className="editor-page" data-editor-theme={editorTheme} style={{ paddingTop: '58px', paddingBottom: 0 }}>
+    <div className="editor-page" data-editor-theme={editorTheme}>
       <ProfileCanvas
         username={username}
         content={content}
@@ -360,12 +334,8 @@ export default function EditorPage() {
     async function load() {
       try {
         const [themeRes, contentRes] = await Promise.all([
-          fetch(`${API_BASE}/api/u/${username}/theme`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          fetch(`${API_BASE}/api/u/${username}/content`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
+          apiFetch(`/api/u/${username}/theme`, { token }),
+          apiFetch(`/api/u/${username}/content`, { token }),
         ]);
 
         if (isMounted) {

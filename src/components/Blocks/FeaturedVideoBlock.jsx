@@ -7,7 +7,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
-import { parseVideoUrl } from '../../utils/videoUtils';
+import { parseVideoUrl } from '../../lib/videoUtils';
 
 export default function FeaturedVideoBlock({ data = {} }) {
   const {

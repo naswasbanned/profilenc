@@ -1,0 +1,49 @@
+/* ==========================================================================
+   QUOTE
+   ========================================================================== */
+
+.fn-quote-section {
+  position: relative;
+  z-index: 1;
+  padding: 110px 0;
+  border-top: 1px solid var(--line);
+}
+
+.fn-quote {
+  position: relative;
+  padding: 70px 60px 60px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-lg);
+  background: var(--blue);
+  color: var(--paper-light);
+  box-shadow: var(--shadow);
+}
+
+.fn-quote-mark {
+  position: absolute;
+  top: 14px;
+  left: 34px;
+  color: var(--butter);
+  font-family: var(--fn-display);
+  font-size: 7rem;
+  line-height: 1;
+}
+
+.fn-quote-text {
+  max-width: 850px;
+  margin: 0 0 26px;
+  font-family: var(--fn-display);
+  font-size: clamp(2rem, 4.6vw, 4.2rem);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 0.98;
+}
+
+.fn-quote-cite {
+  font-family: var(--fn-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 250, 240, 0.82);
+}
+

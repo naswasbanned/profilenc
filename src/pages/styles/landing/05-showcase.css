@@ -1,0 +1,257 @@
+/* ==========================================================================
+   SHOWCASE (3D Container Scroll Animation)
+   ========================================================================== */
+
+.fn-showcase {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  margin-bottom: 80px;
+}
+
+@media (min-width: 768px) {
+  .fn-showcase {
+    margin-bottom: 110px;
+  }
+}
+
+.fn-showcase-static-header {
+  padding: 60px 0 20px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .fn-showcase-static-header {
+    padding: 80px 0 28px;
+  }
+}
+
+.fn-showcase-header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.fn-showcase-tag {
+  font-family: var(--fn-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--coral-dark);
+}
+
+.fn-showcase-title {
+  margin: 0;
+  font-family: var(--fn-display);
+  font-size: clamp(1.7rem, 2.8vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.fn-showcase-subtitle {
+  max-width: 540px;
+  margin: 0 auto;
+  font-family: var(--fn-body);
+  font-size: clamp(0.82rem, 1.1vw, 0.92rem);
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* Persona Selector Pills */
+.fn-showcase-pills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.fn-showcase-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-light);
+  color: var(--muted);
+  font-family: var(--fn-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--line);
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.fn-showcase-pill:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--line);
+  background: var(--paper-elevated);
+  color: var(--ink);
+}
+
+.fn-showcase-pill.active {
+  background: var(--butter);
+  color: #191524;
+  border-color: var(--line);
+  box-shadow: 3px 3px 0 var(--line);
+  font-weight: 800;
+}
+
+/* Mock Browser Window Container inside 3D Card */
+.fn-showcase-browser-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.fn-browser-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 16px;
+  background: var(--paper-elevated);
+  border-bottom: 2px solid var(--line);
+}
+
+.fn-browser-dots {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.fn-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.fn-dot.close {
+  background: var(--coral);
+}
+
+.fn-dot.minimize {
+  background: var(--butter);
+}
+
+.fn-dot.zoom {
+  background: var(--mint);
+}
+
+.fn-browser-url-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px;
+  background: var(--paper-light);
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--fn-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink);
+  box-shadow: 1px 1px 0 var(--line);
+}
+
+.fn-url-icon {
+  color: var(--muted);
+}
+
+.fn-url-text {
+  letter-spacing: 0.02em;
+}
+
+.fn-browser-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: var(--paper-light);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--fn-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.fn-live-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 6px var(--mint);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+}
+
+/* Browser Scroll Progress Indicator */
+.fn-browser-progress-track {
+  width: 100%;
+  height: 3px;
+  background: var(--paper-light);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+
+.fn-browser-progress-bar {
+  height: 100%;
+  width: 100%;
+  background: var(--coral);
+}
+
+.fn-browser-body {
+  padding: 20px;
+  background: var(--paper);
+  overflow: hidden;
+  /* No manual secondary scrollbar! Entirely driven by primary page scroll */
+  position: relative;
+  height: clamp(420px, 58vh, 540px);
+}
+
+@media (min-width: 768px) {
+  .fn-browser-body {
+    padding: 26px 30px;
+    height: clamp(460px, 62vh, 600px);
+  }
+}
+
+.fn-specimen-scroll-track {
+  width: 100%;
+  will-change: transform;
+  padding-bottom: 28px;
+}
+
+.fn-specimen.fn-specimen-featured {
+  width: 100%;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: 4px 5px 0 var(--line);
+}
+

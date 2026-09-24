@@ -1,0 +1,220 @@
+/* ==========================================================================
+   PROFILENC LANDING PAGE — "FIELD NOTES" EDITORIAL SYSTEM
+   Paper tones, tactile borders, hard offset shadows, expressive serif display.
+   Scoped entirely under .landing-raw-root so no other surface is affected.
+   ========================================================================== */
+
+.landing-raw-root,
+.landing-raw-root[data-theme="dark"],
+[data-theme="dark"] .landing-raw-root {
+  /* --- Sweet Dark Purple Palette (Default) --- */
+  --paper: #191524;
+  --paper-light: #241e33;
+  --paper-elevated: #2f2742;
+  --ink: #f9f3e9;
+  --muted: #b2a5c2;
+  --line: #44375b;
+
+  --coral: #f1846b;
+  --coral-dark: #d96351;
+  --butter: #f6d878;
+  --mint: #9ed0b0;
+  --blue: #8ba8e2;
+  --lavender: #cbbbe8;
+
+  --bg-dots: rgba(249, 243, 233, 0.07);
+}
+
+.landing-raw-root[data-theme="light"],
+[data-theme="light"] .landing-raw-root {
+  /* --- Editorial Paper Light Mode Palette --- */
+  --paper: #f5efdf;
+  --paper-light: #fffaf0;
+  --paper-elevated: #ede5d2;
+  --ink: #252320;
+  --muted: #746e63;
+  --line: #d7ccb8;
+
+  --coral: #e96d52;
+  --coral-dark: #c9503c;
+  --butter: #f4cf62;
+  --mint: #b9d9bb;
+  --blue: #5578bd;
+  --lavender: #c6b9df;
+
+  --bg-dots: rgba(37, 35, 32, 0.07);
+}
+
+.landing-raw-root {
+  /* --- Depth --- */
+  --shadow: 6px 7px 0 var(--ink);
+  --shadow-small: 3px 4px 0 var(--ink);
+
+  /* --- Radii --- */
+  --radius-sm: 8px;
+  --radius-md: 18px;
+  --radius-lg: 34px;
+  --max-width: 1180px;
+
+  /* --- Type --- */
+  --fn-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --fn-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --fn-mono: 'DM Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  position: relative;
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    radial-gradient(var(--bg-dots, rgba(248, 241, 228, 0.075)) 0.7px, transparent 0.7px),
+    var(--paper);
+  background-size: 7px 7px;
+  font-family: var(--fn-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: normal;
+  overflow-x: clip;
+}
+
+.landing-raw-root *,
+.landing-raw-root *::before,
+.landing-raw-root *::after {
+  box-sizing: border-box;
+}
+
+.landing-raw-root ::selection {
+  background: var(--coral);
+  color: var(--paper-light);
+}
+
+.landing-raw-root :focus-visible {
+  outline: 2px solid var(--coral-dark);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.landing-raw-root input:focus,
+.landing-raw-root input:focus-visible,
+.landing-raw-root textarea:focus,
+.landing-raw-root textarea:focus-visible,
+.landing-raw-root select:focus,
+.landing-raw-root select:focus-visible {
+  outline: none !important;
+}
+
+.landing-raw-root img {
+  display: block;
+  max-width: 100%;
+}
+
+.landing-raw-root button {
+  font-family: inherit;
+}
+
+/* --- Shared primitives --- */
+
+.fn-container {
+  width: min(calc(100% - 40px), var(--max-width));
+  margin-inline: auto;
+}
+
+.fn-eyebrow {
+  margin: 0 0 12px;
+  color: var(--coral-dark);
+  font-family: var(--fn-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fn-section {
+  position: relative;
+  z-index: 1;
+  padding: 110px 0;
+  border-top: 1px solid var(--line);
+}
+
+.fn-section-head {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 40px;
+  margin-bottom: 54px;
+}
+
+.fn-display {
+  margin: 0;
+  font-family: var(--fn-display);
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: 600;
+  letter-spacing: -0.07em;
+  line-height: 0.92;
+}
+
+.fn-section-lead {
+  max-width: 540px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.08rem;
+  line-height: 1.55;
+}
+
+/* --- Buttons --- */
+
+.fn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 21px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper-light);
+  cursor: pointer;
+  font-family: var(--fn-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.fn-btn:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow-small);
+}
+
+.fn-btn:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+.fn-btn-coral {
+  background: var(--coral);
+  color: var(--ink);
+}
+
+.fn-btn-butter {
+  background: var(--butter);
+  color: var(--ink);
+}
+
+.fn-btn-ghost {
+  background: transparent;
+  color: var(--ink);
+}
+
+.fn-btn-small {
+  min-height: 38px;
+  padding: 0 16px;
+  font-size: 0.82rem;
+}
+
+.fn-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+  box-shadow: none;
+}
+

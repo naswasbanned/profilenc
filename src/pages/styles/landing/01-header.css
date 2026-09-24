@@ -1,0 +1,133 @@
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.fn-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 16px 0;
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.fn-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.fn-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--fn-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.fn-logo-mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper-light);
+  box-shadow: var(--shadow-small);
+  transform: rotate(-8deg);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.fn-logo-mark img {
+  width: 19px;
+  height: 19px;
+}
+
+.fn-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.fn-nav-links a {
+  color: var(--muted);
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.fn-nav-links a:hover {
+  color: var(--ink);
+}
+
+.fn-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --- Theme Toggle Button --- */
+.fn-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper-light);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: var(--fn-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
+  flex-shrink: 0;
+}
+
+.fn-theme-toggle:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-small);
+  background: var(--butter);
+  color: #211f24;
+}
+
+.fn-theme-toggle:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+
+/* --- Centered Brand Row (phone only, not sticky) --- */
+.fn-mobile-brand {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .fn-mobile-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px 16px 4px;
+  }
+
+  .fn-mobile-brand-name {
+    font-family: var(--fn-display);
+    font-size: 1.32rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+  }
+}

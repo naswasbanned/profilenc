@@ -13,6 +13,8 @@ import {
   Globe,
   Settings,
   Layers,
+  LayoutDashboard,
+  User,
   Calendar,
   ArrowRight,
   Eye,
@@ -20,9 +22,11 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import AccountSettingsModal from '../components/Editor/AccountSettingsModal';
+import MobileDock from '../components/primitives/MobileDock';
+import MobileBrandBar from '../components/primitives/MobileBrandBar';
+import { apiFetch } from '../lib/api';
 import './DashboardPage.css';
-
-const API_BASE = import.meta.env.VITE_API_URL || '';
+import { useUiTheme } from '../hooks/useUiTheme';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -46,60 +50,9 @@ export default function DashboardPage() {
   const { user, isAuthenticated, loading, logout } = useAuth();
 
   // Universal Theme Synchronization
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('profilenc_theme') || 'dark';
-    }
-    return 'dark';
-  });
+  const { theme, toggleTheme } = useUiTheme();
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
 
-  const toggleTheme = (e) => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-
-    if (!document.startViewTransition) {
-      setTheme(nextTheme);
-      localStorage.setItem('profilenc_theme', nextTheme);
-      document.documentElement.setAttribute('data-theme', nextTheme);
-      return;
-    }
-
-    const rect = e?.currentTarget?.getBoundingClientRect();
-    const x = rect ? rect.left + rect.width / 2 : window.innerWidth;
-    const y = rect ? rect.top + rect.height / 2 : 0;
-
-    const maxDist = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    );
-    const endRadius = Math.ceil(maxDist) + 40;
-
-    const transition = document.startViewTransition(() => {
-      setTheme(nextTheme);
-      localStorage.setItem('profilenc_theme', nextTheme);
-      document.documentElement.setAttribute('data-theme', nextTheme);
-    });
-
-    transition.ready.then(() => {
-      document.documentElement.animate(
-        {
-          clipPath: [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${endRadius}px at ${x}px ${y}px)`,
-          ],
-        },
-        {
-          duration: 650,
-          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-          fill: 'forwards',
-          pseudoElement: '::view-transition-new(root)',
-        }
-      );
-    });
-  };
 
   // Auth Guard & Title
   useEffect(() => {
@@ -119,7 +72,7 @@ export default function DashboardPage() {
     if (!user?.username) return;
     try {
       setFetchLoading(true);
-      const res = await fetch(`${API_BASE}/api/u/${user.username}`);
+      const res = await apiFetch(`/api/u/${user.username}`, { token: null });
       if (res.ok) {
         const data = await res.json();
         setProfileData(data);
@@ -227,6 +180,9 @@ export default function DashboardPage() {
           </div>
         </div>
       </header>
+
+      {/* Centered brand, phone only. Static: the dock handles navigation. */}
+      <MobileBrandBar />
 
       {/* Main Content Area */}
       <main className="dashboard-main-content">
@@ -502,6 +458,65 @@ export default function DashboardPage() {
           editorTheme={theme}
         />
       )}
+
+      {/* Phone dock: the only navigation on phones, so it carries the four
+          shortcuts people reach for plus a sheet holding the header actions */}
+      <MobileDock
+        ariaLabel="Dashboard navigation"
+        brand={{ label: 'Other settings', Icon: Settings }}
+        items={[
+          {
+            id: 'overview',
+            label: 'Home',
+            Icon: LayoutDashboard,
+            active: !showSettingsModal,
+            onClick: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+          },
+          {
+            id: 'studio',
+            label: 'Studio',
+            Icon: Edit3,
+            onClick: () => navigate(`/@${user?.username}/edit`),
+          },
+          {
+            id: 'profile',
+            label: 'Live',
+            Icon: ExternalLink,
+            onClick: () => window.open(`/@${user?.username}`, '_blank'),
+          },
+          {
+            id: 'account',
+            label: 'Account',
+            Icon: User,
+            active: showSettingsModal,
+            onClick: () => setShowSettingsModal(true),
+          },
+        ]}
+        sheet={{
+          title: `@${user.username}`,
+          rows: [
+            ...(user.isAdmin
+              ? [{ id: 'admin', label: 'Admin kernel', Icon: Shield, to: '/admin' }]
+              : []),
+            { id: 'site', label: 'Landing page', Icon: Globe, to: '/' },
+            {
+              id: 'copy',
+              label: copied ? 'Link copied' : 'Copy profile link',
+              Icon: copied ? Check : Copy,
+              keepOpen: true,
+              onClick: handleCopyLink,
+            },
+            {
+              id: 'theme',
+              label: theme === 'dark' ? 'Light appearance' : 'Dark appearance',
+              Icon: theme === 'dark' ? Sun : Moon,
+              keepOpen: true,
+              onClick: toggleTheme,
+            },
+            { id: 'logout', label: 'Log out', Icon: LogOut, variant: 'danger', onClick: handleLogout },
+          ],
+        }}
+      />
     </div>
   );
 }

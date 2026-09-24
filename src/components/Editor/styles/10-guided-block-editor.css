@@ -1,0 +1,1150 @@
+/* ==========================================================================
+   10. GUIDED BLOCK EDITOR (schema driven forms + live preview)
+
+   Two panes on a desktop: preview on the right, one step of fields on the left.
+   On a phone the preview becomes a short strip above the fields and the step
+   navigation sits at the bottom of the panel.
+
+   Class prefix `bf-` = block form.
+   ========================================================================== */
+
+.block-editor-guided .editor-modal-body {
+  padding: 0 !important;
+  gap: 0 !important;
+  /* The two panes own the scrolling */
+  overflow: hidden !important;
+}
+
+.bf-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* --- Live preview ------------------------------------------------------- */
+
+.bf-preview {
+  order: 2;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-left: 2px solid var(--fn-editor-line);
+  background: var(--fn-editor-paper-sunken);
+}
+
+.bf-preview-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--fn-editor-line);
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.bf-preview-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  padding: 4px 9px;
+  border: 1.5px solid var(--fn-editor-line);
+  border-radius: 999px;
+  background: var(--fn-editor-paper);
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.bf-preview-toggle:hover {
+  color: var(--fn-editor-ink);
+  border-color: var(--fn-editor-ink);
+}
+
+/* The chip that brings the preview back sits at the right end of the rail, so
+   it lands under the Hide button it replaces and nothing shifts. */
+.bf-step-preview {
+  order: 2;
+  margin-left: auto;
+  border-style: dashed;
+}
+
+.bf-preview-stage {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 12px;
+}
+
+/* The preview is a small copy of the profile canvas: same wrapper class, same
+   data attributes, same background. Block styles are left untouched so the
+   preview matches the published page. */
+.bf-preview-canvas {
+  min-height: 100%;
+  padding: 18px 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.bf-preview-canvas .block-wrapper {
+  margin-bottom: 0;
+}
+
+/* --- Field panel ------------------------------------------------------- */
+
+.bf-panel {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.bf-workbench > * {
+  min-height: 0;
+}
+
+.bf-workbench.is-preview-hidden {
+  grid-template-columns: 1fr;
+}
+
+.bf-steps {
+  display: flex;
+  gap: 6px;
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--fn-editor-line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.bf-steps::-webkit-scrollbar {
+  display: none;
+}
+
+.bf-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  padding: 7px 12px;
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 999px;
+  background: var(--fn-editor-paper);
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.bf-step.is-active {
+  background: var(--fn-editor-butter);
+  border-color: var(--fn-editor-ink);
+  color: #211f24;
+}
+
+.bf-step-index {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--fn-editor-ink) 12%, transparent);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.62rem;
+}
+
+.bf-panel-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px 16px 20px;
+}
+
+.bf-blurb {
+  margin: 0 0 16px;
+  padding: 11px 13px;
+  border: 2px dashed var(--fn-editor-line);
+  border-radius: 12px;
+  background: var(--fn-editor-paper-light);
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-body);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.bf-step-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-top: 2px solid var(--fn-editor-line);
+  background: var(--fn-editor-paper);
+}
+
+.bf-step-count {
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* --- Buttons ----------------------------------------------------------- */
+
+.bf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 999px;
+  background: var(--fn-editor-paper-light);
+  color: var(--fn-editor-ink);
+  font-family: var(--fn-editor-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 140ms ease, background 140ms ease;
+}
+
+.bf-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.bf-btn:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+.bf-btn-primary {
+  background: var(--fn-editor-butter);
+  border-color: var(--fn-editor-ink);
+  color: #211f24;
+}
+
+.bf-btn-add {
+  width: 100%;
+  border-style: dashed;
+}
+
+/* --- Fields ------------------------------------------------------------ */
+
+.bf-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bf-field-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.bf-field-label {
+  color: var(--fn-editor-ink);
+  font-family: var(--fn-editor-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.bf-field-required {
+  margin-left: 3px;
+  color: var(--fn-editor-coral-dark);
+}
+
+.bf-field-counter {
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.62rem;
+}
+
+.bf-field-hint,
+.bf-field-error {
+  margin: 0;
+  font-family: var(--fn-editor-body);
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.bf-field-hint {
+  color: var(--fn-editor-muted);
+}
+
+.bf-field-error {
+  color: var(--fn-editor-coral-dark);
+  font-weight: 600;
+}
+
+.bf-input {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 10px;
+  background: var(--fn-editor-paper);
+  color: var(--fn-editor-ink);
+  font-family: var(--fn-editor-body);
+  font-size: 0.9rem;
+}
+
+.bf-input:focus {
+  outline: none;
+  border-color: var(--fn-editor-coral);
+}
+
+.bf-field.has-error .bf-input {
+  border-color: var(--fn-editor-coral-dark);
+}
+
+.bf-textarea {
+  min-height: 84px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* --- Choice pills ------------------------------------------------------ */
+
+.bf-choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.bf-choice {
+  min-width: 42px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 10px;
+  background: var(--fn-editor-paper);
+  color: var(--fn-editor-ink);
+  font-family: var(--fn-editor-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bf-choice.is-active {
+  background: var(--fn-editor-butter);
+  border-color: var(--fn-editor-ink);
+  color: #211f24;
+}
+
+/* --- Icon grid --------------------------------------------------------- */
+
+.bf-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+  gap: 6px;
+}
+
+.bf-icon-swatch {
+  display: grid;
+  place-items: center;
+  min-height: 38px;
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 10px;
+  background: var(--fn-editor-paper);
+  color: var(--fn-editor-ink);
+  cursor: pointer;
+}
+
+.bf-icon-swatch.is-text {
+  font-family: var(--fn-editor-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.bf-icon-swatch.is-active {
+  background: var(--fn-editor-butter);
+  border-color: var(--fn-editor-ink);
+  color: #211f24;
+}
+
+/* --- Tags -------------------------------------------------------------- */
+
+.bf-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.bf-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px 4px 10px;
+  border: 1.5px solid var(--fn-editor-line);
+  border-radius: 999px;
+  background: var(--fn-editor-paper-light);
+  color: var(--fn-editor-ink);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.68rem;
+}
+
+.bf-tag button {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--fn-editor-ink) 10%, transparent);
+  color: var(--fn-editor-ink);
+  cursor: pointer;
+}
+
+/* --- Repeatable rows --------------------------------------------------- */
+
+.bf-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bf-list-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bf-row {
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 12px;
+  background: var(--fn-editor-paper-light);
+  overflow: hidden;
+}
+
+.bf-row.is-open {
+  border-color: var(--fn-editor-coral);
+}
+
+.bf-row-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+}
+
+.bf-row-grip {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  color: var(--fn-editor-muted);
+  cursor: grab;
+  /* The handle owns the gesture, so the browser must not scroll from here.
+     Everywhere else on the row keeps normal touch scrolling. */
+  touch-action: none;
+}
+
+.bf-row-summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: 1;
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 4px;
+  border: none;
+  background: none;
+  color: var(--fn-editor-ink);
+  font-family: var(--fn-editor-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bf-row-index {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--fn-editor-paper);
+  border: 1.5px solid var(--fn-editor-line);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.62rem;
+}
+
+.bf-row-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bf-row-chevron {
+  flex-shrink: 0;
+  color: var(--fn-editor-muted);
+  transition: transform 160ms ease;
+}
+
+.bf-row-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.bf-row-action {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 9px;
+  background: var(--fn-editor-paper);
+  color: var(--fn-editor-muted);
+  cursor: pointer;
+}
+
+.bf-row-action.is-danger:hover {
+  border-color: var(--fn-editor-coral-dark);
+  color: var(--fn-editor-coral-dark);
+}
+
+.bf-row-body {
+  padding: 4px 12px 14px;
+  border-top: 2px dashed var(--fn-editor-line);
+}
+
+/* --- Empty state ------------------------------------------------------- */
+
+.bf-empty {
+  padding: 28px 18px;
+  border: 2px dashed var(--fn-editor-line);
+  border-radius: 12px;
+  background: var(--fn-editor-paper-light);
+  text-align: center;
+}
+
+.bf-empty-text {
+  margin: 0 0 14px;
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-body);
+  font-size: 0.85rem;
+}
+
+.bf-empty-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* --- Phones: preview on top, fields below ------------------------------ */
+
+@media (max-width: 768px) {
+  .bf-workbench {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .bf-preview {
+    order: 1;
+    max-height: 32vh;
+    border-left: none;
+    border-bottom: 2px solid var(--fn-editor-line);
+  }
+
+  .bf-preview-stage {
+    padding: 12px;
+  }
+
+  .bf-panel {
+    order: 2;
+  }
+
+  .bf-steps {
+    padding: 10px 12px;
+  }
+
+  .bf-step-preview {
+    order: -1;
+    margin-left: 0;
+  }
+
+  .bf-panel-scroll {
+    padding: 14px 12px 18px;
+  }
+
+  .bf-step-nav {
+    padding: 10px 12px;
+  }
+
+  .bf-input,
+  .bf-choice,
+  .bf-btn {
+    font-size: 1rem;
+  }
+
+  .bf-input {
+    min-height: 44px;
+  }
+}
+
+/* --- Toggle ------------------------------------------------------------- */
+
+.bf-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.bf-toggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bf-toggle-track {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  flex-shrink: 0;
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 999px;
+  background: var(--fn-editor-paper);
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.bf-toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--fn-editor-muted);
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.bf-toggle input:checked + .bf-toggle-track {
+  background: var(--fn-editor-mint);
+  border-color: var(--fn-editor-ink);
+}
+
+.bf-toggle input:checked + .bf-toggle-track .bf-toggle-knob {
+  transform: translateX(18px);
+  background: var(--fn-editor-ink);
+}
+
+.bf-toggle input:focus-visible + .bf-toggle-track {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fn-editor-coral) 35%, transparent);
+}
+
+.bf-toggle-label {
+  color: var(--fn-editor-ink);
+  font-family: var(--fn-editor-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* --- Image list --------------------------------------------------------- */
+
+.bf-image-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bf-image-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 12px;
+  background: var(--fn-editor-paper-light);
+}
+
+.bf-image-index {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--fn-editor-line);
+  border-radius: 50%;
+  background: var(--fn-editor-paper);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.62rem;
+}
+
+.bf-image-row-picker {
+  flex: 1;
+  min-width: 0;
+}
+
+/* --- Checklist (goal steps) --------------------------------------------- */
+
+.bf-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bf-check-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bf-check-box {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 8px;
+  background: var(--fn-editor-paper);
+  color: var(--fn-editor-ink);
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.bf-check-box.is-done {
+  background: var(--fn-editor-mint);
+  border-color: var(--fn-editor-ink);
+}
+
+.bf-check-input.is-done {
+  color: var(--fn-editor-muted);
+  text-decoration: line-through;
+}
+
+.bf-check-add {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.bf-check-add .bf-input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* --- Tech icon picker --------------------------------------------------- */
+
+.bf-tech {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bf-tech-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 12px;
+  background: var(--fn-editor-paper);
+}
+
+.bf-tech-slug {
+  flex: 1;
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+}
+
+.bf-tech-color {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1.5px solid var(--fn-editor-line);
+  border-radius: 999px;
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.bf-tech-color input {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.bf-tech-presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: 6px;
+}
+
+.bf-tech-preset {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 10px;
+  border: 2px solid var(--fn-editor-line);
+  border-radius: 10px;
+  background: var(--fn-editor-paper);
+  color: var(--fn-editor-ink);
+  font-family: var(--fn-editor-body);
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.bf-tech-preset span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bf-tech-preset.is-active {
+  border-color: var(--fn-editor-ink);
+  background: var(--fn-editor-butter);
+  color: #211f24;
+}
+
+/* --- Note --------------------------------------------------------------- */
+
+.bf-note {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 15px;
+  border: 2px dashed var(--fn-editor-line);
+  border-radius: 12px;
+  background: var(--fn-editor-paper-light);
+}
+
+.bf-note-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--fn-editor-coral-dark);
+  font-family: var(--fn-editor-body);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.bf-note-text {
+  margin: 0;
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-body);
+  font-size: 0.84rem;
+  line-height: 1.6;
+}
+
+/* --- Tab rows (tab manager reuses the block editor row) ------------------ */
+
+.bf-row.is-hidden {
+  opacity: 0.55;
+}
+
+.tab-row-icon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--fn-editor-line);
+  border-radius: 8px;
+  background: var(--fn-editor-paper);
+  color: var(--fn-editor-ink);
+}
+
+.tab-row-icon-text {
+  font-family: var(--fn-editor-mono);
+  font-size: 0.54rem;
+  font-weight: 700;
+}
+
+.tab-row-flag {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border: 1.5px solid var(--fn-editor-line);
+  border-radius: 999px;
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bf-row-action:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   HOVER AND FOCUS STATES
+
+   Matches the editor chrome: controls lift by a pixel or two and pick up the
+   hard offset shadow, destructive actions turn coral, and keyboard focus is
+   always visible. Grouped here so every control in the guided modals and the
+   tab manager behaves the same way.
+   ========================================================================== */
+
+/* --- Buttons ------------------------------------------------------------ */
+
+.bf-btn:hover:not(:disabled) {
+  background: var(--fn-editor-paper-elevated);
+  border-color: var(--fn-editor-ink);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--fn-editor-shadow-xs);
+}
+
+.bf-btn-primary:hover:not(:disabled) {
+  background: var(--fn-editor-butter);
+}
+
+.bf-btn-add:hover:not(:disabled) {
+  border-style: solid;
+  background: var(--fn-editor-coral);
+  color: var(--fn-editor-ink);
+}
+
+.bf-btn:not(:disabled):active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+/* --- Step chips --------------------------------------------------------- */
+
+.bf-step:hover:not(.is-active) {
+  border-color: var(--fn-editor-ink);
+  color: var(--fn-editor-ink);
+  transform: translateY(-1px);
+}
+
+.bf-step.is-active:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--fn-editor-shadow-xs);
+}
+
+.bf-step:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* --- Choice pills and icon swatches ------------------------------------- */
+
+.bf-choice:hover:not(.is-active),
+.bf-icon-swatch:hover:not(.is-active),
+.bf-tech-preset:hover:not(.is-active) {
+  border-color: var(--fn-editor-ink);
+  background: var(--fn-editor-paper-elevated);
+  transform: translateY(-1px);
+}
+
+.bf-choice.is-active:hover,
+.bf-icon-swatch.is-active:hover,
+.bf-tech-preset.is-active:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--fn-editor-shadow-xs);
+}
+
+.bf-choice:active,
+.bf-icon-swatch:active,
+.bf-tech-preset:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.bf-choice,
+.bf-icon-swatch,
+.bf-tech-preset,
+.bf-row-action,
+.bf-check-box,
+.bf-row-summary,
+.bf-tag button {
+  transition: transform 140ms ease, background 140ms ease, border-color 140ms ease,
+    color 140ms ease, box-shadow 140ms ease;
+}
+
+/* --- Repeatable rows ---------------------------------------------------- */
+
+.bf-row-summary:hover .bf-row-title {
+  color: var(--fn-editor-coral-dark);
+}
+
+.bf-row-summary:hover .bf-row-chevron {
+  color: var(--fn-editor-ink);
+}
+
+.bf-row-action:hover:not(:disabled) {
+  border-color: var(--fn-editor-ink);
+  color: var(--fn-editor-ink);
+  transform: translateY(-1px);
+}
+
+.bf-row-action.is-danger:hover:not(:disabled) {
+  background: var(--fn-editor-coral);
+  border-color: var(--fn-editor-ink);
+  color: var(--fn-editor-ink);
+}
+
+.bf-row-action:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.bf-row-grip:hover {
+  background: var(--fn-editor-paper-elevated);
+  color: var(--fn-editor-ink);
+}
+
+.bf-row-grip:active {
+  cursor: grabbing;
+}
+
+/* --- Checklist ---------------------------------------------------------- */
+
+.bf-check-box:hover {
+  border-color: var(--fn-editor-ink);
+  transform: translateY(-1px);
+}
+
+.bf-check-box.is-done:hover {
+  background: var(--fn-editor-mint);
+  box-shadow: var(--fn-editor-shadow-xs);
+}
+
+/* --- Tags and colour swatch -------------------------------------------- */
+
+.bf-tag button:hover {
+  background: var(--fn-editor-coral);
+  color: var(--fn-editor-ink);
+}
+
+.bf-tech-color:hover {
+  border-color: var(--fn-editor-ink);
+  color: var(--fn-editor-ink);
+}
+
+/* --- Preview toggle ----------------------------------------------------- */
+
+.bf-preview-toggle {
+  transition: transform 140ms ease, border-color 140ms ease, color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.bf-preview-toggle:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--fn-editor-shadow-xs);
+}
+
+.bf-preview-toggle:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+/* --- Inputs ------------------------------------------------------------- */
+
+.bf-input:hover:not(:focus) {
+  border-color: color-mix(in srgb, var(--fn-editor-ink) 45%, var(--fn-editor-line));
+}
+
+/* --- Keyboard focus ----------------------------------------------------- */
+
+.bf-btn:focus-visible,
+.bf-step:focus-visible,
+.bf-choice:focus-visible,
+.bf-icon-swatch:focus-visible,
+.bf-tech-preset:focus-visible,
+.bf-row-action:focus-visible,
+.bf-row-summary:focus-visible,
+.bf-check-box:focus-visible,
+.bf-preview-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fn-editor-coral) 38%, transparent);
+}
+
+/* --- Touch and reduced motion ------------------------------------------- */
+
+@media (hover: none) {
+
+  .bf-btn:hover:not(:disabled),
+  .bf-step:hover,
+  .bf-choice:hover,
+  .bf-icon-swatch:hover,
+  .bf-tech-preset:hover,
+  .bf-row-action:hover,
+  .bf-check-box:hover,
+  .bf-preview-toggle:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .bf-btn,
+  .bf-step,
+  .bf-choice,
+  .bf-icon-swatch,
+  .bf-tech-preset,
+  .bf-row-action,
+  .bf-check-box,
+  .bf-row-summary,
+  .bf-preview-toggle,
+  .bf-tag button {
+    transition: none;
+  }
+
+  .bf-btn:hover:not(:disabled),
+  .bf-step:hover,
+  .bf-choice:hover,
+  .bf-icon-swatch:hover,
+  .bf-tech-preset:hover,
+  .bf-row-action:hover,
+  .bf-check-box:hover,
+  .bf-preview-toggle:hover {
+    transform: none;
+  }
+}

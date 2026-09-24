@@ -1,0 +1,483 @@
+/* ==========================================================================
+   BUTTON STYLES (Configurable via Theme > Layout > Button Style)
+   ========================================================================== */
+
+/* 1. EDITORIAL TACTILE (Field Notes) — 2px solid border, hard offset shadow, hover translation */
+[data-button-style="editorial-tactile"] .hero-btn,
+[data-button-style="editorial-tactile"] .hero-social-link,
+[data-button-style="editorial-tactile"] .service-cta-btn,
+[data-button-style="editorial-tactile"] .event-btn-cta,
+[data-button-style="editorial-tactile"] .card-action-btn,
+[data-button-style="editorial-tactile"] .journal-quick-add-btn,
+[data-button-style="editorial-tactile"] .journal-card-btn,
+[data-button-style="editorial-tactile"] .journal-read-btn,
+[data-button-style="editorial-tactile"] .review-link-btn,
+[data-button-style="editorial-tactile"] .article-modal-close-btn {
+  font-weight: 700 !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+/* Hero Main Buttons */
+[data-button-style="editorial-tactile"] .hero-btn.primary {
+  background: var(--btn-primary-bg, #252320);
+  color: var(--btn-primary-text, #fffaf0);
+  border: 2px solid var(--tactile-border-color, #252320) !important;
+  box-shadow: 3px 4px 0 var(--tactile-shadow-color, #252320) !important;
+  border-radius: var(--btn-radius, 999px);
+}
+
+[data-button-style="editorial-tactile"] .hero-btn.primary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 6px 0 var(--tactile-shadow-color, #252320) !important;
+  filter: none;
+}
+
+[data-button-style="editorial-tactile"] .hero-btn.primary:active {
+  transform: translate(0, 0);
+  box-shadow: 1px 1px 0 var(--tactile-shadow-color, #252320) !important;
+}
+
+[data-button-style="editorial-tactile"] .hero-btn.secondary {
+  background: var(--card-bg, #fffaf0);
+  color: var(--heading-color, #252320);
+  border: 2px solid var(--tactile-border-color, #252320) !important;
+  box-shadow: 2px 3px 0 var(--tactile-shadow-color, #252320) !important;
+  border-radius: var(--btn-radius, 999px);
+}
+
+[data-button-style="editorial-tactile"] .hero-btn.secondary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 5px 0 var(--tactile-shadow-color, #252320) !important;
+  color: var(--accent-color, #e96d52);
+  background: var(--card-bg, #fffaf0);
+}
+
+/* Hero Social Link Buttons (e.g. Github, Linkedin) */
+[data-button-style="editorial-tactile"] .hero-social-link {
+  background: var(--card-bg, #fffaf0);
+  color: var(--heading-color, #252320);
+  border: 2px solid var(--tactile-border-color, #252320) !important;
+  box-shadow: 2px 2px 0 var(--tactile-shadow-color, #252320) !important;
+  border-radius: var(--radius-sm, 10px);
+}
+
+[data-button-style="editorial-tactile"] .hero-social-link:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--tactile-shadow-color, #252320) !important;
+  background: var(--accent-color, #e96d52);
+  color: #fffaf0;
+  border-color: var(--tactile-border-color, #252320) !important;
+}
+
+/* Service & Event CTA & Primary Buttons */
+[data-button-style="editorial-tactile"] .service-cta-btn.primary,
+[data-button-style="editorial-tactile"] .event-btn-cta,
+[data-button-style="editorial-tactile"] .journal-quick-add-btn {
+  background: var(--color-accent-primary, var(--accent-color, #e96d52)) !important;
+  color: #fffaf0 !important;
+  border: 2px solid var(--tactile-border-color, #252320) !important;
+  box-shadow: 3px 3px 0 var(--tactile-shadow-color, #252320) !important;
+  border-radius: var(--btn-radius, 10px);
+}
+
+[data-button-style="editorial-tactile"] .service-cta-btn.primary:hover,
+[data-button-style="editorial-tactile"] .event-btn-cta:hover,
+[data-button-style="editorial-tactile"] .journal-quick-add-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--tactile-shadow-color, #252320) !important;
+}
+
+[data-button-style="editorial-tactile"] .service-cta-btn.secondary,
+[data-button-style="editorial-tactile"] .card-action-btn,
+[data-button-style="editorial-tactile"] .journal-card-btn,
+[data-button-style="editorial-tactile"] .journal-read-btn,
+[data-button-style="editorial-tactile"] .review-link-btn,
+[data-button-style="editorial-tactile"] .article-modal-close-btn {
+  background: var(--card-bg, #fffaf0) !important;
+  color: var(--heading-color, #252320) !important;
+  border: 2px solid var(--tactile-border-color, #252320) !important;
+  box-shadow: 2px 2px 0 var(--tactile-shadow-color, #252320) !important;
+  border-radius: var(--btn-radius, 8px);
+  padding: 5px 13px;
+}
+
+[data-button-style="editorial-tactile"] .service-cta-btn.secondary:hover,
+[data-button-style="editorial-tactile"] .card-action-btn:hover,
+[data-button-style="editorial-tactile"] .journal-card-btn:hover,
+[data-button-style="editorial-tactile"] .journal-read-btn:hover,
+[data-button-style="editorial-tactile"] .review-link-btn:hover,
+[data-button-style="editorial-tactile"] .article-modal-close-btn:hover,
+[data-button-style="editorial-tactile"] .journal-entry-card:hover .journal-read-btn {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 3.5px 3.5px 0 var(--tactile-shadow-color, #252320) !important;
+  background: var(--color-accent-primary, var(--accent-color, #e96d52)) !important;
+  color: #ffffff !important;
+}
+
+/* 2. FLAT BORDER (Obsidian / Clean Studio Light / Minimal) — 1px border, no offset shadow, subtle lift & glow */
+[data-button-style="flat-border"] .hero-btn,
+[data-button-style="flat-border"] .hero-social-link,
+[data-button-style="flat-border"] .service-cta-btn,
+[data-button-style="flat-border"] .event-btn-cta,
+[data-button-style="flat-border"] .card-action-btn,
+[data-button-style="flat-border"] .journal-quick-add-btn,
+[data-button-style="flat-border"] .journal-card-btn,
+[data-button-style="flat-border"] .journal-read-btn,
+[data-button-style="flat-border"] .review-link-btn,
+[data-button-style="flat-border"] .article-modal-close-btn {
+  border-radius: var(--btn-radius, var(--radius-sm, 8px)) !important;
+  box-shadow: none !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), filter var(--transition-fast);
+}
+
+[data-button-style="flat-border"] .hero-btn.primary,
+[data-button-style="flat-border"] .service-cta-btn.primary,
+[data-button-style="flat-border"] .event-btn-cta,
+[data-button-style="flat-border"] .journal-quick-add-btn {
+  background: var(--btn-primary-bg, var(--color-accent-primary, #00f0aa)) !important;
+  color: var(--btn-primary-text, #090a0f) !important;
+  border: 1px solid var(--btn-primary-bg, var(--color-accent-primary, #00f0aa)) !important;
+}
+
+[data-button-style="flat-border"] .hero-btn.primary:hover,
+[data-button-style="flat-border"] .service-cta-btn.primary:hover,
+[data-button-style="flat-border"] .event-btn-cta:hover,
+[data-button-style="flat-border"] .journal-quick-add-btn:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--color-accent-primary, #00f0aa) 30%, transparent) !important;
+  filter: brightness(1.08);
+}
+
+[data-button-style="flat-border"] .hero-btn.secondary,
+[data-button-style="flat-border"] .service-cta-btn.secondary,
+[data-button-style="flat-border"] .hero-social-link,
+[data-button-style="flat-border"] .card-action-btn,
+[data-button-style="flat-border"] .journal-card-btn,
+[data-button-style="flat-border"] .journal-read-btn,
+[data-button-style="flat-border"] .review-link-btn,
+[data-button-style="flat-border"] .article-modal-close-btn {
+  background: color-mix(in srgb, var(--card-text-color, #ffffff) 6%, var(--card-bg, transparent)) !important;
+  color: var(--card-heading-color, var(--heading-color, #ffffff)) !important;
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.12)) !important;
+}
+
+[data-button-style="flat-border"] .hero-btn.secondary:hover,
+[data-button-style="flat-border"] .service-cta-btn.secondary:hover,
+[data-button-style="flat-border"] .hero-social-link:hover,
+[data-button-style="flat-border"] .card-action-btn:hover,
+[data-button-style="flat-border"] .journal-card-btn:hover,
+[data-button-style="flat-border"] .journal-read-btn:hover,
+[data-button-style="flat-border"] .review-link-btn:hover,
+[data-button-style="flat-border"] .article-modal-close-btn:hover,
+[data-button-style="flat-border"] .journal-entry-card:hover .journal-read-btn {
+  transform: translateY(-1.5px);
+  border-color: var(--color-accent-primary, #00f0aa) !important;
+  color: var(--color-accent-primary, #00f0aa) !important;
+  background: color-mix(in srgb, var(--color-accent-primary, #00f0aa) 12%, var(--card-bg, transparent)) !important;
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--color-accent-primary, #00f0aa) 15%, transparent) !important;
+}
+
+[data-button-style="flat-border"] .hero-btn:active,
+[data-button-style="flat-border"] .hero-social-link:active,
+[data-button-style="flat-border"] .service-cta-btn:active,
+[data-button-style="flat-border"] .event-btn-cta:active,
+[data-button-style="flat-border"] .card-action-btn:active,
+[data-button-style="flat-border"] .journal-quick-add-btn:active,
+[data-button-style="flat-border"] .journal-read-btn:active {
+  transform: translateY(0);
+}
+
+/* 3. ROUNDED GLOW BUTTONS (Modern / Cyberpunk / Midnight Violet) */
+[data-button-style="rounded-glow"] .hero-btn,
+[data-button-style="rounded-glow"] .hero-social-link,
+[data-button-style="rounded-glow"] .service-cta-btn,
+[data-button-style="rounded-glow"] .event-btn-cta,
+[data-button-style="rounded-glow"] .card-action-btn,
+[data-button-style="rounded-glow"] .journal-quick-add-btn,
+[data-button-style="rounded-glow"] .journal-card-btn,
+[data-button-style="rounded-glow"] .journal-read-btn,
+[data-button-style="rounded-glow"] .review-link-btn,
+[data-button-style="rounded-glow"] .article-modal-close-btn {
+  border-radius: 9999px !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+[data-button-style="rounded-glow"] .hero-btn.primary,
+[data-button-style="rounded-glow"] .service-cta-btn.primary,
+[data-button-style="rounded-glow"] .event-btn-cta,
+[data-button-style="rounded-glow"] .journal-quick-add-btn {
+  background: var(--btn-primary-bg, var(--color-accent-primary, #00f0aa)) !important;
+  color: var(--btn-primary-text, #090a0f) !important;
+  border: 1px solid transparent !important;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--color-accent-primary, #00f0aa) 25%, transparent) !important;
+}
+
+[data-button-style="rounded-glow"] .hero-btn.primary:hover,
+[data-button-style="rounded-glow"] .service-cta-btn.primary:hover,
+[data-button-style="rounded-glow"] .event-btn-cta:hover,
+[data-button-style="rounded-glow"] .journal-quick-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent-primary, #00f0aa) 50%, transparent) !important;
+}
+
+[data-button-style="rounded-glow"] .hero-btn.secondary,
+[data-button-style="rounded-glow"] .service-cta-btn.secondary,
+[data-button-style="rounded-glow"] .card-action-btn,
+[data-button-style="rounded-glow"] .journal-card-btn,
+[data-button-style="rounded-glow"] .journal-read-btn,
+[data-button-style="rounded-glow"] .review-link-btn,
+[data-button-style="rounded-glow"] .article-modal-close-btn {
+  background: color-mix(in srgb, var(--color-accent-primary, #00f0aa) 8%, var(--card-bg, transparent)) !important;
+  color: var(--color-accent-primary, #00f0aa) !important;
+  border: 1px solid color-mix(in srgb, var(--color-accent-primary, #00f0aa) 35%, transparent) !important;
+  box-shadow: none !important;
+}
+
+[data-button-style="rounded-glow"] .hero-btn.secondary:hover,
+[data-button-style="rounded-glow"] .service-cta-btn.secondary:hover,
+[data-button-style="rounded-glow"] .card-action-btn:hover,
+[data-button-style="rounded-glow"] .journal-card-btn:hover,
+[data-button-style="rounded-glow"] .journal-read-btn:hover,
+[data-button-style="rounded-glow"] .review-link-btn:hover,
+[data-button-style="rounded-glow"] .article-modal-close-btn:hover,
+[data-button-style="rounded-glow"] .journal-entry-card:hover .journal-read-btn {
+  transform: translateY(-1.5px);
+  background: color-mix(in srgb, var(--color-accent-primary, #00f0aa) 18%, var(--card-bg, transparent)) !important;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent-primary, #00f0aa) 35%, transparent) !important;
+}
+
+/* 4. NEO-BRUTALIST BUTTONS */
+[data-button-style="neo-brutalist"] .hero-btn,
+[data-button-style="neo-brutalist"] .hero-social-link,
+[data-button-style="neo-brutalist"] .service-cta-btn,
+[data-button-style="neo-brutalist"] .event-btn-cta,
+[data-button-style="neo-brutalist"] .card-action-btn,
+[data-button-style="neo-brutalist"] .journal-quick-add-btn,
+[data-button-style="neo-brutalist"] .journal-card-btn,
+[data-button-style="neo-brutalist"] .journal-read-btn,
+[data-button-style="neo-brutalist"] .review-link-btn,
+[data-button-style="neo-brutalist"] .article-modal-close-btn {
+  border-radius: 0 !important;
+  font-weight: 800 !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
+}
+
+[data-button-style="neo-brutalist"] .hero-btn.primary,
+[data-button-style="neo-brutalist"] .service-cta-btn.primary,
+[data-button-style="neo-brutalist"] .event-btn-cta,
+[data-button-style="neo-brutalist"] .journal-quick-add-btn {
+  background: var(--color-accent-primary, #ffdd00) !important;
+  color: #000000 !important;
+  border: 2.5px solid #000000 !important;
+  box-shadow: 3.5px 3.5px 0 #000000 !important;
+}
+
+[data-button-style="neo-brutalist"] .hero-btn.primary:hover,
+[data-button-style="neo-brutalist"] .service-cta-btn.primary:hover,
+[data-button-style="neo-brutalist"] .event-btn-cta:hover,
+[data-button-style="neo-brutalist"] .journal-quick-add-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5.5px 5.5px 0 #000000 !important;
+}
+
+[data-button-style="neo-brutalist"] .hero-btn.secondary,
+[data-button-style="neo-brutalist"] .hero-social-link,
+[data-button-style="neo-brutalist"] .service-cta-btn.secondary,
+[data-button-style="neo-brutalist"] .card-action-btn,
+[data-button-style="neo-brutalist"] .journal-card-btn,
+[data-button-style="neo-brutalist"] .journal-read-btn,
+[data-button-style="neo-brutalist"] .review-link-btn,
+[data-button-style="neo-brutalist"] .article-modal-close-btn {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 2.5px 2.5px 0 #000000 !important;
+}
+
+[data-button-style="neo-brutalist"] .hero-btn.secondary:hover,
+[data-button-style="neo-brutalist"] .hero-social-link:hover,
+[data-button-style="neo-brutalist"] .service-cta-btn.secondary:hover,
+[data-button-style="neo-brutalist"] .card-action-btn:hover,
+[data-button-style="neo-brutalist"] .journal-card-btn:hover,
+[data-button-style="neo-brutalist"] .journal-read-btn:hover,
+[data-button-style="neo-brutalist"] .review-link-btn:hover,
+[data-button-style="neo-brutalist"] .article-modal-close-btn:hover,
+[data-button-style="neo-brutalist"] .journal-entry-card:hover .journal-read-btn {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 4px 4px 0 #000000 !important;
+  background: var(--color-accent-primary, #ffdd00) !important;
+  color: #000000 !important;
+}
+
+/* --- Inline Block Edit Bar (when in Editor Mode) --- */
+.block-edit-controls {
+  position: absolute;
+  top: -16px;
+  right: 18px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 6px 4px 10px;
+  border-radius: 9px;
+  background: var(--fn-editor-paper-light, #fffaf0);
+  border: 2px solid var(--fn-editor-line, #d7ccb8);
+  box-shadow: var(--fn-editor-shadow-xs, 2px 2px 0 rgba(37, 35, 32, 0.18));
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), background 180ms ease, border-color 180ms ease;
+  pointer-events: none;
+}
+
+.block-wrapper:hover .block-edit-controls,
+.block-wrapper.is-editing .block-edit-controls {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.block-edit-type-label {
+  font-family: var(--fn-editor-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fn-editor-muted, #746e63);
+  padding-right: 4px;
+  user-select: none;
+}
+
+.block-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px 9px;
+  border-radius: 6px;
+  background: var(--fn-editor-paper, #f5efdf);
+  border: 1.5px solid var(--fn-editor-line, #d7ccb8);
+  color: var(--fn-editor-ink, #252320);
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--fn-editor-mono, monospace);
+  cursor: pointer;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.08);
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.block-edit-btn:hover {
+  background: var(--fn-editor-butter, #f4cf62);
+  border-color: var(--fn-editor-ink, #252320);
+  color: #211f24;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
+  transform: translate(-1px, -1px);
+}
+
+.block-edit-btn:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+.block-edit-btn.btn-delete:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+  color: #ef4444;
+  box-shadow: 2px 2px 0 rgba(239, 68, 68, 0.3);
+}
+
+/* Explicit Light Mode Action Bar */
+[data-theme="light"] .block-edit-controls,
+[data-editor-theme="light"] .block-edit-controls,
+[data-theme="light"] [data-button-style] .block-edit-controls,
+[data-editor-theme="light"] [data-button-style] .block-edit-controls {
+  background: var(--fn-editor-paper-light, #fffaf0);
+  border: 2px solid var(--fn-editor-line, #d7ccb8);
+  box-shadow: 2px 2px 0 rgba(37, 35, 32, 0.18);
+}
+
+[data-theme="light"] .block-edit-type-label,
+[data-editor-theme="light"] .block-edit-type-label,
+[data-theme="light"] [data-button-style] .block-edit-type-label,
+[data-editor-theme="light"] [data-button-style] .block-edit-type-label {
+  color: var(--fn-editor-muted, #746e63);
+}
+
+[data-theme="light"] .block-edit-btn,
+[data-editor-theme="light"] .block-edit-btn,
+[data-theme="light"] [data-button-style] .block-edit-btn,
+[data-editor-theme="light"] [data-button-style] .block-edit-btn {
+  background: var(--fn-editor-paper, #f5efdf);
+  border: 1.5px solid var(--fn-editor-line, #d7ccb8);
+  color: var(--fn-editor-ink, #252320);
+  box-shadow: 1px 1px 0 rgba(37, 35, 32, 0.12);
+}
+
+[data-theme="light"] .block-edit-btn:hover,
+[data-editor-theme="light"] .block-edit-btn:hover,
+[data-theme="light"] [data-button-style] .block-edit-btn:hover,
+[data-editor-theme="light"] [data-button-style] .block-edit-btn:hover {
+  background: var(--fn-editor-butter, #f4cf62);
+  border-color: var(--fn-editor-ink, #252320);
+  color: #211f24;
+  box-shadow: 2px 2px 0 rgba(37, 35, 32, 0.22);
+  transform: translate(-1px, -1px);
+}
+
+[data-theme="light"] .block-edit-btn.btn-delete:hover,
+[data-editor-theme="light"] .block-edit-btn.btn-delete:hover,
+[data-theme="light"] [data-button-style] .block-edit-btn.btn-delete:hover,
+[data-editor-theme="light"] [data-button-style] .block-edit-btn.btn-delete:hover {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: #ef4444;
+  color: #ef4444;
+  box-shadow: 2px 2px 0 rgba(239, 68, 68, 0.25);
+}
+
+/* Explicit Dark Mode Action Bar */
+[data-theme="dark"] .block-edit-controls,
+[data-editor-theme="dark"] .block-edit-controls,
+[data-theme="dark"] [data-button-style] .block-edit-controls,
+[data-editor-theme="dark"] [data-button-style] .block-edit-controls {
+  background: var(--fn-editor-paper-light, #231e33);
+  border: 2px solid var(--fn-editor-line, #423659);
+  box-shadow: 2px 2px 0 #0c0914;
+}
+
+[data-theme="dark"] .block-edit-type-label,
+[data-editor-theme="dark"] .block-edit-type-label,
+[data-theme="dark"] [data-button-style] .block-edit-type-label,
+[data-editor-theme="dark"] [data-button-style] .block-edit-type-label {
+  color: var(--fn-editor-muted, #b2a5c2);
+}
+
+[data-theme="dark"] .block-edit-btn,
+[data-editor-theme="dark"] .block-edit-btn,
+[data-theme="dark"] [data-button-style] .block-edit-btn,
+[data-editor-theme="dark"] [data-button-style] .block-edit-btn {
+  background: var(--fn-editor-paper, #181524);
+  border: 1.5px solid var(--fn-editor-line, #423659);
+  color: var(--fn-editor-ink, #f9f3e9);
+  box-shadow: 1px 1px 0 #0c0914;
+}
+
+[data-theme="dark"] .block-edit-btn:hover,
+[data-editor-theme="dark"] .block-edit-btn:hover,
+[data-theme="dark"] [data-button-style] .block-edit-btn:hover,
+[data-editor-theme="dark"] [data-button-style] .block-edit-btn:hover {
+  background: var(--fn-editor-paper-elevated, #2e2742);
+  border-color: var(--fn-editor-coral, #f1846b);
+  color: var(--fn-editor-coral, #f1846b);
+  box-shadow: 2px 2px 0 #0c0914;
+  transform: translate(-1px, -1px);
+}
+
+[data-theme="dark"] .block-edit-btn.btn-delete:hover,
+[data-editor-theme="dark"] .block-edit-btn.btn-delete:hover,
+[data-theme="dark"] [data-button-style] .block-edit-btn.btn-delete:hover,
+[data-editor-theme="dark"] [data-button-style] .block-edit-btn.btn-delete:hover {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: #ef4444;
+  color: #ef4444;
+  box-shadow: 2px 2px 0 rgba(239, 68, 68, 0.4);
+}
+
