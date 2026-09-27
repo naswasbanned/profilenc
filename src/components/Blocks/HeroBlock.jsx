@@ -11,6 +11,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
+import { safeUrl } from '../../lib/safeUrl';
 
 const socialIcons = {
   Github: <Github size={18} />,
@@ -71,36 +72,45 @@ export default function HeroBlock({ data = {} }) {
       {/* Social Links */}
       {socials && socials.length > 0 && (
         <div className="hero-socials">
-          {socials.map((s, idx) => (
-            <a
-              key={idx}
-              href={s.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hero-social-link"
-            >
-              {socialIcons[s.platform] || <Globe size={18} />}
-              <span>{s.label || s.platform}</span>
-            </a>
-          ))}
+          {socials.map((s, idx) => {
+            const href = safeUrl(s.url);
+            if (!href) return null;
+            return (
+              <a
+                key={idx}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hero-social-link"
+              >
+                {socialIcons[s.platform] || <Globe size={18} />}
+                <span>{s.label || s.platform}</span>
+              </a>
+            );
+          })}
         </div>
       )}
 
       {/* Action Buttons */}
       {actions && actions.length > 0 && (
         <div className="hero-actions">
-          {actions.map((act, idx) => (
-            <a
-              key={idx}
-              href={act.url}
-              target={act.url?.startsWith('http') ? '_blank' : undefined}
-              rel={act.url?.startsWith('http') ? 'noopener noreferrer' : undefined}
-              className={`hero-btn ${act.primary ? 'primary' : 'secondary'}`}
-            >
-              {act.label}
-              {act.url?.startsWith('http') && <ExternalLink size={14} />}
-            </a>
-          ))}
+          {actions.map((act, idx) => {
+            const href = safeUrl(act.url);
+            if (!href) return null;
+            const isExternal = href.startsWith('http');
+            return (
+              <a
+                key={idx}
+                href={href}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noopener noreferrer' : undefined}
+                className={`hero-btn ${act.primary ? 'primary' : 'secondary'}`}
+              >
+                {act.label}
+                {isExternal && <ExternalLink size={14} />}
+              </a>
+            );
+          })}
         </div>
       )}
     </div>

@@ -27,11 +27,9 @@ export default function LoginPage() {
 
     try {
       const user = await login(form.login, form.password);
-      if (user.isAdmin || user.username === 'nas' || user.username === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/dashboard');
-      }
+      // Route on the actual admin flag only. Matching on specific usernames
+      // implied a privilege the server never granted.
+      navigate(user.isAdmin ? '/admin' : '/dashboard');
     } catch (err) {
       setError(err.message);
     } finally {

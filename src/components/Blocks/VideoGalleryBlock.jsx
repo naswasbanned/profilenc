@@ -15,6 +15,7 @@ import {
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import { parseVideoUrl } from '../../lib/videoUtils';
+import { safeUrl } from '../../lib/safeUrl';
 
 export default function VideoGalleryBlock({ data = {} }) {
   const {
@@ -289,9 +290,9 @@ export default function VideoGalleryBlock({ data = {} }) {
                     </div>
                   </div>
 
-                  {(activeVideo.videoUrl || activeVideo.url) && (
+                  {safeUrl(activeVideo.videoUrl || activeVideo.url) && (
                     <a
-                      href={activeVideo.videoUrl || activeVideo.url}
+                      href={safeUrl(activeVideo.videoUrl || activeVideo.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="video-lightbox-watch-btn"

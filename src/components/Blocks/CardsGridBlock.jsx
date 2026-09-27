@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Maximize2, X } from 'lucide-react';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
+import { safeUrl } from '../../lib/safeUrl';
 
 export default function CardsGridBlock({ data = {} }) {
   const {
@@ -70,9 +71,9 @@ export default function CardsGridBlock({ data = {} }) {
 
               {(item.linkUrl || item.actionLabel) && (
                 <div className="card-footer">
-                  {item.linkUrl ? (
+                  {safeUrl(item.linkUrl) ? (
                     <a
-                      href={item.linkUrl}
+                      href={safeUrl(item.linkUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="card-action-btn"

@@ -10,6 +10,7 @@ import userRoutes from './routes/users.js';
 import templateRoutes from './routes/templates.js';
 import adminRoutes from './routes/admin.js';
 import siteRoutes from './routes/site.js';
+import { apiLimiter } from './middleware/rateLimit.js';
 import { ensureUploadDirs } from './services/imageService.js';
 import { runMigrations } from './db/migrate.js';
 import { seedTemplates } from './db/seeds/templates.js';
@@ -34,6 +35,11 @@ app.use('/uploads', express.static(uploadsDir, {
   immutable: true,
 }));
 
+// Abuse ceiling for the whole API. Per-route limits live on the routes
+// themselves; this one only catches broad hammering.
+// Note: `trust proxy` stays off on purpose — see middleware/clientIp.js.
+app.use('/api', apiLimiter);
+
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/images', imageRoutes);
@@ -49,13 +55,23 @@ app.get('/api/health', (_req, res) => {
 
 // Error handler
 app.use((err, _req, res, _next) => {
-  console.error('Unhandled error:', err);
-
   // Multer file size error
   if (err.code === 'LIMIT_FILE_SIZE') {
-    return res.status(413).json({ error: 'File too large. Max 10MB.' });
+    return res.status(413).json({ error: 'File too large.' });
   }
 
+  // More files than the route accepts
+  if (err.code === 'LIMIT_FILE_COUNT' || err.code === 'LIMIT_UNEXPECTED_FILE') {
+    return res.status(400).json({ error: 'Only one file per upload is allowed.' });
+  }
+
+  // Rejected upload types and other validation failures carry their own status.
+  // These are expected client mistakes, so they are not logged as crashes.
+  if (err.status && err.status >= 400 && err.status < 500) {
+    return res.status(err.status).json({ error: err.message || 'Invalid request' });
+  }
+
+  console.error('Unhandled error:', err);
   res.status(500).json({ error: 'Internal server error' });
 });
 

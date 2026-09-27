@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import { parseVideoUrl } from '../../lib/videoUtils';
+import { safeUrl } from '../../lib/safeUrl';
 
 export default function FeaturedVideoBlock({ data = {} }) {
   const {
@@ -119,11 +120,12 @@ export default function FeaturedVideoBlock({ data = {} }) {
           {actions && actions.length > 0 && (
             <div className="featured-video-actions">
               {actions.map((act, idx) => {
-                if (!act.label || !act.url) return null;
+                const href = safeUrl(act.url);
+                if (!act.label || !href) return null;
                 return (
                   <a
                     key={idx}
-                    href={act.url}
+                    href={href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`featured-video-btn ${act.primary ? 'primary' : 'secondary'}`}

@@ -63,11 +63,9 @@ export async function adminOnly(req, res, next) {
     return res.status(401).json({ error: 'Authentication required' });
   }
 
-  // Fast check from decoded token or verify against database
-  if (req.user.isAdmin) {
-    return next();
-  }
-
+  // Always confirm against the database. The token carries an `isAdmin` claim,
+  // but it stays valid for 7 days, so trusting it would keep a demoted account
+  // in the admin console for up to a week after the change.
   try {
     const { query } = await import('../config/db.js');
     const { rows } = await query('SELECT is_admin FROM users WHERE id = $1', [req.user.id]);

@@ -1,5 +1,6 @@
 import { Star, ExternalLink } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
+import { safeUrl } from '../../lib/safeUrl';
 
 export default function MediaReviewsBlock({ data = {} }) {
   const { items = [] } = data;
@@ -66,9 +67,9 @@ export default function MediaReviewsBlock({ data = {} }) {
                 </div>
               )}
 
-              {(item.link || item.url) && (
+              {safeUrl(item.link || item.url) && (
                 <a
-                  href={item.link || item.url}
+                  href={safeUrl(item.link || item.url)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="review-link-btn"

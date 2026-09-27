@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Check, Sparkles, Clock, ArrowRight, ExternalLink } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
+import { safeUrl } from '../../lib/safeUrl';
 
 export default function ServicesBlock({ data = {} }) {
   const {
@@ -106,13 +107,13 @@ export default function ServicesBlock({ data = {} }) {
               {(service.ctaLabel || service.ctaUrl) && (
                 <div className="service-footer">
                   <a
-                    href={service.ctaUrl || '#contact'}
-                    target={service.ctaUrl?.startsWith('http') ? '_blank' : undefined}
-                    rel={service.ctaUrl?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    href={safeUrl(service.ctaUrl) || '#contact'}
+                    target={safeUrl(service.ctaUrl)?.startsWith('http') ? '_blank' : undefined}
+                    rel={safeUrl(service.ctaUrl)?.startsWith('http') ? 'noopener noreferrer' : undefined}
                     className={`service-cta-btn ${isFeatured ? 'primary' : 'secondary'}`}
                   >
                     <span>{service.ctaLabel || 'Inquire Now'}</span>
-                    {service.ctaUrl?.startsWith('http') ? (
+                    {safeUrl(service.ctaUrl)?.startsWith('http') ? (
                       <ExternalLink size={14} />
                     ) : (
                       <ArrowRight size={14} />

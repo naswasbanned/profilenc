@@ -3,6 +3,14 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { query } from '../config/db.js';
 import auth from '../middleware/auth.js';
+import { LIMITS, firstLengthError, isSafeUrl } from '../lib/validate.js';
+import {
+  loginAccountLimiter,
+  loginIpLimiter,
+  passwordChangeLimiter,
+  registerLimiter,
+  usernameCheckLimiter,
+} from '../middleware/rateLimit.js';
 
 const router = Router();
 
@@ -20,7 +28,7 @@ const RESERVED_USERNAMES = new Set([
  * Body: { username, email, password, templateSlug? }
  * Returns: { token, expiresIn, user }
  */
-router.post('/register', async (req, res) => {
+router.post('/register', registerLimiter, async (req, res) => {
   try {
     const { username, email, password, templateSlug } = req.body;
 
@@ -217,7 +225,7 @@ const FIELD_NOTES_THEME = {
  * Body: { login (username or email), password }
  * Returns: { token, expiresIn, user }
  */
-router.post('/login', async (req, res) => {
+router.post('/login', loginIpLimiter, loginAccountLimiter, async (req, res) => {
   try {
     const { login, password, username: legacyUsername } = req.body;
     const identifier = login || legacyUsername;
@@ -305,7 +313,7 @@ router.get('/me', auth, async (req, res) => {
  * Body: { username }
  * Returns: { available: boolean }
  */
-router.post('/check-username', async (req, res) => {
+router.post('/check-username', usernameCheckLimiter, async (req, res) => {
   try {
     const { username } = req.body;
     if (!username) {
@@ -342,6 +350,21 @@ router.put('/profile', auth, async (req, res) => {
   try {
     const userId = req.user.id;
     const { displayName, avatarUrl, bio, isPublic, username: newUsername } = req.body;
+
+    const lengthError = firstLengthError([
+      [displayName, LIMITS.displayName, 'Display name'],
+      [bio, LIMITS.bio, 'Bio'],
+      [avatarUrl, LIMITS.avatarUrl, 'Avatar URL'],
+    ]);
+    if (lengthError) {
+      return res.status(400).json({ error: lengthError });
+    }
+
+    // Reject script-bearing URL schemes before they reach the database. This
+    // value is rendered as an <img src> on public profiles.
+    if (avatarUrl !== undefined && avatarUrl !== null && avatarUrl !== '' && !isSafeUrl(avatarUrl)) {
+      return res.status(400).json({ error: 'Avatar URL must be an http(s) or relative address' });
+    }
 
     let updatedUsername = req.user.username;
 
@@ -430,7 +453,7 @@ router.put('/profile', auth, async (req, res) => {
  * PUT /api/auth/change-password
  * Auth required. Verifies current password and updates to new password.
  */
-router.put('/change-password', auth, async (req, res) => {
+router.put('/change-password', passwordChangeLimiter, auth, async (req, res) => {
   try {
     const userId = req.user.id;
     const { currentPassword, newPassword } = req.body;

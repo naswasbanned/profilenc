@@ -95,9 +95,21 @@ const DEFAULT_LANDING_SETTINGS = {
 export async function seedBootstrap() {
   console.log('Checking bootstrap seed...');
 
-  // 1. Admin flag for the configured administrator account
-  const adminUsername = (process.env.ADMIN_USERNAME || 'admin').toLowerCase();
-  await query('UPDATE users SET is_admin = true WHERE username = $1', [adminUsername]);
+  // 1. Admin flag for the configured administrator account.
+  //    Only applied while no administrator exists. Re-applying it on every boot
+  //    would silently undo a deliberate demotion the next time the container
+  //    restarted, which makes admin access impossible to revoke.
+  const { rows: existingAdmins } = await query('SELECT id FROM users WHERE is_admin = true LIMIT 1');
+  if (existingAdmins.length === 0) {
+    const adminUsername = (process.env.ADMIN_USERNAME || 'admin').toLowerCase();
+    const { rowCount } = await query(
+      'UPDATE users SET is_admin = true WHERE username = $1',
+      [adminUsername]
+    );
+    if (rowCount > 0) {
+      console.log(`Bootstrap: promoted "${adminUsername}" to administrator.`);
+    }
+  }
 
   // 2. Default patch notes (only when none exist)
   const { rows: existingPatches } = await query('SELECT id FROM patch_notes LIMIT 1');

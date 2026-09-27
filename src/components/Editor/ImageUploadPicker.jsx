@@ -3,6 +3,9 @@ import { Upload, Image as ImageIcon, Check, Loader2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { apiFetch } from '../../lib/api';
 
+/** Mirrors the server allowlist in server/src/middleware/upload.js. */
+const ACCEPTED_IMAGE_TYPES = 'image/jpeg,image/png,image/gif,image/webp,image/avif';
+
 export default function ImageUploadPicker({ value, onChange, label = 'Image' }) {
   const { token } = useAuth();
   const fileInputRef = useRef(null);
@@ -72,7 +75,7 @@ export default function ImageUploadPicker({ value, onChange, label = 'Image' }) 
           type="file"
           ref={fileInputRef}
           onChange={handleFileUpload}
-          accept="image/*"
+          accept={ACCEPTED_IMAGE_TYPES}
           style={{ display: 'none' }}
         />
 

@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
+import { safeUrl } from '../../lib/safeUrl';
 
 export default function GalleryBlock({ data = {} }) {
   const {
@@ -221,9 +222,9 @@ export default function GalleryBlock({ data = {} }) {
                     </div>
                   </div>
 
-                  {activePhoto.linkUrl && (
+                  {safeUrl(activePhoto.linkUrl) && (
                     <a
-                      href={activePhoto.linkUrl}
+                      href={safeUrl(activePhoto.linkUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="gallery-lightbox-link"

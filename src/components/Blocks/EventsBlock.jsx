@@ -17,6 +17,7 @@ import {
   Video,
   Users,
 } from 'lucide-react';
+import { safeUrl } from '../../lib/safeUrl';
 
 // Helper to generate Google Calendar Add-to-Calendar URL
 function getGoogleCalendarUrl(event) {
@@ -374,9 +375,9 @@ function EventCardItem({ event }) {
       {/* Right Action & Calendar Sync Column */}
       <div className="event-actions">
         {/* RSVP / Join CTA Button */}
-        {event.linkUrl && (
+        {safeUrl(event.linkUrl) && (
           <a
-            href={event.linkUrl}
+            href={safeUrl(event.linkUrl)}
             target="_blank"
             rel="noopener noreferrer"
             className={`event-btn-cta ${isLive ? 'live' : 'primary'}`}

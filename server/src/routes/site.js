@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { query } from '../config/db.js';
-import upload from '../middleware/upload.js';
-import { processImage } from '../services/imageService.js';
+import { publicUpload } from '../middleware/upload.js';
+import { suggestionLimiter } from '../middleware/rateLimit.js';
+import { LIMITS, firstLengthError } from '../lib/validate.js';
+import { ImageValidationError, processImage } from '../services/imageService.js';
 
 const router = Router();
 
@@ -42,12 +44,22 @@ router.get('/patch-notes', async (_req, res) => {
  * POST /api/site/suggestions
  * Public endpoint for open community suggestions with optional screenshot upload.
  */
-router.post('/suggestions', upload.single('image'), async (req, res) => {
+router.post('/suggestions', suggestionLimiter, publicUpload.single('image'), async (req, res) => {
   try {
     const { name, email, category = 'DESIGN', title, message } = req.body;
 
     if (!title || !title.trim() || !message || !message.trim()) {
       return res.status(400).json({ error: 'Title and suggestion message are required' });
+    }
+
+    const lengthError = firstLengthError([
+      [name, LIMITS.suggestionName, 'Name'],
+      [email, LIMITS.suggestionEmail, 'Email'],
+      [title, LIMITS.suggestionTitle, 'Title'],
+      [message, LIMITS.suggestionMessage, 'Suggestion'],
+    ]);
+    if (lengthError) {
+      return res.status(400).json({ error: lengthError });
     }
 
     let imageUrl = null;
@@ -81,6 +93,9 @@ router.post('/suggestions', upload.single('image'), async (req, res) => {
       suggestion: rows[0],
     });
   } catch (err) {
+    if (err instanceof ImageValidationError) {
+      return res.status(err.status).json({ error: err.message });
+    }
     console.error('Submit suggestion error:', err);
     res.status(500).json({ error: 'Failed to submit suggestion. Please try again.' });
   }

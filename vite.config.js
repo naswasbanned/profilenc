@@ -10,4 +10,9 @@ export default defineConfig({
       '/uploads': 'http://localhost:3001',
     },
   },
+  test: {
+    // Scoped on purpose: the default glob would also pick up the test files
+    // that ship inside .agents/skills/, which are not part of this project.
+    include: ['src/**/*.test.{js,jsx}', 'server/src/**/*.test.js'],
+  },
 })

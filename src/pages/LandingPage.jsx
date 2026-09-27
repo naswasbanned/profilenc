@@ -45,6 +45,10 @@ import { ContainerScroll } from '../components/ui/container-scroll-animation';
 import HowItWorks from '../components/ui/how-it-works';
 import ThreeDTestimonials from '../components/ui/3d-testimonials';
 import LandingBottomNav from '../components/Landing/LandingBottomNav';
+import WinnerCelebration from '../components/Landing/WinnerEvent/WinnerCelebration';
+import WinnerSection from '../components/Landing/WinnerEvent/WinnerSection';
+import { useWinnerCelebration } from '../components/Landing/WinnerEvent/useWinnerCelebration';
+import { WINNER_EVENT } from '../components/Landing/WinnerEvent/winnerEvent.config';
 import { apiFetch } from '../lib/api';
 import './LandingPage.css';
 import { useUiTheme } from '../hooks/useUiTheme';
@@ -634,6 +638,8 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const { theme, toggleTheme } = useUiTheme();
+  // First place event: entry popup state, once per session plus manual replay
+  const celebration = useWinnerCelebration();
 
 
 
@@ -675,8 +681,9 @@ export default function LandingPage() {
   const handleSuggestionImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        setSuggestionError('Image file is too large (max 10MB)');
+      // Matches MAX_PUBLIC_UPLOAD_BYTES in server/src/middleware/upload.js
+      if (file.size > 2 * 1024 * 1024) {
+        setSuggestionError('Image file is too large (max 2MB)');
         return;
       }
       setSuggestionFile(file);
@@ -1029,6 +1036,12 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* FIRST PLACE EVENT: certificate, team and special thanks.
+          Toggle and content live in components/Landing/WinnerEvent/winnerEvent.config.js */}
+      {WINNER_EVENT.enabled && (
+        <WinnerSection onReplay={celebration.replay} lenisRef={lenisRef} />
+      )}
+
       {/* ENGINE UPDATES / PATCH NOTES BOARD */}
       <section className="fn-section" id="updates">
         <div className="fn-container">
@@ -1227,7 +1240,7 @@ export default function LandingPage() {
                     <label className="fn-upload">
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/jpeg,image/png,image/gif,image/webp,image/avif"
                         onChange={handleSuggestionImageChange}
                         className="fn-file-input"
                       />
@@ -1422,6 +1435,15 @@ export default function LandingPage() {
 
       {/* Phone tab bar — replaces the top header on small screens */}
       <LandingBottomNav lenisRef={lenisRef} theme={theme} onToggleTheme={toggleTheme} />
+
+      {/* First place entry popup: trophy, confetti, then back to normal */}
+      {WINNER_EVENT.enabled && (
+        <WinnerCelebration
+          open={celebration.open}
+          onClose={celebration.close}
+          lenisRef={lenisRef}
+        />
+      )}
     </div>
   );
 }

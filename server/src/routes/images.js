@@ -5,12 +5,32 @@ import { fileURLToPath } from 'url';
 import { query } from '../config/db.js';
 import auth from '../middleware/auth.js';
 import upload from '../middleware/upload.js';
-import { processImage, deleteImage, ensureUploadDirs } from '../services/imageService.js';
+import { imageUploadLimiter } from '../middleware/rateLimit.js';
+import { ImageValidationError, processImage, deleteImage } from '../services/imageService.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const uploadsDir = path.join(__dirname, '..', '..', 'uploads');
 
+/** Per-account storage ceiling. Raise if real usage gets close. */
+const MAX_IMAGES_PER_USER = 200;
+const MAX_BYTES_PER_USER = 200 * 1024 * 1024; // 200 MB
+
 const router = Router();
+
+/**
+ * Current storage usage for a user, read from the images table.
+ * @returns {Promise<{count: number, bytes: number}>}
+ */
+async function usageFor(userId) {
+  const { rows } = await query(
+    'SELECT COUNT(*)::int AS count, COALESCE(SUM(size_bytes), 0)::bigint AS bytes FROM images WHERE user_id = $1',
+    [userId]
+  );
+  return {
+    count: rows[0]?.count || 0,
+    bytes: Number(rows[0]?.bytes || 0),
+  };
+}
 
 /**
  * POST /api/images
@@ -18,10 +38,26 @@ const router = Router();
  * Stores in uploads/:userId/ directory.
  * Returns { url, filename, width, height, sizeBytes, originalName }.
  */
-router.post('/', auth, upload.single('image'), async (req, res) => {
+router.post('/', auth, imageUploadLimiter, upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No image file provided' });
+    }
+
+    // Quota check before any decoding work. The temp file is removed here
+    // because processImage, which normally cleans it up, is never reached.
+    const usage = await usageFor(req.user.id);
+    if (usage.count >= MAX_IMAGES_PER_USER || usage.bytes >= MAX_BYTES_PER_USER) {
+      await fs.unlink(req.file.path).catch(() => {});
+      return res.status(413).json({
+        error: 'Storage limit reached. Delete some images to upload more.',
+        usage: {
+          images: usage.count,
+          maxImages: MAX_IMAGES_PER_USER,
+          bytes: usage.bytes,
+          maxBytes: MAX_BYTES_PER_USER,
+        },
+      });
     }
 
     // Ensure user-specific upload dir exists
@@ -45,6 +81,9 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
       originalName: req.file.originalname,
     });
   } catch (err) {
+    if (err instanceof ImageValidationError) {
+      return res.status(err.status).json({ error: err.message });
+    }
     console.error('Image upload error:', err);
     res.status(500).json({ error: 'Failed to process image' });
   }
@@ -86,7 +125,13 @@ router.get('/', auth, async (req, res) => {
  */
 router.delete('/:filename', auth, async (req, res) => {
   try {
-    const { filename } = req.params;
+    // basename strips any traversal segments before this value reaches a path
+    // join below. The ownership check already blocks it, but the filesystem
+    // call should not depend on that being the only guard.
+    const filename = path.basename(req.params.filename || '');
+    if (!filename) {
+      return res.status(400).json({ error: 'Filename required' });
+    }
 
     const { rowCount } = await query(
       'DELETE FROM images WHERE filename = $1 AND user_id = $2',

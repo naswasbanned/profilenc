@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, SkipBack, SkipForward, Music, Disc3, ExternalLink } from 'lucide-react';
+import { safeUrl } from '../../lib/safeUrl';
 
 /**
  * Detect provider from embed URL and return normalized embed src with autoplay support.
@@ -321,9 +322,9 @@ export default function MusicPlayerBlock({ data }) {
           )}
 
           {/* Provider badge */}
-          {parsed.provider && (
+          {parsed.provider && safeUrl(currentTrack?.embedUrl) && (
             <a
-              href={currentTrack?.embedUrl}
+              href={safeUrl(currentTrack?.embedUrl)}
               target="_blank"
               rel="noopener noreferrer"
               className="music-provider-badge"

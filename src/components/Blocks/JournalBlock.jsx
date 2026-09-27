@@ -33,6 +33,7 @@ import {
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import ImageUploadPicker from '../Editor/ImageUploadPicker';
+import { safeUrl } from '../../lib/safeUrl';
 
 const MOOD_OPTIONS = [
   { emoji: '', label: '🚫 None', isNone: true },
@@ -98,17 +99,23 @@ function parseInlineMarkdown(text) {
     const key = `inline-${match.index}-${nodes.length}`;
 
     if (isLink) {
+      const href = safeUrl(linkUrl);
       nodes.push(
-        <a
-          key={key}
-          href={linkUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="journal-prose-link"
-        >
-          {linkText}
-        </a>
+        href ? (
+          <a
+            key={key}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="journal-prose-link"
+          >
+            {linkText}
+          </a>
+        ) : (
+          // Unsafe scheme such as javascript: — keep the words, drop the link.
+          <span key={key}>{linkText}</span>
+        )
       );
     } else if (isBoldItalic) {
       nodes.push(
