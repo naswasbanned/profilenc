@@ -108,6 +108,8 @@ export const WINNER_EVENT = {
     { name: 'Rakayida FH.', role: 'Early Tester', note: 'For testing every rough edge.' },
     { name: 'Khafidz FPW.', role: 'Demo Tester', note: 'For giving advice.' },
     { name: 'M. Dzamar R.', role: 'Demo Tester', note: 'For giving courage.' },
+    { name: 'J. Calvin N.', role: 'Demo Tester', note: 'For supporting.' },
+    { name: 'Zaki A.', role: 'Demo Tester', note: 'For being with us.' },
     { name: 'Rapid AS.', role: 'Demo Tester', note: 'For being there.' },
     { name: 'M. Irsyad F.', role: 'Demo Tester', note: 'For giving confidence.' },
   ],
