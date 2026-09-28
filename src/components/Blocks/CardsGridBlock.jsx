@@ -29,6 +29,14 @@ export default function CardsGridBlock({ data = {} }) {
       <div className={`cards-grid cols-${columns}`}>
         {cardList.map((item, idx) => {
           const img = item.image || item.imageUrl || item.coverImage;
+          // Highlights: saved as an array by the editor, but accept a
+          // newline-separated string from older or hand-written content.
+          const bullets = (Array.isArray(item.bullets)
+            ? item.bullets
+            : String(item.bullets || '').split('\n')
+          )
+            .map((line) => String(line).trim())
+            .filter(Boolean);
           return (
             <div
               key={item.id || idx}
@@ -56,7 +64,18 @@ export default function CardsGridBlock({ data = {} }) {
                   <span className="spec-category">{item.category}</span>
                 )}
                 <h3 className="card-title">{item.title}</h3>
-              {item.description && <p className="card-desc">{item.description}</p>}
+              {item.description && (
+                <p className={`card-desc${bullets.length > 0 ? ' has-bullets' : ''}`}>{item.description}</p>
+              )}
+
+              {/* Same highlight list as the career timeline: one point per line */}
+              {bullets.length > 0 && (
+                <ul className="timeline-bullets card-bullets">
+                  {bullets.map((bullet, bIdx) => (
+                    <li key={bIdx}>{bullet}</li>
+                  ))}
+                </ul>
+              )}
 
               {item.tags && item.tags.length > 0 && (
                 <div className="card-tags">

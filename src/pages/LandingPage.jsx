@@ -1,7 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import {
   ArrowRight,
@@ -48,15 +46,32 @@ import { MANUAL_PATCH_NOTES } from '../../server/src/data/patchNotes.js';
 import { mergePatchNotes } from '../../server/src/lib/patchNotes.js';
 import ThreeDTestimonials from '../components/ui/3d-testimonials';
 import LandingBottomNav from '../components/Landing/LandingBottomNav';
-import WinnerCelebration from '../components/Landing/WinnerEvent/WinnerCelebration';
 import WinnerSection from '../components/Landing/WinnerEvent/WinnerSection';
 import { useWinnerCelebration } from '../components/Landing/WinnerEvent/useWinnerCelebration';
 import { WINNER_EVENT } from '../components/Landing/WinnerEvent/winnerEvent.config';
 import { apiFetch } from '../lib/api';
+import { initialLandingConfig, loadLandingConfig, mergeLandingConfig } from '../lib/landingConfig';
 import './LandingPage.css';
 import { useUiTheme } from '../hooks/useUiTheme';
 
-gsap.registerPlugin(ScrollTrigger);
+// The entry popup (and its confetti engine) is fetched only once it is about
+// to open, which is after the page has finished loading.
+const WinnerCelebration = lazy(() => import('../components/Landing/WinnerEvent/WinnerCelebration'));
+
+/**
+ * Smooth scrolling is a pointer-device nicety. On touch screens native
+ * scrolling already feels right, and running Lenis there only adds a
+ * per-frame loop on the phones that can least afford it.
+ */
+function wantsSmoothScroll() {
+  if (typeof window === 'undefined' || !window.matchMedia) return false;
+  // Keyed on a touch-first primary pointer rather than on "pointer: fine",
+  // so desktops without a reported mouse still get smooth scrolling.
+  return (
+    !window.matchMedia('(pointer: coarse)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+}
 
 
 // Comprehensive showcase profile featuring all core modular blocks
@@ -605,24 +620,9 @@ export default function LandingPage() {
 
   const [featuredProfiles, setFeaturedProfiles] = useState([]);
   const [patchNotesList, setPatchNotesList] = useState(CODE_PATCH_NOTES);
-  const [landingData, setLandingData] = useState({
-    hero: {
-      badge: 'PROFILENC // PERSONAL PROFILE BUILDER',
-      mastheadTop: 'CREATE YOUR',
-      mastheadMid: 'PERSONAL PAGE.',
-      manifestoLead: 'The easiest way to build a clean, customizable profile website. Choose your blocks, customize colors and fonts, and share your link with the world.',
-      claimLabel: 'YOUR PERSONAL LINK',
-    },
-    marquee: {
-      text: 'CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //',
-    },
-    cta: {
-      badge: '[GET_STARTED]',
-      title: 'READY TO BUILD YOUR PAGE?',
-      text: "Create a clean, customizable personal page in minutes. It's free and easy to set up.",
-      btnLabel: 'START BUILDING NOW',
-    },
-  });
+  // CMS copy for the first render: the early response from index.html, else
+  // the last visit's cache, else the defaults (see lib/landingConfig.js).
+  const [landingData, setLandingData] = useState(initialLandingConfig);
 
   // Open Suggestion Box Form State
   const [suggestionForm, setSuggestionForm] = useState({
@@ -700,54 +700,27 @@ export default function LandingPage() {
     }
   };
 
-  const marquee1Ref = useRef(null);
   const lenisRef = useRef(null);
 
   useEffect(() => {
-    // Set document title
     document.title = 'Profilenc';
 
-    // 1. Lenis Smooth Scroll Integration
+    // Smooth scroll on mouse and trackpad only. Everything that scrolls the
+    // page checks lenisRef and falls back to native scrolling when it is null,
+    // and in-page anchors then use the CSS `scroll-behavior: smooth`.
+    // The marquee is a CSS animation (styles/landing/04-marquee.css), so
+    // GSAP is no longer needed on this page.
+    if (!wantsSmoothScroll()) return undefined;
+
     const lenis = new Lenis({
       duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      smoothTouch: false,
+      autoRaf: true,
     });
-
     lenisRef.current = lenis;
 
-    lenis.on('scroll', ScrollTrigger.update);
-
-    const tickerCb = (time) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(tickerCb);
-    gsap.ticker.lagSmoothing(0);
-
-    // 2. Infinite Marquee
-    if (marquee1Ref.current) {
-      gsap.to(marquee1Ref.current, {
-        xPercent: -50,
-        ease: 'none',
-        duration: 22,
-        repeat: -1,
-      });
-    }
-
-    // Refresh ScrollTrigger when fonts finish loading
-    if (document.fonts) {
-      document.fonts.ready.then(() => {
-        ScrollTrigger.refresh();
-      });
-    }
-
-    const onResize = () => {
-      ScrollTrigger.refresh();
-    };
-    window.addEventListener('resize', onResize);
-
-    // Smooth anchor link clicks via Lenis
+    // Route in-page anchor clicks through Lenis so they share its easing
     const handleAnchorClick = (e) => {
       const anchor = e.target.closest('a');
       const href = anchor?.getAttribute('href');
@@ -762,17 +735,14 @@ export default function LandingPage() {
     document.addEventListener('click', handleAnchorClick);
 
     return () => {
-      window.removeEventListener('resize', onResize);
       document.removeEventListener('click', handleAnchorClick);
       lenisRef.current = null;
       lenis.destroy();
-      gsap.ticker.remove(tickerCb);
-      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
   // Lenis owns the scroll position on pointer devices, so ask it first and fall
-  // back to the native scroll on touch, where Lenis stays passive.
+  // back to the native scroll on touch, where Lenis is not started.
   const scrollToTop = () => {
     const lenis = lenisRef.current;
     if (lenis) {
@@ -781,14 +751,6 @@ export default function LandingPage() {
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  // Refresh ScrollTrigger when dynamic landing data finishes loading
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 120);
-    return () => clearTimeout(timer);
-  }, [featuredProfiles, patchNotesList, landingData]);
 
   // Fetch Live Site Data (Landing Config & Patch Notes & Featured Profiles)
   useEffect(() => {
@@ -842,19 +804,11 @@ export default function LandingPage() {
       })
       .catch(() => { });
 
-    // Landing CMS Settings
-    apiFetch('/api/site/landing', { token: null })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (data?.config) {
-          setLandingData((prev) => ({
-            hero: { ...prev.hero, ...(data.config.hero || {}) },
-            marquee: { ...prev.marquee, ...(data.config.marquee || {}) },
-            cta: { ...prev.cta, ...(data.config.cta || {}) },
-          }));
-        }
-      })
-      .catch(() => { });
+    // Landing CMS settings. Usually already on screen from the first render;
+    // this refreshes the cache and applies anything newer.
+    loadLandingConfig().then((config) => {
+      if (config) setLandingData((prev) => mergeLandingConfig(prev, config));
+    });
   }, []);
 
   return (
@@ -1040,7 +994,7 @@ export default function LandingPage() {
 
       {/* MARQUEE */}
       <section className="fn-marquee" aria-hidden="true">
-        <div ref={marquee1Ref} className="fn-marquee-track">
+        <div className="fn-marquee-track">
           <span>{landingData.marquee?.text || 'CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //'}</span>
           <span>{landingData.marquee?.text || 'CREATE YOUR PROFILE // 10 MODULAR BLOCKS // NO CODING REQUIRED // SHARE ANYWHERE //'}</span>
         </div>
@@ -1414,13 +1368,17 @@ export default function LandingPage() {
       {/* Phone tab bar — replaces the top header on small screens */}
       <LandingBottomNav lenisRef={lenisRef} theme={theme} onToggleTheme={toggleTheme} />
 
-      {/* First place entry popup: trophy, confetti, then back to normal */}
-      {WINNER_EVENT.enabled && (
-        <WinnerCelebration
-          open={celebration.open}
-          onClose={celebration.close}
-          lenisRef={lenisRef}
-        />
+      {/* First place entry popup: trophy, confetti, then back to normal.
+          Mounted once it has been asked to open, and kept mounted after that
+          so its exit animation can play. */}
+      {WINNER_EVENT.enabled && celebration.requested && (
+        <Suspense fallback={null}>
+          <WinnerCelebration
+            open={celebration.open}
+            onClose={celebration.close}
+            lenisRef={lenisRef}
+          />
+        </Suspense>
       )}
     </div>
   );

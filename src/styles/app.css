@@ -405,3 +405,50 @@
   }
 }
 
+
+/* ==========================================================================
+   Route fallback: shown while a lazily loaded page chunk downloads.
+   Colours follow the site theme set on <html> by index.html, so there is no
+   light flash in dark mode. The spinner waits 400ms before appearing, so fast
+   loads show nothing but the page background.
+   ========================================================================== */
+
+.route-fallback {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  background: #191524;
+}
+
+[data-theme="light"] .route-fallback {
+  background: #f5efdf;
+}
+
+.route-fallback-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(249, 243, 233, 0.2);
+  border-top-color: #f1846b;
+  border-radius: 50%;
+  opacity: 0;
+  animation:
+    route-fallback-reveal 0.2s ease 0.4s forwards,
+    route-fallback-spin 0.7s linear infinite;
+}
+
+[data-theme="light"] .route-fallback-spinner {
+  border-color: rgba(37, 35, 32, 0.18);
+  border-top-color: #e96d52;
+}
+
+@keyframes route-fallback-reveal {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes route-fallback-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

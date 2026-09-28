@@ -23,5 +23,23 @@
   font-weight: 600;
   letter-spacing: -0.03em;
   will-change: transform;
+  /* The track holds the text twice, so sliding it by half loops seamlessly.
+     Runs on the compositor; this used to be a GSAP tween on the main thread. */
+  animation: fn-marquee-scroll 22s linear infinite;
+}
+
+@keyframes fn-marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fn-marquee-track {
+    animation: none;
+  }
 }
 

@@ -111,7 +111,7 @@ export default function LandingBottomNav({ lenisRef, theme, onToggleTheme }) {
 
   const scrollTo = (target) => {
     // Lenis owns the scroll position on pointer devices, so ask it first and
-    // fall back to the native scroll on touch (where Lenis stays passive).
+    // fall back to the native scroll on touch (where Lenis is not started).
     const lenis = lenisRef?.current;
     if (lenis) {
       lenis.scrollTo(target, { offset: -8, duration: 0.9 });

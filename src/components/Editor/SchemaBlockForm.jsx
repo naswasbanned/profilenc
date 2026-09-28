@@ -23,6 +23,11 @@ function readValue(values, field) {
   const keys = [field.key, ...(field.aliases || [])];
   for (const key of keys) {
     const candidate = values[key];
+    // An empty array (no highlights yet, no tags yet) is a real, present
+    // value, not a missing one. Treating it as missing fell through to the
+    // fallback on every render, which for `lines` meant a freshly typed
+    // newline was wiped out as soon as it produced an empty array.
+    if (Array.isArray(candidate)) return candidate;
     if (candidate !== undefined && candidate !== null && candidate !== '') return candidate;
   }
   return values[field.key] ?? field.fallback ?? '';

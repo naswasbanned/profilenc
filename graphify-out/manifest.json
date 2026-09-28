@@ -6,9 +6,9 @@
     "semantic_hash": "49c8473bcfcec3aef596a5fb04a6df06"
   },
   "package.json": {
-    "mtime": 1790255022.168574,
-    "seen": 1790259068.9239938,
-    "ast_hash": "8ee3ca3c0da60d4b69a56c2cab9921de",
+    "mtime": 1790570341.3895724,
+    "seen": 1790572113.5289388,
+    "ast_hash": "7ba7dd0c2314509c9823da348af50639",
     "semantic_hash": ""
   },
   "server/package.json": {
@@ -102,9 +102,9 @@
     "semantic_hash": ""
   },
   "src/App.jsx": {
-    "mtime": 1790062553.37531,
-    "seen": 1790062712.910689,
-    "ast_hash": "37c71e1bb437139374c30ba5746db749",
+    "mtime": 1790570925.5253832,
+    "seen": 1790572113.5289764,
+    "ast_hash": "41ec7ee6c94336bbd9e0a0eed5865a9e",
     "semantic_hash": ""
   },
   "src/components/Blocks/BlockRenderer.jsx": {
@@ -114,9 +114,9 @@
     "semantic_hash": ""
   },
   "src/components/Blocks/CardsGridBlock.jsx": {
-    "mtime": 1790254222.3718567,
-    "seen": 1790259068.924057,
-    "ast_hash": "261d79b7c23e6d90a6197cf6f0e0f2ef",
+    "mtime": 1790573249.6240091,
+    "seen": 1790573418.4002297,
+    "ast_hash": "3257cf55b78c1af35714c5d530f63a32",
     "semantic_hash": ""
   },
   "src/components/Blocks/EventsBlock.jsx": {
@@ -348,9 +348,9 @@
     "semantic_hash": ""
   },
   "src/pages/LandingPage.jsx": {
-    "mtime": 1790566565.9341002,
-    "seen": 1790568635.98656,
-    "ast_hash": "bf78dc4b1afad8632b453d11e8b3d41a",
+    "mtime": 1790571960.8139515,
+    "seen": 1790572113.5291095,
+    "ast_hash": "8d78ebca48470e9b60dbc4b2f1c6eff4",
     "semantic_hash": ""
   },
   "src/pages/LoginPage.jsx": {
@@ -372,9 +372,9 @@
     "semantic_hash": ""
   },
   "vite.config.js": {
-    "mtime": 1790254278.1342683,
-    "seen": 1790259068.9242995,
-    "ast_hash": "22c6ab39ee218d5f7d7f815eec96e750",
+    "mtime": 1790570943.0149975,
+    "seen": 1790572113.5291138,
+    "ast_hash": "06deca8e24cca7fbfe0aa85d8ebf7264",
     "semantic_hash": ""
   },
   ".opencode/plugins/graphify.js": {
@@ -402,9 +402,9 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1790176206.0404878,
-    "seen": 1790176418.0730724,
-    "ast_hash": "ab5e7a60421faed23295be497d2ade72",
+    "mtime": 1790572545.5163136,
+    "seen": 1790573418.40038,
+    "ast_hash": "afba30c6ca3e6662b3be23d78e8a2258",
     "semantic_hash": ""
   },
   "src/assets/react.svg": {
@@ -432,9 +432,9 @@
     "semantic_hash": ""
   },
   "src/hooks/useUiTheme.js": {
-    "mtime": 1790058026.542206,
-    "seen": 1790062712.9107463,
-    "ast_hash": "448ba702d340d265ca03bce60038b39a",
+    "mtime": 1790572546.941978,
+    "seen": 1790573418.4003484,
+    "ast_hash": "6498e9db382041c78950d80c34081cc7",
     "semantic_hash": ""
   },
   "src/lib/api.js": {
@@ -474,9 +474,9 @@
     "semantic_hash": ""
   },
   "src/components/Landing/LandingBottomNav.jsx": {
-    "mtime": 1790158096.4384923,
-    "seen": 1790162178.34155,
-    "ast_hash": "d4a5c7aff6f67014523c57066ba06e27",
+    "mtime": 1790570955.5816174,
+    "seen": 1790572113.529064,
+    "ast_hash": "bf7f25c804136f278b3729907a4fa555",
     "semantic_hash": ""
   },
   "src/components/Editor/BlockEditorWorkbench.jsx": {
@@ -492,9 +492,9 @@
     "semantic_hash": ""
   },
   "src/components/Editor/blockSchemas/cardsGrid.js": {
-    "mtime": 1790162133.6466365,
-    "seen": 1790162178.3415382,
-    "ast_hash": "5d7a8c913b5dc581764dfa6eb400df81",
+    "mtime": 1790573259.8073504,
+    "seen": 1790573418.400265,
+    "ast_hash": "c85418d93e521efccd2b1f70d3aeecd3",
     "semantic_hash": ""
   },
   "src/components/Editor/blockSchemas/index.js": {
@@ -780,15 +780,15 @@
     "semantic_hash": ""
   },
   "src/components/Landing/WinnerEvent/useWinnerCelebration.js": {
-    "mtime": 1790522767.6041403,
-    "seen": 1790528154.0286758,
-    "ast_hash": "ce40c0c0b65bf9ce597e6d1164d07168",
+    "mtime": 1790570897.1604931,
+    "seen": 1790572113.5290735,
+    "ast_hash": "98a22bdb92936a3ea90fd9a6d84acb06",
     "semantic_hash": ""
   },
   "src/components/Landing/WinnerEvent/winnerEvent.config.js": {
-    "mtime": 1790562033.2211092,
-    "seen": 1790568635.9865243,
-    "ast_hash": "3b257d766fbf442b4d291d57f3495758",
+    "mtime": 1790570898.7092264,
+    "seen": 1790572113.5290744,
+    "ast_hash": "3e46e936323146864771c0022313bec4",
     "semantic_hash": ""
   },
   "server/src/data/patchNotes.js": {
@@ -819,6 +819,12 @@
     "mtime": 1790566511.445223,
     "seen": 1790568635.9865143,
     "ast_hash": "88a15ccc51638252aeb9fa0a76431df1",
+    "semantic_hash": ""
+  },
+  "src/lib/landingConfig.js": {
+    "mtime": 1790570808.8922486,
+    "seen": 1790572113.5290968,
+    "ast_hash": "52e69b49ef7873ab659a71750866d38b",
     "semantic_hash": ""
   }
 }

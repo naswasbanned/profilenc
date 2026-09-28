@@ -33,7 +33,7 @@ export const WINNER_EVENT = {
   celebration: {
     headline: 'The winner takes it all',
     message: 'Profilenc took first place. Thank you for being part of the journey.',
-    delayMs: 600, // wait for the hero to paint before celebrating
+    delayMs: 600, // extra wait after the page has loaded and gone idle
     autoCloseMs: 6500,
   },
 

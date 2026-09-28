@@ -131,6 +131,19 @@
   flex: 1;
 }
 
+/* Highlights reuse the timeline list (.timeline-bullets in 05-timeline.css).
+   When a card has them, the list takes over the stretch that keeps card
+   footers aligned, so there is no gap between summary and highlights. */
+.card-desc.has-bullets {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+}
+
+.timeline-bullets.card-bullets {
+  flex: 1;
+  margin: 10px 0 16px 18px;
+}
+
 .card-tags {
   display: flex;
   flex-wrap: wrap;

@@ -18,14 +18,14 @@ const VIEW_TRANSITION_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
  *        `<html data-theme>` attribute when nothing is stored.
  */
 export function readStoredUiTheme(fallbackToDocument = false) {
-  if (typeof window === 'undefined') return 'dark';
+  if (typeof window === 'undefined') return 'light';
   const stored = localStorage.getItem(UI_THEME_STORAGE_KEY);
   if (stored) return stored;
   if (fallbackToDocument) {
     const attr = document.documentElement.getAttribute('data-theme');
     if (attr) return attr;
   }
-  return 'dark';
+  return 'light';
 }
 
 /** Persist the theme and apply it to the document element. */

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
@@ -8,19 +8,34 @@
       name="description"
       content="Profilenc — build a clean, customizable personal profile page with modular blocks and your own link."
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Fonts are bundled locally (src/styles/fonts.css); no third-party
+         stylesheet blocks the first paint. -->
     <script>
       (function () {
         try {
           var saved = localStorage.getItem('profilenc_theme');
-          var theme = saved || 'dark';
+          var theme = saved || 'light';
           document.documentElement.setAttribute('data-theme', theme);
         } catch (e) {}
+      })();
+    </script>
+    <script>
+      // Landing page only: start the CMS request now instead of after the app
+      // bundle has downloaded, so the hero renders with the real copy on its
+      // first paint. Consumed once by src/lib/landingConfig.js.
+      (function () {
+        if (location.pathname !== '/' || !window.fetch) return;
+        window.__PROFILENC_LANDING__ = fetch('/api/site/landing')
+          .then(function (res) {
+            return res.ok ? res.json() : null;
+          })
+          .then(function (data) {
+            window.__PROFILENC_LANDING_DATA__ = data;
+            return data;
+          })
+          .catch(function () {
+            return null;
+          });
       })();
     </script>
     <title>Profilenc</title>

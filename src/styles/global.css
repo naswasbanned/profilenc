@@ -3,7 +3,12 @@
    Theme: Technical Obsidian & Precision Luminescence
    ========================================================================== */
 
-/* Font imports: Local Fontsource + Paired Webfonts */
+/* Font imports, all bundled locally (no render-blocking third-party CSS).
+   Plus Jakarta Sans and Space Grotesk used to be @imported from Google here,
+   which chained a second blocking request behind this whole stylesheet.
+   Profile themes that pick them still get them via ThemeContext's runtime
+   loader; everything else falls back to DM Sans below. */
+@import './fonts.css';
 @import '@fontsource/jetbrains-mono/400.css';
 @import '@fontsource/jetbrains-mono/500.css';
 @import '@fontsource/jetbrains-mono/700.css';
@@ -12,14 +17,13 @@
 @import '@fontsource/orbitron/900.css';
 @import '@fontsource/crimson-text/400.css';
 @import '@fontsource/crimson-text/700.css';
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
   /* === 1. Typography Tokens === */
   /* Display font: Space Grotesk (geometric, technical character for headers) */
-  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Space Grotesk', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   /* Body font: Plus Jakarta Sans (refined neo-grotesque, high legibility) */
-  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Plus Jakarta Sans', 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   /* Monospace font: JetBrains Mono (high-precision tabular & code face) */
   --font-mono: 'JetBrains Mono', monospace;
   /* Serif font: Crimson Text (literary editorial warmth for journal/diary) */
