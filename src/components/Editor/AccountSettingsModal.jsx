@@ -24,13 +24,13 @@ import EditorModal from '../primitives/EditorModal';
 import ImageUploadPicker from './ImageUploadPicker';
 import './Editor.css';
 
-export default function AccountSettingsModal({ onClose, onUsernameChanged, editorTheme }) {
+export default function AccountSettingsModal({ onClose, onUsernameChanged, editorTheme, initialTab }) {
   const navigate = useNavigate();
   const { user, updateProfile, changePassword, logout, checkUsername, deleteAccount } = useAuth();
 
   const currentEditorTheme = editorTheme || (typeof window !== 'undefined' ? localStorage.getItem('profilenc_theme') || document.documentElement.getAttribute('data-theme') || 'dark' : 'dark');
 
-  const [activeTab, setActiveTab] = useState('profile'); // 'profile' | 'security' | 'session'
+  const [activeTab, setActiveTab] = useState(initialTab || 'profile'); // 'profile' | 'security' | 'session'
 
   // Profile Form State
   const [displayName, setDisplayName] = useState(user?.displayName || user?.username || '');

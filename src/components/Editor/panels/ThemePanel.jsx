@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { Sparkles, Type, Check, Layers, Palette, Square, FolderKanban, Image, Trash2, LayoutTemplate, ShieldCheck, Sliders, Compass, Info } from 'lucide-react';
@@ -785,9 +785,35 @@ function SimpleSelectInput({ label, value, onChange, options }) {
   );
 }
 
-export default function ThemePanel({ tabs = [] }) {
+export default function ThemePanel({ tabs = [], initialSection, scrollToField }) {
   const { updateTheme, getNestedValue } = useTheme();
-  const [section, setSection] = useState('style');
+  const [section, setSection] = useState(initialSection || 'style');
+
+  // Deep-link: when initialSection changes from the search palette, switch section
+  // and scroll to the target field after a short delay for render.
+  useEffect(() => {
+    if (initialSection) {
+      setSection(initialSection);
+    }
+  }, [initialSection]);
+
+  useEffect(() => {
+    if (!scrollToField) return;
+    const timer = setTimeout(() => {
+      const el = document.querySelector(`[data-theme-field="${scrollToField}"]`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.style.outline = '2px solid var(--fn-editor-coral)';
+        el.style.outlineOffset = '4px';
+        el.style.borderRadius = '8px';
+        setTimeout(() => {
+          el.style.outline = '';
+          el.style.outlineOffset = '';
+        }, 2000);
+      }
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [scrollToField, section]);
 
   const sections = [
     { id: 'style', label: 'Preset' },

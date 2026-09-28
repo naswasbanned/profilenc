@@ -210,9 +210,9 @@
     "semantic_hash": ""
   },
   "src/components/Editor/AccountSettingsModal.jsx": {
-    "mtime": 1790164212.6014557,
-    "seen": 1790164245.7723513,
-    "ast_hash": "bee1f32c38ac1eaa6cdacf4d52435727",
+    "mtime": 1790583844.157903,
+    "seen": 1790583918.0239644,
+    "ast_hash": "5d3171eebf4e5771514e345cf732f32b",
     "semantic_hash": ""
   },
   "src/components/Editor/AddBlockModal.jsx": {
@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/Editor/EditorOverlay.jsx": {
-    "mtime": 1790165201.6808822,
-    "seen": 1790165524.6674588,
-    "ast_hash": "60bd41b9f52bc5ab49c08385c52b7529",
+    "mtime": 1790583805.819491,
+    "seen": 1790583918.0239804,
+    "ast_hash": "e0c9bb053df2d73cc1939473618afd3c",
     "semantic_hash": ""
   },
   "src/components/Editor/ImageUploadPicker.jsx": {
@@ -264,9 +264,9 @@
     "semantic_hash": "b00c21d33f29dc1d4e96bca648d52e38"
   },
   "src/components/Editor/panels/ThemePanel.jsx": {
-    "mtime": 1790177006.0578835,
-    "seen": 1790227950.7904665,
-    "ast_hash": "bd2d44ba9e2c52d13cd469365dea5135",
+    "mtime": 1790583832.7877803,
+    "seen": 1790583918.024087,
+    "ast_hash": "039b4ac7e2db2f318fc526f7c44ccd79",
     "semantic_hash": ""
   },
   "src/components/OptimizedImage/OptimizedImage.jsx": {
@@ -825,6 +825,18 @@
     "mtime": 1790570808.8922486,
     "seen": 1790572113.5290968,
     "ast_hash": "52e69b49ef7873ab659a71750866d38b",
+    "semantic_hash": ""
+  },
+  "src/components/Editor/EditorSearchPalette.jsx": {
+    "mtime": 1790583763.4390378,
+    "seen": 1790583918.0239873,
+    "ast_hash": "700f5c746126008b23b5547e042d70f4",
+    "semantic_hash": ""
+  },
+  "src/components/Editor/searchRegistry.js": {
+    "mtime": 1790583702.287384,
+    "seen": 1790583918.0240893,
+    "ast_hash": "889e53c108b6c7b86021aad50b2ef231",
     "semantic_hash": ""
   }
 }

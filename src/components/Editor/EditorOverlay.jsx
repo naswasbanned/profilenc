@@ -20,6 +20,7 @@ import {
   Settings,
   Moon,
   Sun,
+  Search,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -28,6 +29,7 @@ import BlockEditorModal from './BlockEditorModal';
 import AddBlockModal from './AddBlockModal';
 import TabManagerModal from './TabManagerModal';
 import AccountSettingsModal from './AccountSettingsModal';
+import EditorSearchPalette from './EditorSearchPalette';
 import EditorModal from '../primitives/EditorModal';
 import { useSyncedUiTheme } from '../../hooks/useUiTheme';
 import './Editor.css';
@@ -58,10 +60,13 @@ export default function EditorOverlay({
   const { theme, isDirty: isThemeDirty, resetTheme } = useTheme();
 
   const [showThemeDrawer, setShowThemeDrawer] = useState(false);
+  const [themePanelInitial, setThemePanelInitial] = useState(null);
   const [showAddBlockModal, setShowAddBlockModal] = useState(false);
   const [showTabManager, setShowTabManager] = useState(false);
   const [showAccountSettings, setShowAccountSettings] = useState(false);
+  const [accountSettingsTab, setAccountSettingsTab] = useState('profile');
   const [showExitModal, setShowExitModal] = useState(false);
+  const [showSearchPalette, setShowSearchPalette] = useState(false);
   const [dismissedToast, setDismissedToast] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -100,6 +105,63 @@ export default function EditorOverlay({
       navigate(`/@${username}`);
     }
   };
+
+  // Ctrl+K / Cmd+K to open search palette, Ctrl+S / Cmd+S to save
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowSearchPalette((v) => !v);
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        handleSave();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [handleSave]);
+
+  // Dispatch an action from the search palette
+  const handleSearchAction = useCallback((action) => {
+    switch (action.type) {
+      case 'callback':
+        if (action.key === 'save') handleSave();
+        else if (action.key === 'undo') onUndo?.();
+        else if (action.key === 'redo') onRedo?.();
+        else if (action.key === 'preview') window.open(`/@${username}`, '_blank');
+        else if (action.key === 'exit') handleExit();
+        else if (action.key === 'toggleEditorTheme') toggleEditorTheme?.();
+        break;
+      case 'open-theme':
+        setThemePanelInitial(action.section ? { section: action.section, field: action.field || null } : null);
+        setShowThemeDrawer(true);
+        break;
+      case 'open-add-block':
+        setShowAddBlockModal(true);
+        break;
+      case 'open-tab-manager':
+        setShowTabManager(true);
+        break;
+      case 'open-account-settings':
+        if (action.tab) setAccountSettingsTab(action.tab);
+        setShowAccountSettings(true);
+        break;
+      case 'open-block-editor': {
+        const currentTab = tabs.find((t) => t.id === activeTabId) || tabs[0];
+        const block = (currentTab?.blocks || []).find((b) => b.id === action.blockId);
+        if (block) setEditingBlock(block);
+        break;
+      }
+      default:
+        break;
+    }
+  }, [handleSave, onUndo, onRedo, username, handleExit, toggleEditorTheme, tabs, activeTabId, setEditingBlock]);
+
+  // Collect user blocks from the active tab for the search palette
+  const activeBlocks = (() => {
+    const tab = tabs.find((t) => t.id === activeTabId) || tabs[0];
+    return (tab?.blocks || []).map((b) => ({ id: b.id, type: b.type, title: b.title || b.type }));
+  })();
 
   return (
     <>
@@ -149,6 +211,16 @@ export default function EditorOverlay({
 
         {/* Center Quick Actions */}
         <div className="editor-toolbar-center">
+          <button
+            type="button"
+            className="editor-tab"
+            onClick={() => setShowSearchPalette(true)}
+            title="Search editor (Ctrl+K)"
+          >
+            <Search size={15} />
+            <span>Search</span>
+          </button>
+
           <button
             type="button"
             className="editor-tab"
@@ -299,6 +371,15 @@ export default function EditorOverlay({
         </div>
       </motion.div>
 
+      {/* Search Command Palette */}
+      <EditorSearchPalette
+        isOpen={showSearchPalette}
+        onClose={() => setShowSearchPalette(false)}
+        onAction={handleSearchAction}
+        userBlocks={activeBlocks}
+        editorTheme={editorTheme}
+      />
+
       {/* Theme Drawer (Right Sliding Panel) */}
       <AnimatePresence>
         {showThemeDrawer && (
@@ -309,20 +390,24 @@ export default function EditorOverlay({
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 360, opacity: 0 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
+            onAnimationComplete={() => {
+              // Clear the initial section after theme panel has opened
+              // so subsequent opens don't re-scroll
+            }}
           >
             <div className="editor-panel-header">
               <h3>Theme & Colors</h3>
               <button
                 type="button"
                 className="editor-panel-collapse"
-                onClick={() => setShowThemeDrawer(false)}
+                onClick={() => { setShowThemeDrawer(false); setThemePanelInitial(null); }}
               >
                 <ChevronRight size={18} />
               </button>
             </div>
 
             <div className="editor-panel-body">
-              <ThemePanel tabs={tabs} />
+              <ThemePanel tabs={tabs} initialSection={themePanelInitial?.section} scrollToField={themePanelInitial?.field} />
             </div>
           </motion.div>
         )}
@@ -366,7 +451,8 @@ export default function EditorOverlay({
         {showAccountSettings && (
           <AccountSettingsModal
             editorTheme={editorTheme}
-            onClose={() => setShowAccountSettings(false)}
+            initialTab={accountSettingsTab}
+            onClose={() => { setShowAccountSettings(false); setAccountSettingsTab('profile'); }}
           />
         )}
       </AnimatePresence>

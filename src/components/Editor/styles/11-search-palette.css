@@ -1,0 +1,249 @@
+/* ==========================================================================
+   11. EDITOR SEARCH PALETTE (Ctrl+K command palette)
+
+   Centered overlay with search input and filtered result rows.
+   Class prefix `esp-` = editor search palette.
+   ========================================================================== */
+
+.esp-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: min(18vh, 160px);
+}
+
+.esp-container {
+  width: 100%;
+  max-width: 580px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.45),
+    0 0 0 1px var(--fn-editor-line);
+  display: flex;
+  flex-direction: column;
+  max-height: min(65vh, 520px);
+}
+
+[data-editor-theme="dark"] .esp-container {
+  background: var(--fn-editor-paper);
+}
+
+[data-editor-theme="light"] .esp-container {
+  background: #ffffff;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+/* --- Search input row --------------------------------------------------- */
+
+.esp-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 2px solid var(--fn-editor-line);
+}
+
+.esp-input-icon {
+  flex-shrink: 0;
+  color: var(--fn-editor-muted);
+}
+
+.esp-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--fn-editor-body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--fn-editor-ink);
+}
+
+.esp-input::placeholder {
+  color: var(--fn-editor-muted);
+  font-weight: 400;
+}
+
+.esp-shortcut {
+  flex-shrink: 0;
+  font-family: var(--fn-editor-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--fn-editor-muted);
+  background: color-mix(in srgb, var(--fn-editor-ink) 8%, transparent);
+  border: 1.5px solid var(--fn-editor-line);
+  border-radius: 5px;
+  padding: 3px 7px;
+  text-transform: uppercase;
+}
+
+/* --- Results list ------------------------------------------------------- */
+
+.esp-results {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px;
+}
+
+.esp-results::-webkit-scrollbar { width: 4px; }
+.esp-results::-webkit-scrollbar-thumb {
+  background: var(--fn-editor-line);
+  border-radius: 999px;
+}
+
+.esp-empty {
+  padding: 32px 18px;
+  text-align: center;
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-body);
+  font-size: 0.85rem;
+}
+
+.esp-category-label {
+  padding: 10px 12px 4px;
+  font-family: var(--fn-editor-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fn-editor-muted);
+}
+
+/* --- Result row --------------------------------------------------------- */
+
+.esp-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 100ms ease;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  font-family: var(--fn-editor-body);
+}
+
+.esp-row:hover,
+.esp-row.is-active {
+  background: color-mix(in srgb, var(--fn-editor-ink) 7%, transparent);
+}
+
+.esp-row.is-active {
+  outline: 2px solid var(--fn-editor-coral);
+  outline-offset: -2px;
+}
+
+.esp-row-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--fn-editor-ink) 6%, transparent);
+  border: 1.5px solid var(--fn-editor-line);
+  color: var(--fn-editor-coral);
+}
+
+.esp-row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.esp-row-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--fn-editor-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.esp-row-category {
+  font-family: var(--fn-editor-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fn-editor-muted);
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--fn-editor-ink) 6%, transparent);
+  border: 1px solid var(--fn-editor-line);
+  flex-shrink: 0;
+}
+
+.esp-row-enter {
+  flex-shrink: 0;
+  font-family: var(--fn-editor-mono);
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--fn-editor-muted);
+  opacity: 0;
+  transition: opacity 100ms ease;
+}
+
+.esp-row.is-active .esp-row-enter {
+  opacity: 1;
+}
+
+/* --- Footer hint -------------------------------------------------------- */
+
+.esp-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px 18px;
+  border-top: 1.5px solid var(--fn-editor-line);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.56rem;
+  font-weight: 600;
+  color: var(--fn-editor-muted);
+  letter-spacing: 0.04em;
+}
+
+.esp-footer kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--fn-editor-ink) 8%, transparent);
+  border: 1px solid var(--fn-editor-line);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+}
+
+/* --- Mobile --------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .esp-backdrop {
+    padding-top: 12px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .esp-container {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 14px;
+  }
+}
