@@ -102,7 +102,7 @@ export const WINNER_EVENT = {
 
   // placeholder: replace with the people and groups you want to thank
   thanks: [
-    { name: 'Kanye W.', role: 'GOAT', note: 'For the existing.' },
+    { name: 'Kanye W.', role: 'GOAT', note: 'For existing.' },
     { name: 'Panji DBP.', role: 'Early Tester', note: 'For the honest feedback.' },
     { name: 'Raditya DA.', role: 'Eatly Tester', note: 'For real user testing' },
     { name: 'Rakayida FH.', role: 'Early Tester', note: 'For testing every rough edge.' },
@@ -111,6 +111,7 @@ export const WINNER_EVENT = {
     { name: 'J. Calvin N.', role: 'Demo Tester', note: 'For supporting.' },
     { name: 'Zaki A.', role: 'Demo Tester', note: 'For being with us.' },
     { name: 'Rapid AS.', role: 'Demo Tester', note: 'For being there.' },
+    { name: 'SM. Omar R.', role: 'Demo Tester', note: 'For being there.' },
     { name: 'M. Irsyad F.', role: 'Demo Tester', note: 'For giving confidence.' },
   ],
 };
