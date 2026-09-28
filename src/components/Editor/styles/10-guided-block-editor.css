@@ -83,9 +83,16 @@
 .bf-preview-stage {
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
+  overflow: hidden;
   overscroll-behavior: contain;
   padding: 12px;
+}
+
+/* Wrapper that is set to the real desktop width and scaled down via CSS
+   transform so the preview is a miniature of the published page. */
+.bf-preview-scaler {
+  transform-origin: top left;
+  /* width and transform are set inline via JS ResizeObserver */
 }
 
 /* The preview is a small copy of the profile canvas: same wrapper class, same
@@ -96,10 +103,6 @@
   padding: 18px 0;
   border-radius: 12px;
   overflow: hidden;
-}
-
-.bf-preview-canvas .block-wrapper {
-  margin-bottom: 0;
 }
 
 /* --- Field panel ------------------------------------------------------- */

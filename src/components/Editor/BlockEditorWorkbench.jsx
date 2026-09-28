@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef, useEffect, useCallback } from 'react';
 import { ArrowLeft, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import BlockRenderer from '../Blocks/BlockRenderer';
 import SchemaBlockForm from './SchemaBlockForm';
@@ -11,6 +11,9 @@ function prefersPreviewOpen() {
   if (typeof window === 'undefined') return true;
   return !window.matchMedia('(max-width: 768px)').matches;
 }
+
+/** Fixed desktop width used to render the preview at 1:1 before scaling. */
+const PREVIEW_DESKTOP_W = 1200;
 
 /**
  * Guided editing surface for schema driven blocks.
@@ -89,9 +92,29 @@ export default function BlockEditorWorkbench({
     data: formData,
   };
 
+  // --- Dynamic scale for the desktop-width preview -------------------------
+  const stageRef = useRef(null);
+  const [previewScale, setPreviewScale] = useState(0.5);
+
+  const recalcScale = useCallback(() => {
+    if (!stageRef.current) return;
+    const padding = 24; // 12px each side
+    const availableW = stageRef.current.clientWidth - padding;
+    setPreviewScale(Math.min(1, availableW / PREVIEW_DESKTOP_W));
+  }, []);
+
+  useEffect(() => {
+    recalcScale();
+    const el = stageRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(recalcScale);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [recalcScale, showPreview]);
+
   return (
     <div className={`bf-workbench ${showPreview ? '' : 'is-preview-hidden'}`}>
-      {/* Live preview */}
+      {/* Live preview — rendered at real desktop width then scaled down */}
       {showPreview && (
         <aside className="bf-preview">
           <div className="bf-preview-head">
@@ -107,22 +130,31 @@ export default function BlockEditorWorkbench({
               <span>Hide</span>
             </button>
           </div>
-          <div className="bf-preview-stage">
+          <div className="bf-preview-stage" ref={stageRef}>
             <div
-              className="app bf-preview-canvas"
-              {...canvasAttributes}
+              className="bf-preview-scaler"
               style={{
-                backgroundColor: background.backgroundColor,
-                backgroundImage: background.backgroundGradient || undefined,
+                width: PREVIEW_DESKTOP_W,
+                transformOrigin: 'top left',
+                transform: `scale(${previewScale})`,
               }}
             >
-              <BlockRenderer
-                block={previewBlock}
-                index={0}
-                totalBlocks={1}
-                isEditing={false}
-                disableReveal
-              />
+              <div
+                className="app bf-preview-canvas"
+                {...canvasAttributes}
+                style={{
+                  backgroundColor: background.backgroundColor,
+                  backgroundImage: background.backgroundGradient || undefined,
+                }}
+              >
+                <BlockRenderer
+                  block={previewBlock}
+                  index={0}
+                  totalBlocks={1}
+                  isEditing={false}
+                  disableReveal
+                />
+              </div>
             </div>
           </div>
         </aside>
