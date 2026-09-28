@@ -120,7 +120,11 @@
   box-shadow: 6px 12px 0 var(--line, #44375b);
 }
 
-/* Pin Icon */
+/* Pin Icon (the wrapper is what drops in when the card enters view) */
+.how-it-works-pin-wrap {
+  display: block;
+}
+
 .how-it-works-pin {
   width: 28px;
   height: 28px;
@@ -314,6 +318,29 @@
   font-family: var(--fn-body, 'DM Sans', sans-serif);
   color: var(--ink, #252320);
   font-size: 0.82rem;
+}
+
+/* "Show all releases" toggle under the board, above the side fades */
+.hiw-more {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.hiw-more-icon {
+  transition: transform 220ms ease;
+}
+
+.hiw-more-icon.is-open {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hiw-more-icon {
+    transition: none;
+  }
 }
 
 /* Desktop Zig-Zag Positions (Wider 380px cards) */

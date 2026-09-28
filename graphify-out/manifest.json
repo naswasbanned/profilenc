@@ -54,10 +54,10 @@
     "semantic_hash": ""
   },
   "server/src/routes/admin.js": {
-    "mtime": 1788445091.0486133,
-    "seen": 1790051323.0564296,
-    "ast_hash": "ef80010f61f069fb72033f486eccf5d0",
-    "semantic_hash": "ef80010f61f069fb72033f486eccf5d0"
+    "mtime": 1790566074.938296,
+    "seen": 1790568635.98642,
+    "ast_hash": "95ff355054f2306b2297d27ef0e860dc",
+    "semantic_hash": ""
   },
   "server/src/routes/auth.js": {
     "mtime": 1790254056.3803716,
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "server/src/routes/site.js": {
-    "mtime": 1790254072.9167953,
-    "seen": 1790259068.9240327,
-    "ast_hash": "089d993e0ae2d0a68565ffc1f38b2cf3",
+    "mtime": 1790566036.365339,
+    "seen": 1790568635.9864242,
+    "ast_hash": "478a2e868e52a9500ea7c5b5ad4e9bce",
     "semantic_hash": ""
   },
   "server/src/routes/templates.js": {
@@ -300,10 +300,10 @@
     "semantic_hash": "73366c0ca619c1a7a1c0cec92d81d456"
   },
   "src/components/ui/how-it-works.jsx": {
-    "mtime": 1789974413.869084,
-    "seen": 1790051323.0565534,
-    "ast_hash": "e212d64431d7f6abf824e9b6fd9c6692",
-    "semantic_hash": "e212d64431d7f6abf824e9b6fd9c6692"
+    "mtime": 1790567514.0842376,
+    "seen": 1790568635.9865372,
+    "ast_hash": "a8cfa8d2ec4b22bbb658507c782d3495",
+    "semantic_hash": ""
   },
   "src/contexts/AuthContext.jsx": {
     "mtime": 1790053075.97134,
@@ -330,9 +330,9 @@
     "semantic_hash": ""
   },
   "src/pages/AdminDashboardPage.jsx": {
-    "mtime": 1790219663.599304,
-    "seen": 1790227950.7905102,
-    "ast_hash": "e99fff17870339f555db87f4b35079e8",
+    "mtime": 1790566722.7636847,
+    "seen": 1790568635.986556,
+    "ast_hash": "3812bae4a0221636796a6bc3743dfa4c",
     "semantic_hash": ""
   },
   "src/pages/DashboardPage.jsx": {
@@ -348,9 +348,9 @@
     "semantic_hash": ""
   },
   "src/pages/LandingPage.jsx": {
-    "mtime": 1790523476.9666295,
-    "seen": 1790528154.0287182,
-    "ast_hash": "5b6121b02a62a1fc32be1cfc4669bb02",
+    "mtime": 1790566565.9341002,
+    "seen": 1790568635.98656,
+    "ast_hash": "bf78dc4b1afad8632b453d11e8b3d41a",
     "semantic_hash": ""
   },
   "src/pages/LoginPage.jsx": {
@@ -414,9 +414,9 @@
     "semantic_hash": ""
   },
   "server/src/db/seeds/bootstrap.js": {
-    "mtime": 1790254131.1063492,
-    "seen": 1790259068.9240053,
-    "ast_hash": "67d501b51c372792093162e47da635d1",
+    "mtime": 1790566171.0601451,
+    "seen": 1790568635.9864035,
+    "ast_hash": "50a8150309c098a74d64a0585d0374c5",
     "semantic_hash": ""
   },
   "src/components/Profile/ProfileCanvas.jsx": {
@@ -762,9 +762,9 @@
     "semantic_hash": ""
   },
   "src/components/Landing/WinnerEvent/WinnerSection.jsx": {
-    "mtime": 1790527875.0754716,
-    "seen": 1790528154.0286722,
-    "ast_hash": "c4c133f47d6d316c14a5e3c7a1abffd8",
+    "mtime": 1790529856.24124,
+    "seen": 1790530055.9190996,
+    "ast_hash": "1d0119d5ef0be5f1b61a6d179077f848",
     "semantic_hash": ""
   },
   "src/components/Landing/WinnerEvent/confetti.js": {
@@ -786,9 +786,39 @@
     "semantic_hash": ""
   },
   "src/components/Landing/WinnerEvent/winnerEvent.config.js": {
-    "mtime": 1790522714.144448,
-    "seen": 1790528154.0286767,
-    "ast_hash": "c5316a52edabaef257b52e3820d2bc82",
+    "mtime": 1790562033.2211092,
+    "seen": 1790568635.9865243,
+    "ast_hash": "3b257d766fbf442b4d291d57f3495758",
+    "semantic_hash": ""
+  },
+  "server/src/data/patchNotes.js": {
+    "mtime": 1790565685.2916443,
+    "seen": 1790568635.9863992,
+    "ast_hash": "20fb0b41c19d92cff170fba1f6300a38",
+    "semantic_hash": ""
+  },
+  "server/src/lib/patchNotes.js": {
+    "mtime": 1790565621.4327378,
+    "seen": 1790568635.9864085,
+    "ast_hash": "8a5c7ffd4057bf448af0fc76576638e7",
+    "semantic_hash": ""
+  },
+  "server/src/lib/patchNotes.test.js": {
+    "mtime": 1790565646.9011173,
+    "seen": 1790568635.98641,
+    "ast_hash": "f9a15b935eaef560775afee0af0c20b0",
+    "semantic_hash": ""
+  },
+  "server/src/services/patchNotesService.js": {
+    "mtime": 1790565987.6467748,
+    "seen": 1790568635.9864295,
+    "ast_hash": "76a37e9296f73957ceebb3a4dd4eecd1",
+    "semantic_hash": ""
+  },
+  "src/components/Landing/RevealHeading.jsx": {
+    "mtime": 1790566511.445223,
+    "seen": 1790568635.9865143,
+    "ast_hash": "88a15ccc51638252aeb9fa0a76431df1",
     "semantic_hash": ""
   }
 }

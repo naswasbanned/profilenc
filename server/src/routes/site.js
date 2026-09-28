@@ -4,8 +4,15 @@ import { publicUpload } from '../middleware/upload.js';
 import { suggestionLimiter } from '../middleware/rateLimit.js';
 import { LIMITS, firstLengthError } from '../lib/validate.js';
 import { ImageValidationError, processImage } from '../services/imageService.js';
+import { codeOnlyPatchNotes, loadPatchNotes } from '../services/patchNotesService.js';
 
 const router = Router();
+
+/** Fields the landing page needs; database ids and timestamps stay private. */
+function publicPatchNote(note) {
+  const { version, status, date, codename, title, changes, is_current, source } = note;
+  return { version, status, date, codename, title, changes, is_current, source };
+}
 
 /**
  * GET /api/site/landing
@@ -26,17 +33,17 @@ router.get('/landing', async (_req, res) => {
 
 /**
  * GET /api/site/patch-notes
- * Public endpoint to fetch active engine patch notes / release timeline.
+ * Public release timeline: the code changelog merged with the releases
+ * published from the admin console, newest version first.
  */
 router.get('/patch-notes', async (_req, res) => {
   try {
-    const { rows } = await query(
-      'SELECT id, version, status, date, codename, title, changes, order_num, is_current FROM patch_notes ORDER BY order_num ASC, created_at DESC'
-    );
-    res.json({ patchNotes: rows });
+    const { notes } = await loadPatchNotes();
+    res.json({ patchNotes: notes.map(publicPatchNote) });
   } catch (err) {
-    console.error('Site patch-notes GET error:', err);
-    res.status(500).json({ error: 'Failed to fetch patch notes' });
+    // The code changelog needs no database, so the timeline still loads
+    console.error('Site patch-notes GET error, serving code changelog only:', err);
+    res.json({ patchNotes: codeOnlyPatchNotes().notes.map(publicPatchNote) });
   }
 });
 

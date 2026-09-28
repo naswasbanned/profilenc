@@ -37,6 +37,7 @@
 
 .patch-card-version-wrap {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
 }
@@ -142,6 +143,118 @@
   background: var(--lavender-bg);
   color: var(--lavender-text);
   border-color: var(--lavender-border);
+}
+
+/* --- Timeline sources: code changelog vs dashboard --- */
+
+.toolbar-info code {
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  font-family: var(--fn-mono);
+  font-size: 0.8em;
+}
+
+.patch-source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--fn-mono);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.patch-source-badge.is-code {
+  background: var(--blue-bg);
+  border-color: var(--blue-border);
+  color: var(--blue-text);
+}
+
+.patch-source-badge.is-dashboard {
+  background: var(--mint-bg);
+  border-color: var(--mint-border);
+  color: var(--mint-text);
+}
+
+.patch-card-locked {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-family: var(--fn-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* Dashboard notes hidden because code has the same version */
+.admin-patch-shadowed {
+  margin-top: 24px;
+  padding: 20px 22px;
+  border: 2px dashed var(--amber-border);
+  border-radius: var(--radius-sm);
+  background: var(--amber-bg);
+}
+
+.admin-patch-shadowed-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--amber-text);
+  font-family: var(--fn-mono);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-patch-shadowed p {
+  margin: 8px 0 14px;
+  color: var(--ink);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.admin-patch-shadowed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-patch-shadowed-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper-light);
+}
+
+.patch-card-ver.is-small {
+  font-size: 0.95rem;
+}
+
+.admin-patch-shadowed-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 0.88rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-patch-form-hint {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 
 /* Loading & Empty States */

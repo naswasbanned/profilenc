@@ -1,0 +1,22 @@
+/* Word-by-word heading reveal (see RevealHeading.jsx) */
+
+/* The landing display type is tracked tightly, which also narrows the
+   spaces; give the words their room back */
+.fn-reveal-heading {
+  word-spacing: 0.14em;
+}
+
+/* Each word slides up from behind its own mask. The padding, cancelled by
+   the negative margin, keeps ascenders and descenders inside the clip
+   without changing the line height. */
+.fn-reveal-mask {
+  display: inline-block;
+  margin: -0.14em -0.06em -0.18em;
+  padding: 0.14em 0.06em 0.18em;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.fn-reveal-word {
+  display: inline-block;
+}

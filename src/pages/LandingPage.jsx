@@ -39,10 +39,13 @@ import {
   MessageSquare,
   ArrowUp,
 } from 'lucide-react';
-import { motion, useTransform } from 'framer-motion';
+import { MotionConfig, motion, useTransform } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { ContainerScroll } from '../components/ui/container-scroll-animation';
 import HowItWorks from '../components/ui/how-it-works';
+import RevealHeading from '../components/Landing/RevealHeading';
+import { MANUAL_PATCH_NOTES } from '../../server/src/data/patchNotes.js';
+import { mergePatchNotes } from '../../server/src/lib/patchNotes.js';
 import ThreeDTestimonials from '../components/ui/3d-testimonials';
 import LandingBottomNav from '../components/Landing/LandingBottomNav';
 import WinnerCelebration from '../components/Landing/WinnerEvent/WinnerCelebration';
@@ -186,57 +189,14 @@ const MAIN_SHOWCASE_PROFILE = {
   ],
 };
 
-// Human-friendly patch notes / updates
-const ENGINE_PATCH_NOTES = [
-  {
-    version: 'v1.0.0',
-    status: 'LATEST UPDATE',
-    date: 'August 28, 2026',
-    codename: 'RELEASE 1.0',
-    title: 'Photo Gallery, Events Calendar & Smooth Scroll',
-    changes: [
-      { type: 'NEW', text: 'Photo Gallery Block: Display images in clean grid layouts with full-screen lightbox zoom.' },
-      { type: 'NEW', text: 'Events & Calendar Block: Share your schedule with 1-click Google Calendar & Apple .ICS sync.' },
-      { type: 'IMPROVED', text: 'Smooth Scroll Showcase: Ultra-smooth scrolling experience powered by GSAP and Lenis.' },
-      { type: 'IMPROVED', text: 'Independent Card Colors: Customize text colors inside cards without affecting headlines.' },
-    ],
-  },
-  {
-    version: 'v0.9.0',
-    status: 'UPDATE',
-    date: 'August 27, 2026',
-    codename: 'BLOCK EXPANSION',
-    title: 'Services & Rates, Hero Alignments & Multi-Image Uploads',
-    changes: [
-      { type: 'NEW', text: 'Services & Commissions Block: Create pricing tiers with deliverables checklist and booking buttons.' },
-      { type: 'NEW', text: 'Hero Layout Options: Choose between center, left-aligned, or split-side layouts for your header.' },
-      { type: 'NEW', text: 'Journal Cover Photos: Add card cover images and format articles with a visual markdown editor.' },
-      { type: 'NEW', text: 'Multi-Image Gallery: Attach multiple project images to your career and timeline milestones.' },
-    ],
-  },
-  {
-    version: 'v0.8.0',
-    status: 'UPDATE',
-    date: 'August 26, 2026',
-    codename: 'THEME ENGINE',
-    title: 'Custom Theme Colors & Dynamic Page Backgrounds',
-    changes: [
-      { type: 'IMPROVED', text: 'Color Customization: Set custom theme colors, button styles, and border radius.' },
-      { type: 'NEW', text: 'Page Backgrounds: Choose unique background styles dynamically for each tab.' },
-    ],
-  },
-  {
-    version: 'v0.5.0',
-    status: 'INITIAL LAUNCH',
-    date: 'August 20, 2026',
-    codename: 'BETA RELEASE',
-    title: 'Visual Live Editor & Custom Profile URLs',
-    changes: [
-      { type: 'NEW', text: 'Custom Profile URLs: Get your unique profile link at profilenc.my.id/@yourname.' },
-      { type: 'NEW', text: 'Visual Live Editor: Edit your profile blocks and see changes instantly in real-time.' },
-    ],
-  },
-];
+// Patch notes shown before /api/site/patch-notes answers, and kept if it
+// never does: the code changelog on its own, merged with the same rules the
+// server uses. Both files are plain data and pure functions; they live under
+// server/ because the backend image only copies server/src.
+const CODE_PATCH_NOTES = mergePatchNotes({ manual: MANUAL_PATCH_NOTES }).notes;
+
+// How many releases the landing board shows before "Show all releases"
+const PATCH_NOTES_PREVIEW_COUNT = 4;
 
 function ShowcaseBrowserPreview({ profile, scrollYProgress }) {
   const windowRef = useRef(null);
@@ -644,7 +604,7 @@ export default function LandingPage() {
 
 
   const [featuredProfiles, setFeaturedProfiles] = useState([]);
-  const [patchNotesList, setPatchNotesList] = useState(ENGINE_PATCH_NOTES);
+  const [patchNotesList, setPatchNotesList] = useState(CODE_PATCH_NOTES);
   const [landingData, setLandingData] = useState({
     hero: {
       badge: 'PROFILENC // PERSONAL PROFILE BUILDER',
@@ -1045,18 +1005,36 @@ export default function LandingPage() {
       {/* ENGINE UPDATES / PATCH NOTES BOARD */}
       <section className="fn-section" id="updates">
         <div className="fn-container">
-          <div className="fn-section-head">
-            <div>
-              <p className="fn-eyebrow">01 / Engine updates</p>
-              <h2 className="fn-display">What&rsquo;s new in Profilenc.</h2>
+          {/* Same scroll-in treatment as the winner section: eyebrow and lead
+              fade up, the heading reveals word by word */}
+          <MotionConfig reducedMotion="user">
+            <div className="fn-section-head">
+              <div>
+                <motion.p
+                  className="fn-eyebrow"
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.8 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  01 / Engine updates
+                </motion.p>
+                <RevealHeading className="fn-display" text="What’s new in Profilenc." />
+              </div>
+              <motion.p
+                className="fn-section-lead"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.8 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                Changelog and the latest features added to the profile builder.
+                Every release makes it easier to shape a page that feels like yours.
+              </motion.p>
             </div>
-            <p className="fn-section-lead">
-              Changelog and the latest features added to the profile builder.
-              Every release makes it easier to shape a page that feels like yours.
-            </p>
-          </div>
+          </MotionConfig>
 
-          <HowItWorks patches={patchNotesList} />
+          <HowItWorks patches={patchNotesList} initialCount={PATCH_NOTES_PREVIEW_COUNT} />
         </div>
       </section>
 

@@ -1,8 +1,59 @@
 import { Router } from 'express';
 import { query } from '../config/db.js';
 import auth, { adminOnly } from '../middleware/auth.js';
+import { CHANGE_TYPES, normalizeChanges } from '../lib/patchNotes.js';
+import { codeReleaseFor, loadPatchNotes } from '../services/patchNotesService.js';
 
 const router = Router();
+
+const PATCH_LIMITS = { version: 32, status: 40, date: 60, codename: 60, title: 160, changeText: 300, changes: 20 };
+
+/**
+ * Validate and clean a patch note from the admin form.
+ * @returns {{ error: string } | { value: object }}
+ */
+function readPatchNoteBody(body = {}) {
+  const text = (value) => (typeof value === 'string' ? value.trim() : '');
+  const value = {
+    version: text(body.version),
+    status: text(body.status) || 'UPDATE',
+    date: text(body.date),
+    codename: text(body.codename),
+    title: text(body.title),
+    // Unknown tags fall back to NEW so the landing board can always style them
+    changes: normalizeChanges(body.changes).map((change) => ({
+      type: CHANGE_TYPES.includes(change.type) ? change.type : 'NEW',
+      text: change.text,
+    })),
+  };
+
+  if (!value.version || !value.title || !value.date) {
+    return { error: 'Version, date, and title are required' };
+  }
+
+  for (const field of ['version', 'status', 'date', 'codename', 'title']) {
+    if (value[field].length > PATCH_LIMITS[field]) {
+      return { error: `${field} must be ${PATCH_LIMITS[field]} characters or fewer` };
+    }
+  }
+  if (value.changes.length > PATCH_LIMITS.changes) {
+    return { error: `A release can list at most ${PATCH_LIMITS.changes} changes` };
+  }
+  if (value.changes.some((change) => change.text.length > PATCH_LIMITS.changeText)) {
+    return { error: `Each change must be ${PATCH_LIMITS.changeText} characters or fewer` };
+  }
+
+  // Code wins a version clash on the public timeline, so a dashboard copy
+  // would never show. Refuse it up front with a clear reason instead.
+  if (codeReleaseFor(value.version)) {
+    return {
+      error: `${value.version} is already written in code (server/src/data/patchNotes.js). Use a new version number.`,
+      status: 409,
+    };
+  }
+
+  return { value };
+}
 
 // Protect all admin routes with auth and adminOnly
 router.use(auth);
@@ -17,7 +68,8 @@ router.get('/stats', async (_req, res) => {
     const { rows: userCount } = await query('SELECT COUNT(*) FROM users');
     const { rows: publicCount } = await query('SELECT COUNT(*) FROM users WHERE is_public = true');
     const { rows: adminCount } = await query('SELECT COUNT(*) FROM users WHERE is_admin = true');
-    const { rows: patchCount } = await query('SELECT COUNT(*) FROM patch_notes');
+    // Releases on the public timeline: code changelog plus dashboard notes
+    const { notes: patchTimeline } = await loadPatchNotes();
     const { rows: suggestionCount } = await query('SELECT COUNT(*) FROM suggestions');
     const { rows: newSuggestionCount } = await query("SELECT COUNT(*) FROM suggestions WHERE status = 'NEW'");
 
@@ -53,7 +105,7 @@ router.get('/stats', async (_req, res) => {
       publicUsers: parseInt(publicCount[0].count, 10),
       adminUsers: parseInt(adminCount[0].count, 10),
       totalBlocks,
-      totalPatches: parseInt(patchCount[0].count, 10),
+      totalPatches: patchTimeline.length,
       totalSuggestions: parseInt(suggestionCount[0].count, 10),
       newSuggestions: parseInt(newSuggestionCount[0].count, 10),
     });
@@ -263,10 +315,10 @@ router.delete('/users/:id', async (req, res) => {
  */
 router.get('/patch-notes', async (_req, res) => {
   try {
-    const { rows } = await query(
-      'SELECT id, version, status, date, codename, title, changes, order_num, is_current, created_at, updated_at FROM patch_notes ORDER BY order_num ASC, created_at DESC'
-    );
-    res.json({ patchNotes: rows });
+    // notes: the public timeline, each tagged source 'code' or 'dashboard'.
+    // shadowed: dashboard rows hidden because code has the same version.
+    const { notes, shadowed } = await loadPatchNotes();
+    res.json({ patchNotes: notes, shadowed });
   } catch (err) {
     console.error('Admin get patch notes error:', err);
     res.status(500).json({ error: 'Failed to fetch patch notes' });
@@ -279,22 +331,19 @@ router.get('/patch-notes', async (_req, res) => {
  */
 router.post('/patch-notes', async (req, res) => {
   try {
-    const { version, status = 'UPDATE', date, codename = '', title, changes = [], order_num = 0, is_current = false } = req.body;
-
-    if (!version || !title || !date) {
-      return res.status(400).json({ error: 'Version, date, and title are required' });
+    const parsed = readPatchNoteBody(req.body);
+    if (parsed.error) {
+      return res.status(parsed.status || 400).json({ error: parsed.error });
     }
+    const { version, status, date, codename, title, changes } = parsed.value;
 
-    // If marked as current, reset other notes is_current to false
-    if (is_current) {
-      await query('UPDATE patch_notes SET is_current = false');
-    }
-
+    // Order and the "current" flag are derived from the version number when
+    // the timeline is merged, so these columns are no longer set from here.
     const { rows } = await query(
       `INSERT INTO patch_notes (version, status, date, codename, title, changes, order_num, is_current, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
+       VALUES ($1, $2, $3, $4, $5, $6, 0, false, NOW())
        RETURNING *`,
-      [version.trim(), status.trim(), date.trim(), codename.trim(), title.trim(), JSON.stringify(changes), order_num, is_current]
+      [version, status, date, codename, title, JSON.stringify(changes)]
     );
 
     res.status(201).json({ patchNote: rows[0] });
@@ -314,22 +363,18 @@ router.post('/patch-notes', async (req, res) => {
 router.put('/patch-notes/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { version, status, date, codename, title, changes, order_num, is_current } = req.body;
-
-    if (!version || !title || !date) {
-      return res.status(400).json({ error: 'Version, date, and title are required' });
+    const parsed = readPatchNoteBody(req.body);
+    if (parsed.error) {
+      return res.status(parsed.status || 400).json({ error: parsed.error });
     }
-
-    if (is_current) {
-      await query('UPDATE patch_notes SET is_current = false WHERE id != $1', [id]);
-    }
+    const { version, status, date, codename, title, changes } = parsed.value;
 
     const { rows } = await query(
       `UPDATE patch_notes
-       SET version = $1, status = $2, date = $3, codename = $4, title = $5, changes = $6, order_num = $7, is_current = $8, updated_at = NOW()
-       WHERE id = $9
+       SET version = $1, status = $2, date = $3, codename = $4, title = $5, changes = $6, updated_at = NOW()
+       WHERE id = $7
        RETURNING *`,
-      [version.trim(), status.trim(), date.trim(), codename.trim(), title.trim(), JSON.stringify(changes), order_num || 0, !!is_current, id]
+      [version, status, date, codename, title, JSON.stringify(changes), id]
     );
 
     if (rows.length === 0) {

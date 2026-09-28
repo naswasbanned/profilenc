@@ -32,6 +32,9 @@ import {
   Globe,
   LogOut,
   Settings,
+  Code2,
+  Database,
+  Lock,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import MobileDock from '../components/primitives/MobileDock';
@@ -91,7 +94,10 @@ export default function AdminDashboardPage() {
   const [deleteUserModal, setDeleteUserModal] = useState(null);
 
   // Patch Notes State
+  // patchNotes: the merged public timeline (code changelog + dashboard rows).
+  // shadowedPatches: dashboard rows hidden because code has the same version.
   const [patchNotes, setPatchNotes] = useState([]);
+  const [shadowedPatches, setShadowedPatches] = useState([]);
   const [patchesLoading, setPatchesLoading] = useState(true);
   const [editingPatch, setEditingPatch] = useState(null);
   const [isPatchModalOpen, setIsPatchModalOpen] = useState(false);
@@ -172,6 +178,7 @@ export default function AdminDashboardPage() {
       if (res.ok) {
         const data = await res.json();
         setPatchNotes(data.patchNotes || []);
+        setShadowedPatches(data.shadowed || []);
       }
     } catch (err) {
       console.error('Fetch patch notes failed:', err);
@@ -377,16 +384,21 @@ export default function AdminDashboardPage() {
       codename: '',
       title: '',
       changes: [{ type: 'NEW', text: '' }],
-      order_num: patchNotes.length,
-      is_current: false,
     });
     setIsPatchModalOpen(true);
   };
 
+  // Only dashboard rows reach here; code releases are read only.
   const handleEditPatch = (patch) => {
     setEditingPatch({
-      ...patch,
-      changes: Array.isArray(patch.changes) ? [...patch.changes] : [],
+      id: patch.id,
+      version: patch.version,
+      // LATEST UPDATE is assigned automatically now, so it is not an option
+      status: patch.status === 'LATEST UPDATE' ? 'UPDATE' : patch.status || 'UPDATE',
+      date: patch.date,
+      codename: patch.codename || '',
+      title: patch.title,
+      changes: Array.isArray(patch.changes) ? patch.changes.map((change) => ({ ...change })) : [],
     });
     setIsPatchModalOpen(true);
   };
@@ -773,7 +785,11 @@ export default function AdminDashboardPage() {
             <div className="content-toolbar">
               <div className="toolbar-info">
                 <h3>ENGINE CHANGELOG & RELEASE TIMELINE</h3>
-                <p>Manage release updates displayed on the landing page timeline.</p>
+                <p>
+                  One timeline from two sources: releases written in code
+                  (<code>server/src/data/patchNotes.js</code>) and releases you publish here.
+                  The landing page shows both, newest version first.
+                </p>
               </div>
               <button type="button" onClick={handleOpenNewPatch} className="admin-btn-primary">
                 <Plus size={16} /> New Release Note
@@ -786,42 +802,116 @@ export default function AdminDashboardPage() {
               <div className="admin-empty-state">No patch notes published yet.</div>
             ) : (
               <div className="admin-patches-grid">
-                {patchNotes.map((p) => (
-                  <div key={p.id || p.version} className={`admin-patch-card ${p.is_current ? 'current' : ''}`}>
-                    <div className="patch-card-top">
-                      <div className="patch-card-version-wrap">
-                        <span className="patch-card-ver">{p.version}</span>
-                        <span className="patch-card-tag">[{p.status}]</span>
-                        {p.is_current && <span className="patch-current-badge">CURRENT RELEASE</span>}
+                {patchNotes.map((p) => {
+                  const fromCode = p.source === 'code';
+                  return (
+                    <div
+                      key={`${p.source}-${p.id ?? p.version}`}
+                      className={`admin-patch-card ${p.is_current ? 'current' : ''}`}
+                    >
+                      <div className="patch-card-top">
+                        <div className="patch-card-version-wrap">
+                          <span className="patch-card-ver">{p.version}</span>
+                          <span className="patch-card-tag">[{p.status}]</span>
+                          {p.is_current && <span className="patch-current-badge">CURRENT RELEASE</span>}
+                          <span className={`patch-source-badge ${fromCode ? 'is-code' : 'is-dashboard'}`}>
+                            {fromCode ? <Code2 size={11} aria-hidden="true" /> : <Database size={11} aria-hidden="true" />}
+                            {fromCode ? 'IN CODE' : 'DASHBOARD'}
+                          </span>
+                        </div>
+                        <div className="patch-card-actions">
+                          {fromCode ? (
+                            <span
+                              className="patch-card-locked"
+                              title="Written in server/src/data/patchNotes.js. Change it there."
+                            >
+                              <Lock size={13} aria-hidden="true" /> Read only
+                            </span>
+                          ) : (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => handleEditPatch(p)}
+                                className="action-btn"
+                                aria-label={`Edit ${p.version}`}
+                              >
+                                <Edit2 size={14} />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeletePatch(p.id)}
+                                className="action-btn danger"
+                                aria-label={`Delete ${p.version}`}
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </div>
+
+                      <div className="patch-card-meta">
+                        <span>RELEASE DATE: {p.date}</span>
+                        {p.codename && <span>TITLE: {p.codename}</span>}
+                      </div>
+
+                      <h4 className="patch-card-title">{p.title}</h4>
+
+                      <div className="patch-card-changes">
+                        {Array.isArray(p.changes) &&
+                          p.changes.map((c, cIdx) => (
+                            <div key={cIdx} className="admin-change-row">
+                              <span className={`change-tag ${(c.type || 'new').toLowerCase()}`}>[{c.type || 'NEW'}]</span>
+                              <span className="change-desc">{c.text}</span>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Dashboard rows that clash with a version written in code. They
+                are never deleted automatically; the admin decides. */}
+            {shadowedPatches.length > 0 && (
+              <div className="admin-patch-shadowed">
+                <div className="admin-patch-shadowed-head">
+                  <AlertTriangle size={15} aria-hidden="true" />
+                  <span>
+                    {shadowedPatches.length} dashboard {shadowedPatches.length === 1 ? 'note is' : 'notes are'} hidden
+                  </span>
+                </div>
+                <p>
+                  These versions are also written in code, so the landing page shows the code version.
+                  Delete them to tidy up, or edit one and give it a new version number.
+                </p>
+                <div className="admin-patch-shadowed-list">
+                  {shadowedPatches.map((p) => (
+                    <div key={p.id} className="admin-patch-shadowed-row">
+                      <span className="patch-card-ver is-small">{p.version}</span>
+                      <span className="admin-patch-shadowed-title">{p.title}</span>
                       <div className="patch-card-actions">
-                        <button type="button" onClick={() => handleEditPatch(p)} className="action-btn">
+                        <button
+                          type="button"
+                          onClick={() => handleEditPatch(p)}
+                          className="action-btn"
+                          aria-label={`Edit hidden ${p.version}`}
+                        >
                           <Edit2 size={14} />
                         </button>
-                        <button type="button" onClick={() => handleDeletePatch(p.id)} className="action-btn danger">
+                        <button
+                          type="button"
+                          onClick={() => handleDeletePatch(p.id)}
+                          className="action-btn danger"
+                          aria-label={`Delete hidden ${p.version}`}
+                        >
                           <Trash2 size={14} />
                         </button>
                       </div>
                     </div>
-
-                    <div className="patch-card-meta">
-                      <span>RELEASE DATE: {p.date}</span>
-                      {p.codename && <span>TITLE: {p.codename}</span>}
-                    </div>
-
-                    <h4 className="patch-card-title">{p.title}</h4>
-
-                    <div className="patch-card-changes">
-                      {Array.isArray(p.changes) &&
-                        p.changes.map((c, cIdx) => (
-                          <div key={cIdx} className="admin-change-row">
-                            <span className={`change-tag ${(c.type || 'new').toLowerCase()}`}>[{c.type || 'NEW'}]</span>
-                            <span className="change-desc">{c.text}</span>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -1283,6 +1373,11 @@ export default function AdminDashboardPage() {
             </div>
 
             <form onSubmit={handleSavePatch} className="admin-patch-form">
+              <p className="admin-patch-form-hint">
+                The timeline is ordered by version number, and the newest release is marked
+                LATEST UPDATE automatically. Versions already written in code cannot be reused here.
+              </p>
+
               <div className="form-row-2">
                 <div className="cms-field">
                   <label>VERSION (e.g. v1.1.0)</label>
@@ -1300,8 +1395,8 @@ export default function AdminDashboardPage() {
                     value={editingPatch.status}
                     onChange={(e) => setEditingPatch({ ...editingPatch, status: e.target.value })}
                   >
-                    <option value="LATEST UPDATE">LATEST UPDATE</option>
                     <option value="UPDATE">UPDATE</option>
+                    <option value="MAJOR UPDATE">MAJOR UPDATE</option>
                     <option value="BETA RELEASE">BETA RELEASE</option>
                     <option value="SECURITY PATCH">SECURITY PATCH</option>
                     <option value="INITIAL LAUNCH">INITIAL LAUNCH</option>
@@ -1372,6 +1467,7 @@ export default function AdminDashboardPage() {
                       >
                         <option value="NEW">NEW</option>
                         <option value="IMPROVED">IMPROVED</option>
+                        <option value="FIXED">FIXED</option>
                         <option value="SYSTEM">SYSTEM</option>
                         <option value="STUDIO">STUDIO</option>
                         <option value="CRITICAL">CRITICAL</option>
@@ -1402,17 +1498,6 @@ export default function AdminDashboardPage() {
                     </div>
                   ))}
                 </div>
-              </div>
-
-              <div className="cms-checkbox-field">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={editingPatch.is_current || false}
-                    onChange={(e) => setEditingPatch({ ...editingPatch, is_current: e.target.checked })}
-                  />
-                  <span>Mark as current featured release (displays green highlight)</span>
-                </label>
               </div>
 
               <div className="modal-actions">
