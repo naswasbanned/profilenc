@@ -594,7 +594,8 @@
 .article-modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 999;
+  /* Above the editor modal (10000) so the reader also opens from the block preview */
+  z-index: 10001;
   background: rgba(10, 10, 15, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);

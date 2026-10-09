@@ -219,7 +219,7 @@
       "file_type": "code",
       "norm_label": "getentrydatevalue()",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L52"
+      "source_location": "L53"
     },
     {
       "id": "src_components_blocks_journalblock_journalblock",
@@ -231,7 +231,7 @@
       "file_type": "code",
       "norm_label": "journalblock()",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L291"
+      "source_location": "L292"
     },
     {
       "id": "src_components_blocks_journalblock_parseinlinemarkdown",
@@ -243,7 +243,7 @@
       "file_type": "code",
       "norm_label": "parseinlinemarkdown()",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L68"
+      "source_location": "L69"
     },
     {
       "id": "src_components_blocks_journalblock_renderjournalmarkdown",
@@ -255,7 +255,7 @@
       "file_type": "code",
       "norm_label": "renderjournalmarkdown()",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L155"
+      "source_location": "L156"
     },
     {
       "id": "src_components_blocks_mediareviewsblock_mediareviewsblock",
@@ -3127,7 +3127,7 @@
       "file_type": "code",
       "norm_label": "mood_options",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L38"
+      "source_location": "L39"
     },
     {
       "id": "src_components_blocks_mediareviewsblock",
@@ -7109,6 +7109,18 @@
       "type": "external"
     },
     {
+      "id": "src_components_editor_styles_11_search_palette",
+      "label": "src_components_editor_styles_11_search_palette",
+      "_origin": "semantic",
+      "community": 2,
+      "community_name": "EditorSearchPalette.jsx",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "src_components_editor_styles_11_search_palette",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "src_components_editor_editor",
       "label": "src_components_editor_editor",
       "_origin": "semantic",
@@ -7333,17 +7345,6 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "src_components_editor_fields_index_togglefield",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "src_components_editor_styles_11_search_palette",
-      "label": "src_components_editor_styles_11_search_palette",
-      "community": 2,
-      "community_name": "EditorSearchPalette.jsx",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "src_components_editor_styles_11_search_palette",
       "source_file": "",
       "type": "external"
     }
@@ -7958,7 +7959,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L304",
+      "source_location": "L305",
       "weight": 1.0
     },
     {
@@ -7970,7 +7971,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L352",
+      "source_location": "L370",
       "weight": 1.0
     },
     {
@@ -7982,7 +7983,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L912",
+      "source_location": "L930",
       "weight": 1.0
     },
     {
@@ -7994,7 +7995,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L102",
+      "source_location": "L103",
       "weight": 1.0
     },
     {
@@ -8006,7 +8007,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L193",
+      "source_location": "L194",
       "weight": 1.0
     },
     {
@@ -11074,7 +11075,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L33",
+      "source_location": "L34",
       "weight": 1.0
     },
     {
@@ -11086,7 +11087,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L34",
+      "source_location": "L35",
       "weight": 1.0
     },
     {
@@ -11098,7 +11099,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0
     },
     {
@@ -11110,7 +11111,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0
     },
     {
@@ -14955,7 +14956,7 @@
     },
     {
       "source": "src_components_blocks_journalblock",
-      "target": "ref_framer_motion",
+      "target": "ref_react_dom",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14967,7 +14968,7 @@
     },
     {
       "source": "src_components_blocks_journalblock",
-      "target": "ref_lucide_react",
+      "target": "ref_framer_motion",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14986,7 +14987,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L33",
+      "source_location": "L34",
       "weight": 1.0
     },
     {
@@ -14998,7 +14999,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L34",
+      "source_location": "L35",
       "weight": 1.0
     },
     {
@@ -15010,7 +15011,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0
     },
     {
@@ -15022,7 +15023,19 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L36",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_blocks_journalblock",
+      "target": "ref_lucide_react",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/Blocks/JournalBlock.jsx",
+      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -20401,7 +20414,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L155",
+      "source_location": "L156",
       "weight": 1.0
     },
     {
@@ -20412,7 +20425,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L291",
+      "source_location": "L292",
       "weight": 1.0
     },
     {
@@ -20423,7 +20436,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0
     },
     {
@@ -20434,7 +20447,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L52",
+      "source_location": "L53",
       "weight": 1.0
     },
     {
@@ -20445,7 +20458,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Blocks/JournalBlock.jsx",
-      "source_location": "L68",
+      "source_location": "L69",
       "weight": 1.0
     },
     {
@@ -23893,5 +23906,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "dab3817d01807d72b8157fbae8c08872c8fc00b9"
+  "built_at_commit": "ccd7e024243a44cf823a1959efd9ee2a76b57a7d"
 }

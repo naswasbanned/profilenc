@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calendar,
@@ -310,15 +311,32 @@ export default function JournalBlock({
         setActiveArticle(null);
       }
     };
-    if (activeArticle) {
-      window.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
+    if (!activeArticle) return undefined;
+    const { body } = document;
+    const previousOverflow = body.style.overflow;
+    const previousPaddingRight = body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    window.addEventListener('keydown', handleKeyDown);
+    body.style.overflow = 'hidden';
+    // Keeps the page from jumping sideways when the scrollbar disappears
+    if (scrollbarWidth > 0) body.style.paddingRight = `${scrollbarWidth}px`;
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
+      body.style.overflow = previousOverflow;
+      body.style.paddingRight = previousPaddingRight;
     };
   }, [activeArticle]);
+
+  // The modal is portaled out of the transformed block wrapper, so it carries
+  // the canvas data-* style attributes along for the preset selectors.
+  const [canvasAttributes, setCanvasAttributes] = useState({});
+  const openArticle = (entry, e) => {
+    const canvasEl = e.currentTarget.closest('[data-design-style]');
+    setCanvasAttributes(canvasEl
+      ? Object.fromEntries([...canvasEl.attributes].filter((a) => a.name.startsWith('data-')).map((a) => [a.name, a.value]))
+      : {});
+    setActiveArticle(entry);
+  };
 
   // Quick Form State
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -580,7 +598,7 @@ export default function JournalBlock({
                   setIsFormOpen(false);
                   setEditingId(null);
                 }}
-                style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+                style={{ background: 'none', border: 'none', color: 'var(--card-text-muted, #94a3b8)', cursor: 'pointer', padding: '4px' }}
                 title="Close form"
               >
                 <X size={18} />
@@ -604,7 +622,7 @@ export default function JournalBlock({
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '5px' }}>
                     <label className="journal-input-label" style={{ margin: 0 }}>Publication Date</label>
-                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.72rem', color: '#cbd5e1', cursor: 'pointer' }}>
+                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.72rem', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer' }}>
                       <input
                         type="checkbox"
                         checked={pinned}
@@ -620,8 +638,8 @@ export default function JournalBlock({
                           setPinned(e.target.checked);
                         }}
                       />
-                      <Pin size={11} color={pinned ? '#00f0aa' : '#94a3b8'} />
-                      <span style={{ color: pinned ? '#00f0aa' : '#cbd5e1', fontWeight: pinned ? 700 : 400 }}>Pin to top</span>
+                      <Pin size={11} color={pinned ? 'var(--color-accent-primary, #00f0aa)' : 'var(--card-text-muted, #94a3b8)'} />
+                      <span style={{ color: pinned ? 'var(--color-accent-primary, #00f0aa)' : 'var(--card-text-color, #cbd5e1)', fontWeight: pinned ? 700 : 400 }}>Pin to top</span>
                     </label>
                   </div>
                   <input
@@ -643,7 +661,7 @@ export default function JournalBlock({
 
               {coverUrl && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '-4px' }}>
-                  <label style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#cbd5e1', cursor: 'pointer' }}>
+                  <label style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer' }}>
                     <input
                       type="checkbox"
                       checked={isSpoiler}
@@ -658,7 +676,7 @@ export default function JournalBlock({
               {/* Quick Mood & Reflection Tag Selector */}
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8' }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--card-text-muted, #94a3b8)' }}>
                     Mood / Reflection Theme
                   </label>
                   {mood && (
@@ -666,10 +684,10 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => setMoodEmoji((prev) => (prev ? '' : '✨'))}
                       style={{
-                        background: !moodEmoji ? 'rgba(0, 240, 170, 0.15)' : 'transparent',
+                        background: !moodEmoji ? 'color-mix(in srgb, var(--color-accent-primary, #00f0aa) 15%, transparent)' : 'transparent',
                         border: '1px solid',
-                        borderColor: !moodEmoji ? '#00f0aa' : 'rgba(255,255,255,0.12)',
-                        color: !moodEmoji ? '#00f0aa' : '#cbd5e1',
+                        borderColor: !moodEmoji ? 'var(--color-accent-primary, #00f0aa)' : 'var(--card-border, rgba(255,255,255,0.12))',
+                        color: !moodEmoji ? 'var(--color-accent-primary, #00f0aa)' : 'var(--card-text-color, #cbd5e1)',
                         fontSize: '0.7rem',
                         padding: '2px 8px',
                         borderRadius: '4px',
@@ -700,10 +718,10 @@ export default function JournalBlock({
                         style={{
                           padding: '4px 9px',
                           borderRadius: '6px',
-                          background: isSelected ? 'rgba(0, 240, 170, 0.15)' : '#06070a',
+                          background: isSelected ? 'color-mix(in srgb, var(--color-accent-primary, #00f0aa) 15%, transparent)' : 'var(--color-surface-sunken, #06070a)',
                           border: '1px solid',
-                          borderColor: isSelected ? '#00f0aa' : 'rgba(255,255,255,0.08)',
-                          color: isSelected ? '#00f0aa' : '#cbd5e1',
+                          borderColor: isSelected ? 'var(--color-accent-primary, #00f0aa)' : 'var(--card-border, rgba(255,255,255,0.08))',
+                          color: isSelected ? 'var(--color-accent-primary, #00f0aa)' : 'var(--card-text-color, #cbd5e1)',
                           fontSize: '0.74rem',
                           cursor: 'pointer',
                           display: 'flex',
@@ -732,7 +750,7 @@ export default function JournalBlock({
               </div>
 
               {/* Formatting Toolbar & Write/Preview Container */}
-              <div style={{ border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', overflow: 'hidden', background: '#06070a' }}>
+              <div style={{ border: '1px solid var(--card-border, rgba(255,255,255,0.08))', borderRadius: '8px', overflow: 'hidden', background: 'var(--color-surface-sunken, #06070a)' }}>
                 {/* Editor Toolbar Header */}
                 <div
                   style={{
@@ -740,8 +758,8 @@ export default function JournalBlock({
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '6px 10px',
-                    background: '#10141f',
-                    borderBottom: '1px solid rgba(255,255,255,0.08)',
+                    background: 'var(--card-bg, #10141f)',
+                    borderBottom: '1px solid var(--card-border, rgba(255,255,255,0.08))',
                     flexWrap: 'wrap',
                     gap: '6px',
                   }}
@@ -751,7 +769,7 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => insertText('**', '**')}
                       title="Bold"
-                      style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
                     >
                       <Bold size={14} />
                     </button>
@@ -759,7 +777,7 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => insertText('*', '*')}
                       title="Italic"
-                      style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
                     >
                       <Italic size={14} />
                     </button>
@@ -767,7 +785,7 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => insertText('## ')}
                       title="Heading 2"
-                      style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
                     >
                       <Heading2 size={14} />
                     </button>
@@ -775,7 +793,7 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => insertText('### ')}
                       title="Heading 3"
-                      style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
                     >
                       <Heading3 size={14} />
                     </button>
@@ -783,7 +801,7 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => insertText('> ')}
                       title="Quote"
-                      style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
                     >
                       <Quote size={14} />
                     </button>
@@ -791,7 +809,7 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => insertText('- ')}
                       title="Bullet List"
-                      style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
                     >
                       <List size={14} />
                     </button>
@@ -799,7 +817,7 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => insertText('1. ')}
                       title="Numbered List"
-                      style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
                     >
                       <ListOrdered size={14} />
                     </button>
@@ -807,7 +825,7 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => insertText('`', '`')}
                       title="Inline Code"
-                      style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
                     >
                       <Code2 size={14} />
                     </button>
@@ -815,7 +833,7 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => insertText('```\n', '\n```')}
                       title="Code Block"
-                      style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
                     >
                       <Code size={14} />
                     </button>
@@ -823,7 +841,7 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => insertText('[', '](https://...)')}
                       title="Link"
-                      style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
                     >
                       <Link2 size={14} />
                     </button>
@@ -831,14 +849,14 @@ export default function JournalBlock({
                       type="button"
                       onClick={() => insertText('\n---\n')}
                       title="Divider Line"
-                      style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--card-text-color, #cbd5e1)', cursor: 'pointer', padding: '4px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}
                     >
                       <Minus size={14} />
                     </button>
                   </div>
 
                   {/* Write / Preview Tab Switcher */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '3px', background: '#06070a', padding: '2px', borderRadius: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '3px', background: 'var(--color-surface-sunken, #06070a)', padding: '2px', borderRadius: '6px' }}>
                     <button
                       type="button"
                       onClick={() => setFormTab('write')}
@@ -848,9 +866,9 @@ export default function JournalBlock({
                         gap: '4px',
                         padding: '3px 8px',
                         borderRadius: '4px',
-                        background: formTab === 'write' ? '#1c2233' : 'none',
+                        background: formTab === 'write' ? 'var(--card-bg, #1c2233)' : 'none',
                         border: 'none',
-                        color: formTab === 'write' ? '#00f0aa' : '#94a3b8',
+                        color: formTab === 'write' ? 'var(--color-accent-primary, #00f0aa)' : 'var(--card-text-muted, #94a3b8)',
                         fontSize: '0.72rem',
                         fontWeight: 600,
                         cursor: 'pointer',
@@ -867,9 +885,9 @@ export default function JournalBlock({
                         gap: '4px',
                         padding: '3px 8px',
                         borderRadius: '4px',
-                        background: formTab === 'preview' ? '#1c2233' : 'none',
+                        background: formTab === 'preview' ? 'var(--card-bg, #1c2233)' : 'none',
                         border: 'none',
-                        color: formTab === 'preview' ? '#00f0aa' : '#94a3b8',
+                        color: formTab === 'preview' ? 'var(--color-accent-primary, #00f0aa)' : 'var(--card-text-muted, #94a3b8)',
                         fontSize: '0.72rem',
                         fontWeight: 600,
                         cursor: 'pointer',
@@ -898,7 +916,7 @@ export default function JournalBlock({
                       padding: '14px',
                       background: 'transparent',
                       border: 'none',
-                      color: '#f1f5f9',
+                      color: 'var(--card-text-color, #f1f5f9)',
                       fontSize: '0.88rem',
                       lineHeight: '1.6',
                       fontFamily: 'var(--font-serif)',
@@ -911,7 +929,7 @@ export default function JournalBlock({
                     {content.trim() ? (
                       renderJournalMarkdown(content)
                     ) : (
-                      <p style={{ color: '#888', fontStyle: 'italic', fontSize: '0.85rem' }}>No content yet...</p>
+                      <p style={{ color: 'var(--card-text-muted, #888)', fontStyle: 'italic', fontSize: '0.85rem' }}>No content yet...</p>
                     )}
                   </div>
                 )}
@@ -920,13 +938,13 @@ export default function JournalBlock({
                 <div
                   style={{
                     padding: '6px 12px',
-                    background: '#0d1017',
-                    borderTop: '1px solid rgba(255,255,255,0.06)',
+                    background: 'var(--card-bg, #0d1017)',
+                    borderTop: '1px solid var(--card-border, rgba(255,255,255,0.08))',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     fontSize: '0.7rem',
-                    color: '#8b949e',
+                    color: 'var(--card-text-muted, #8b949e)',
                     fontFamily: 'var(--font-mono)',
                   }}
                 >
@@ -952,8 +970,8 @@ export default function JournalBlock({
                     padding: '8px 16px',
                     borderRadius: '6px',
                     background: 'transparent',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    color: '#cbd5e1',
+                    border: '1px solid var(--card-border, rgba(255,255,255,0.12))',
+                    color: 'var(--card-text-color, #cbd5e1)',
                     fontSize: '0.82rem',
                     cursor: 'pointer',
                   }}
@@ -985,7 +1003,7 @@ export default function JournalBlock({
           }}
         >
           <BookOpen size={28} color="#64748b" style={{ margin: '0 auto 12px' }} />
-          <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '14px' }}>
+          <p style={{ color: 'var(--card-text-muted, #94a3b8)', fontSize: '0.9rem', marginBottom: '14px' }}>
             No journal entries published yet.
           </p>
           {isEditing && (
@@ -1010,7 +1028,7 @@ export default function JournalBlock({
               <div
                 key={entry.id || idx}
                 className={`journal-entry-card ${cover ? 'has-cover' : ''} ${entry.pinned ? 'is-pinned-card' : ''}`}
-                onClick={() => setActiveArticle(entry)}
+                onClick={(e) => openArticle(entry, e)}
               >
                 {/* Card Cover Photo with optional Spoiler Effect */}
                 {cover && (
@@ -1095,10 +1113,12 @@ export default function JournalBlock({
         </div>
       )}
 
-      {/* Reader Modal */}
+      {/* Reader Modal: portaled so transformed ancestors can't trap its fixed position or z-index */}
+      {createPortal(
       <AnimatePresence>
         {activeArticle && (
           <motion.div
+            {...canvasAttributes}
             className="article-modal-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -1170,7 +1190,9 @@ export default function JournalBlock({
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
+      )}
     </>
   );
 }
