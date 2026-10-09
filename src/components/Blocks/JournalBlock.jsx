@@ -30,7 +30,9 @@ import {
   Image as ImageIcon,
   AlertCircle,
   ArrowRight,
+  Download,
 } from 'lucide-react';
+import { useParams } from 'react-router-dom';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import ImageUploadPicker from '../Editor/ImageUploadPicker';
@@ -47,7 +49,13 @@ const MOOD_OPTIONS = [
   { emoji: '🎨', label: 'Artistic' },
   { emoji: '⚡', label: 'Energized' },
   { emoji: '🌿', label: 'Mindful' },
-  { emoji: '💻', label: 'Deep Work' },
+];
+
+// Paper looks offered by "Save as image"; ids map to `.journal-paper.is-<id>`
+const PAPER_STYLES = [
+  { id: 'notebook', label: 'Notebook', swatch: '#fbf7ee' },
+  { id: 'typewriter', label: 'Typewriter', swatch: '#ffffff' },
+  { id: 'midnight', label: 'Midnight', swatch: '#151821' },
 ];
 
 function getEntryDateValue(entry) {
@@ -302,6 +310,30 @@ export default function JournalBlock({
 
   // Reader Modal State
   const [activeArticle, setActiveArticle] = useState(null);
+
+  // Export-as-image: the offscreen paper sheet is captured, not the modal itself
+  const { username: rawUsername } = useParams();
+  const username = rawUsername?.replace(/^@/, '');
+  const paperRef = useRef(null);
+  const [exportState, setExportState] = useState('idle'); // 'idle' | 'busy' | 'error'
+  const [showExportOptions, setShowExportOptions] = useState(false);
+  const [paperStyle, setPaperStyle] = useState('notebook');
+  const handleExportImage = async () => {
+    setExportState('busy');
+    try {
+      await document.fonts.ready;
+      const { toPng } = await import('html-to-image'); // separate chunk, only loaded on export
+      const dataUrl = await toPng(paperRef.current, { pixelRatio: 2, cacheBust: true });
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = `${(activeArticle.title || 'journal-entry').replace(/[^\w-]+/g, '-').slice(0, 60)}.png`;
+      link.click();
+      setExportState('idle');
+    } catch {
+      setExportState('error');
+      setTimeout(() => setExportState('idle'), 3500);
+    }
+  };
   const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(() => setActiveArticle(null));
 
   // Close reader modal on Escape key press and lock background scroll
@@ -335,6 +367,7 @@ export default function JournalBlock({
     setCanvasAttributes(canvasEl
       ? Object.fromEntries([...canvasEl.attributes].filter((a) => a.name.startsWith('data-')).map((a) => [a.name, a.value]))
       : {});
+    setShowExportOptions(false);
     setActiveArticle(entry);
   };
 
@@ -1170,7 +1203,43 @@ export default function JournalBlock({
                   <span className="journal-read-time">
                     <Clock size={12} /> {activeReadTime} min read
                   </span>
+                  <button
+                    type="button"
+                    className={`journal-sort-btn journal-export-btn ${showExportOptions ? 'active' : ''}`}
+                    onClick={() => setShowExportOptions((v) => !v)}
+                    aria-expanded={showExportOptions}
+                    title="Choose a paper style and download this entry as a PNG"
+                  >
+                    <Download size={12} /> Save as image
+                  </button>
                 </div>
+
+                {showExportOptions && (
+                  <div className="journal-export-options" role="group" aria-label="Paper style">
+                    <span className="journal-input-label">Paper style</span>
+                    {PAPER_STYLES.map((s) => (
+                      <button
+                        key={s.id}
+                        type="button"
+                        className={`journal-sort-btn ${paperStyle === s.id ? 'active' : ''}`}
+                        onClick={() => setPaperStyle(s.id)}
+                        aria-pressed={paperStyle === s.id}
+                      >
+                        <span className="journal-export-swatch" style={{ background: s.swatch }} aria-hidden="true" />
+                        {s.label}
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      className="journal-quick-add-btn"
+                      onClick={handleExportImage}
+                      disabled={exportState === 'busy'}
+                    >
+                      {exportState === 'error' ? <AlertCircle size={13} /> : <Download size={13} />}
+                      {exportState === 'busy' ? 'Saving...' : exportState === 'error' ? 'Export failed, retry' : 'Download PNG'}
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Modal Cover Image (if available) */}
@@ -1192,6 +1261,50 @@ export default function JournalBlock({
         )}
       </AnimatePresence>,
       document.body
+      )}
+
+      {/* Offscreen paper sheet that "Save as image" captures */}
+      {activeArticle && createPortal(
+        <div className="journal-paper-stage" aria-hidden="true">
+          <div className={`journal-paper-desk is-${paperStyle}`} ref={paperRef}>
+            <article className={`journal-paper is-${paperStyle}`}>
+              <span className="journal-paper-tape" />
+              <div className="journal-paper-holes"><span /><span /><span /></div>
+
+              <header className="journal-paper-header">
+                <span className="journal-paper-kicker">Journal &amp; Thoughts</span>
+                <h1 className="journal-paper-title">{activeArticle.title}</h1>
+                <div className="journal-paper-meta">
+                  <span>{activeArticle.date || 'Recent'}</span>
+                  {activeArticle.mood && (
+                    <span>{activeArticle.moodEmoji ? `${activeArticle.moodEmoji} ` : ''}{activeArticle.mood}</span>
+                  )}
+                </div>
+              </header>
+
+              {(activeArticle.coverUrl || activeArticle.imageUrl) && (
+                <img
+                  className="journal-paper-cover"
+                  src={activeArticle.coverUrl || activeArticle.imageUrl}
+                  alt=""
+                  crossOrigin="anonymous"
+                />
+              )}
+
+              <div className="journal-paper-body">{renderJournalMarkdown(activeContent)}</div>
+
+              <footer className="journal-paper-footer">
+                <img src="/logo.svg" alt="" className="journal-paper-logo" />
+                <div>
+                  <strong>Written on Profilenc</strong>
+                  <span>{username ? `${window.location.host}/@${username}` : window.location.host}</span>
+                </div>
+                <span className="journal-paper-sign">{username ? `— @${username}` : ''}</span>
+              </footer>
+            </article>
+          </div>
+        </div>,
+        document.body
       )}
     </>
   );

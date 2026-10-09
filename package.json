@@ -19,6 +19,7 @@
     "@fontsource/orbitron": "^5.2.8",
     "framer-motion": "12.43.0",
     "gsap": "^3.15.0",
+    "html-to-image": "1.11.13",
     "lenis": "^1.3.26",
     "lucide-react": "^0.566.0",
     "react": "^19.2.0",

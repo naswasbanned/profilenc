@@ -937,3 +937,317 @@
   border-top: var(--card-border-width, 1.5px) dashed var(--card-border, #d7ccb8);
   margin: 2.25em 0;
 }
+
+.journal-export-btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.journal-export-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px dashed var(--card-border, rgba(255, 255, 255, 0.12));
+}
+
+.journal-export-options .journal-input-label {
+  margin: 0 4px 0 0;
+}
+
+.journal-export-options .journal-quick-add-btn {
+  margin-left: auto;
+}
+
+.journal-export-options .journal-quick-add-btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.journal-export-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+}
+
+/* --- Export as image: paper sheet (rendered offscreen, captured by html-to-image) --- */
+.journal-paper-stage {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  pointer-events: none;
+}
+
+/* The captured node: a desk surface tinted by the profile accent */
+.journal-paper-desk {
+  width: 900px;
+  padding: 56px 40px 64px;
+  box-sizing: border-box;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.08), transparent 55%),
+    color-mix(in srgb, var(--color-accent-primary, #e96d52) 22%, #2b2620);
+}
+
+.journal-paper {
+  /* Fixed paper palette so the export reads the same on every profile theme */
+  --paper: #fbf7ee;
+  --ink: #2b2722;
+  --card-text-color: #2b2722;
+  --card-heading-color: #1d1a16;
+  --heading-color: #1d1a16;
+  --card-text-muted: #7a7062;
+  --card-border: #d8ccb4;
+  --card-bg: #fbf7ee;
+  --color-surface-sunken: #f1e9d8;
+
+  position: relative;
+  overflow: hidden;
+  padding: 72px 72px 40px 112px;
+  color: var(--ink);
+  border-radius: 3px;
+  background:
+    /* red margin rule */
+    linear-gradient(90deg, transparent 84px, rgba(214, 84, 72, 0.4) 84px, rgba(214, 84, 72, 0.4) 86px, transparent 86px),
+    /* faint ruled lines */
+    repeating-linear-gradient(180deg, transparent 0 31px, rgba(86, 120, 168, 0.16) 31px 32px),
+    var(--paper);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 24px 48px rgba(0, 0, 0, 0.35), 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.journal-paper-tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 150px;
+  height: 36px;
+  transform: translateX(-50%) rotate(-2.5deg);
+  background: color-mix(in srgb, var(--color-accent-primary, #e96d52) 45%, rgba(255, 255, 255, 0.4));
+  opacity: 0.75;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.journal-paper-holes {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.journal-paper-holes span {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-accent-primary, #e96d52) 22%, #2b2620);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+
+
+
+.journal-paper-header {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.journal-paper-kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent-primary, #e96d52);
+}
+
+.journal-paper-title {
+  font-family: var(--font-serif);
+  font-size: 44px;
+  line-height: 1.15;
+  font-weight: 700;
+  color: var(--card-heading-color);
+  margin: 12px 0 14px;
+}
+
+.journal-paper-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--card-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.journal-paper-meta span + span::before {
+  content: '·';
+  margin-right: 18px;
+}
+
+.journal-paper-cover {
+  /* global img rule sets content-visibility: auto, which collapses images in this offscreen sheet */
+  content-visibility: visible;
+  display: block;
+  width: 100%;
+  max-height: 380px;
+  object-fit: cover;
+  margin-bottom: 32px;
+  border: 8px solid #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  transform: rotate(-0.8deg);
+}
+
+.journal-paper-body .journal-article-prose {
+  position: relative;
+  font-size: 19px;
+  line-height: 32px; /* matches the ruled line spacing */
+}
+
+.journal-paper-footer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 2px dashed var(--card-border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--card-text-muted);
+}
+
+.journal-paper-footer div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.journal-paper-footer strong {
+  color: var(--ink);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+.journal-paper-logo {
+  content-visibility: visible;
+  width: 34px;
+  height: 34px;
+}
+
+.journal-paper-sign {
+  margin-left: auto;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink);
+}
+
+/* --- Paper style: Typewriter (plain bond sheet, everything in mono) --- */
+.journal-paper-desk.is-typewriter {
+  background: #d8d4cc;
+}
+
+.journal-paper.is-typewriter {
+  --paper: #ffffff;
+  --ink: #1f1f1f;
+  --card-text-color: #1f1f1f;
+  --card-heading-color: #111111;
+  --heading-color: #111111;
+  --card-text-muted: #6b6b6b;
+  --card-border: #cfcfcf;
+  --color-surface-sunken: #f3f3f3;
+  padding: 80px 88px 44px;
+  background: var(--paper);
+  border-radius: 0;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+.journal-paper.is-typewriter .journal-paper-tape,
+.journal-paper.is-typewriter .journal-paper-holes {
+  display: none;
+}
+
+.journal-paper.is-typewriter .journal-paper-title,
+.journal-paper.is-typewriter .journal-paper-body .journal-article-prose,
+.journal-paper.is-typewriter .journal-paper-body h2,
+.journal-paper.is-typewriter .journal-paper-body h3,
+.journal-paper.is-typewriter .journal-paper-body h4,
+.journal-paper.is-typewriter .journal-paper-sign {
+  font-family: var(--font-mono);
+}
+
+.journal-paper.is-typewriter .journal-paper-title {
+  font-size: 34px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding-bottom: 18px;
+  border-bottom: 3px double var(--ink);
+}
+
+.journal-paper.is-typewriter .journal-paper-body .journal-article-prose {
+  font-size: 16px;
+  line-height: 30px;
+}
+
+.journal-paper.is-typewriter .journal-paper-cover {
+  border: 1px solid var(--ink);
+  box-shadow: none;
+  transform: none;
+  filter: grayscale(0.35) contrast(1.05);
+}
+
+.journal-paper.is-typewriter .journal-paper-sign {
+  font-style: normal;
+  font-size: 15px;
+}
+
+/* --- Paper style: Midnight (dark sheet on a dot grid, accent highlights) --- */
+.journal-paper-desk.is-midnight {
+  background: color-mix(in srgb, var(--color-accent-primary, #e96d52) 30%, #07080c);
+}
+
+.journal-paper.is-midnight {
+  --paper: #151821;
+  --ink: #e8e6e1;
+  --card-text-color: #d6d3cc;
+  --card-heading-color: #ffffff;
+  --heading-color: #ffffff;
+  --card-text-muted: #8b8f9c;
+  --card-border: #2c3140;
+  --card-bg: #151821;
+  --color-surface-sunken: #0e1017;
+  padding: 72px 80px 40px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.07) 1.2px, transparent 1.6px) 0 0 / 24px 24px,
+    var(--paper);
+  border: 1px solid color-mix(in srgb, var(--color-accent-primary, #e96d52) 40%, transparent);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 40px color-mix(in srgb, var(--color-accent-primary, #e96d52) 18%, transparent);
+}
+
+.journal-paper.is-midnight .journal-paper-tape,
+.journal-paper.is-midnight .journal-paper-holes {
+  display: none;
+}
+
+.journal-paper.is-midnight .journal-paper-header {
+  padding-left: 22px;
+  border-left: 4px solid var(--color-accent-primary, #e96d52);
+}
+
+.journal-paper.is-midnight .journal-paper-cover {
+  border: none;
+  border-radius: 12px;
+  transform: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+.journal-paper.is-midnight .journal-paper-footer {
+  border-top-style: solid;
+}
