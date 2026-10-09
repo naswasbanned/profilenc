@@ -1057,6 +1057,9 @@
 }
 
 .journal-paper-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 700;

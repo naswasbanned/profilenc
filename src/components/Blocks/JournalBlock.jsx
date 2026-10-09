@@ -37,6 +37,7 @@ import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import ImageUploadPicker from '../Editor/ImageUploadPicker';
 import { safeUrl } from '../../lib/safeUrl';
+import { getIcon, isIconDisabled } from '../../lib/icons';
 
 const MOOD_OPTIONS = [
   { emoji: '', label: '🚫 None', isNone: true },
@@ -299,10 +300,13 @@ function renderJournalMarkdown(content) {
 
 export default function JournalBlock({
   data = {},
+  block,
   isEditing = false,
   onUpdateData,
 }) {
   const { items = [] } = data;
+  // Same icon the block heading shows: the picked icon, BookOpen on "Auto", nothing on "None"
+  const KickerIcon = isIconDisabled(block?.icon) ? null : (getIcon(block?.icon) || BookOpen);
   const list = Array.isArray(items) ? items : [];
 
   // Sorting state: 'newest' (default) or 'oldest'
@@ -1182,9 +1186,11 @@ export default function JournalBlock({
               </button>
 
               <div className="article-modal-header">
-                <span className="article-modal-kicker">
-                  <BookOpen size={13} /> Journal & Thoughts
-                </span>
+                {block?.title && (
+                  <span className="article-modal-kicker">
+                    {KickerIcon && <KickerIcon size={13} />} {block.title}
+                  </span>
+                )}
 
                 <h2 className="article-modal-title">
                   {activeArticle.title}
@@ -1272,7 +1278,11 @@ export default function JournalBlock({
               <div className="journal-paper-holes"><span /><span /><span /></div>
 
               <header className="journal-paper-header">
-                <span className="journal-paper-kicker">Journal &amp; Thoughts</span>
+                {block?.title && (
+                  <span className="journal-paper-kicker">
+                    {KickerIcon && <KickerIcon size={13} />} {block.title}
+                  </span>
+                )}
                 <h1 className="journal-paper-title">{activeArticle.title}</h1>
                 <div className="journal-paper-meta">
                   <span>{activeArticle.date || 'Recent'}</span>
