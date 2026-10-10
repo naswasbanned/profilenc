@@ -190,6 +190,9 @@
 [data-button-style="press-outline"] .event-btn-cta:hover,
 [data-button-style="press-outline"] .card-action-btn:hover,
 [data-button-style="press-outline"] .journal-read-btn:hover,
+[data-button-style="press-outline"] .journal-quick-add-btn:hover,
+[data-button-style="press-outline"] .journal-card-btn:hover,
+[data-button-style="press-outline"] .journal-card-btn.btn-pinned,
 [data-button-style="press-outline"] .review-link-btn:hover {
   background: var(--heading-color, #17171a);
   color: var(--bg-color, #f2f2f0);

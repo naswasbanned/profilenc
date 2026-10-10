@@ -125,14 +125,6 @@ export default function EventsBlock({ data = {} }) {
     });
   }, [eventList, filter]);
 
-  if (eventList.length === 0) {
-    return (
-      <div style={{ textAlign: 'center', padding: '36px', color: '#888', fontSize: '0.85rem' }}>
-        No events scheduled yet. Click Edit to create your first event or stream.
-      </div>
-    );
-  }
-
   // Mini Calendar generation
   const year = calendarMonth.getFullYear();
   const month = calendarMonth.getMonth();
@@ -164,6 +156,14 @@ export default function EventsBlock({ data = {} }) {
     });
     return map;
   }, [eventList, year, month]);
+
+  if (eventList.length === 0) {
+    return (
+      <div style={{ textAlign: 'center', padding: '36px', color: '#888', fontSize: '0.85rem' }}>
+        No events scheduled yet. Click Edit to create your first event or stream.
+      </div>
+    );
+  }
 
   return (
     <div className="events-block-container">

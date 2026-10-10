@@ -23,7 +23,6 @@ import {
   Search,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
 import ThemePanel from './panels/ThemePanel';
 import BlockEditorModal from './BlockEditorModal';
 import AddBlockModal from './AddBlockModal';
@@ -39,12 +38,9 @@ export default function EditorOverlay({
   tabs = [],
   activeTabId,
   hasChanges = false,
-  onSelectTab,
   onUpdateTabs,
   onAddBlock,
   onEditBlock,
-  onMoveBlock,
-  onDeleteBlock,
   onUndo,
   onRedo,
   canUndo = false,
@@ -57,7 +53,6 @@ export default function EditorOverlay({
 }) {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { theme, isDirty: isThemeDirty, resetTheme } = useTheme();
 
   const [showThemeDrawer, setShowThemeDrawer] = useState(false);
   const [themePanelInitial, setThemePanelInitial] = useState(null);

@@ -23,7 +23,14 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // `motion`/`m` are only referenced as <motion.div>/<m.div>, which this rule cannot see without eslint-plugin-react
+      'no-unused-vars': ['error', { varsIgnorePattern: '^([A-Z_]|motion$|m$)', argsIgnorePattern: '^_' }],
+      // Dev-only HMR hint, not a correctness issue; keep it visible without failing lint
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
+  },
+  {
+    files: ['server/**/*.js'],
+    languageOptions: { globals: globals.node },
   },
 ])

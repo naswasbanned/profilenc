@@ -793,6 +793,7 @@ export default function ThemePanel({ tabs = [], initialSection, scrollToField })
   // and scroll to the target field after a short delay for render.
   useEffect(() => {
     if (initialSection) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- follows a deep link from the search palette
       setSection(initialSection);
     }
   }, [initialSection]);
@@ -905,14 +906,8 @@ export default function ThemePanel({ tabs = [], initialSection, scrollToField })
   const liveCardShadow = getNestedValue('global.cardBoxShadow') || getNestedValue('global.cardShadow') || 'none';
   const liveCardBorderWidth = getNestedValue('global.cardBorderWidth') ?? 1;
   const liveCardBorderStyle = getNestedValue('global.cardBorderStyle') || 'solid';
-  const liveBlockGap = getNestedValue('global.blockGap') ?? 28;
-  const liveBlockPadding = getNestedValue('global.blockPadding') ?? 20;
-  const liveBlockDividerStyle = getNestedValue('global.blockDividerStyle') || 'none';
-  const liveBlockDividerColor = getNestedValue('global.blockDividerColor') || liveCardBorder;
-  const liveHeadingWeight = getNestedValue('global.headingFontWeight') || 700;
   const livePillStyle = getNestedValue('global.pillStyle') || (currentDesignStyle === 'field-notes' ? 'editorial-bordered' : 'rounded-glow');
   const liveButtonStyle = getNestedValue('global.buttonStyle') || (currentDesignStyle === 'field-notes' || isLightOrPaper ? 'editorial-tactile' : 'flat-border');
-  const liveIconStyle = getNestedValue('global.iconStyle') || (currentDesignStyle === 'field-notes' ? 'bordered-box' : 'glass-accent');
 
   return (
     <div className="theme-panel">

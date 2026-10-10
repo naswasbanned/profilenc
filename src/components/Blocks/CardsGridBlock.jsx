@@ -4,6 +4,7 @@ import { ExternalLink, Maximize2, X } from 'lucide-react';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import { safeUrl } from '../../lib/safeUrl';
+import CanvasPortal from './CanvasPortal';
 
 export default function CardsGridBlock({ data = {} }) {
   const {
@@ -117,7 +118,7 @@ export default function CardsGridBlock({ data = {} }) {
     </div>
 
       {/* Image Zoom Modal */}
-      <AnimatePresence>
+      <CanvasPortal><AnimatePresence>
         {activeModalImage && (
           <motion.div
             className="image-zoom-backdrop"
@@ -128,7 +129,7 @@ export default function CardsGridBlock({ data = {} }) {
           >
             {hintVisible && (
               <div className="modal-double-click-hint">
-                <span>Click once more outside to close (or use ✕)</span>
+                <span>Click once more outside to close (or use the close button)</span>
               </div>
             )}
             <motion.div
@@ -161,7 +162,7 @@ export default function CardsGridBlock({ data = {} }) {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence></CanvasPortal>
     </>
   );
 }

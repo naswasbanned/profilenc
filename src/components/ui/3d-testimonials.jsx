@@ -59,20 +59,19 @@ export function Marquee({
  * Showcases a real public user profile created on Profilenc
  */
 export function CreatorProfileCard({ profile }) {
-  if (!profile) return null;
-  const username = profile.username || 'user';
-  const displayName = profile.displayName || profile.display_name || username;
-  const avatarUrl = profile.avatarUrl || profile.avatar_url;
-  const templateSlug = profile.templateSlug || profile.template_slug || 'developer';
+  const username = profile?.username || 'user';
+  const displayName = profile?.displayName || profile?.display_name || username;
+  const avatarUrl = profile?.avatarUrl || profile?.avatar_url;
+  const templateSlug = profile?.templateSlug || profile?.template_slug || 'developer';
 
   // Dynamic user bio / headline directly from the account profile setting
   const bioText = useMemo(() => {
-    const raw = profile.bio || profile.headline;
+    const raw = profile?.bio || profile?.headline;
     if (raw && typeof raw === 'string' && raw.trim().length > 0) {
       return raw.trim();
     }
     return '';
-  }, [profile.bio, profile.headline]);
+  }, [profile?.bio, profile?.headline]);
 
   const roleTag = useMemo(() => {
     const t = (templateSlug || '').toLowerCase();
@@ -81,6 +80,9 @@ export function CreatorProfileCard({ profile }) {
     if (t.includes('minimal')) return 'MINIMAL';
     return templateSlug ? templateSlug.toUpperCase() : 'CREATOR';
   }, [templateSlug]);
+
+  // Hooks above must run on every render, so the empty case returns here
+  if (!profile) return null;
 
   return (
     <Link to={`/@${username}`} className="ui-creator-profile-card">

@@ -19,7 +19,7 @@ export function parseVideoUrl(url) {
 
   // 1. YouTube (standard watch, youtu.be shortlinks, embed, shorts)
   const ytMatch = cleanUrl.match(
-    /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=|shorts\/)|youtu\.be\/)([^"&?\/\s]{11})/i
+    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=|shorts\/)|youtu\.be\/)([^"&?/\s]{11})/i
   );
   if (ytMatch && ytMatch[1]) {
     const videoId = ytMatch[1];
@@ -35,7 +35,7 @@ export function parseVideoUrl(url) {
   }
 
   // 2. Vimeo
-  const vimeoMatch = cleanUrl.match(/(?:vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/[^\/]*\/videos\/|album\/(?:\d+\/)?video\/|video\/|))(\d+)/i);
+  const vimeoMatch = cleanUrl.match(/(?:vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/[^/]*\/videos\/|album\/(?:\d+\/)?video\/|video\/|))(\d+)/i);
   if (vimeoMatch && vimeoMatch[1]) {
     const videoId = vimeoMatch[1];
     return {

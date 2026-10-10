@@ -155,6 +155,8 @@
 [data-button-style="soft-raised"] .event-btn-cta:hover,
 [data-button-style="soft-raised"] .card-action-btn:hover,
 [data-button-style="soft-raised"] .journal-read-btn:hover,
+[data-button-style="soft-raised"] .journal-quick-add-btn:hover,
+[data-button-style="soft-raised"] .journal-card-btn:hover,
 [data-button-style="soft-raised"] .review-link-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 14px 26px rgba(47, 43, 58, 0.2) !important;

@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import ProfileCanvas from '../components/Profile/ProfileCanvas';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import { apiFetch } from '../lib/api';
 import { normalizeModularContent } from '../lib/profileContent';
+import { entryIdFromPath, findTabWithEntry } from '../lib/journal';
+import { track } from '../lib/stats';
 
 export default function ProfilePage() {
   const { username: rawUsername } = useParams();
   const username = rawUsername?.replace(/^@/, '');
+  const { pathname } = useLocation();
 
   const [theme, setTheme] = useState(null);
   const [content, setContent] = useState(null);
@@ -42,8 +45,11 @@ export default function ProfilePage() {
 
         setTheme(themeRes.ok ? await themeRes.json() : {});
         setContent(normalized);
-        setActiveTabId(normalized.tabs?.[0]?.id || null);
+        // An entry link lands on the tab that holds the entry
+        setActiveTabId(findTabWithEntry(normalized, entryIdFromPath(pathname)) || normalized.tabs?.[0]?.id || null);
         setLoading(false);
+        // The server ignores the owner's own visits (by token) and bots
+        track(username, 'view');
       } catch {
         setError('Failed to load profile');
         setLoading(false);
@@ -55,6 +61,8 @@ export default function ProfilePage() {
     return () => {
       document.title = 'Profilenc';
     };
+    // pathname is only read on the first load; opening entries later must not refetch the profile
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
 
   if (loading) {

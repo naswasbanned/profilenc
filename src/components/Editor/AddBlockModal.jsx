@@ -461,6 +461,7 @@ const BLOCK_PRESETS = [
 export default function AddBlockModal({ onAddBlock, onClose, editorTheme = 'dark' }) {
   const handleSelect = (preset) => {
     const newBlock = {
+      // eslint-disable-next-line react-hooks/purity -- runs in a click handler, not during render
       id: `block-${Date.now()}`,
       type: preset.type,
       title: preset.defaultTitle,

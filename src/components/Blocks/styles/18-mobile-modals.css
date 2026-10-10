@@ -165,3 +165,23 @@
     gap: 8px;
   }
 }
+
+/* --- Popup surfaces on presets with see-through cards (e.g. Press Mono) ---
+   Popups sit on a dark backdrop, not the page, so a transparent --card-bg
+   leaves them colourless. Paint the card colour over the page colour instead. */
+.article-modal,
+.timeline-lightbox-dialog,
+.image-zoom-dialog,
+.gallery-lightbox-footer {
+  background-color: var(--bg-color, #12151e);
+  background-image: linear-gradient(var(--card-bg, transparent), var(--card-bg, transparent));
+}
+
+/* Popups are portaled to <body> (CanvasPortal), so they must clear the
+   editor modal (10000) when opened from the block editor preview. */
+.gallery-lightbox-backdrop,
+.video-lightbox-backdrop,
+.timeline-lightbox-backdrop,
+.image-zoom-backdrop {
+  z-index: 10001;
+}

@@ -27,6 +27,7 @@ export default function OptimizedImage({
   // If the image was already cached and loaded before React hydrated
   useEffect(() => {
     if (imgRef.current?.complete && imgRef.current?.naturalWidth > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- cached images never fire onLoad, so the DOM is read once after mount
       setLoaded(true);
     }
   }, [src]);

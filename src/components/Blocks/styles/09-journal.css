@@ -1254,3 +1254,13 @@
 .journal-paper.is-midnight .journal-paper-footer {
   border-top-style: solid;
 }
+
+.journal-export-actions {
+  display: inline-flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.journal-export-actions .journal-quick-add-btn {
+  margin-left: 0;
+}

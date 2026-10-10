@@ -193,7 +193,7 @@ export default function EditorSearchPalette({
               {results.length === 0 && query.trim() && (
                 <div className="esp-empty">No results for "{query}"</div>
               )}
-              {grouped.map((item, i) => {
+              {grouped.map((item) => {
                 if (item.type === 'header') {
                   return (
                     <div key={`cat-${item.category}`} className="esp-category-label">

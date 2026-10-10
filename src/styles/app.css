@@ -247,7 +247,7 @@
 }
 
 /* Ensure all content sits above the background layer */
-.app > *:not(.profile-bg-layer):not(.profile-home-badge):not(.profile-edit-fab):not(.profile-fab-stack):not(.profile-tabs-nav):not(.editor-modal-backdrop) {
+.app > *:not(.profile-bg-layer):not(.profile-edit-fab):not(.profile-fab-stack):not(.profile-tabs-nav):not(.editor-modal-backdrop) {
   position: relative;
   z-index: 1;
 }
@@ -321,6 +321,7 @@
   font-family: var(--fn-editor-body, 'DM Sans', sans-serif);
   box-shadow: 3px 4px 0 var(--fn-editor-ink, #f9f3e9);
   transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  text-decoration: none; /* also used on the Dashboard link */
 }
 
 .profile-settings-fab:hover {
@@ -344,65 +345,28 @@
   }
 }
 
-/* --- Sticky Profilenc Brand Badge (Top-Left on Public Profiles) --- */
-.profile-home-badge {
-  position: fixed;
-  top: 8px;
-  left: 16px;
-  z-index: 120;
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  min-height: 44px;
-  aspect-ratio: 1 / 1;
-  flex-shrink: 0;
-  box-sizing: border-box;
-  border-radius: 50%;
-  background-color: var(--paper-light, #fffaf0);
-  border: 2px solid var(--ink, #252320);
-  box-shadow: 2.5px 3px 0 var(--ink, #252320);
-  display: flex;
+/* --- "Made with Profilenc" link in the profile footer --- */
+.app-footer-brand {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  gap: 6px;
+  margin-top: 8px;
+  color: inherit;
   text-decoration: none;
-  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+  opacity: 0.75;
+  transition: opacity 160ms ease;
 }
 
-.profile-home-badge:hover {
-  transform: translate(-1.5px, -1.5px);
-  box-shadow: 4px 4.5px 0 var(--ink, #252320);
-  background-color: #ffffff;
+.app-footer-brand:hover,
+.app-footer-brand:focus-visible {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.profile-home-badge:active {
-  transform: translate(0.5px, 0.5px);
-  box-shadow: 1px 1.5px 0 var(--ink, #252320);
-}
-
-.profile-home-badge-img {
-  width: 22px;
-  height: 22px;
-  display: block;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-@media (max-width: 640px) {
-  .profile-home-badge {
-    top: 6px;
-    left: 10px;
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-    min-height: 38px;
-    box-shadow: 2px 2.5px 0 var(--ink, #252320);
-  }
-
-  .profile-home-badge-img {
-    width: 19px;
-    height: 19px;
-  }
+.app-footer-brand img {
+  width: 16px;
+  height: 16px;
 }
 
 

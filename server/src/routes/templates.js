@@ -56,7 +56,7 @@ router.get('/featured/profiles', async (_req, res) => {
               }
             }
           }
-        } catch (e) {
+        } catch {
           // ignore parsing error
         }
       }

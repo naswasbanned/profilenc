@@ -325,6 +325,7 @@ export default function EditorPage() {
 
     if (authLoading) return;
     if (!token || !username || !isOwner) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- nothing to fetch for a guest, so the gate opens right away
       setDataLoaded(true);
       return;
     }

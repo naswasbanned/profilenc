@@ -46,6 +46,8 @@ import GitHubHeatmapBlock from './GitHubHeatmapBlock';
 import MusicPlayerBlock from './MusicPlayerBlock';
 import MilestonesBlock from './MilestonesBlock';
 import { getIcon, isIconDisabled } from '../../lib/icons';
+import { isBlockEmpty } from '../../lib/blockEmpty';
+import { BlockIdContext } from './CanvasPortal';
 import './Blocks.css';
 
 const blockComponentMap = {
@@ -123,6 +125,8 @@ export default function BlockRenderer({
   disableReveal = false,
 }) {
   if (!block || block.hidden) return null;
+  // Visitors never see "Click Edit to add..." placeholders or an orphaned heading
+  if (!isEditing && !disableReveal && isBlockEmpty(block)) return null;
 
   const BlockComponent = blockComponentMap[block.type];
 
@@ -142,6 +146,7 @@ export default function BlockRenderer({
   return (
     <motion.section
       className={`block-wrapper ${isEditing ? 'is-editing' : ''}`}
+      data-block-id={block.id}
       variants={blockVariants}
       initial={disableReveal ? 'visible' : 'hidden'}
       {...(disableReveal
@@ -211,6 +216,7 @@ export default function BlockRenderer({
       )}
 
       {/* Render Component */}
+      <BlockIdContext.Provider value={block.id}>
       <BlockComponent
         data={block.data || {}}
         block={block}
@@ -228,6 +234,7 @@ export default function BlockRenderer({
         }}
         onUpdateBlock={onUpdateBlock}
       />
+      </BlockIdContext.Provider>
     </motion.section>
   );
 }

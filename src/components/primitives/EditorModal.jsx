@@ -62,7 +62,7 @@ export default function EditorModal({
     <>
       {hintVisible && (
         <div className="modal-double-click-hint">
-          <span>Click once more outside to close (or use ✕)</span>
+          <span>Click once more outside to close (or use the close button)</span>
         </div>
       )}
       <motion.div

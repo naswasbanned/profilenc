@@ -783,7 +783,7 @@ export default function LandingPage() {
                     }
                   }
                 }
-              } catch (e) {
+              } catch {
                 // Keep original profile object
               }
               return p;

@@ -40,7 +40,10 @@ function App() {
 
           {/* Profile & Editor routes - accepts both /username and /@username */}
           <Route path="/:username/edit" element={<EditorPage />} />
-          <Route path="/:username" element={<ProfilePage />} />
+          <Route path="/:username" element={<ProfilePage />}>
+            {/* Entry links reuse the mounted profile; JournalBlock opens the entry */}
+            <Route path="journal/:entryId" element={null} />
+          </Route>
         </Routes>
       </Suspense>
     </AuthProvider>

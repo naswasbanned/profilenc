@@ -124,3 +124,11 @@ export const imageUploadLimiter = limiter({
   keyGenerator: (req) => (req.user?.id ? `user:${req.user.id}` : byClient(req)),
   message: 'Upload limit reached for this hour. Please try again later.',
 });
+
+/** Profile view / click beacons. Generous for real browsing, caps scripted inflation. */
+export const statsLimiter = limiter({
+  label: 'stats',
+  windowMs: 15 * MINUTE,
+  limit: 120,
+  message: 'Too many tracking events.',
+});

@@ -13,6 +13,7 @@ import {
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import { safeUrl } from '../../lib/safeUrl';
+import CanvasPortal from './CanvasPortal';
 
 export default function GalleryBlock({ data = {} }) {
   const {
@@ -120,7 +121,7 @@ export default function GalleryBlock({ data = {} }) {
       </div>
 
       {/* Full Photo Lightbox Modal */}
-      <AnimatePresence>
+      <CanvasPortal><AnimatePresence>
         {activePhoto && (
           <motion.div
             className="gallery-lightbox-backdrop"
@@ -131,7 +132,7 @@ export default function GalleryBlock({ data = {} }) {
           >
             {hintVisible && (
               <div className="modal-double-click-hint">
-                <span>Click once more outside to close (or use ✕)</span>
+                <span>Click once more outside to close (or use the close button)</span>
               </div>
             )}
             <div className="gallery-lightbox-container" onClick={(e) => e.stopPropagation()}>
@@ -238,7 +239,7 @@ export default function GalleryBlock({ data = {} }) {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence></CanvasPortal>
     </>
   );
 }

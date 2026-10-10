@@ -112,7 +112,7 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged, edito
         } else {
           setUsernameStatus({ state: 'taken', msg: res.reason || 'Username is already taken' });
         }
-      } catch (err) {
+      } catch {
         setUsernameStatus({ state: 'invalid', msg: 'Unable to check username' });
       }
     }, 450);

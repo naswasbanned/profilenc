@@ -16,6 +16,7 @@ import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import { parseVideoUrl } from '../../lib/videoUtils';
 import { safeUrl } from '../../lib/safeUrl';
+import CanvasPortal from './CanvasPortal';
 
 export default function VideoGalleryBlock({ data = {} }) {
   const {
@@ -185,12 +186,12 @@ export default function VideoGalleryBlock({ data = {} }) {
       </div>
 
       {/* Cinema Lightbox Modal Player */}
-      <AnimatePresence>
+      <CanvasPortal><AnimatePresence>
         {activeIdx !== null && activeVideo && (
           <div className="video-lightbox-backdrop" onClick={handleBackdropClick}>
             {hintVisible && (
               <div className="modal-double-click-hint">
-                <span>Click once more outside to close (or use ✕)</span>
+                <span>Click once more outside to close (or use the close button)</span>
               </div>
             )}
 
@@ -306,7 +307,7 @@ export default function VideoGalleryBlock({ data = {} }) {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
+      </AnimatePresence></CanvasPortal>
     </div>
   );
 }

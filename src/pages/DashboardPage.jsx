@@ -19,12 +19,14 @@ import {
   ArrowRight,
   Eye,
   EyeOff,
+  BarChart3,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import AccountSettingsModal from '../components/Editor/AccountSettingsModal';
 import MobileDock from '../components/primitives/MobileDock';
 import MobileBrandBar from '../components/primitives/MobileBrandBar';
 import { apiFetch } from '../lib/api';
+import { normalizeModularContent } from '../lib/profileContent';
 import './DashboardPage.css';
 import { useUiTheme } from '../hooks/useUiTheme';
 
@@ -64,6 +66,7 @@ export default function DashboardPage() {
 
   // Profile data fetch for live block stats
   const [profileData, setProfileData] = useState(null);
+  const [blockCount, setBlockCount] = useState(null);
   const [fetchLoading, setFetchLoading] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -72,10 +75,18 @@ export default function DashboardPage() {
     if (!user?.username) return;
     try {
       setFetchLoading(true);
-      const res = await apiFetch(`/api/u/${user.username}`, { token: null });
+      // Content uses the stored token so private profiles still count for their owner
+      const [res, contentRes] = await Promise.all([
+        apiFetch(`/api/u/${user.username}`, { token: null }),
+        apiFetch(`/api/u/${user.username}/content`),
+      ]);
       if (res.ok) {
         const data = await res.json();
         setProfileData(data);
+      }
+      if (contentRes.ok) {
+        const content = normalizeModularContent(await contentRes.json(), user.username);
+        setBlockCount((content.tabs || []).reduce((sum, tab) => sum + (tab.blocks?.length || 0), 0));
       }
     } catch (err) {
       console.error('Failed to load profile details:', err);
@@ -90,18 +101,32 @@ export default function DashboardPage() {
     }
   }, [user?.username, fetchProfileDetails]);
 
-  // Derive total blocks
-  const blockCount = useMemo(() => {
-    if (!profileData?.sections) return null;
-    const sec = profileData.sections;
-    if (Array.isArray(sec)) {
-      return sec.reduce((acc, tab) => acc + (tab?.blocks?.length || 0), 0);
-    }
-    if (sec.tabs && Array.isArray(sec.tabs)) {
-      return sec.tabs.reduce((acc, tab) => acc + (tab?.blocks?.length || 0), 0);
-    }
-    return null;
-  }, [profileData]);
+  // Visitor stats for the last 30 days (null while loading, false on failure)
+  const [stats, setStats] = useState(null);
+  useEffect(() => {
+    if (!user?.username) return;
+    let cancelled = false;
+    apiFetch('/api/stats?days=30')
+      .then((res) => (res.ok ? res.json() : false))
+      .catch(() => false)
+      .then((data) => { if (!cancelled) setStats(data); });
+    return () => { cancelled = true; };
+  }, [user?.username]);
+
+  // Fill missing days with zero so the chart has one bar per day, oldest first
+  const statsDays = useMemo(() => {
+    if (!stats) return [];
+    const byDay = new Map(stats.daily.map((d) => [d.day, d.views]));
+    return Array.from({ length: stats.days }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (stats.days - 1 - i));
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      return { day: key, views: byDay.get(key) || 0 };
+    });
+  }, [stats]);
+  const statsMax = Math.max(1, ...statsDays.map((d) => d.views));
+  const views7 = statsDays.slice(-7).reduce((sum, d) => sum + d.views, 0);
+
 
   // Copy Profile URL
   const handleCopyLink = useCallback(() => {
@@ -318,7 +343,7 @@ export default function DashboardPage() {
               <span className="metric-tag">03 // CONTENT BLOCKS</span>
               <div className="metric-value-row">
                 <span className="metric-number">
-                  {blockCount !== null ? blockCount : (fetchLoading ? '...' : 'Loaded')}
+                  {blockCount !== null ? blockCount : (fetchLoading ? '...' : '—')}
                 </span>
                 <span className="metric-unit">blocks</span>
               </div>
@@ -335,6 +360,65 @@ export default function DashboardPage() {
               <span className="metric-sub">
                 {user.isAdmin ? 'Full platform administration access' : 'Standard portfolio account'}
               </span>
+            </div>
+          </motion.div>
+
+          {/* Visitor Stats (rendered unconditionally so the stagger reaches it; see AGENTS.md) */}
+          <motion.div className="dash-hub-section" variants={itemVariants}>
+            <div className="section-title-wrap">
+              <h2 className="dash-section-title">VISITOR STATS</h2>
+              <span className="section-tag-mono">// LAST 30 DAYS</span>
+            </div>
+
+            <div className="dash-hub-card dash-stats-card">
+              {stats === null && <p className="hub-desc">Loading stats...</p>}
+              {stats === false && <p className="hub-desc">Stats are unavailable right now.</p>}
+              {stats && (
+                <>
+                  <div className="dash-stats-totals">
+                    <div>
+                      <span className="dash-stats-number">{views7}</span>
+                      <span className="hub-tag">VIEWS · 7 DAYS</span>
+                    </div>
+                    <div>
+                      <span className="dash-stats-number">{stats.totalViews}</span>
+                      <span className="hub-tag">VIEWS · 30 DAYS</span>
+                    </div>
+                    <BarChart3 size={22} className="dash-stats-icon" aria-hidden="true" />
+                  </div>
+
+                  <div className="dash-stats-chart" role="img" aria-label={`Daily profile views over the last ${stats.days} days, ${stats.totalViews} in total`}>
+                    {statsDays.map((d) => (
+                      <span
+                        key={d.day}
+                        className="dash-stats-bar"
+                        style={{ height: `${Math.max(3, (d.views / statsMax) * 100)}%` }}
+                        title={`${d.day}: ${d.views} view${d.views === 1 ? '' : 's'}`}
+                      />
+                    ))}
+                  </div>
+
+                  <h3 className="hub-title dash-stats-subtitle">Most clicked links</h3>
+                  {stats.topClicks.length === 0 ? (
+                    <p className="hub-desc">No link clicks yet. Share your profile to start collecting them.</p>
+                  ) : (
+                    <ol className="dash-stats-clicks">
+                      {stats.topClicks.map((c) => {
+                        const url = c.target.split('|').slice(1).join('|');
+                        return (
+                          <li key={c.target}>
+                            <span className="dash-stats-url" title={url}>{url}</span>
+                            <span className="hub-tag">{c.count}</span>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  )}
+                  <p className="section-tag-mono dash-stats-note">
+                    Counts only. Your own visits and bots are not counted; repeat visits count each time.
+                  </p>
+                </>
+              )}
             </div>
           </motion.div>
 
@@ -452,7 +536,7 @@ export default function DashboardPage() {
       {showSettingsModal && (
         <AccountSettingsModal
           onClose={() => setShowSettingsModal(false)}
-          onUsernameChanged={(newUsername) => {
+          onUsernameChanged={() => {
             fetchProfileDetails();
           }}
           editorTheme={theme}

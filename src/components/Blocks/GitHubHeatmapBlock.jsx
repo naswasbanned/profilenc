@@ -126,6 +126,7 @@ export default function GitHubHeatmapBlock({ data }) {
   useEffect(() => {
     if (!username) return;
     let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- shows the spinner for a new username fetch
     setLoading(true);
     setError(null);
 

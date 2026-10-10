@@ -11,14 +11,12 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(() => getStoredToken());
-  const [loading, setLoading] = useState(true);
+  // Only a stored token needs verifying, so without one there is nothing to wait for
+  const [loading, setLoading] = useState(() => Boolean(getStoredToken()));
 
   // On mount, verify stored token
   useEffect(() => {
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+    if (!token) return;
 
     apiJson('/api/auth/me', { token, errorMessage: 'Invalid token' })
       .then((data) => {

@@ -130,6 +130,18 @@ export async function runMigrations() {
     )
   `);
 
+  // Daily profile analytics counters. No visitor identifiers are stored.
+  await query(`
+    CREATE TABLE IF NOT EXISTS profile_stats_daily (
+      user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      day         DATE NOT NULL DEFAULT CURRENT_DATE,
+      kind        TEXT NOT NULL,
+      target      TEXT NOT NULL DEFAULT '',
+      count       INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (user_id, day, kind, target)
+    )
+  `);
+
   // Indexes
   await query(`
     CREATE INDEX IF NOT EXISTS idx_user_content_user_key ON user_content(user_id, key)

@@ -3,6 +3,7 @@ import { Calendar, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
+import CanvasPortal from './CanvasPortal';
 
 export default function TimelineBlock({ data = {} }) {
   const { items = [] } = data;
@@ -102,7 +103,7 @@ export default function TimelineBlock({ data = {} }) {
       </div>
 
       {/* Lightbox Image Preview Modal */}
-      <AnimatePresence>
+      <CanvasPortal><AnimatePresence>
         {previewImage && (
           <motion.div
             className="timeline-lightbox-backdrop"
@@ -113,7 +114,7 @@ export default function TimelineBlock({ data = {} }) {
           >
             {hintVisible && (
               <div className="modal-double-click-hint">
-                <span>Click once more outside to close (or use ✕)</span>
+                <span>Click once more outside to close (or use the close button)</span>
               </div>
             )}
             <motion.div
@@ -141,7 +142,7 @@ export default function TimelineBlock({ data = {} }) {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence></CanvasPortal>
     </>
   );
 }

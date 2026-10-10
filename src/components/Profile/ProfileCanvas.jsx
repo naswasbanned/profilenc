@@ -1,13 +1,15 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Folder, Settings } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Folder, LayoutDashboard, Settings } from 'lucide-react';
 import BlockRenderer from '../Blocks/BlockRenderer';
 import AccountSettingsModal from '../Editor/AccountSettingsModal';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { getIcon, isIconDisabled } from '../../lib/icons';
 import { getCanvasBackground, getCanvasStyleAttributes } from '../../lib/canvasStyle';
+import { isTabEmpty } from '../../lib/blockEmpty';
+import { clickTarget, track } from '../../lib/stats';
 import '../../styles/app.css';
 import '../Blocks/Blocks.css';
 
@@ -149,7 +151,8 @@ export default function ProfileCanvas({
   const isOwner = authUser?.username?.toLowerCase() === username?.toLowerCase();
   const [showAccountSettings, setShowAccountSettings] = useState(false);
 
-  const tabs = (content?.tabs || []).filter((t) => t.enabled !== false);
+  // Visitors skip tabs with nothing to show; the editor keeps every tab so it can be filled
+  const tabs = (content?.tabs || []).filter((t) => t.enabled !== false && (isEditing || !isTabEmpty(t)));
   const currentTab = tabs.find((t) => t.id === activeTabId) || tabs[0];
   const blocks = currentTab?.blocks || [];
 
@@ -171,6 +174,10 @@ export default function ProfileCanvas({
     <div
       className="app"
       {...canvasAttributes}
+      onClickCapture={isEditing || isOwner ? undefined : (e) => {
+        const target = clickTarget(e.target);
+        if (target) track(username, 'click', target);
+      }}
       style={{
         backgroundColor: tabBgColor,
         backgroundImage: tabBgGradient || undefined,
@@ -200,21 +207,13 @@ export default function ProfileCanvas({
         </div>
       )}
 
-      {/* Sticky Profilenc Home Badge on Top-Left */}
-      {!isEditing && (
-        <Link
-          to="/"
-          className="profile-home-badge"
-          title="Back to Profilenc"
-          aria-label="Back to Profilenc"
-        >
-          <img src="/logo.svg" alt="Profilenc" className="profile-home-badge-img" />
-        </Link>
-      )}
-
       {/* Settings + Edit FABs for profile owner */}
       {isOwner && !isEditing && (
         <div className="profile-fab-stack">
+          <Link to="/dashboard" className="profile-settings-fab" title="Back to your dashboard">
+            <LayoutDashboard size={15} />
+            Dashboard
+          </Link>
           <button
             type="button"
             className="profile-settings-fab"
@@ -276,7 +275,9 @@ export default function ProfileCanvas({
           >
             {blocks.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '60px 20px', color: '#666' }}>
-                <p style={{ fontSize: '1.05rem', marginBottom: '8px' }}>This tab is currently empty.</p>
+                <p style={{ fontSize: '1.05rem', marginBottom: '8px' }}>
+                  {isEditing ? 'This tab is currently empty.' : 'Nothing here yet.'}
+                </p>
                 {isEditing && (
                   <p style={{ fontSize: '0.85rem', color: '#888' }}>
                     Click <strong>"+ Add Block"</strong> in the top toolbar to insert content.
@@ -304,7 +305,11 @@ export default function ProfileCanvas({
 
       {/* Global Profile Footer */}
       <footer className="app-footer dev">
-        <p>© {new Date().getFullYear()} {username} • Built with Profilenc</p>
+        <p>© {new Date().getFullYear()} {username}</p>
+        <Link to="/" className="app-footer-brand">
+          <img src="/logo.svg" alt="" />
+          Made with Profilenc
+        </Link>
       </footer>
     </div>
   );

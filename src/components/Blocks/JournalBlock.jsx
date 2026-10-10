@@ -31,16 +31,19 @@ import {
   AlertCircle,
   ArrowRight,
   Download,
+  Share2,
 } from 'lucide-react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import ImageUploadPicker from '../Editor/ImageUploadPicker';
 import { safeUrl } from '../../lib/safeUrl';
+import CanvasPortal from './CanvasPortal';
+import { PAPER_STYLES, PAPER_STYLE_KEY, readPaperStyle, isProfilePath, entryIdFromPath } from '../../lib/journal';
 import { getIcon, isIconDisabled } from '../../lib/icons';
 
 const MOOD_OPTIONS = [
-  { emoji: '', label: '🚫 None', isNone: true },
+  { emoji: '', label: 'None', isNone: true },
   { emoji: '💡', label: 'Inspired' },
   { emoji: '🎯', label: 'Focused' },
   { emoji: '☕', label: 'Relaxed' },
@@ -52,12 +55,9 @@ const MOOD_OPTIONS = [
   { emoji: '🌿', label: 'Mindful' },
 ];
 
-// Paper looks offered by "Save as image"; ids map to `.journal-paper.is-<id>`
-const PAPER_STYLES = [
-  { id: 'notebook', label: 'Notebook', swatch: '#fbf7ee' },
-  { id: 'typewriter', label: 'Typewriter', swatch: '#ffffff' },
-  { id: 'midnight', label: 'Midnight', swatch: '#151821' },
-];
+// Only devices that can hand a PNG to the share sheet get the Share button (mostly phones)
+const CAN_SHARE_FILES = typeof navigator !== 'undefined' && typeof File !== 'undefined'
+  && Boolean(navigator.canShare?.({ files: [new File([''], 'entry.png', { type: 'image/png' })] }));
 
 function getEntryDateValue(entry) {
   if (!entry) return 0;
@@ -312,39 +312,82 @@ export default function JournalBlock({
   // Sorting state: 'newest' (default) or 'oldest'
   const [sortBy, setSortBy] = useState('newest');
 
-  // Reader Modal State
-  const [activeArticle, setActiveArticle] = useState(null);
-
-  // Export-as-image: the offscreen paper sheet is captured, not the modal itself
   const { username: rawUsername } = useParams();
   const username = rawUsername?.replace(/^@/, '');
+
+  // Reader Modal State. On a public profile the open entry is mirrored in the
+  // address bar (/@user/journal/<id>), so a pasted entry link opens it directly.
+  const location = useLocation();
+  const navigate = useNavigate();
+  const syncsUrl = !isEditing && isProfilePath(location.pathname);
+  const [activeArticle, setActiveArticle] = useState(() => {
+    const linkedId = syncsUrl ? entryIdFromPath(location.pathname) : null;
+    return (linkedId && list.find((entry) => entry.id === linkedId)) || null;
+  });
+  const profilePath = `/${rawUsername || ''}`;
+
+  const openArticle = (entry) => {
+    setShowExportOptions(false);
+    setActiveArticle(entry);
+    if (syncsUrl && entry.id) {
+      navigate(`${profilePath}/journal/${encodeURIComponent(entry.id)}`, { replace: true });
+    }
+  };
+  const closeArticle = () => {
+    setActiveArticle(null);
+    // window.location, not the render-time location: the Escape handler holds an older closure
+    if (syncsUrl && entryIdFromPath(window.location.pathname)) navigate(profilePath, { replace: true });
+  };
+
+  // Export-as-image: the offscreen paper sheet is captured, not the modal itself
   const paperRef = useRef(null);
   const [exportState, setExportState] = useState('idle'); // 'idle' | 'busy' | 'error'
   const [showExportOptions, setShowExportOptions] = useState(false);
-  const [paperStyle, setPaperStyle] = useState('notebook');
-  const handleExportImage = async () => {
+  const [paperStyle, setPaperStyle] = useState(() => readPaperStyle());
+  const choosePaperStyle = (id) => {
+    setPaperStyle(id);
+    try {
+      localStorage.setItem(PAPER_STYLE_KEY, id);
+    } catch {
+      // Not remembering the choice is fine when storage is blocked
+    }
+  };
+  const handleExportImage = async (mode) => {
     setExportState('busy');
     try {
       await document.fonts.ready;
-      const { toPng } = await import('html-to-image'); // separate chunk, only loaded on export
-      const dataUrl = await toPng(paperRef.current, { pixelRatio: 2, cacheBust: true });
-      const link = document.createElement('a');
-      link.href = dataUrl;
-      link.download = `${(activeArticle.title || 'journal-entry').replace(/[^\w-]+/g, '-').slice(0, 60)}.png`;
-      link.click();
+      const { toBlob } = await import('html-to-image'); // separate chunk, only loaded on export
+      const blob = await toBlob(paperRef.current, { pixelRatio: 2, cacheBust: true });
+      const filename = `${(activeArticle.title || 'journal-entry').replace(/[^\w-]+/g, '-').slice(0, 60)}.png`;
+      if (mode === 'share') {
+        const file = new File([blob], filename, { type: 'image/png' });
+        await navigator.share({ files: [file], title: activeArticle.title || 'Journal entry' });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
       setExportState('idle');
-    } catch {
+    } catch (err) {
+      // Dismissing the share sheet is not a failure
+      if (err?.name === 'AbortError') {
+        setExportState('idle');
+        return;
+      }
       setExportState('error');
       setTimeout(() => setExportState('idle'), 3500);
     }
   };
-  const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(() => setActiveArticle(null));
+  const { handleBackdropClick, hintVisible } = useDoubleBackdropClose(closeArticle);
 
   // Close reader modal on Escape key press and lock background scroll
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
-        setActiveArticle(null);
+        closeArticle();
       }
     };
     if (!activeArticle) return undefined;
@@ -361,19 +404,9 @@ export default function JournalBlock({
       body.style.overflow = previousOverflow;
       body.style.paddingRight = previousPaddingRight;
     };
+    // closeArticle only reads live values (window.location, stable setters), so re-binding per render is unneeded
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeArticle]);
-
-  // The modal is portaled out of the transformed block wrapper, so it carries
-  // the canvas data-* style attributes along for the preset selectors.
-  const [canvasAttributes, setCanvasAttributes] = useState({});
-  const openArticle = (entry, e) => {
-    const canvasEl = e.currentTarget.closest('[data-design-style]');
-    setCanvasAttributes(canvasEl
-      ? Object.fromEntries([...canvasEl.attributes].filter((a) => a.name.startsWith('data-')).map((a) => [a.name, a.value]))
-      : {});
-    setShowExportOptions(false);
-    setActiveArticle(entry);
-  };
 
   // Quick Form State
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -732,7 +765,7 @@ export default function JournalBlock({
                       }}
                       title={moodEmoji ? 'Hide emoji from mood tag' : 'Show emoji with mood tag'}
                     >
-                      {moodEmoji ? '🚫 No Emoji' : '✨ Show Emoji'}
+                      {moodEmoji ? 'Hide emoji' : 'Show emoji'}
                     </button>
                   )}
                 </div>
@@ -1065,7 +1098,7 @@ export default function JournalBlock({
               <div
                 key={entry.id || idx}
                 className={`journal-entry-card ${cover ? 'has-cover' : ''} ${entry.pinned ? 'is-pinned-card' : ''}`}
-                onClick={(e) => openArticle(entry, e)}
+                onClick={() => openArticle(entry)}
               >
                 {/* Card Cover Photo with optional Spoiler Effect */}
                 {cover && (
@@ -1150,12 +1183,11 @@ export default function JournalBlock({
         </div>
       )}
 
-      {/* Reader Modal: portaled so transformed ancestors can't trap its fixed position or z-index */}
-      {createPortal(
+      {/* Reader Modal */}
+      <CanvasPortal>
       <AnimatePresence>
         {activeArticle && (
           <motion.div
-            {...canvasAttributes}
             className="article-modal-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -1178,7 +1210,7 @@ export default function JournalBlock({
               <button
                 type="button"
                 className="article-modal-close-btn"
-                onClick={() => setActiveArticle(null)}
+                onClick={closeArticle}
                 title="Close reader (Esc)"
                 aria-label="Close reader"
               >
@@ -1228,22 +1260,34 @@ export default function JournalBlock({
                         key={s.id}
                         type="button"
                         className={`journal-sort-btn ${paperStyle === s.id ? 'active' : ''}`}
-                        onClick={() => setPaperStyle(s.id)}
+                        onClick={() => choosePaperStyle(s.id)}
                         aria-pressed={paperStyle === s.id}
                       >
                         <span className="journal-export-swatch" style={{ background: s.swatch }} aria-hidden="true" />
                         {s.label}
                       </button>
                     ))}
-                    <button
-                      type="button"
-                      className="journal-quick-add-btn"
-                      onClick={handleExportImage}
-                      disabled={exportState === 'busy'}
-                    >
-                      {exportState === 'error' ? <AlertCircle size={13} /> : <Download size={13} />}
-                      {exportState === 'busy' ? 'Saving...' : exportState === 'error' ? 'Export failed, retry' : 'Download PNG'}
-                    </button>
+                    <div className="journal-export-actions">
+                      {CAN_SHARE_FILES && (
+                        <button
+                          type="button"
+                          className="journal-sort-btn"
+                          onClick={() => handleExportImage('share')}
+                          disabled={exportState === 'busy'}
+                        >
+                          <Share2 size={13} /> Share
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        className="journal-quick-add-btn"
+                        onClick={() => handleExportImage('download')}
+                        disabled={exportState === 'busy'}
+                      >
+                        {exportState === 'error' ? <AlertCircle size={13} /> : <Download size={13} />}
+                        {exportState === 'busy' ? 'Saving...' : exportState === 'error' ? 'Export failed, retry' : 'Download PNG'}
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -1265,9 +1309,8 @@ export default function JournalBlock({
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>,
-      document.body
-      )}
+      </AnimatePresence>
+      </CanvasPortal>
 
       {/* Offscreen paper sheet that "Save as image" captures */}
       {activeArticle && createPortal(
