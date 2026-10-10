@@ -24,6 +24,8 @@ export const LIMITS = {
   displayName: 120,
   bio: 2000,
   avatarUrl: 2048,
+  ogTitle: 90,
+  ogDescription: 200,
   suggestionName: 120,
   suggestionEmail: 200,
   suggestionTitle: 200,
@@ -83,4 +85,11 @@ export function firstLengthError(checks) {
     if (error) return error;
   }
   return null;
+}
+
+/** True for a path into this user's own upload folder, e.g. `/uploads/12/abc.webp`. */
+export function isOwnUploadUrl(value, userId) {
+  if (typeof value !== 'string') return false;
+  const match = value.trim().match(/^\/uploads\/(\d+)\/[A-Za-z0-9_-][A-Za-z0-9._-]*$/);
+  return Boolean(match) && Number(match[1]) === Number(userId);
 }

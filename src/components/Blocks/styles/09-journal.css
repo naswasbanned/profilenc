@@ -1264,3 +1264,46 @@
 .journal-export-actions .journal-quick-add-btn {
   margin-left: 0;
 }
+
+/* --- Share menu in the reader --- */
+.journal-share-wrap {
+  position: relative;
+}
+
+.journal-share-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 5;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.12));
+  background-color: var(--bg-color, #12151e);
+  background-image: linear-gradient(var(--card-bg, transparent), var(--card-bg, transparent));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.journal-share-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--card-text-color, #f1f5f9);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-align: left;
+  cursor: pointer;
+}
+
+.journal-share-menu button:hover,
+.journal-share-menu button:focus-visible {
+  background: color-mix(in srgb, var(--color-accent-primary, #00f0aa) 14%, transparent);
+  color: var(--color-accent-primary, #00f0aa);
+  outline: none;
+}

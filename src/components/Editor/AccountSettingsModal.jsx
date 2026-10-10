@@ -38,6 +38,10 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged, edito
   const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || '');
   const [bio, setBio] = useState(user?.bio || '');
   const [isPublic, setIsPublic] = useState(user?.isPublic !== false);
+  // Link-preview overrides; empty means the generated card is used
+  const [ogImageUrl, setOgImageUrl] = useState(user?.ogImageUrl || '');
+  const [ogTitle, setOgTitle] = useState(user?.ogTitle || '');
+  const [ogDescription, setOgDescription] = useState(user?.ogDescription || '');
 
   // Username validation state
   const [usernameStatus, setUsernameStatus] = useState({ state: 'clean', msg: '' }); // 'clean' | 'checking' | 'available' | 'taken' | 'invalid'
@@ -75,15 +79,20 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged, edito
     const initBio = (user?.bio || '').trim();
     const curPublic = isPublic !== false;
     const initPublic = user?.isPublic !== false;
+    const ogChanged =
+      ogImageUrl.trim() !== (user?.ogImageUrl || '') ||
+      ogTitle.trim() !== (user?.ogTitle || '') ||
+      ogDescription.trim() !== (user?.ogDescription || '');
 
     return (
       curName !== initName ||
       curUser !== initUser ||
       curAvatar !== initAvatar ||
       curBio !== initBio ||
-      curPublic !== initPublic
+      curPublic !== initPublic ||
+      ogChanged
     );
-  }, [displayName, username, avatarUrl, bio, isPublic, user]);
+  }, [displayName, username, avatarUrl, bio, isPublic, ogImageUrl, ogTitle, ogDescription, user]);
 
   // Compute if Security & Password has unsaved input
   const isSecurityDirty = useMemo(() => {
@@ -140,6 +149,9 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged, edito
         avatarUrl: avatarUrl.trim(),
         bio: bio.trim(),
         isPublic,
+        ogImageUrl: ogImageUrl.trim(),
+        ogTitle: ogTitle.trim(),
+        ogDescription: ogDescription.trim(),
       });
 
       setProfileMsg({ type: 'success', text: 'Profile updated successfully!' });
@@ -461,6 +473,58 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged, edito
                   className="editor-text-input full-width"
                   style={{ color: 'var(--fn-editor-ink)', background: 'var(--fn-editor-paper-light)', border: '2px solid var(--fn-editor-line)' }}
                   rows={3}
+                />
+              </div>
+
+              {/* Link preview shown when the profile link is shared */}
+              <div className="editor-control" style={{ margin: 0 }}>
+                <label style={{ color: 'var(--fn-editor-ink)' }}>
+                  Share preview
+                  {(ogImageUrl || ogTitle || ogDescription) && (
+                    <button
+                      type="button"
+                      className="editor-btn editor-btn-ghost"
+                      onClick={() => { setOgImageUrl(''); setOgTitle(''); setOgDescription(''); }}
+                    >
+                      Reset to automatic
+                    </button>
+                  )}
+                </label>
+                <p style={{ fontSize: '0.72rem', color: 'var(--fn-editor-muted)', margin: '0 0 10px' }}>
+                  What people see when your profile link is posted in chats and social apps. Leave empty to use the
+                  automatic card made from your name, photo and bio.
+                </p>
+                <div className="account-og-preview" aria-hidden="true">
+                  {ogImageUrl ? (
+                    <img src={ogImageUrl} alt="" />
+                  ) : (
+                    <img src={`/api/og/image/@${user?.username}`} alt="" />
+                  )}
+                  <div>
+                    <strong>{(ogTitle || displayName || user?.username || '').trim()} · Profilenc</strong>
+                    <span>{(ogDescription || bio || '').trim().slice(0, 120)}</span>
+                  </div>
+                </div>
+                <ImageUploadPicker label="Custom preview image (1200 x 630 works best)" value={ogImageUrl} onChange={setOgImageUrl} />
+                <input
+                  type="text"
+                  value={ogTitle}
+                  onChange={(e) => setOgTitle(e.target.value)}
+                  maxLength={90}
+                  placeholder="Preview title (optional)"
+                  aria-label="Preview title"
+                  className="editor-text-input full-width"
+                  style={{ marginTop: '8px' }}
+                />
+                <textarea
+                  value={ogDescription}
+                  onChange={(e) => setOgDescription(e.target.value)}
+                  maxLength={200}
+                  placeholder="Preview description (optional)"
+                  aria-label="Preview description"
+                  className="editor-text-input full-width"
+                  style={{ marginTop: '8px' }}
+                  rows={2}
                 />
               </div>
 

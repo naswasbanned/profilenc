@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readPaperStyle, PAPER_STYLE_KEY, isProfilePath, entryIdFromPath, findTabWithEntry } from './journal';
+import { readPaperStyle, PAPER_STYLE_KEY, isProfilePath, entryIdFromPath, findTabWithEntry, entryShareUrl } from './journal';
 
 const store = (value) => ({ getItem: (k) => (k === PAPER_STYLE_KEY ? value : null) });
 
@@ -44,5 +44,12 @@ describe('findTabWithEntry', () => {
     expect(findTabWithEntry(content, 'nope')).toBe(null);
     expect(findTabWithEntry(content, null)).toBe(null);
     expect(findTabWithEntry(undefined, 'e1')).toBe(null);
+  });
+});
+
+describe('entryShareUrl', () => {
+  it('builds an absolute entry link with or without the @', () => {
+    expect(entryShareUrl('https://p.test/', '@nas', 'entry-1')).toBe('https://p.test/@nas/journal/entry-1');
+    expect(entryShareUrl('https://p.test', 'nas', 'a b')).toBe('https://p.test/@nas/journal/a%20b');
   });
 });

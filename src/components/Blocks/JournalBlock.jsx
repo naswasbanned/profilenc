@@ -32,6 +32,8 @@ import {
   ArrowRight,
   Download,
   Share2,
+  Copy,
+  ChevronDown,
 } from 'lucide-react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useDoubleBackdropClose } from '../../hooks/useDoubleBackdropClose';
@@ -39,7 +41,7 @@ import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import ImageUploadPicker from '../Editor/ImageUploadPicker';
 import { safeUrl } from '../../lib/safeUrl';
 import CanvasPortal from './CanvasPortal';
-import { PAPER_STYLES, PAPER_STYLE_KEY, readPaperStyle, isProfilePath, entryIdFromPath } from '../../lib/journal';
+import { PAPER_STYLES, PAPER_STYLE_KEY, readPaperStyle, isProfilePath, entryIdFromPath, entryShareUrl } from '../../lib/journal';
 import { getIcon, isIconDisabled } from '../../lib/icons';
 
 const MOOD_OPTIONS = [
@@ -328,6 +330,8 @@ export default function JournalBlock({
 
   const openArticle = (entry) => {
     setShowExportOptions(false);
+    setShareMenuOpen(false);
+    setCopyState('idle');
     setActiveArticle(entry);
     if (syncsUrl && entry.id) {
       navigate(`${profilePath}/journal/${encodeURIComponent(entry.id)}`, { replace: true });
@@ -343,6 +347,35 @@ export default function JournalBlock({
   const paperRef = useRef(null);
   const [exportState, setExportState] = useState('idle'); // 'idle' | 'busy' | 'error'
   const [showExportOptions, setShowExportOptions] = useState(false);
+
+  // Share menu: copy link, save as image, or the device share sheet
+  const [shareMenuOpen, setShareMenuOpen] = useState(false);
+  const [copyState, setCopyState] = useState('idle'); // 'idle' | 'copied' | 'manual'
+  const shareButtonRef = useRef(null);
+  const shareUrl = activeArticle?.id ? entryShareUrl(window.location.origin, rawUsername, activeArticle.id) : '';
+  const closeShareMenu = () => {
+    setShareMenuOpen(false);
+    shareButtonRef.current?.focus();
+  };
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopyState('copied');
+      setTimeout(() => setCopyState('idle'), 2200);
+      closeShareMenu();
+    } catch {
+      // Clipboard blocked (permissions, insecure origin): show the link to copy by hand
+      setCopyState('manual');
+    }
+  };
+  const handleShareLink = async () => {
+    closeShareMenu();
+    try {
+      await navigator.share({ title: activeArticle?.title || 'Journal entry', url: shareUrl });
+    } catch {
+      // Dismissed or unsupported: nothing to do
+    }
+  };
   const [paperStyle, setPaperStyle] = useState(() => readPaperStyle());
   const choosePaperStyle = (id) => {
     setPaperStyle(id);
@@ -1241,16 +1274,70 @@ export default function JournalBlock({
                   <span className="journal-read-time">
                     <Clock size={12} /> {activeReadTime} min read
                   </span>
-                  <button
-                    type="button"
-                    className={`journal-sort-btn journal-export-btn ${showExportOptions ? 'active' : ''}`}
-                    onClick={() => setShowExportOptions((v) => !v)}
-                    aria-expanded={showExportOptions}
-                    title="Choose a paper style and download this entry as a PNG"
-                  >
-                    <Download size={12} /> Save as image
-                  </button>
+                  <div className="journal-share-wrap">
+                    <button
+                      ref={shareButtonRef}
+                      type="button"
+                      className={`journal-sort-btn journal-export-btn ${shareMenuOpen || showExportOptions ? 'active' : ''}`}
+                      onClick={() => setShareMenuOpen((v) => !v)}
+                      aria-haspopup="menu"
+                      aria-expanded={shareMenuOpen}
+                    >
+                      {copyState === 'copied' ? <Check size={12} /> : <Share2 size={12} />}
+                      {copyState === 'copied' ? 'Link copied' : 'Share'}
+                      <ChevronDown size={12} aria-hidden="true" />
+                    </button>
+                    {shareMenuOpen && (
+                      <div
+                        className="journal-share-menu"
+                        role="menu"
+                        onKeyDown={(e) => {
+                          // Escape closes only the menu, not the whole reader
+                          if (e.key === 'Escape') {
+                            e.stopPropagation();
+                            closeShareMenu();
+                          }
+                        }}
+                      >
+                        {shareUrl && (
+                          <button type="button" role="menuitem" autoFocus onClick={handleCopyLink}>
+                            <Copy size={13} /> Copy link
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          role="menuitem"
+                          autoFocus={!shareUrl}
+                          onClick={() => {
+                            setShowExportOptions(true);
+                            closeShareMenu();
+                          }}
+                        >
+                          <Download size={13} /> Save as image
+                        </button>
+                        {shareUrl && typeof navigator !== 'undefined' && navigator.share && (
+                          <button type="button" role="menuitem" onClick={handleShareLink}>
+                            <Share2 size={13} /> Share via...
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
+
+                {copyState === 'manual' && (
+                  <div className="journal-export-options">
+                    <label className="journal-input-label" htmlFor="journal-share-url">Copy this link</label>
+                    <input
+                      id="journal-share-url"
+                      className="journal-form-input"
+                      readOnly
+                      value={shareUrl}
+                      autoFocus
+                      onFocus={(e) => e.target.select()}
+                    />
+                  </div>
+                )}
 
                 {showExportOptions && (
                   <div className="journal-export-options" role="group" aria-label="Paper style">

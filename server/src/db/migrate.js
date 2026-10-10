@@ -130,6 +130,11 @@ export async function runMigrations() {
     )
   `);
 
+  // Custom link-preview overrides (all optional; the generated card is used otherwise)
+  await query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS og_image_url TEXT`);
+  await query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS og_title TEXT`);
+  await query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS og_description TEXT`);
+
   // Daily profile analytics counters. No visitor identifiers are stored.
   await query(`
     CREATE TABLE IF NOT EXISTS profile_stats_daily (

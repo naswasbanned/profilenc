@@ -24,9 +24,9 @@
     "semantic_hash": ""
   },
   "server/src/db/migrate.js": {
-    "mtime": 1791650832.88231,
-    "seen": 1791651636.4052525,
-    "ast_hash": "845caf13f2788e114ffe1f41a209b53d",
+    "mtime": 1791653666.3838072,
+    "seen": 1791654612.7482138,
+    "ast_hash": "9acc3828ca6f4bd0b019cab531b257c3",
     "semantic_hash": ""
   },
   "server/src/db/seeds/templates.js": {
@@ -60,9 +60,9 @@
     "semantic_hash": ""
   },
   "server/src/routes/auth.js": {
-    "mtime": 1790254056.3803716,
-    "seen": 1790259068.9240272,
-    "ast_hash": "51f6a4e2d15997af9e3f6fea697e30d6",
+    "mtime": 1791654064.0521288,
+    "seen": 1791654612.7482429,
+    "ast_hash": "089e36db1f97b9b467fdb59d4057aa08",
     "semantic_hash": ""
   },
   "server/src/routes/images.js": {
@@ -150,9 +150,9 @@
     "semantic_hash": ""
   },
   "src/components/Blocks/JournalBlock.jsx": {
-    "mtime": 1791650301.8920135,
-    "seen": 1791651636.4052954,
-    "ast_hash": "1e569ad45e2049cc47446d36d1975a9a",
+    "mtime": 1791654266.2812092,
+    "seen": 1791654612.7482684,
+    "ast_hash": "d728804999b8b0eabb3f98ad7b22ee2a",
     "semantic_hash": ""
   },
   "src/components/Blocks/MediaReviewsBlock.jsx": {
@@ -210,9 +210,9 @@
     "semantic_hash": ""
   },
   "src/components/Editor/AccountSettingsModal.jsx": {
-    "mtime": 1791649916.232144,
-    "seen": 1791651636.4053054,
-    "ast_hash": "25e0cca536966ceca40a508d14545a71",
+    "mtime": 1791654132.649963,
+    "seen": 1791654612.7482796,
+    "ast_hash": "a4a2345540fa40028f596772cc7401d6",
     "semantic_hash": ""
   },
   "src/components/Editor/AddBlockModal.jsx": {
@@ -708,9 +708,9 @@
     "semantic_hash": ""
   },
   "server/src/lib/validate.js": {
-    "mtime": 1790258123.5741909,
-    "seen": 1790259068.9240127,
-    "ast_hash": "d171368593de5a52c438fc7f48ebb4e9",
+    "mtime": 1791653686.9101467,
+    "seen": 1791654612.7482324,
+    "ast_hash": "008b177817a52f091fd1f740a7a81e27",
     "semantic_hash": ""
   },
   "server/src/middleware/clientIp.js": {
@@ -882,15 +882,15 @@
     "semantic_hash": ""
   },
   "server/src/routes/og.js": {
-    "mtime": 1791650503.5854757,
-    "seen": 1791651636.4052749,
-    "ast_hash": "f7fb780e4da7ca1bcbf70601c4011dc9",
+    "mtime": 1791653509.6244292,
+    "seen": 1791654612.748245,
+    "ast_hash": "4b5ec6d2fcaaee2bdfd5751364fc7759",
     "semantic_hash": ""
   },
   "server/src/routes/og.test.js": {
-    "mtime": 1791650746.4779804,
-    "seen": 1791651636.4052758,
-    "ast_hash": "69d87ad860b50b2726b00eb0d506309d",
+    "mtime": 1791653818.0754144,
+    "seen": 1791654612.748246,
+    "ast_hash": "2cc2c7eba7adc0cc494dbec903ef9fe1",
     "semantic_hash": ""
   },
   "server/src/routes/stats.js": {
@@ -906,15 +906,15 @@
     "semantic_hash": ""
   },
   "src/lib/journal.js": {
-    "mtime": 1791650155.3195767,
-    "seen": 1791651636.4053874,
-    "ast_hash": "a7baacc6ca405c1fec3f5fa0c6912b4b",
+    "mtime": 1791654266.2692993,
+    "seen": 1791654612.7483737,
+    "ast_hash": "4235392314a8452e4f57178308ded2cc",
     "semantic_hash": ""
   },
   "src/lib/journal.test.js": {
-    "mtime": 1791650155.3182411,
-    "seen": 1791651636.4053888,
-    "ast_hash": "2a7aa15356a6915206160c197377d786",
+    "mtime": 1791654266.280287,
+    "seen": 1791654612.7483747,
+    "ast_hash": "51536cc1cc7212315e5075aebc070490",
     "semantic_hash": ""
   },
   "src/lib/stats.js": {
@@ -927,6 +927,30 @@
     "mtime": 1791651044.4677937,
     "seen": 1791651636.4053957,
     "ast_hash": "a932d85f092dfdc666bb31dedfc62244",
+    "semantic_hash": ""
+  },
+  "server/src/lib/ogCard.js": {
+    "mtime": 1791653924.2775474,
+    "seen": 1791654612.7482235,
+    "ast_hash": "a0a722560f7619bc17a486b5c924137d",
+    "semantic_hash": ""
+  },
+  "server/src/lib/ogCard.test.js": {
+    "mtime": 1791653369.2985275,
+    "seen": 1791654612.748225,
+    "ast_hash": "fd846c126ec1a503802d6c1f3303fd80",
+    "semantic_hash": ""
+  },
+  "server/src/lib/validate.test.js": {
+    "mtime": 1791653713.772743,
+    "seen": 1791654612.7482338,
+    "ast_hash": "38d01b7a9a69e0065da33f3ad131b9c4",
+    "semantic_hash": ""
+  },
+  "server/src/services/ogImageService.js": {
+    "mtime": 1791653469.3341703,
+    "seen": 1791654612.7482545,
+    "ast_hash": "2a29bdf41eaebd0c00742060e621b08b",
     "semantic_hash": ""
   }
 }

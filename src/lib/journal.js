@@ -44,3 +44,9 @@ export function findTabWithEntry(content, entryId) {
   }
   return null;
 }
+
+/** Absolute link to one journal entry, e.g. https://site/@nas/journal/entry-1. */
+export function entryShareUrl(origin, username, entryId) {
+  const user = String(username || '').replace(/^@/, '');
+  return `${String(origin || '').replace(/\/+$/, '')}/@${user}/journal/${encodeURIComponent(entryId)}`;
+}

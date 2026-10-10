@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { query } from '../config/db.js';
 import auth from '../middleware/auth.js';
-import { LIMITS, firstLengthError, isSafeUrl } from '../lib/validate.js';
+import { LIMITS, firstLengthError, isSafeUrl, isOwnUploadUrl } from '../lib/validate.js';
 import {
   loginAccountLimiter,
   loginIpLimiter,
@@ -281,7 +281,7 @@ router.post('/login', loginIpLimiter, loginAccountLimiter, async (req, res) => {
 router.get('/me', auth, async (req, res) => {
   try {
     const { rows } = await query(
-      'SELECT id, username, email, display_name, avatar_url, bio, is_public, is_admin, template_slug, created_at FROM users WHERE id = $1',
+      'SELECT id, username, email, display_name, avatar_url, bio, is_public, is_admin, template_slug, created_at, og_image_url, og_title, og_description FROM users WHERE id = $1',
       [req.user.id]
     );
 
@@ -301,6 +301,9 @@ router.get('/me', auth, async (req, res) => {
       isAdmin: !!user.is_admin,
       templateSlug: user.template_slug,
       createdAt: user.created_at,
+      ogImageUrl: user.og_image_url || '',
+      ogTitle: user.og_title || '',
+      ogDescription: user.og_description || '',
     });
   } catch (err) {
     console.error('Me error:', err);
@@ -349,12 +352,14 @@ router.post('/check-username', usernameCheckLimiter, async (req, res) => {
 router.put('/profile', auth, async (req, res) => {
   try {
     const userId = req.user.id;
-    const { displayName, avatarUrl, bio, isPublic, username: newUsername } = req.body;
+    const { displayName, avatarUrl, bio, isPublic, username: newUsername, ogImageUrl, ogTitle, ogDescription } = req.body;
 
     const lengthError = firstLengthError([
       [displayName, LIMITS.displayName, 'Display name'],
       [bio, LIMITS.bio, 'Bio'],
       [avatarUrl, LIMITS.avatarUrl, 'Avatar URL'],
+      [ogTitle, LIMITS.ogTitle, 'Preview title'],
+      [ogDescription, LIMITS.ogDescription, 'Preview description'],
     ]);
     if (lengthError) {
       return res.status(400).json({ error: lengthError });
@@ -364,6 +369,15 @@ router.put('/profile', auth, async (req, res) => {
     // value is rendered as an <img src> on public profiles.
     if (avatarUrl !== undefined && avatarUrl !== null && avatarUrl !== '' && !isSafeUrl(avatarUrl)) {
       return res.status(400).json({ error: 'Avatar URL must be an http(s) or relative address' });
+    }
+
+    if ([ogImageUrl, ogTitle, ogDescription].some((v) => v !== undefined && v !== null && typeof v !== 'string')) {
+      return res.status(400).json({ error: 'Preview fields must be text' });
+    }
+
+    // The preview image is read from disk to draw the card, so it must be the user's own upload
+    if (ogImageUrl && !isOwnUploadUrl(ogImageUrl, userId)) {
+      return res.status(400).json({ error: 'Preview image must be one of your uploaded images' });
     }
 
     let updatedUsername = req.user.username;
@@ -394,6 +408,13 @@ router.put('/profile', auth, async (req, res) => {
       updatedUsername = normalizedUsername;
     }
 
+    // Preview overrides are only touched when sent; '' clears one back to automatic
+    const ogFields = { og_image_url: ogImageUrl, og_title: ogTitle, og_description: ogDescription };
+    for (const [column, value] of Object.entries(ogFields)) {
+      if (value === undefined) continue;
+      await query(`UPDATE users SET ${column} = $1 WHERE id = $2`, [value?.trim() || null, userId]);
+    }
+
     const { rows: updatedRows } = await query(
       `UPDATE users SET
         username = COALESCE($1, username),
@@ -403,7 +424,7 @@ router.put('/profile', auth, async (req, res) => {
         is_public = COALESCE($5, is_public),
         updated_at = NOW()
        WHERE id = $6
-       RETURNING id, username, email, display_name, avatar_url, bio, is_public, is_admin, template_slug, created_at`,
+       RETURNING id, username, email, display_name, avatar_url, bio, is_public, is_admin, template_slug, created_at, og_image_url, og_title, og_description`,
       [
         updatedUsername,
         displayName !== undefined ? displayName : null,
@@ -441,6 +462,9 @@ router.put('/profile', auth, async (req, res) => {
         isAdmin: !!user.is_admin,
         templateSlug: user.template_slug,
         createdAt: user.created_at,
+        ogImageUrl: user.og_image_url || '',
+        ogTitle: user.og_title || '',
+        ogDescription: user.og_description || '',
       },
     });
   } catch (err) {
