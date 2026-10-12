@@ -7,7 +7,7 @@ import { CARD_W, CARD_H, AVATAR_BOX, COVER_BOX, profileCardSvg, entryCardSvg } f
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const uploadsDir = path.join(__dirname, '..', '..', 'uploads');
-const cacheDir = path.join(uploadsDir, 'og');
+const cacheDir = path.join(uploadsDir, 'og'); // shortcut: no eviction — add a cron to prune files older than 7 days when the uploads disk matters
 
 // Bump when the card layout changes so every cached card is redrawn
 const CARD_VERSION = 1;

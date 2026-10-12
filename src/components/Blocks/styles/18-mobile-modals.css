@@ -156,8 +156,8 @@
     font-size: 1.12rem;
   }
 
-  .journal-modal-cover-wrap {
-    max-height: 200px;
+  .journal-modal-cover-wrap .journal-modal-cover-img {
+    height: 200px;
   }
 
   .journal-toolbar {

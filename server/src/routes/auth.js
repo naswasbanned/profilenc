@@ -408,13 +408,6 @@ router.put('/profile', auth, async (req, res) => {
       updatedUsername = normalizedUsername;
     }
 
-    // Preview overrides are only touched when sent; '' clears one back to automatic
-    const ogFields = { og_image_url: ogImageUrl, og_title: ogTitle, og_description: ogDescription };
-    for (const [column, value] of Object.entries(ogFields)) {
-      if (value === undefined) continue;
-      await query(`UPDATE users SET ${column} = $1 WHERE id = $2`, [value?.trim() || null, userId]);
-    }
-
     const { rows: updatedRows } = await query(
       `UPDATE users SET
         username = COALESCE($1, username),
@@ -422,6 +415,9 @@ router.put('/profile', auth, async (req, res) => {
         avatar_url = $3,
         bio = $4,
         is_public = COALESCE($5, is_public),
+        og_image_url = COALESCE($7, og_image_url),
+        og_title = COALESCE($8, og_title),
+        og_description = COALESCE($9, og_description),
         updated_at = NOW()
        WHERE id = $6
        RETURNING id, username, email, display_name, avatar_url, bio, is_public, is_admin, template_slug, created_at, og_image_url, og_title, og_description`,
@@ -432,6 +428,9 @@ router.put('/profile', auth, async (req, res) => {
         bio !== undefined ? bio : null,
         isPublic !== undefined ? isPublic : null,
         userId,
+        ogImageUrl !== undefined ? (ogImageUrl?.trim() || null) : null,
+        ogTitle !== undefined ? (ogTitle?.trim() || null) : null,
+        ogDescription !== undefined ? (ogDescription?.trim() || null) : null,
       ]
     );
 

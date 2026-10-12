@@ -338,6 +338,9 @@ export default function JournalBlock({
     }
   };
   const closeArticle = () => {
+    setShowExportOptions(false);
+    setShareMenuOpen(false);
+    setCopyState('idle');
     setActiveArticle(null);
     // window.location, not the render-time location: the Escape handler holds an older closure
     if (syncsUrl && entryIdFromPath(window.location.pathname)) navigate(profilePath, { replace: true });
@@ -352,11 +355,18 @@ export default function JournalBlock({
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const [copyState, setCopyState] = useState('idle'); // 'idle' | 'copied' | 'manual'
   const shareButtonRef = useRef(null);
+  const shareWrapRef = useRef(null);
   const shareUrl = activeArticle?.id ? entryShareUrl(window.location.origin, rawUsername, activeArticle.id) : '';
   const closeShareMenu = () => {
     setShareMenuOpen(false);
     shareButtonRef.current?.focus();
   };
+  useEffect(() => {
+    if (!shareMenuOpen) return;
+    const onDown = (e) => { if (!shareWrapRef.current?.contains(e.target)) closeShareMenu(); };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, [shareMenuOpen]);
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
@@ -1274,7 +1284,7 @@ export default function JournalBlock({
                   <span className="journal-read-time">
                     <Clock size={12} /> {activeReadTime} min read
                   </span>
-                  <div className="journal-share-wrap">
+                  <div className="journal-share-wrap" ref={shareWrapRef}>
                     <button
                       ref={shareButtonRef}
                       type="button"
