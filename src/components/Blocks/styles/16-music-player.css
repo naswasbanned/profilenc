@@ -828,7 +828,6 @@
   --fv-peek: 10px;
   --fv-inset: 16px;
   --fv-arm-shift: 0px;
-  --fv-icon-shift: 0px;
   position: fixed;
   z-index: 40;
   width: var(--fv-size);
@@ -848,7 +847,6 @@
   .floating-vinyl {
     --fv-scale: 0.4; --fv-size: 72px; --fv-peek: 8px; --fv-inset: 12px;
     --fv-arm-shift: -10px; /* stage px (x0.4 = 4px on screen), toward screen-left */
-    --fv-icon-shift: -3px; /* screen px, up */
   }
 }
 
@@ -881,43 +879,6 @@
 /* Top edge: bottom half is visible, so the arm pivots bottom-right and points up */
 .floating-vinyl.edge-top .vinyl-tonearm { top: auto; bottom: 4px; transform: rotate(196deg); }
 .floating-vinyl.edge-top .vinyl-tonearm.playing { transform: rotate(161deg); }
-
-/* Small backing circle (28% of the vinyl) centred in the VISIBLE half of the disc */
-.floating-vinyl-icon {
-  --fv-glyph: calc(var(--fv-size) * 0.28);
-  --fv-gx: 50%;
-  --fv-gy: 50%;
-  position: absolute;
-  left: calc(var(--fv-gx) - var(--fv-glyph) / 2);
-  top: calc(var(--fv-gy) - var(--fv-glyph) / 2);
-  translate: 0 var(--fv-icon-shift);
-  width: var(--fv-glyph);
-  height: var(--fv-glyph);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  opacity: 1;
-  transition: opacity 0.2s ease;
-  z-index: 6;
-  pointer-events: none;
-}
-
-.floating-vinyl-icon svg { display: block; }
-
-.floating-vinyl.edge-left .floating-vinyl-icon { --fv-gx: 75%; }
-.floating-vinyl.edge-right .floating-vinyl-icon { --fv-gx: 25%; }
-.floating-vinyl.edge-top .floating-vinyl-icon { --fv-gy: 75%; }
-
-/* Playing: no glyph on touch; Pause glyph on hover / keyboard focus only */
-.floating-vinyl-icon.is-playing { opacity: 0; }
-
-@media (hover: hover) {
-  .floating-vinyl:hover .floating-vinyl-icon.is-playing { opacity: 1; }
-}
-.floating-vinyl:focus-visible .floating-vinyl-icon.is-playing { opacity: 1; }
 
 .floating-vinyl:focus-visible {
   outline: 3px solid var(--color-accent-primary, #00f0aa);
@@ -968,8 +929,7 @@
 @media (prefers-reduced-motion: reduce) {
   .floating-vinyl .vinyl-disc.spinning { animation: none; }
   .floating-vinyl .vinyl-tonearm,
-  .floating-vinyl,
-  .floating-vinyl-icon { transition: none; }
+  .floating-vinyl { transition: none; }
   .floating-vinyl:hover,
   .floating-vinyl:focus-visible { transform: none !important; }
 }
