@@ -127,12 +127,14 @@
   }
 
   .article-modal-header {
-    padding: 14px 14px 10px;
+    padding: 14px 64px 10px 14px;
   }
 
+  /* The header stays pinned, so keep it compact on small screens */
   .article-modal-title {
-    font-size: 1.45rem;
-    line-height: 1.12;
+    font-size: 1.2rem;
+    line-height: 1.18;
+    margin-bottom: 8px;
   }
 
   .article-modal-meta {
@@ -140,8 +142,8 @@
     gap: 6px 10px;
   }
 
-  .article-modal-body {
-    padding: 14px 14px calc(20px + env(safe-area-inset-bottom, 0px));
+  .article-modal-scroll {
+    padding: 16px 14px calc(20px + env(safe-area-inset-bottom, 0px));
   }
 
   .journal-article-prose {

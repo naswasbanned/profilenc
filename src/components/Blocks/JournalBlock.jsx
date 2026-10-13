@@ -1334,7 +1334,10 @@ export default function JournalBlock({
                     )}
                   </div>
                 </div>
+              </div>
 
+              {/* Everything below the header scrolls; the header above stays put */}
+              <div className="article-modal-scroll">
                 {copyState === 'manual' && (
                   <div className="journal-export-options">
                     <label className="journal-input-label" htmlFor="journal-share-url">Copy this link</label>
@@ -1387,21 +1390,24 @@ export default function JournalBlock({
                     </div>
                   </div>
                 )}
-              </div>
 
-              {/* Modal Cover Image (if available) */}
-              {(activeArticle.coverUrl || activeArticle.imageUrl) && (
-                <div className="journal-modal-cover-wrap">
-                  <OptimizedImage
-                    src={activeArticle.coverUrl || activeArticle.imageUrl}
-                    alt={activeArticle.title}
-                    className="journal-modal-cover-img"
-                  />
+                {/* Modal cover image (if available), then a divider before the text */}
+                {(activeArticle.coverUrl || activeArticle.imageUrl) && (
+                  <>
+                    <div className="journal-modal-cover-wrap">
+                      <OptimizedImage
+                        src={activeArticle.coverUrl || activeArticle.imageUrl}
+                        alt={activeArticle.title}
+                        className="journal-modal-cover-img"
+                      />
+                    </div>
+                    <hr className="journal-modal-divider" />
+                  </>
+                )}
+
+                <div className="article-modal-body">
+                  {renderJournalMarkdown(activeContent)}
                 </div>
-              )}
-
-              <div className="article-modal-body">
-                {renderJournalMarkdown(activeContent)}
               </div>
             </motion.div>
           </motion.div>

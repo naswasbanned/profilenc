@@ -190,17 +190,55 @@
 }
 
 /* --- Reader Modal Full-Size Image --- */
+/* Frame follows the user's theme, the same way .article-modal does: card
+   tokens by default, then a per-preset override below. The letterbox tint is
+   see-through so it works on light and dark cards alike. */
 .journal-modal-cover-wrap {
   width: 100%;
-  border-radius: var(--radius-sm, 10px);
+  border-radius: var(--card-border-radius, var(--radius-sm, 10px));
   overflow: hidden;
   margin-bottom: 24px;
-  background: var(--color-surface-sunken, #000000);
-  border: var(--card-border-width, 1.5px) solid var(--card-border, #d7ccb8);
-  box-shadow: 2px 3px 0 var(--heading-color, #252320);
+  background: color-mix(in srgb, var(--card-heading-color, #000000) 6%, transparent);
+  border: var(--card-border-width, 1px) var(--card-border-style, solid) var(--card-border, rgba(255, 255, 255, 0.1));
+  box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+[data-design-style="field-notes"] .journal-modal-cover-wrap,
+[data-button-style="editorial-tactile"] .journal-modal-cover-wrap {
+  border-width: 2px;
+  border-color: var(--card-border, #d7ccb8);
+  box-shadow: 3px 4px 0 var(--tactile-shadow-color, #252320);
+}
+
+[data-design-style="neo-brutalist"] .journal-modal-cover-wrap,
+[data-button-style="neo-brutalist"] .journal-modal-cover-wrap {
+  border: 3px solid #000000;
+  border-radius: 0;
+  box-shadow: 5px 5px 0 #000000;
+}
+
+[data-design-style="midnight-violet"] .journal-modal-cover-wrap,
+[data-button-style="rounded-glow"] .journal-modal-cover-wrap {
+  border: 1px solid color-mix(in srgb, var(--color-accent-primary, #8b5cf6) 35%, transparent);
+  border-radius: 14px;
+  box-shadow: 0 0 24px color-mix(in srgb, var(--color-accent-primary, #8b5cf6) 18%, transparent);
+}
+
+[data-button-style="flat-border"] .journal-modal-cover-wrap {
+  border: 1px solid var(--card-border, #e2e8f0);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+/* Separates the cover from the text; same rule as the header's bottom border */
+.journal-modal-divider {
+  height: 0;
+  margin: 0 0 24px;
+  border: 0;
+  border-top: var(--card-border-width, 1.5px) solid var(--card-border, #d7ccb8);
 }
 
 .journal-modal-cover-wrap .optimized-image-wrapper {
@@ -617,14 +655,16 @@
   width: 100%;
   max-width: 760px;
   max-height: calc(100vh - 110px);
-  overflow-y: auto;
-  padding: 40px 42px;
+  /* The modal itself no longer scrolls: the header stays fixed on top and
+     .article-modal-scroll below it scrolls. */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   border-radius: var(--card-border-radius, 16px);
   background: var(--card-bg, var(--color-surface-raised, #12151e));
   border: var(--card-border-width, 1px) var(--card-border-style, solid) var(--card-border, rgba(255, 255, 255, 0.1));
   box-shadow: var(--card-shadow, 0 20px 50px rgba(0, 0, 0, 0.5));
   position: relative;
-  scroll-behavior: smooth;
   box-sizing: border-box;
 }
 
@@ -659,8 +699,15 @@
 
 @media (max-width: 640px) {
   .article-modal {
-    padding: 24px 20px;
     max-height: 92vh;
+  }
+
+  .article-modal-header {
+    padding: 18px 60px 14px 18px;
+  }
+
+  .article-modal-scroll {
+    padding: 18px 18px calc(24px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -677,18 +724,34 @@
   margin-bottom: 12px;
 }
 
+/* Sticky top bar: title, meta and share. A flex item that never scrolls, so
+   the share menu (absolutely positioned inside it) can drop over the body.
+   Right padding keeps the title clear of the close button. */
 .article-modal-header {
-  margin-bottom: 24px;
-  padding-bottom: 20px;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 2;
+  padding: 28px 64px 18px 42px;
   border-bottom: var(--card-border-width, 1.5px) solid var(--card-border, #d7ccb8);
+}
+
+/* The scrolling part of the reader: cover, divider and text */
+.article-modal-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  padding: 24px 42px 40px;
 }
 
 .article-modal-title {
   font-family: var(--font-serif);
-  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  /* Smaller than before: the header now stays on screen while reading */
+  font-size: clamp(1.4rem, 3.4vw, 1.9rem);
   font-weight: 700;
   color: var(--card-heading-color, var(--heading-color, #252320));
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   line-height: 1.22;
   letter-spacing: -0.015em;
 }
@@ -789,10 +852,6 @@
   color: var(--btn-primary-text, #ffffff);
   border-color: var(--color-accent-primary, #2563eb);
   transform: translateY(-1px);
-}
-
-.article-modal-body {
-  padding-bottom: 24px;
 }
 
 /* --- Journal Article Prose / Reader Typography --- */
