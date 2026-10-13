@@ -1831,6 +1831,7 @@ export default function ThemePanel({ tabs = [], initialSection, scrollToField })
                   label="Background Image"
                   value={getNestedValue('global.backgroundImage') || ''}
                   onChange={(url) => updateTheme('global.backgroundImage', url || null)}
+                  cropRatio="16:9"
                 />
 
                 {getNestedValue('global.backgroundImage') && (

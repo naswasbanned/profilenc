@@ -770,6 +770,8 @@ export default function JournalBlock({
                 label="Cover Image (Optional)"
                 value={coverUrl}
                 onChange={setCoverUrl}
+                cropRatio="3:1"
+                variant="card"
               />
 
               {coverUrl && (

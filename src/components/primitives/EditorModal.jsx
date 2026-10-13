@@ -13,6 +13,7 @@ import { readStoredUiTheme } from '../../hooks/useUiTheme';
  * @param {Function} props.onClose            Called on the second backdrop click.
  * @param {string}  [props.size]              Dialog size class: `modal-sm` | `modal-md` | `modal-lg`.
  * @param {string}  [props.dialogClassName]   Extra classes for the dialog.
+ * @param {string}  [props.backdropClassName] Extra classes for the backdrop.
  * @param {object}  [props.dialogStyle]       Inline style for the dialog.
  * @param {string}  [props.editorTheme]       `dark` | `light`. Falls back to the stored UI theme.
  * @param {boolean} [props.fadeBackdrop]      Animate the backdrop opacity as well.
@@ -24,6 +25,7 @@ export default function EditorModal({
   onClose,
   size = '',
   dialogClassName = '',
+  backdropClassName = '',
   dialogStyle,
   editorTheme,
   fadeBackdrop = false,
@@ -57,6 +59,9 @@ export default function EditorModal({
   const dialogClasses = ['editor-modal-dialog', size, dialogClassName]
     .filter(Boolean)
     .join(' ');
+  const backdropClasses = ['editor-modal-backdrop', backdropClassName]
+    .filter(Boolean)
+    .join(' ');
 
   const body = (
     <>
@@ -81,7 +86,7 @@ export default function EditorModal({
 
   const backdrop = fadeBackdrop ? (
     <motion.div
-      className="editor-modal-backdrop"
+      className={backdropClasses}
       data-editor-theme={resolvedTheme}
       onClick={handleBackdropClick}
       initial={{ opacity: 0 }}
@@ -93,7 +98,7 @@ export default function EditorModal({
     </motion.div>
   ) : (
     <div
-      className="editor-modal-backdrop"
+      className={backdropClasses}
       data-editor-theme={resolvedTheme}
       onClick={handleBackdropClick}
     >

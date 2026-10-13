@@ -31,7 +31,7 @@ const timeline = {
           { key: 'description', type: 'textarea', label: 'Summary', placeholder: 'What you worked on.', max: 300, rows: 3 },
           { key: 'bullets', type: 'lines', label: 'Highlights', placeholder: 'Shipped the new checkout\nGrew usage by 30%' },
           { key: 'tags', type: 'tags', label: 'Tools and skills' },
-          { key: 'images', type: 'imageList', label: 'Photos', hint: 'Optional screenshots or photos for this entry.' },
+          { key: 'images', type: 'imageList', label: 'Photos', hint: 'Optional screenshots or photos for this entry.', cropRatio: '4:3' },
         ],
       },
     },

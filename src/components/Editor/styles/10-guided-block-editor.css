@@ -325,6 +325,48 @@
   border-color: var(--fn-editor-coral-dark);
 }
 
+/* --- Range (slider + number) -------------------------------------------- */
+
+.bf-range {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bf-range-slider {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  margin: 0;
+  accent-color: var(--fn-editor-coral);
+  cursor: pointer;
+}
+
+.bf-range-slider:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--fn-editor-coral) 45%, transparent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.bf-range-number {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+.bf-range-input {
+  width: 64px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bf-range-unit {
+  color: var(--fn-editor-muted);
+  font-family: var(--fn-editor-mono);
+  font-size: 0.8rem;
+}
+
 .bf-textarea {
   min-height: 84px;
   resize: vertical;

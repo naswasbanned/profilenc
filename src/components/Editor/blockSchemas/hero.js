@@ -11,7 +11,7 @@ const hero = {
         { key: 'name', type: 'text', label: 'Full name', placeholder: 'Alex Rivers', required: true, max: 50 },
         { key: 'tagline', type: 'text', label: 'Role or tagline', placeholder: 'Full-stack engineer', max: 70 },
         { key: 'bio', type: 'textarea', label: 'Short bio', placeholder: 'Two or three sentences about your work.', max: 320, rows: 4 },
-        { key: 'avatarUrl', type: 'image', label: 'Profile photo', hint: 'A square photo works best.' },
+        { key: 'avatarUrl', type: 'image', label: 'Profile photo', hint: 'A square photo works best.', cropRatio: '1:1', cropShape: 'round' },
         { key: 'statusBadge', type: 'text', label: 'Status pill', placeholder: 'Available for freelance', hint: 'Small badge next to your name. Leave empty to hide it.', max: 40 },
       ],
     },

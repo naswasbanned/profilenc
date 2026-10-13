@@ -53,6 +53,8 @@ import { apiFetch } from '../lib/api';
 import { initialLandingConfig, loadLandingConfig, mergeLandingConfig } from '../lib/landingConfig';
 import './LandingPage.css';
 import { useUiTheme } from '../hooks/useUiTheme';
+import LazyImageEditor from '../components/ImageEditor/LazyImageEditor';
+import { isWithinSuggestionLimit } from '../lib/uploadLimits';
 
 // The entry popup (and its confetti engine) is fetched only once it is about
 // to open, which is after the page has finished loading.
@@ -638,18 +640,28 @@ export default function LandingPage() {
   const [suggestionSuccess, setSuggestionSuccess] = useState(false);
   const [suggestionError, setSuggestionError] = useState('');
 
+  const [suggestionEditFile, setSuggestionEditFile] = useState(null);
+  const suggestionFileInputRef = useRef(null);
+
+  // A picked image opens the editor first; the input is reset so the same
+  // file can be picked again.
   const handleSuggestionImageChange = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      // Matches MAX_PUBLIC_UPLOAD_BYTES in server/src/middleware/upload.js
-      if (file.size > 2 * 1024 * 1024) {
-        setSuggestionError('Image file is too large (max 2MB)');
-        return;
-      }
-      setSuggestionFile(file);
-      setSuggestionPreview(URL.createObjectURL(file));
-      setSuggestionError('');
+    e.target.value = '';
+    if (file) setSuggestionEditFile(file);
+  };
+
+  // Runs on the editor result (edited or original).
+  const acceptSuggestionImage = (file) => {
+    // Matches MAX_PUBLIC_UPLOAD_BYTES in server/src/middleware/upload.js
+    if (!isWithinSuggestionLimit(file.size)) {
+      setSuggestionError('Image file is too large (max 2MB)');
+      return;
     }
+    if (suggestionPreview) URL.revokeObjectURL(suggestionPreview);
+    setSuggestionFile(file);
+    setSuggestionPreview(URL.createObjectURL(file));
+    setSuggestionError('');
   };
 
   const handleRemoveSuggestionImage = () => {
@@ -1173,6 +1185,7 @@ export default function LandingPage() {
                       <input
                         type="file"
                         accept="image/jpeg,image/png,image/gif,image/webp,image/avif"
+                        ref={suggestionFileInputRef}
                         onChange={handleSuggestionImageChange}
                         className="fn-file-input"
                       />
@@ -1379,6 +1392,22 @@ export default function LandingPage() {
             lenisRef={lenisRef}
           />
         </Suspense>
+      )}
+
+      {/* Suggestion image editor, outside the form and the upload label so
+          its clicks and keys can't reach them. */}
+      {suggestionEditFile && (
+        <LazyImageEditor
+          file={suggestionEditFile}
+          recommendedRatio="free"
+          editorTheme={theme}
+          returnFocusRef={suggestionFileInputRef}
+          onConfirm={(f) => {
+            setSuggestionEditFile(null);
+            acceptSuggestionImage(f);
+          }}
+          onCancel={() => setSuggestionEditFile(null)}
+        />
       )}
     </div>
   );

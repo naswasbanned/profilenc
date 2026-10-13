@@ -7,7 +7,7 @@ import ImageUploadPicker from '../ImageUploadPicker';
  * several pictures without any other per-image data, such as the photo deck and
  * timeline attachments.
  */
-export default function ImageListField({ label, value, onChange, hint }) {
+export default function ImageListField({ label, value, onChange, hint, cropRatio, cropShape }) {
   const images = Array.isArray(value) ? value : [];
 
   const setImage = (index, url) => {
@@ -25,7 +25,13 @@ export default function ImageListField({ label, value, onChange, hint }) {
           <div className="bf-image-row" key={`${index}-${image || 'empty'}`}>
             <span className="bf-image-index">{index + 1}</span>
             <div className="bf-image-row-picker">
-              <ImageUploadPicker label="" value={image} onChange={(url) => setImage(index, url)} />
+              <ImageUploadPicker
+                label=""
+                value={image}
+                onChange={(url) => setImage(index, url)}
+                cropRatio={cropRatio}
+                cropShape={cropShape}
+              />
             </div>
             <button
               type="button"

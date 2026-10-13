@@ -1,69 +1,67 @@
 # Graph Report - profile  (2026-10-13)
 
 ## Corpus Check
-- 155 files · ~104,129 words
+- 167 files · ~113,289 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 89 file(s) not represented in the graph (top: .css 82, (none) 6, .conf 1)
+- Unclassified: 90 file(s) not represented in the graph (top: .css 83, (none) 6, .conf 1)
 
 ## Summary
-- 732 nodes · 1679 edges · 36 communities (35 shown, 1 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 36 edges (avg confidence: 0.85)
+- 820 nodes · 1911 edges · 34 communities (31 shown, 3 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 40 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3f9f9be6`
+- Built from commit: `a8eacd85`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- images.js
-- BlockRenderer.jsx
+- fields/index.js
+- lucide-react
 - EditorSearchPalette.jsx
 - package.json
-- site.js
-- ThemePanel.jsx
+- db.js
+- ProfileCanvas.jsx
 - lib/patchNotes.js
 - SchemaBlockForm.jsx
 - blockSchemas/index.js
-- LandingPage.jsx
+- TechIconField.jsx
 - routes/auth.js
 - ogImageService.js
 - src/index.js
 - card.jsx
 - dependencies
 - WinnerSection.jsx
-- react
+- LandingPage.jsx
 - React + Vite
-- db.js
-- WinnerCelebration.jsx
-- WinnerCertificate.jsx
+- TabManagerModal.jsx
 - how-it-works.jsx
-- vitest
-- upload.js
-- routes/stats.js
-- useWinnerCelebration.js
+- ThemePanel.jsx
+- images.js
+- floatingPlayer.js
 - server/package.json
-- scripts
+- imageEdit.js
 - dependencies
 - devDependencies
-- GitHubHeatmapBlock.jsx
-- MilestonesBlock.jsx
+- RepeatableList.jsx
 - scripts
-- LandingPage
+- container-scroll-animation.jsx
+- react
 - vite.config.js
-- avatar.jsx
+- eslint.config.js
+- TagsField.jsx
 
 ## God Nodes (most connected - your core abstractions)
-1. `react` - 60 edges
-2. `lucide-react` - 50 edges
+1. `react` - 64 edges
+2. `lucide-react` - 51 edges
 3. `framer-motion` - 39 edges
 4. `useAuth()` - 23 edges
 5. `safeUrl()` - 23 edges
 6. `query()` - 21 edges
 7. `apiFetch()` - 21 edges
 8. `react-router-dom` - 17 edges
-9. `vitest` - 13 edges
-10. `useDoubleBackdropClose()` - 13 edges
+9. `vitest` - 16 edges
+10. `Field()` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `load()` --indirect_call--> `token()`  [INFERRED]
@@ -74,21 +72,21 @@
   server/src/routes/og.js → server/src/config/db.js
 - `loadPatchNotes()` --calls--> `query()`  [EXTRACTED]
   server/src/services/patchNotesService.js → server/src/config/db.js
-- `loadPatchNotes()` --calls--> `mergePatchNotes()`  [EXTRACTED]
-  server/src/services/patchNotesService.js → server/src/lib/patchNotes.js
+- `buildPreview()` --calls--> `localUploadPath()`  [EXTRACTED]
+  server/src/routes/og.js → server/src/services/ogImageService.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (36 total, 1 thin omitted)
+## Communities (34 total, 3 thin omitted)
 
-### Community 0 - "images.js"
-Cohesion: 0.14
-Nodes (15): IMPORTANT: keep the reminder string free of backticks and $(...) constructs., ref_fs, ref_path, sharp, uuid, __dirname, router, uploadsDir (+7 more)
+### Community 0 - "fields/index.js"
+Cohesion: 0.30
+Nodes (5): ChecklistField(), makeTaskId(), Field(), ImageField(), ImageUploadPicker()
 
-### Community 1 - "BlockRenderer.jsx"
+### Community 1 - "lucide-react"
 Cohesion: 0.06
-Nodes (55): blockComponentMap, blockIconMap, blockVariants, renderBlockIcon(), src_components_blocks_blocks, BlockIdContext, CanvasPortal(), CardsGridBlock() (+47 more)
+Nodes (55): framer-motion, lucide-react, react-dom, blockComponentMap, blockIconMap, blockVariants, BlockIdContext, CanvasPortal() (+47 more)
 
 ### Community 2 - "EditorSearchPalette.jsx"
 Cohesion: 0.18
@@ -96,151 +94,135 @@ Nodes (14): EditorSearchPalette(), getRecent(), ICON_MAP, pushRecent(), ACCOUNT_
 
 ### Community 3 - "package.json"
 Cohesion: 0.11
-Nodes (20): name, private, type, version, eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-refresh (+12 more)
+Nodes (17): name, private, type, version, fast-check, @fontsource/crimson-text, @fontsource/dm-mono, @fontsource/dm-sans (+9 more)
 
-### Community 4 - "site.js"
-Cohesion: 0.21
-Nodes (9): checkLength(), firstLengthError(), isOwnUploadUrl(), isSafeUrl(), LIMITS, SAFE_PROTOCOLS, suggestionLimiter, publicUpload (+1 more)
+### Community 4 - "db.js"
+Cohesion: 0.18
+Nodes (14): pg, pool, isBotUserAgent(), MAX_TARGET_LENGTH, parseDays(), parseStatEvent(), STAT_KINDS, adminOnly() (+6 more)
 
-### Community 5 - "ThemePanel.jsx"
-Cohesion: 0.08
-Nodes (25): BlockRenderer(), BlockEditorWorkbench(), prefersPreviewOpen(), BODY_FONT_GROUPS, BORDER_STYLE_OPTIONS, BUTTON_STYLE_OPTIONS, CURATED_PAIRINGS, CURATED_PALETTES (+17 more)
+### Community 5 - "ProfileCanvas.jsx"
+Cohesion: 0.10
+Nodes (31): vitest, BlockRenderer(), renderBlockIcon(), src_components_blocks_blocks, BlockEditorWorkbench(), prefersPreviewOpen(), pageVariants, ProfileCanvas() (+23 more)
 
 ### Community 6 - "lib/patchNotes.js"
-Cohesion: 0.21
-Nodes (16): MANUAL_PATCH_NOTES, CHANGE_TYPES, compareNewestFirst(), dateValue(), DEFAULT_STATUS, findManualNote(), LATEST_STATUS, mergePatchNotes() (+8 more)
+Cohesion: 0.19
+Nodes (19): MANUAL_PATCH_NOTES, CHANGE_TYPES, compareNewestFirst(), dateValue(), DEFAULT_STATUS, findManualNote(), LATEST_STATUS, mergePatchNotes() (+11 more)
 
 ### Community 7 - "SchemaBlockForm.jsx"
-Cohesion: 0.06
-Nodes (46): SkillsBlock(), ChecklistField(), makeTaskId(), ChoiceField(), Field(), IconPickerField(), ImageField(), ImageListField() (+38 more)
+Cohesion: 0.09
+Nodes (21): ChoiceField(), ImageListField(), src_components_editor_fields_index_checklistfield, src_components_editor_fields_index_choicefield, src_components_editor_fields_index_imagefield, src_components_editor_fields_index_imagelistfield, src_components_editor_fields_index_linesfield, src_components_editor_fields_index_notefield (+13 more)
 
 ### Community 8 - "blockSchemas/index.js"
 Cohesion: 0.09
 Nodes (17): cardsGrid, events, featuredVideo, gallery, githubHeatmap, hero, SCHEMAS, journal (+9 more)
 
-### Community 9 - "LandingPage.jsx"
-Cohesion: 0.12
-Nodes (9): HEADING_VARIANTS, RevealHeading(), WORD_VARIANTS, WinnerSection(), ThreeDProfiles(), ContainerScroll(), ContainerScrollContext, MAIN_SHOWCASE_PROFILE (+1 more)
+### Community 9 - "TechIconField.jsx"
+Cohesion: 0.39
+Nodes (6): SkillsBlock(), TechIconField(), POPULAR_TECH_PRESETS, resolveTechIcon(), TECH_ALIAS_MAP, TechIcon()
 
 ### Community 10 - "routes/auth.js"
-Cohesion: 0.23
-Nodes (12): clientIp(), normalizeAddress(), byClient(), imageUploadLimiter, limiter(), loginAccountLimiter, loginIpLimiter, passwordChangeLimiter (+4 more)
+Cohesion: 0.10
+Nodes (24): checkLength(), firstLengthError(), isOwnUploadUrl(), isSafeUrl(), LIMITS, SAFE_PROTOCOLS, clientIp(), normalizeAddress() (+16 more)
 
 ### Community 11 - "ogImageService.js"
 Cohesion: 0.13
-Nodes (32): ref_crypto, absoluteImage(), escapeHtml(), findJournalEntry(), renderOgHtml(), summarize(), AVATAR_BOX, CARD_H (+24 more)
+Nodes (31): ref_crypto, absoluteImage(), escapeHtml(), findJournalEntry(), renderOgHtml(), summarize(), AVATAR_BOX, CARD_H (+23 more)
 
 ### Community 12 - "src/index.js"
 Cohesion: 0.17
-Nodes (15): query(), runMigrations(), DEFAULT_LANDING_SETTINGS, seedBootstrap(), seedTemplates(), TEMPLATES, app, __dirname (+7 more)
+Nodes (15): express, query(), runMigrations(), DEFAULT_LANDING_SETTINGS, seedBootstrap(), seedTemplates(), TEMPLATES, app (+7 more)
 
 ### Community 13 - "card.jsx"
 Cohesion: 0.29
 Nodes (6): Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle
 
 ### Community 14 - "dependencies"
-Cohesion: 0.18
-Nodes (11): dependencies, bcrypt, cors, express, express-rate-limit, helmet, jsonwebtoken, multer (+3 more)
+Cohesion: 0.11
+Nodes (17): dependencies, bcrypt, cors, express, express-rate-limit, helmet, jsonwebtoken, multer (+9 more)
 
 ### Community 15 - "WinnerSection.jsx"
-Cohesion: 0.11
-Nodes (13): BITS, CARD_TILTS, HOVER_SPRING, initialsOf(), LIST_VARIANTS, NOTE_TILTS, NOTE_TONES, NOTE_VARIANTS (+5 more)
-
-### Community 16 - "react"
 Cohesion: 0.05
-Nodes (77): framer-motion, lucide-react, react, react-dom, react-router-dom, AdminDashboardPage, App(), DashboardPage (+69 more)
+Nodes (35): createConfetti(), FALLBACK_COLORS, readConfettiPalette(), TrophyArt(), useOverlayLock(), alreadyCelebrated(), markCelebrated(), useWinnerCelebration() (+27 more)
+
+### Community 16 - "LandingPage.jsx"
+Cohesion: 0.05
+Nodes (68): react-router-dom, token(), AdminDashboardPage, App(), DashboardPage, EditorPage, LoginPage, ProfilePage (+60 more)
 
 ### Community 17 - "React + Vite"
 Cohesion: 0.50
 Nodes (3): Expanding the ESLint configuration, React Compiler, React + Vite
 
-### Community 18 - "db.js"
-Cohesion: 0.18
-Nodes (13): express, pg, pool, adminOnly(), auth(), optionalAuth(), ownerOnly(), PATCH_LIMITS (+5 more)
-
-### Community 19 - "WinnerCelebration.jsx"
-Cohesion: 0.23
-Nodes (8): createConfetti(), FALLBACK_COLORS, readConfettiPalette(), TrophyArt(), CelebrationOverlay(), fadeUp(), HEADLINE_VARIANTS, WORD_VARIANTS
-
-### Community 20 - "WinnerCertificate.jsx"
+### Community 18 - "TabManagerModal.jsx"
 Cohesion: 0.20
-Nodes (7): useOverlayLock(), LightboxBody(), MEDAL_BURST, SIGNATURE_PATHS, TILT_SPRING, WinnerCertificate(), src_components_landing_winnerevent_winnerevent
+Nodes (11): IconPickerField(), src_components_editor_fields_index_iconpickerfield, src_components_editor_fields_index_sortablerow, src_components_editor_fields_index_textfield, TextField(), makeTabId(), renderTabIcon(), TabManagerModal() (+3 more)
 
 ### Community 21 - "how-it-works.jsx"
 Cohesion: 0.16
 Nodes (11): CARD_VARIANTS, CHANGE_VARIANTS, CHANGES_VARIANTS, EASE_OUT, HowItWorks(), layoutCards(), PatchBoard(), PIN_VARIANTS (+3 more)
 
-### Community 22 - "vitest"
-Cohesion: 0.15
-Nodes (8): ref_url, vitest, req(), cards, fixture, get(), users, clickTarget()
+### Community 22 - "ThemePanel.jsx"
+Cohesion: 0.08
+Nodes (26): BODY_FONT_GROUPS, BORDER_STYLE_OPTIONS, BUTTON_STYLE_OPTIONS, CURATED_PAIRINGS, CURATED_PALETTES, DESIGN_PRESETS, DIVIDER_STYLE_OPTIONS, HEADING_FONT_GROUPS (+18 more)
 
-### Community 23 - "upload.js"
-Cohesion: 0.22
-Nodes (7): multer, __dirname, MAX_PUBLIC_UPLOAD_BYTES, MAX_UPLOAD_BYTES, storage, tempDir, upload
+### Community 23 - "images.js"
+Cohesion: 0.07
+Nodes (28): IMPORTANT: keep the reminder string free of backticks and $(...) constructs., ref_fs, multer, ref_path, sharp, ref_url, uuid, __dirname (+20 more)
 
-### Community 24 - "routes/stats.js"
-Cohesion: 0.42
-Nodes (6): isBotUserAgent(), MAX_TARGET_LENGTH, parseDays(), parseStatEvent(), STAT_KINDS, statsLimiter
-
-### Community 25 - "useWinnerCelebration.js"
-Cohesion: 0.48
-Nodes (5): alreadyCelebrated(), markCelebrated(), useWinnerCelebration(), whenPageSettles(), WINNER_EVENT
+### Community 24 - "floatingPlayer.js"
+Cohesion: 0.23
+Nodes (15): RangeField(), FLOAT_ALIGNS, FLOAT_DESIGN_SIZE, FLOAT_EDGES, FLOAT_SIZE_DEFAULT, FLOAT_SIZE_MAX, FLOAT_SIZE_MIN, FLOAT_SIZE_STEP (+7 more)
 
 ### Community 26 - "server/package.json"
-Cohesion: 0.13
-Nodes (13): bcrypt, cors, express-rate-limit, helmet, jsonwebtoken, name, private, type (+5 more)
+Cohesion: 0.14
+Nodes (12): bcrypt, cors, express-rate-limit, helmet, jsonwebtoken, name, private, type (+4 more)
 
-### Community 27 - "scripts"
-Cohesion: 0.33
-Nodes (6): scripts, dev, migrate, seed:bootstrap, seed:templates, start
+### Community 27 - "imageEdit.js"
+Cohesion: 0.09
+Nodes (49): FreeCropHandles(), HANDLES, ADJUSTMENT_FIELDS, computeFreeBounds(), FOCUSABLE_SELECTOR, ImageEditor(), seedFreeSize(), stopPropagation() (+41 more)
 
 ### Community 28 - "dependencies"
-Cohesion: 0.13
-Nodes (15): dependencies, @fontsource/crimson-text, @fontsource/dm-mono, @fontsource/dm-sans, @fontsource/jetbrains-mono, @fontsource/orbitron, @fontsource-variable/fraunces, framer-motion (+7 more)
+Cohesion: 0.12
+Nodes (16): dependencies, @fontsource/crimson-text, @fontsource/dm-mono, @fontsource/dm-sans, @fontsource/jetbrains-mono, @fontsource/orbitron, @fontsource-variable/fraunces, framer-motion (+8 more)
 
 ### Community 29 - "devDependencies"
-Cohesion: 0.18
-Nodes (11): devDependencies, eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals, @types/react, @types/react-dom (+3 more)
+Cohesion: 0.17
+Nodes (12): devDependencies, eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-refresh, fast-check, globals, @types/react (+4 more)
 
-### Community 30 - "GitHubHeatmapBlock.jsx"
-Cohesion: 0.48
-Nodes (5): computeStats(), fetchContributions(), formatDate(), getContributionLevel(), GitHubHeatmapBlock()
-
-### Community 31 - "MilestonesBlock.jsx"
-Cohesion: 0.33
-Nodes (3): CATEGORY_COLORS, CATEGORY_ICONS, MilestonesBlock()
+### Community 31 - "RepeatableList.jsx"
+Cohesion: 0.60
+Nodes (3): makeItemId(), RepeatableList(), SortableRow()
 
 ### Community 32 - "scripts"
 Cohesion: 0.33
 Nodes (6): scripts, build, dev, lint, preview, test
 
-### Community 33 - "LandingPage"
-Cohesion: 0.36
-Nodes (8): initialLandingConfig(), LANDING_DEFAULTS, loadLandingConfig(), mergeLandingConfig(), readCache(), writeCache(), LandingPage(), wantsSmoothScroll()
+### Community 34 - "react"
+Cohesion: 0.18
+Nodes (7): react, CONTENT_KEYS, ImageEditor, LazyImageEditor(), Avatar, AvatarFallback, AvatarImage
 
-### Community 39 - "avatar.jsx"
-Cohesion: 0.50
-Nodes (3): Avatar, AvatarFallback, AvatarImage
+### Community 37 - "eslint.config.js"
+Cohesion: 0.33
+Nodes (5): eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals
 
 ## Knowledge Gaps
-- **183 isolated node(s):** `name`, `private`, `version`, `type`, `dev` (+178 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 247 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **196 isolated node(s):** `name`, `private`, `version`, `type`, `dev` (+191 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 264 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `react` to `BlockRenderer.jsx`, `EditorSearchPalette.jsx`, `package.json`, `ThemePanel.jsx`, `SchemaBlockForm.jsx`, `avatar.jsx`, `LandingPage.jsx`, `card.jsx`, `WinnerSection.jsx`, `WinnerCelebration.jsx`, `WinnerCertificate.jsx`, `how-it-works.jsx`, `useWinnerCelebration.js`, `GitHubHeatmapBlock.jsx`, `MilestonesBlock.jsx`?**
-  _High betweenness centrality (0.266) - this node is a cross-community bridge._
-- **Why does `vitest` connect `vitest` to `BlockRenderer.jsx`, `package.json`, `site.js`, `ThemePanel.jsx`, `lib/patchNotes.js`, `ogImageService.js`, `routes/stats.js`, `server/package.json`?**
-  _High betweenness centrality (0.221) - this node is a cross-community bridge._
-- **Why does `lucide-react` connect `react` to `BlockRenderer.jsx`, `EditorSearchPalette.jsx`, `package.json`, `ThemePanel.jsx`, `SchemaBlockForm.jsx`, `LandingPage.jsx`, `WinnerSection.jsx`, `WinnerCelebration.jsx`, `WinnerCertificate.jsx`, `how-it-works.jsx`, `GitHubHeatmapBlock.jsx`, `MilestonesBlock.jsx`?**
-  _High betweenness centrality (0.205) - this node is a cross-community bridge._
+- **Why does `react` connect `react` to `fields/index.js`, `lucide-react`, `EditorSearchPalette.jsx`, `package.json`, `container-scroll-animation.jsx`, `ProfileCanvas.jsx`, `TagsField.jsx`, `TechIconField.jsx`, `card.jsx`, `WinnerSection.jsx`, `LandingPage.jsx`, `TabManagerModal.jsx`, `how-it-works.jsx`, `ThemePanel.jsx`, `floatingPlayer.js`, `imageEdit.js`, `RepeatableList.jsx`?**
+  _High betweenness centrality (0.267) - this node is a cross-community bridge._
+- **Why does `vitest` connect `ProfileCanvas.jsx` to `lucide-react`, `package.json`, `db.js`, `lib/patchNotes.js`, `routes/auth.js`, `ogImageService.js`, `images.js`, `floatingPlayer.js`, `server/package.json`, `imageEdit.js`?**
+  _High betweenness centrality (0.228) - this node is a cross-community bridge._
+- **Why does `lucide-react` connect `lucide-react` to `fields/index.js`, `EditorSearchPalette.jsx`, `package.json`, `react`, `ProfileCanvas.jsx`, `TagsField.jsx`, `SchemaBlockForm.jsx`, `TechIconField.jsx`, `WinnerSection.jsx`, `LandingPage.jsx`, `TabManagerModal.jsx`, `how-it-works.jsx`, `ThemePanel.jsx`, `imageEdit.js`, `RepeatableList.jsx`?**
+  _High betweenness centrality (0.192) - this node is a cross-community bridge._
 - **What connects `name`, `private`, `version` to the rest of the system?**
-  _183 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `images.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.1368421052631579 - nodes in this community are weakly interconnected._
-- **Should `BlockRenderer.jsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.06419753086419754 - nodes in this community are weakly interconnected._
+  _196 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `lucide-react` be split into smaller, more focused modules?**
+  _Cohesion score 0.06238030095759234 - nodes in this community are weakly interconnected._
 - **Should `package.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.10822510822510822 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
+- **Should `ProfileCanvas.jsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.10409745293466224 - nodes in this community are weakly interconnected._

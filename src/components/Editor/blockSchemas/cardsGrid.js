@@ -77,6 +77,7 @@ const cardsGrid = {
           {
             key: 'image',
             type: 'image',
+            cropRatio: '16:9',
             label: 'Cover image',
             hint: 'Wide images look best. Visitors can tap it to zoom.',
             // Older cards stored the cover under a different key

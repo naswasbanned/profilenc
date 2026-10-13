@@ -170,52 +170,65 @@
   z-index: 3;
 }
 
-/* Tonearm */
+/* Tonearm: zero-size pivot at the disc's top-right corner. The arm and head
+   rotate together around it; the head sits at the arm's tip. */
 .vinyl-tonearm {
   position: absolute;
-  top: -8px;
-  right: 20px;
+  top: 4px;
+  right: -4px;
+  width: 0;
+  height: 0;
   z-index: 5;
-  transform-origin: top right;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: rotate(-28deg);
+  transform-origin: 0 0;
+  /* Parked: short arm swung sideways, off the record. */
+  transform: rotate(-16deg);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
 }
 
+/* Playing: swings in so the needle rests on the outer grooves. */
 .vinyl-tonearm.playing {
-  transform: rotate(-12deg);
+  transform: rotate(19deg);
 }
 
 .tonearm-base {
-  width: 12px;
-  height: 12px;
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
   border-radius: 50%;
   background: #333;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  position: absolute;
-  top: 0;
-  right: 0;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), inset 0 0 0 2px rgba(0, 0, 0, 0.35);
+  z-index: 2;
 }
 
 .tonearm-arm {
+  position: absolute;
+  top: 0;
+  left: -1.5px;
   width: 3px;
-  height: 70px;
+  height: 74px;
   background: linear-gradient(to bottom, #555, #333);
   border-radius: 2px;
-  position: absolute;
-  top: 10px;
-  right: 5px;
-  transform: rotate(12deg);
-  transform-origin: top center;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 1;
 }
 
+/* Cartridge: angled slightly off the arm, like a real headshell. */
 .tonearm-head {
-  width: 8px;
-  height: 6px;
-  background: #888;
-  border-radius: 0 0 2px 2px;
   position: absolute;
-  top: 78px;
-  right: 0;
+  bottom: -9px;
+  left: 50%;
+  width: 9px;
+  height: 14px;
+  transform: translateX(-50%) rotate(-14deg);
+  transform-origin: 50% 0;
+  background: #888;
+  border-radius: 1px 1px 3px 3px;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.35);
 }
 
 /* Play overlay */
@@ -759,4 +772,139 @@
   border: 1px dashed rgba(167, 139, 250, 0.3);
   color: #c4b5fd;
   border-radius: 14px;
+}
+/* ==========================================================================
+   Floating vinyl (half of the record sticks out of a screen edge)
+   ========================================================================== */
+
+.music-player-layout.is-floating {
+  flex-direction: row;
+  text-align: left;
+}
+
+.music-player-block { position: relative; }
+
+.floating-vinyl {
+  /* Inline style sets --fv-desktop-size / --fv-desktop-scale (px / 180).
+     The media query overrides --fv-size / --fv-scale, which inline styles do not set. */
+  --fv-scale: var(--fv-desktop-scale, 0.5);
+  --fv-size: var(--fv-desktop-size, 90px);
+  --fv-peek: 10px;
+  --fv-inset: 16px;
+  position: fixed;
+  z-index: 40;
+  width: var(--fv-size);
+  height: var(--fv-size);
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 50%;
+  cursor: pointer;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+  transition: transform 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile: one fixed size (64px) whatever size was chosen */
+@media (max-width: 640px) {
+  .floating-vinyl { --fv-scale: 0.3556; --fv-size: 64px; --fv-peek: 8px; --fv-inset: 12px; }
+}
+
+/* Stage: the 180px card design, scaled. No overflow clipping so the arm shows. */
+.floating-vinyl-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 180px;
+  height: 180px;
+  transform-origin: 0 0;
+  transform: scale(var(--fv-scale));
+  pointer-events: none;
+}
+
+.floating-vinyl .vinyl-disc {
+  display: block;
+}
+
+/* Right edge: left half is visible, so the arm pivots top-left and swings the other way */
+.floating-vinyl.edge-right .vinyl-tonearm { right: auto; left: -4px; transform: rotate(16deg); }
+.floating-vinyl.edge-right .vinyl-tonearm.playing { transform: rotate(-19deg); }
+.floating-vinyl.edge-right .tonearm-head { transform: translateX(-50%) rotate(14deg); }
+
+/* Top edge: bottom half is visible, so the arm pivots bottom-right and points up */
+.floating-vinyl.edge-top .vinyl-tonearm { top: auto; bottom: 4px; transform: rotate(196deg); }
+.floating-vinyl.edge-top .vinyl-tonearm.playing { transform: rotate(161deg); }
+
+.floating-vinyl-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 6;
+}
+
+.floating-vinyl:hover .floating-vinyl-icon,
+.floating-vinyl:focus-visible .floating-vinyl-icon {
+  opacity: 1;
+}
+
+.floating-vinyl:focus-visible {
+  outline: 3px solid var(--color-accent-primary, #00f0aa);
+  outline-offset: 3px;
+}
+
+/* Edges: half the disc is clipped off-screen */
+.floating-vinyl.edge-left { left: calc(var(--fv-size) / -2 + env(safe-area-inset-left, 0px)); }
+.floating-vinyl.edge-right { right: calc(var(--fv-size) / -2 + env(safe-area-inset-right, 0px)); }
+.floating-vinyl.edge-top { top: calc(var(--fv-size) / -2 + env(safe-area-inset-top, 0px)); }
+
+.floating-vinyl.edge-left:hover,
+.floating-vinyl.edge-left:focus-visible { transform: translateX(var(--fv-peek)); }
+.floating-vinyl.edge-right:hover,
+.floating-vinyl.edge-right:focus-visible { transform: translateX(calc(var(--fv-peek) * -1)); }
+.floating-vinyl.edge-top:hover,
+.floating-vinyl.edge-top:focus-visible { transform: translateY(var(--fv-peek)); }
+
+/* Alignment along the edge */
+.floating-vinyl.edge-left.align-start,
+.floating-vinyl.edge-right.align-start { top: max(var(--fv-inset), env(safe-area-inset-top, 0px)); }
+.floating-vinyl.edge-left.align-center,
+.floating-vinyl.edge-right.align-center { top: calc(50% - var(--fv-size) / 2); }
+.floating-vinyl.edge-left.align-end,
+.floating-vinyl.edge-right.align-end { bottom: max(var(--fv-inset), env(safe-area-inset-bottom, 0px)); }
+
+.floating-vinyl.edge-top.align-start { left: max(var(--fv-inset), env(safe-area-inset-left, 0px)); }
+.floating-vinyl.edge-top.align-center { left: calc(50% - var(--fv-size) / 2); }
+.floating-vinyl.edge-top.align-end { right: calc(max(var(--fv-inset), env(safe-area-inset-right, 0px)) + 24px * var(--fv-scale)); }
+
+/* Editor preview: stays inside the preview card */
+.floating-vinyl.is-inline-preview { position: absolute; }
+
+/* Theme variants */
+[data-design-style="field-notes"] .floating-vinyl {
+  filter: drop-shadow(3px 4px 0 rgba(37, 35, 32, 0.25));
+}
+
+[data-design-style="neo-brutalist"] .floating-vinyl {
+  filter: none;
+  box-shadow: 0 0 0 3px #000000, 4px 4px 0 #000000;
+}
+
+[data-design-style="midnight-violet"] .floating-vinyl {
+  filter: drop-shadow(0 0 14px rgba(167, 139, 250, 0.45));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-vinyl .vinyl-disc.spinning { animation: none; }
+  .floating-vinyl .vinyl-tonearm,
+  .floating-vinyl,
+  .floating-vinyl-icon { transition: none; }
+  .floating-vinyl:hover,
+  .floating-vinyl:focus-visible { transform: none !important; }
 }

@@ -6,6 +6,7 @@ import {
   ImageListField,
   LinesField,
   NoteField,
+  RangeField,
   RepeatableList,
   TagsField,
   TechIconField,
@@ -68,6 +69,19 @@ function SchemaField({ field, values, onChange }) {
           onChange={set}
         />
       );
+    case 'range':
+      return (
+        <RangeField
+          label={field.label}
+          hint={field.hint}
+          min={field.min}
+          max={field.max}
+          step={field.step}
+          unit={field.unit}
+          value={field.normalize ? field.normalize(value) : value}
+          onChange={set}
+        />
+      );
     case 'toggle':
       return (
         <ToggleField label={field.label} hint={field.hint} value={value} onChange={set} />
@@ -106,11 +120,25 @@ function SchemaField({ field, values, onChange }) {
       );
     case 'image':
       return (
-        <ImageField label={field.label} hint={field.hint} value={value} onChange={set} />
+        <ImageField
+          label={field.label}
+          hint={field.hint}
+          value={value}
+          onChange={set}
+          cropRatio={field.cropRatio}
+          cropShape={field.cropShape}
+        />
       );
     case 'imageList':
       return (
-        <ImageListField label={field.label} hint={field.hint} value={value} onChange={set} />
+        <ImageListField
+          label={field.label}
+          hint={field.hint}
+          value={value}
+          onChange={set}
+          cropRatio={field.cropRatio}
+          cropShape={field.cropShape}
+        />
       );
     case 'icon':
       return (
@@ -178,7 +206,9 @@ export default function SchemaBlockForm({ group, data, onFieldChange, onListChan
 
   return (
     <div className="bf-fields">
-      {group.fields.map((field) => (
+      {group.fields
+        .filter((f) => !f.showIf || data?.[f.showIf.key] === f.showIf.equals)
+        .map((field) => (
         <SchemaField
           key={field.key}
           field={field}

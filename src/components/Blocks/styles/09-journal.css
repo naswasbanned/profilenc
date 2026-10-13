@@ -1373,3 +1373,49 @@
   color: var(--color-accent-primary, #00f0aa);
   outline: none;
 }
+
+/* ImageUploadPicker, card variant: follows the user's card theme, not the editor theme. */
+.card-upload > div {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.card-upload-thumb {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-sm, 8px);
+  border: 1.5px solid var(--card-border, #d7ccb8);
+  background: var(--color-surface-sunken, #f5efdf);
+  color: var(--card-text-muted, #746e63);
+}
+
+.card-upload-btn {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm, 8px);
+  border: 1.5px solid var(--card-border, #d7ccb8);
+  background: var(--color-surface-sunken, #f5efdf);
+  color: var(--card-text-color, #252320);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.card-upload-btn:hover:not(:disabled) {
+  border-color: var(--color-accent-primary, #e96d52);
+  color: var(--color-accent-primary, #e96d52);
+}
+
+.card-upload-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}

@@ -45,7 +45,7 @@ const gallery = {
         defaultItem: { src: '', title: '', description: '', location: '', date: '', tag: '', linkUrl: '', linkLabel: '' },
         exampleItem: { src: '', title: 'Kyoto sunset', description: 'Shot on a walk through Gion.', location: 'Kyoto, Japan', date: '2026', tag: 'Photography', linkUrl: '', linkLabel: '' },
         fields: [
-          { key: 'src', type: 'image', label: 'Photo', aliases: ['image', 'url'] },
+          { key: 'src', type: 'image', label: 'Photo', aliases: ['image', 'url'], cropRatio: '4:3' },
           { key: 'title', type: 'text', label: 'Title', placeholder: 'Kyoto sunset', max: 60 },
           { key: 'description', type: 'textarea', label: 'Description', placeholder: 'Shown when the photo opens full screen.', max: 240, rows: 3 },
           { key: 'location', type: 'text', label: 'Location', placeholder: 'Kyoto, Japan', max: 40 },

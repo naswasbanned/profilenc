@@ -221,6 +221,7 @@ export default function BlockRenderer({
         data={block.data || {}}
         block={block}
         isEditing={isEditing}
+        isPreview={disableReveal}
         onUpdateData={(newData) => {
           if (onUpdateBlock) {
             onUpdateBlock({

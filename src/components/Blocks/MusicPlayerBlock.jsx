@@ -2,6 +2,8 @@ import { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, SkipBack, SkipForward, Music, Disc3, ExternalLink } from 'lucide-react';
 import { safeUrl } from '../../lib/safeUrl';
+import { floatingClassName, floatingStyle } from '../../lib/floatingPlayer';
+import CanvasPortal from './CanvasPortal';
 
 /**
  * Detect provider from embed URL and return normalized embed src with autoplay support.
@@ -82,12 +84,13 @@ const PROVIDER_COLORS = {
 
 function VinylDisc({ artworkUrl, isPlaying, onClick }) {
   return (
-    <div className="vinyl-player-disc-container" onClick={onClick}>
+    <div className="vinyl-player-disc-container" data-music-control onClick={onClick}>
       {/* Tonearm */}
       <div className={`vinyl-tonearm ${isPlaying ? 'playing' : ''}`}>
         <div className="tonearm-base" />
-        <div className="tonearm-arm" />
-        <div className="tonearm-head" />
+        <div className="tonearm-arm">
+          <div className="tonearm-head" />
+        </div>
       </div>
 
       {/* Vinyl record */}
@@ -121,6 +124,49 @@ function VinylDisc({ artworkUrl, isPlaying, onClick }) {
   );
 }
 
+function FloatingVinyl({ artworkUrl, isPlaying, onToggle, className, style }) {
+  return (
+    <button
+      type="button"
+      className={className}
+      style={style}
+      data-music-control
+      aria-label={isPlaying ? 'Pause music' : 'Play music'}
+      aria-pressed={isPlaying}
+      onClick={onToggle}
+    >
+      {/* Fixed 180px design scaled by CSS so disc and arm keep their proportions */}
+      <span className="floating-vinyl-stage" aria-hidden="true">
+        <span className={`vinyl-tonearm ${isPlaying ? 'playing' : ''}`}>
+          <span className="tonearm-base" />
+          <span className="tonearm-arm">
+            <span className="tonearm-head" />
+          </span>
+        </span>
+        <span className={`vinyl-disc ${isPlaying ? 'spinning' : ''}`}>
+          <span className="vinyl-groove vinyl-groove-1" />
+          <span className="vinyl-groove vinyl-groove-2" />
+          <span className="vinyl-groove vinyl-groove-3" />
+          <span className="vinyl-groove vinyl-groove-4" />
+          <span className="vinyl-center">
+            {artworkUrl ? (
+              <img src={artworkUrl} alt="" className="vinyl-artwork" />
+            ) : (
+              <span className="vinyl-center-default">
+                <Disc3 size={28} />
+              </span>
+            )}
+          </span>
+          <span className="vinyl-hole" />
+        </span>
+      </span>
+      <span className="floating-vinyl-icon" aria-hidden="true">
+        {isPlaying ? <Pause size={22} /> : <Play size={22} />}
+      </span>
+    </button>
+  );
+}
+
 function getTrackArtwork(track) {
   if (track?.artworkUrl) return track.artworkUrl;
   if (!track?.embedUrl) return null;
@@ -131,7 +177,7 @@ function getTrackArtwork(track) {
   return null;
 }
 
-export default function MusicPlayerBlock({ data }) {
+export default function MusicPlayerBlock({ data, isPreview = false }) {
   const items = useMemo(() => {
     // Support single track or playlist
     if (data?.items && Array.isArray(data.items) && data.items.length > 0) {
@@ -192,11 +238,14 @@ export default function MusicPlayerBlock({ data }) {
     if (!data?.autoplay) return;
 
     let unlocked = false;
-    const unlockAudio = () => {
+    const unlockAudio = (event) => {
       if (unlocked) return;
       unlocked = true;
-      setIsPlaying(true);
-      if (iframeRef.current?.contentWindow) {
+      // Taps on the player's own controls decide the state themselves:
+      // stop listening but do not force playback.
+      const onControl = !!event?.target?.closest?.('[data-music-control]');
+      if (!onControl) setIsPlaying(true);
+      if (!onControl && iframeRef.current?.contentWindow) {
         try {
           iframeRef.current.contentWindow.postMessage(
             JSON.stringify({ event: 'command', func: 'playVideo', args: '' }),
@@ -215,9 +264,9 @@ export default function MusicPlayerBlock({ data }) {
       window.removeEventListener('click', unlockAudio);
     };
 
-    window.addEventListener('touchstart', unlockAudio, { passive: true, once: true });
-    window.addEventListener('pointerdown', unlockAudio, { passive: true, once: true });
-    window.addEventListener('click', unlockAudio, { passive: true, once: true });
+    window.addEventListener('touchstart', unlockAudio, { passive: true });
+    window.addEventListener('pointerdown', unlockAudio, { passive: true });
+    window.addEventListener('click', unlockAudio, { passive: true });
 
     return () => {
       window.removeEventListener('touchstart', unlockAudio);
@@ -253,16 +302,29 @@ export default function MusicPlayerBlock({ data }) {
 
   const showVisibleEmbed = data?.showEmbed === true || data?.displayMode === 'embedded';
   const discPosition = data?.discPosition || 'left';
+  const floating = !!data?.floating;
+  const floatClass = floatingClassName(data?.floatEdge, data?.floatAlign);
+  const floatingVinyl = floating ? (
+    <FloatingVinyl
+      style={floatingStyle(data?.floatSize)}
+      artworkUrl={getTrackArtwork(currentTrack)}
+      isPlaying={isPlaying}
+      onToggle={handlePlayToggle}
+      className={isPreview ? `${floatClass} is-inline-preview` : floatClass}
+    />
+  ) : null;
 
   return (
     <div className="music-player-block">
-      <div className={`music-player-layout align-${discPosition}`}>
-        {/* Vinyl Disc Visual */}
-        <VinylDisc
-          artworkUrl={getTrackArtwork(currentTrack)}
-          isPlaying={isPlaying}
-          onClick={handlePlayToggle}
-        />
+      <div className={`music-player-layout ${floating ? 'is-floating align-left' : `align-${discPosition}`}`}>
+        {/* Vinyl Disc Visual (the floating vinyl replaces it when floating) */}
+        {!floating && (
+          <VinylDisc
+            artworkUrl={getTrackArtwork(currentTrack)}
+            isPlaying={isPlaying}
+            onClick={handlePlayToggle}
+          />
+        )}
 
         {/* Track Info + Controls */}
         <div className="music-player-info">
@@ -288,7 +350,7 @@ export default function MusicPlayerBlock({ data }) {
           <div className="music-controls">
             <button
               type="button"
-              className="music-control-btn"
+              className="music-control-btn" data-music-control
               onClick={handlePrev}
               disabled={items.length <= 1}
               aria-label="Previous track"
@@ -297,7 +359,7 @@ export default function MusicPlayerBlock({ data }) {
             </button>
             <button
               type="button"
-              className="music-control-btn music-play-btn"
+              className="music-control-btn music-play-btn" data-music-control
               onClick={handlePlayToggle}
               aria-label={isPlaying ? 'Pause' : 'Play'}
             >
@@ -305,7 +367,7 @@ export default function MusicPlayerBlock({ data }) {
             </button>
             <button
               type="button"
-              className="music-control-btn"
+              className="music-control-btn" data-music-control
               onClick={handleNext}
               disabled={items.length <= 1}
               aria-label="Next track"
@@ -337,6 +399,8 @@ export default function MusicPlayerBlock({ data }) {
           )}
         </div>
       </div>
+
+      {floatingVinyl && (isPreview ? floatingVinyl : <CanvasPortal>{floatingVinyl}</CanvasPortal>)}
 
       {/* Invisible YouTube / Audio Streamer (Maintained in DOM for Mobile WebKit/Chromium) */}
       {parsed.embedSrc && !showVisibleEmbed && (

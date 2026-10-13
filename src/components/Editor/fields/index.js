@@ -3,6 +3,7 @@ export { default as TextField } from './TextField';
 export { default as TextAreaField } from './TextAreaField';
 export { default as ChoiceField } from './ChoiceField';
 export { default as ToggleField } from './ToggleField';
+export { default as RangeField } from './RangeField';
 export { default as LinesField } from './LinesField';
 export { default as ChecklistField } from './ChecklistField';
 export { default as ImageField } from './ImageField';

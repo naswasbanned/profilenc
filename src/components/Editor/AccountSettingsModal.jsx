@@ -390,6 +390,9 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged, edito
                     label="Profile Avatar Picture"
                     value={avatarUrl}
                     onChange={(url) => setAvatarUrl(url)}
+                    cropRatio="1:1"
+                    cropShape="round"
+                    editorTheme={currentEditorTheme}
                   />
                 </div>
               </div>
@@ -505,7 +508,13 @@ export default function AccountSettingsModal({ onClose, onUsernameChanged, edito
                     <span>{(ogDescription || bio || '').trim().slice(0, 120)}</span>
                   </div>
                 </div>
-                <ImageUploadPicker label="Custom preview image (1200 x 630 works best)" value={ogImageUrl} onChange={setOgImageUrl} />
+                <ImageUploadPicker
+                  label="Custom preview image (1200 x 630 works best)"
+                  value={ogImageUrl}
+                  onChange={setOgImageUrl}
+                  cropRatio="1.91:1"
+                  editorTheme={currentEditorTheme}
+                />
                 <input
                   type="text"
                   value={ogTitle}
