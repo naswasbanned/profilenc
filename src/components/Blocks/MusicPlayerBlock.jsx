@@ -160,8 +160,8 @@ function FloatingVinyl({ artworkUrl, isPlaying, onToggle, className, style }) {
           <span className="vinyl-hole" />
         </span>
       </span>
-      <span className="floating-vinyl-icon" aria-hidden="true">
-        {isPlaying ? <Pause size={22} /> : <Play size={22} />}
+      <span className={`floating-vinyl-icon ${isPlaying ? 'is-playing' : ''}`} aria-hidden="true">
+        {isPlaying ? <Pause size="60%" /> : <Play size="60%" />}
       </span>
     </button>
   );
