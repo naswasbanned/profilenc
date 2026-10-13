@@ -777,9 +777,45 @@
    Floating vinyl (half of the record sticks out of a screen edge)
    ========================================================================== */
 
+/* No disc slot while floating: "Record position" aligns the remaining assets. */
 .music-player-layout.is-floating {
-  flex-direction: row;
-  text-align: left;
+  flex-direction: column;
+  gap: 0;
+}
+
+.music-player-layout.is-floating .music-player-info {
+  flex: none;
+  width: 100%;
+}
+
+.music-player-layout.is-floating.align-left .music-player-info { align-items: flex-start; text-align: left; }
+.music-player-layout.is-floating.align-left .music-controls { justify-content: flex-start; }
+.music-player-layout.is-floating.align-left .music-track-details { text-align: left; }
+
+.music-player-layout.is-floating.align-center .music-player-info { align-items: center; text-align: center; }
+.music-player-layout.is-floating.align-center .music-controls { justify-content: center; }
+.music-player-layout.is-floating.align-center .music-track-details { text-align: center; }
+
+.music-player-layout.is-floating.align-right .music-player-info { align-items: flex-end; text-align: right; }
+.music-player-layout.is-floating.align-right .music-controls { justify-content: flex-end; }
+.music-player-layout.is-floating.align-right .music-track-details { text-align: right; }
+
+@media (max-width: 640px) {
+  .music-player-layout.is-floating .music-player-info { align-items: center; text-align: center; }
+  .music-player-layout.is-floating .music-controls { justify-content: center; }
+  .music-player-layout.is-floating .music-track-details { text-align: center; }
+}
+
+.music-player-preview-muted {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  border-radius: 8px;
+  border: 1px dashed var(--card-border, rgba(255, 255, 255, 0.15));
+  color: var(--text-muted, #8b949e);
+  font-size: 0.8rem;
 }
 
 .music-player-block { position: relative; }

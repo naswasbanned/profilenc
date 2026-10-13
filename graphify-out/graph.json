@@ -2118,6 +2118,30 @@
       "source_location": "L296"
     },
     {
+      "id": "src_components_editor_fields_tagsfield_tagsfield",
+      "label": "TagsField()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "TagsField.jsx",
+      "file_type": "code",
+      "norm_label": "tagsfield()",
+      "source_file": "src/components/Editor/fields/TagsField.jsx",
+      "source_location": "L17"
+    },
+    {
+      "id": "src_components_editor_fields_tagsfield_toarray",
+      "label": "toArray()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "TagsField.jsx",
+      "file_type": "code",
+      "norm_label": "toarray()",
+      "source_file": "src/components/Editor/fields/TagsField.jsx",
+      "source_location": "L9"
+    },
+    {
       "id": "src_components_ui_how_it_works_howitworks",
       "label": "HowItWorks()",
       "_callable": true,
@@ -3124,30 +3148,6 @@
       "norm_label": "manualchunks()",
       "source_file": "vite.config.js",
       "source_location": "L24"
-    },
-    {
-      "id": "src_components_editor_fields_tagsfield_tagsfield",
-      "label": "TagsField()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "TagsField.jsx",
-      "file_type": "code",
-      "norm_label": "tagsfield()",
-      "source_file": "src/components/Editor/fields/TagsField.jsx",
-      "source_location": "L17"
-    },
-    {
-      "id": "src_components_editor_fields_tagsfield_toarray",
-      "label": "toArray()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "TagsField.jsx",
-      "file_type": "code",
-      "norm_label": "toarray()",
-      "source_file": "src/components/Editor/fields/TagsField.jsx",
-      "source_location": "L9"
     },
     {
       "id": "server_src_lib_stats_isbotuseragent",
@@ -6185,6 +6185,72 @@
       "source_location": "L62"
     },
     {
+      "id": "eslint_config",
+      "label": "eslint.config.js",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "eslint.config.js",
+      "file_type": "code",
+      "norm_label": "eslint.config.js",
+      "source_file": "eslint.config.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "ref_eslint",
+      "label": "eslint",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "eslint.config.js",
+      "file_type": "concept",
+      "norm_label": "eslint",
+      "source_file": "package.json",
+      "source_location": "L35"
+    },
+    {
+      "id": "ref_eslint_js",
+      "label": "@eslint/js",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "eslint.config.js",
+      "file_type": "concept",
+      "norm_label": "@eslint/js",
+      "source_file": "package.json",
+      "source_location": "L31"
+    },
+    {
+      "id": "ref_eslint_plugin_react_hooks",
+      "label": "eslint-plugin-react-hooks",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "eslint.config.js",
+      "file_type": "concept",
+      "norm_label": "eslint-plugin-react-hooks",
+      "source_file": "package.json",
+      "source_location": "L36"
+    },
+    {
+      "id": "ref_eslint_plugin_react_refresh",
+      "label": "eslint-plugin-react-refresh",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "eslint.config.js",
+      "file_type": "concept",
+      "norm_label": "eslint-plugin-react-refresh",
+      "source_file": "package.json",
+      "source_location": "L37"
+    },
+    {
+      "id": "ref_globals",
+      "label": "globals",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "eslint.config.js",
+      "file_type": "concept",
+      "norm_label": "globals",
+      "source_file": "package.json",
+      "source_location": "L39"
+    },
+    {
       "id": "src_components_editor_editorsearchpalette",
       "label": "EditorSearchPalette.jsx",
       "_origin": "ast",
@@ -6282,6 +6348,17 @@
       "norm_label": "theme_section_entries",
       "source_file": "src/components/Editor/searchRegistry.js",
       "source_location": "L98"
+    },
+    {
+      "id": "src_components_editor_fields_tagsfield",
+      "label": "TagsField.jsx",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "TagsField.jsx",
+      "file_type": "code",
+      "norm_label": "tagsfield.jsx",
+      "source_file": "src/components/Editor/fields/TagsField.jsx",
+      "source_location": "L1"
     },
     {
       "id": "src_components_ui_how_it_works",
@@ -8121,83 +8198,6 @@
       "source_location": "L34"
     },
     {
-      "id": "eslint_config",
-      "label": "eslint.config.js",
-      "_origin": "ast",
-      "community": 37,
-      "community_name": "eslint.config.js",
-      "file_type": "code",
-      "norm_label": "eslint.config.js",
-      "source_file": "eslint.config.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "ref_eslint",
-      "label": "eslint",
-      "_origin": "ast",
-      "community": 37,
-      "community_name": "eslint.config.js",
-      "file_type": "concept",
-      "norm_label": "eslint",
-      "source_file": "package.json",
-      "source_location": "L35"
-    },
-    {
-      "id": "ref_eslint_js",
-      "label": "@eslint/js",
-      "_origin": "ast",
-      "community": 37,
-      "community_name": "eslint.config.js",
-      "file_type": "concept",
-      "norm_label": "@eslint/js",
-      "source_file": "package.json",
-      "source_location": "L31"
-    },
-    {
-      "id": "ref_eslint_plugin_react_hooks",
-      "label": "eslint-plugin-react-hooks",
-      "_origin": "ast",
-      "community": 37,
-      "community_name": "eslint.config.js",
-      "file_type": "concept",
-      "norm_label": "eslint-plugin-react-hooks",
-      "source_file": "package.json",
-      "source_location": "L36"
-    },
-    {
-      "id": "ref_eslint_plugin_react_refresh",
-      "label": "eslint-plugin-react-refresh",
-      "_origin": "ast",
-      "community": 37,
-      "community_name": "eslint.config.js",
-      "file_type": "concept",
-      "norm_label": "eslint-plugin-react-refresh",
-      "source_file": "package.json",
-      "source_location": "L37"
-    },
-    {
-      "id": "ref_globals",
-      "label": "globals",
-      "_origin": "ast",
-      "community": 37,
-      "community_name": "eslint.config.js",
-      "file_type": "concept",
-      "norm_label": "globals",
-      "source_file": "package.json",
-      "source_location": "L39"
-    },
-    {
-      "id": "src_components_editor_fields_tagsfield",
-      "label": "TagsField.jsx",
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "TagsField.jsx",
-      "file_type": "code",
-      "norm_label": "tagsfield.jsx",
-      "source_file": "src/components/Editor/fields/TagsField.jsx",
-      "source_location": "L1"
-    },
-    {
       "id": "server_src_config_db",
       "label": "db.js",
       "_origin": "ast",
@@ -9307,6 +9307,18 @@
       "type": "external"
     },
     {
+      "id": "src_components_editor_fields_index_rangefield",
+      "label": "src_components_editor_fields_index_rangefield",
+      "_origin": "semantic",
+      "community": 7,
+      "community_name": "SchemaBlockForm.jsx",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "src_components_editor_fields_index_rangefield",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "src_components_editor_fields_index_repeatablelist",
       "label": "src_components_editor_fields_index_repeatablelist",
       "_origin": "semantic",
@@ -9363,17 +9375,6 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "src_components_editor_fields_index_togglefield",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "src_components_editor_fields_index_rangefield",
-      "label": "src_components_editor_fields_index_rangefield",
-      "community": 7,
-      "community_name": "SchemaBlockForm.jsx",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "src_components_editor_fields_index_rangefield",
       "source_file": "",
       "type": "external"
     }
@@ -10576,7 +10577,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/Blocks/MusicPlayerBlock.jsx",
-      "source_location": "L306",
+      "source_location": "L307",
       "weight": 1.0
     },
     {
@@ -10588,7 +10589,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/Blocks/MusicPlayerBlock.jsx",
-      "source_location": "L309",
+      "source_location": "L310",
       "weight": 1.0
     },
     {
@@ -10600,7 +10601,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/Blocks/MusicPlayerBlock.jsx",
-      "source_location": "L310",
+      "source_location": "L311",
       "weight": 1.0
     },
     {
@@ -10612,7 +10613,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/Blocks/MusicPlayerBlock.jsx",
-      "source_location": "L387",
+      "source_location": "L388",
       "weight": 1.0
     },
     {
@@ -31698,7 +31699,7 @@
       "confidence_score": 0.85,
       "context": "collection",
       "source_file": "src/components/Editor/blockSchemas/musicPlayer.js",
-      "source_location": "L65",
+      "source_location": "L66",
       "weight": 1.0
     },
     {
@@ -31715,5 +31716,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a8eacd85d08e0cc16c1df0b59f2b035bac86db52"
+  "built_at_commit": "300e6b77b17c8a4cc5200b83628af8e03b9641c1"
 }

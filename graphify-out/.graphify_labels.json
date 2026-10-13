@@ -18,6 +18,8 @@
   "16": "LandingPage.jsx",
   "17": "React + Vite",
   "18": "TabManagerModal.jsx",
+  "19": "eslint.config.js",
+  "20": "TagsField.jsx",
   "21": "how-it-works.jsx",
   "22": "ThemePanel.jsx",
   "23": "images.js",
@@ -30,7 +32,5 @@
   "32": "scripts",
   "33": "container-scroll-animation.jsx",
   "34": "react",
-  "36": "vite.config.js",
-  "37": "eslint.config.js",
-  "38": "TagsField.jsx"
+  "36": "vite.config.js"
 }

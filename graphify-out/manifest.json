@@ -168,9 +168,9 @@
     "semantic_hash": "4c616b77f75f88ed2e1f4f10bfa8180b"
   },
   "src/components/Blocks/MusicPlayerBlock.jsx": {
-    "mtime": 1791871582.9760635,
-    "seen": 1791871607.659137,
-    "ast_hash": "2d5bc33000dab83718f52d030ab7ab46",
+    "mtime": 1791872116.202118,
+    "seen": 1791872140.3594315,
+    "ast_hash": "cc92ac3829f871749edce94f482fe714",
     "semantic_hash": ""
   },
   "src/components/Blocks/ServicesBlock.jsx": {
@@ -594,9 +594,9 @@
     "semantic_hash": ""
   },
   "src/components/Editor/blockSchemas/musicPlayer.js": {
-    "mtime": 1791871579.9839287,
-    "seen": 1791871607.6591694,
-    "ast_hash": "daf62aae4598b70df0e6541b5046a6bc",
+    "mtime": 1791872104.653227,
+    "seen": 1791872140.359468,
+    "ast_hash": "154648da6911272378954430960fdd2c",
     "semantic_hash": ""
   },
   "src/components/Editor/blockSchemas/services.js": {

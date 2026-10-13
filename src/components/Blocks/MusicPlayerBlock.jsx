@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, SkipBack, SkipForward, Music, Disc3, ExternalLink } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Music, Disc3, ExternalLink, VolumeX } from 'lucide-react';
 import { safeUrl } from '../../lib/safeUrl';
 import { floatingClassName, floatingStyle } from '../../lib/floatingPlayer';
 import CanvasPortal from './CanvasPortal';
@@ -199,7 +199,7 @@ export default function MusicPlayerBlock({ data, isPreview = false }) {
   }, [data]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(() => !!data?.autoplay);
+  const [isPlaying, setIsPlaying] = useState(() => !!data?.autoplay && !isPreview);
   const iframeRef = useRef(null);
 
   const currentTrack = items[currentIndex] || null;
@@ -210,7 +210,8 @@ export default function MusicPlayerBlock({ data, isPreview = false }) {
 
   // Send play/pause commands to YouTube iframe via postMessage API
   useEffect(() => {
-    if (!iframeRef.current?.contentWindow) return;
+    // Preview renders no audio iframe at all, so there is nothing to command.
+    if (isPreview || !iframeRef.current?.contentWindow) return;
     try {
       if (isPlaying) {
         iframeRef.current.contentWindow.postMessage(
@@ -230,12 +231,12 @@ export default function MusicPlayerBlock({ data, isPreview = false }) {
     } catch {
       // ignore cross-origin error
     }
-  }, [isPlaying, currentIndex]);
+  }, [isPlaying, currentIndex, isPreview]);
 
   // Mobile Autoplay unlock: mobile browsers (iOS/Android) block unmuted audio until first user interaction.
   // This listener starts audio the moment the user touches/taps anywhere on the screen to scroll or browse.
   useEffect(() => {
-    if (!data?.autoplay) return;
+    if (!data?.autoplay || isPreview) return;
 
     let unlocked = false;
     const unlockAudio = (event) => {
@@ -273,7 +274,7 @@ export default function MusicPlayerBlock({ data, isPreview = false }) {
       window.removeEventListener('pointerdown', unlockAudio);
       window.removeEventListener('click', unlockAudio);
     };
-  }, [data?.autoplay]);
+  }, [data?.autoplay, isPreview]);
 
   const handlePlayToggle = () => {
     setIsPlaying((prev) => !prev);
@@ -316,7 +317,7 @@ export default function MusicPlayerBlock({ data, isPreview = false }) {
 
   return (
     <div className="music-player-block">
-      <div className={`music-player-layout ${floating ? 'is-floating align-left' : `align-${discPosition}`}`}>
+      <div className={`music-player-layout ${floating ? 'is-floating ' : ''}align-${discPosition}`}>
         {/* Vinyl Disc Visual (the floating vinyl replaces it when floating) */}
         {!floating && (
           <VinylDisc
@@ -403,7 +404,8 @@ export default function MusicPlayerBlock({ data, isPreview = false }) {
       {floatingVinyl && (isPreview ? floatingVinyl : <CanvasPortal>{floatingVinyl}</CanvasPortal>)}
 
       {/* Invisible YouTube / Audio Streamer (Maintained in DOM for Mobile WebKit/Chromium) */}
-      {parsed.embedSrc && !showVisibleEmbed && (
+      {/* Editor preview loads no audio iframe (silent for every provider); UI state still toggles. */}
+      {parsed.embedSrc && !showVisibleEmbed && !isPreview && (
         <iframe
           ref={iframeRef}
           src={parsed.embedSrc}
@@ -424,7 +426,17 @@ export default function MusicPlayerBlock({ data, isPreview = false }) {
       )}
 
       {/* Visible interactive embed player (only if user enabled) */}
-      {parsed.embedSrc && showVisibleEmbed && (
+      {parsed.embedSrc && showVisibleEmbed && isPreview && (
+        <div
+          className="music-player-preview-muted"
+          style={{ height: `${parsed.defaultHeight || 152}px` }}
+        >
+          <VolumeX size={16} />
+          <span>Audio is muted in the editor preview</span>
+        </div>
+      )}
+
+      {parsed.embedSrc && showVisibleEmbed && !isPreview && (
         <div className="music-player-iframe-wrapper">
           <iframe
             ref={iframeRef}

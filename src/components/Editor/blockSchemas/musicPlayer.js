@@ -30,7 +30,8 @@ const musicPlayer = {
           key: 'discPosition',
           type: 'choice',
           label: 'Record position',
-          fallback: 'center',
+          fallback: 'left',
+          hint: 'With the floating vinyl on, this aligns the title, artist and controls.',
           options: [
             { value: 'left', label: 'Left' },
             { value: 'center', label: 'Center' },

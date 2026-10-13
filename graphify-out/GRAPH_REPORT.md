@@ -1,7 +1,7 @@
 # Graph Report - profile  (2026-10-13)
 
 ## Corpus Check
-- 167 files · ~113,289 words
+- 167 files · ~113,373 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 90 file(s) not represented in the graph (top: .css 83, (none) 6, .conf 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a8eacd85`
+- Built from commit: `300e6b77`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -35,6 +35,8 @@
 - LandingPage.jsx
 - React + Vite
 - TabManagerModal.jsx
+- eslint.config.js
+- TagsField.jsx
 - how-it-works.jsx
 - ThemePanel.jsx
 - images.js
@@ -48,8 +50,6 @@
 - container-scroll-animation.jsx
 - react
 - vite.config.js
-- eslint.config.js
-- TagsField.jsx
 
 ## God Nodes (most connected - your core abstractions)
 1. `react` - 64 edges
@@ -156,6 +156,10 @@ Nodes (3): Expanding the ESLint configuration, React Compiler, React + Vite
 Cohesion: 0.20
 Nodes (11): IconPickerField(), src_components_editor_fields_index_iconpickerfield, src_components_editor_fields_index_sortablerow, src_components_editor_fields_index_textfield, TextField(), makeTabId(), renderTabIcon(), TabManagerModal() (+3 more)
 
+### Community 19 - "eslint.config.js"
+Cohesion: 0.33
+Nodes (5): eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals
+
 ### Community 21 - "how-it-works.jsx"
 Cohesion: 0.16
 Nodes (11): CARD_VARIANTS, CHANGE_VARIANTS, CHANGES_VARIANTS, EASE_OUT, HowItWorks(), layoutCards(), PatchBoard(), PIN_VARIANTS (+3 more)
@@ -200,10 +204,6 @@ Nodes (6): scripts, build, dev, lint, preview, test
 Cohesion: 0.18
 Nodes (7): react, CONTENT_KEYS, ImageEditor, LazyImageEditor(), Avatar, AvatarFallback, AvatarImage
 
-### Community 37 - "eslint.config.js"
-Cohesion: 0.33
-Nodes (5): eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals
-
 ## Knowledge Gaps
 - **196 isolated node(s):** `name`, `private`, `version`, `type`, `dev` (+191 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 264 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
@@ -212,11 +212,11 @@ Nodes (5): eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-re
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `react` to `fields/index.js`, `lucide-react`, `EditorSearchPalette.jsx`, `package.json`, `container-scroll-animation.jsx`, `ProfileCanvas.jsx`, `TagsField.jsx`, `TechIconField.jsx`, `card.jsx`, `WinnerSection.jsx`, `LandingPage.jsx`, `TabManagerModal.jsx`, `how-it-works.jsx`, `ThemePanel.jsx`, `floatingPlayer.js`, `imageEdit.js`, `RepeatableList.jsx`?**
+- **Why does `react` connect `react` to `fields/index.js`, `lucide-react`, `EditorSearchPalette.jsx`, `package.json`, `container-scroll-animation.jsx`, `ProfileCanvas.jsx`, `TechIconField.jsx`, `card.jsx`, `WinnerSection.jsx`, `LandingPage.jsx`, `TabManagerModal.jsx`, `TagsField.jsx`, `how-it-works.jsx`, `ThemePanel.jsx`, `floatingPlayer.js`, `imageEdit.js`, `RepeatableList.jsx`?**
   _High betweenness centrality (0.267) - this node is a cross-community bridge._
 - **Why does `vitest` connect `ProfileCanvas.jsx` to `lucide-react`, `package.json`, `db.js`, `lib/patchNotes.js`, `routes/auth.js`, `ogImageService.js`, `images.js`, `floatingPlayer.js`, `server/package.json`, `imageEdit.js`?**
   _High betweenness centrality (0.228) - this node is a cross-community bridge._
-- **Why does `lucide-react` connect `lucide-react` to `fields/index.js`, `EditorSearchPalette.jsx`, `package.json`, `react`, `ProfileCanvas.jsx`, `TagsField.jsx`, `SchemaBlockForm.jsx`, `TechIconField.jsx`, `WinnerSection.jsx`, `LandingPage.jsx`, `TabManagerModal.jsx`, `how-it-works.jsx`, `ThemePanel.jsx`, `imageEdit.js`, `RepeatableList.jsx`?**
+- **Why does `lucide-react` connect `lucide-react` to `fields/index.js`, `EditorSearchPalette.jsx`, `package.json`, `react`, `ProfileCanvas.jsx`, `SchemaBlockForm.jsx`, `TechIconField.jsx`, `WinnerSection.jsx`, `LandingPage.jsx`, `TabManagerModal.jsx`, `TagsField.jsx`, `how-it-works.jsx`, `ThemePanel.jsx`, `imageEdit.js`, `RepeatableList.jsx`?**
   _High betweenness centrality (0.192) - this node is a cross-community bridge._
 - **What connects `name`, `private`, `version` to the rest of the system?**
   _196 weakly-connected nodes found - possible documentation gaps or missing edges._
