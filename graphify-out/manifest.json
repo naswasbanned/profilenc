@@ -168,9 +168,9 @@
     "semantic_hash": "4c616b77f75f88ed2e1f4f10bfa8180b"
   },
   "src/components/Blocks/MusicPlayerBlock.jsx": {
-    "mtime": 1791876375.7248876,
-    "seen": 1791876449.1201096,
-    "ast_hash": "2b728561b8453d399936182f81bd611b",
+    "mtime": 1791882905.766703,
+    "seen": 1791883988.3000958,
+    "ast_hash": "c2c8035439ce5b6c740dbd10b9f62b87",
     "semantic_hash": ""
   },
   "src/components/Blocks/ServicesBlock.jsx": {

@@ -25,39 +25,73 @@
     font-size: 0.78rem;
   }
 
-  /* 1. Hero Block */
-  .hero-block {
-    padding: 32px 16px 24px;
-  }
-
-  .hero-block.layout-split-left,
-  .hero-block.layout-split-right,
+  /* 1. Hero Block — one centered column for every layout variant
+     (center, left, right, split-left, split-right). Desktop is untouched. */
+  .hero-block,
   .hero-block.align-left,
-  .hero-block.align-right {
+  .hero-block.align-right,
+  .hero-block.layout-split,
+  .hero-block.layout-split-left,
+  .hero-block.layout-split-right {
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     text-align: center;
+    gap: 0;
+    padding: 32px 16px 24px;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
   }
 
-  .hero-block.layout-split-left .hero-status-badge,
-  .hero-block.layout-split-right .hero-status-badge,
+  /* Split wrappers: avatar always first (split-right has the body first in the DOM) */
+  .hero-block .hero-split-media {
+    order: -1;
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  .hero-block .hero-split-body {
+    order: 0;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .hero-block .hero-content-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .hero-block .hero-avatar-wrap {
+    margin-bottom: 20px;
+  }
+
+  .hero-block .hero-status-badge,
   .hero-block.align-left .hero-status-badge,
   .hero-block.align-right .hero-status-badge {
     left: 50%;
     right: auto;
     transform: translateX(-50%);
+    max-width: 90vw;
   }
 
-  .hero-avatar-img-wrap,
-  .hero-avatar-wrap .optimized-image-wrapper,
-  .hero-avatar-fallback,
-  img.hero-avatar:not(.optimized-image) {
+  .hero-block .hero-avatar-img-wrap,
+  .hero-block .hero-avatar-wrap .optimized-image-wrapper,
+  .hero-block .hero-avatar,
+  .hero-block .hero-avatar-fallback,
+  .hero-block img.hero-avatar:not(.optimized-image) {
     width: 90px;
     height: 90px;
   }
 
   .hero-name {
     font-size: clamp(1.6rem, 6vw, 2.2rem);
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .hero-tagline {
@@ -67,25 +101,60 @@
   .hero-bio {
     font-size: 0.88rem;
     line-height: 1.5;
+    margin-bottom: 20px;
+    max-width: 100%;
   }
 
-  .hero-actions {
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-  }
-
-  .hero-action-btn {
-    width: 100%;
+  /* Socials + actions: compact centered wrapping rows, any alignment/button style */
+  .hero-block .hero-socials,
+  .hero-block .hero-socials:has(.hero-social-link:nth-child(4)),
+  .hero-block .hero-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
-    padding: 12px 18px;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .hero-block .hero-socials {
+    margin-bottom: 16px;
+  }
+
+  .hero-block .hero-btn,
+  .hero-block .hero-social-link,
+  .hero-block .hero-socials:has(.hero-social-link:nth-child(4)) .hero-social-link {
+    box-sizing: border-box;
+    width: auto;
+    max-width: 100%;
+    min-height: 40px;
+    padding: 8px 16px;
+    gap: 6px;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    justify-content: center;
+    white-space: normal;
+    text-align: center;
+    margin: 0;
+  }
+
+  .hero-block .hero-social-link {
+    padding: 8px 14px;
     font-size: 0.82rem;
   }
 
-  .hero-socials {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
+  .hero-block .hero-btn svg,
+  .hero-block .hero-social-link svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  /* A lone action button may fill the row */
+  .hero-block .hero-actions > .hero-btn:only-child {
+    width: 100%;
+    max-width: 320px;
   }
 
   /* 2. Services & Rates Block */
