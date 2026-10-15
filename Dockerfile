@@ -9,6 +9,8 @@ RUN npm install
 
 # Copy the rest of the source and build
 COPY . .
+ARG VITE_TURNSTILE_SITE_KEY=
+ENV VITE_TURNSTILE_SITE_KEY=$VITE_TURNSTILE_SITE_KEY
 RUN npm run build
 
 ## Runtime stage: serve built files with nginx

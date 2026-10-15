@@ -35,9 +35,13 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       PORT: 3001
       PUBLIC_URL: ${PUBLIC_URL:-}
+      TURNSTILE_SECRET: ${TURNSTILE_SECRET:-}
 
   frontend:
-    build: .
+    build:
+      context: .
+      args:
+        VITE_TURNSTILE_SITE_KEY: ${VITE_TURNSTILE_SITE_KEY:-}
     container_name: profilenc_frontend
     restart: unless-stopped
     depends_on:

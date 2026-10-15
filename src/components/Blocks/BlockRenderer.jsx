@@ -28,6 +28,7 @@ import {
   Music,
   Video,
   Play,
+  Mail,
 } from 'lucide-react';
 import HeroBlock from './HeroBlock';
 import CardsGridBlock from './CardsGridBlock';
@@ -45,6 +46,7 @@ import VideoGalleryBlock from './VideoGalleryBlock';
 import GitHubHeatmapBlock from './GitHubHeatmapBlock';
 import MusicPlayerBlock from './MusicPlayerBlock';
 import MilestonesBlock from './MilestonesBlock';
+import ContactBlock from './ContactBlock';
 import { getIcon, isIconDisabled } from '../../lib/icons';
 import { isBlockEmpty } from '../../lib/blockEmpty';
 import { BlockIdContext } from './CanvasPortal';
@@ -70,6 +72,7 @@ const blockComponentMap = {
   github_heatmap: GitHubHeatmapBlock,
   music_player: MusicPlayerBlock,
   milestones: MilestonesBlock,
+  contact: ContactBlock,
 };
 
 const blockIconMap = {
@@ -92,6 +95,7 @@ const blockIconMap = {
   github_heatmap: Activity,
   music_player: Music,
   milestones: Star,
+  contact: Mail,
 };
 
 function renderBlockIcon(iconName, blockType) {

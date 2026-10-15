@@ -132,3 +132,54 @@ export const statsLimiter = limiter({
   limit: 120,
   message: 'Too many tracking events.',
 });
+
+const userKey = (req) => (req.user?.id ? `user:${req.user.id}` : byClient(req));
+
+/** Direct messages: 20/hour per sender account. Mount after `auth`. */
+export const dmUserLimiter = limiter({
+  label: 'dm-user',
+  windowMs: 60 * MINUTE,
+  limit: 20,
+  keyGenerator: userKey,
+  message: 'You have sent a lot of messages this hour. Please try again later.',
+});
+
+/** Direct messages: 5/hour per sender + recipient pair, so one person cannot be flooded. */
+export const dmPairLimiter = limiter({
+  label: 'dm-pair',
+  windowMs: 60 * MINUTE,
+  limit: 5,
+  keyGenerator: (req) =>
+    `pair:${req.user?.id}:${String(req.body?.to ?? '').toLowerCase().replace(/^@+/, '').trim()}`,
+  message: 'You have sent several messages to this person already. Please try again later.',
+});
+
+export const dmLimiter = [dmUserLimiter, dmPairLimiter];
+
+/** Username autocomplete: 60/min per account. Mount after `auth`. */
+export const suggestUsersLimiter = limiter({
+  label: 'suggest-users',
+  windowMs: MINUTE,
+  limit: 60,
+  keyGenerator: userKey,
+  message: 'Too many username lookups. Please slow down, or type the full username.',
+});
+
+/** Public contact block: per client address. */
+export const messageIpLimiter = limiter({
+  label: 'messages-ip',
+  windowMs: 60 * MINUTE,
+  limit: 10,
+  message: 'You have sent several messages already. Please try again later.',
+});
+
+/** Public contact block: per recipient profile, so one profile cannot be flooded from many addresses. */
+export const messageProfileLimiter = limiter({
+  label: 'messages-profile',
+  windowMs: 60 * MINUTE,
+  limit: 30,
+  keyGenerator: (req) => `profile:${String(req.params?.username ?? '').toLowerCase()}`,
+  message: 'This profile is receiving a lot of messages right now. Please try again later.',
+});
+
+export const messageLimiter = [messageIpLimiter, messageProfileLimiter];

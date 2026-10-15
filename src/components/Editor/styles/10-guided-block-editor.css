@@ -100,9 +100,18 @@
    preview matches the published page. */
 .bf-preview-canvas {
   min-height: 100%;
-  padding: 18px 0;
+  display: flex;
+  flex-direction: column;
   border-radius: 12px;
   overflow: hidden;
+  /* Same inherited baseline as the public page body (global.css), so nothing
+     falls back to the editor chrome's font or ink color. */
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* --- Field panel ------------------------------------------------------- */

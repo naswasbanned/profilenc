@@ -129,12 +129,12 @@
   /* --- Form controls: 16px text stops iOS from zooming on focus --- */
   .editor-text-input,
   .editor-select,
-  .editor-modal-body textarea {
+  .editor-modal-body textarea:not(:where(.bf-preview-canvas *)) {
     min-height: 44px;
     font-size: 1rem;
   }
 
-  .editor-modal-body textarea {
+  .editor-modal-body textarea:not(:where(.bf-preview-canvas *)) {
     min-height: 96px;
   }
 

@@ -12,8 +12,11 @@ import adminRoutes from './routes/admin.js';
 import siteRoutes from './routes/site.js';
 import ogRoutes from './routes/og.js';
 import statsRoutes from './routes/stats.js';
+import inboxRoutes from './routes/inbox.js';
+import messageRoutes from './routes/messages.js';
 import { apiLimiter } from './middleware/rateLimit.js';
 import { ensureUploadDirs } from './services/imageService.js';
+import { startInboxPurge } from './lib/inboxPurge.js';
 import { runMigrations } from './db/migrate.js';
 import { seedTemplates } from './db/seeds/templates.js';
 import { seedBootstrap } from './db/seeds/bootstrap.js';
@@ -46,10 +49,12 @@ app.use('/api', apiLimiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/images', imageRoutes);
 app.use('/api/u', userRoutes);              // Multi-user profile routes
+app.use('/api/u', messageRoutes);           // Public contact block submissions
 app.use('/api/templates', templateRoutes);  // Template browsing & featured profiles
 app.use('/api/admin', adminRoutes);          // Admin management routes
 app.use('/api/site', siteRoutes);            // Public site content & patch notes
 app.use('/api/stats', statsRoutes);          // Profile view/click counters
+app.use('/api/inbox', inboxRoutes);          // Dashboard inbox (auth required)
 app.use('/api/og', ogRoutes);                // Link-preview HTML for social bots (via nginx)
 
 // Health check
@@ -102,6 +107,7 @@ async function initDatabase(retries = 5, delay = 2000) {
 async function start() {
   await ensureUploadDirs();
   await initDatabase();
+  startInboxPurge();
 
   app.listen(PORT, () => {
     console.log(`Backend running on http://localhost:${PORT}`);

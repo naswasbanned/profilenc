@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ExternalLink,
@@ -20,13 +20,16 @@ import {
   Eye,
   EyeOff,
   BarChart3,
+  Inbox,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import AccountSettingsModal from '../components/Editor/AccountSettingsModal';
+import InboxSection from '../components/Dashboard/InboxSection';
 import MobileDock from '../components/primitives/MobileDock';
 import MobileBrandBar from '../components/primitives/MobileBrandBar';
 import { apiFetch } from '../lib/api';
 import { normalizeModularContent } from '../lib/profileContent';
+import { resolveDashboardTab, formatUnreadBadge, nextTabId } from '../lib/dashboardTabs';
 import './DashboardPage.css';
 import { useUiTheme } from '../hooks/useUiTheme';
 
@@ -112,6 +115,65 @@ export default function DashboardPage() {
       .then((data) => { if (!cancelled) setStats(data); });
     return () => { cancelled = true; };
   }, [user?.username]);
+
+  // Unread inbox messages (null while loading, false on failure)
+  const [unread, setUnread] = useState(null);
+  useEffect(() => {
+    if (!user?.username) return;
+    let cancelled = false;
+    apiFetch('/api/inbox/unread-count')
+      .then((res) => (res.ok ? res.json() : false))
+      .catch(() => false)
+      .then((data) => { if (!cancelled) setUnread(data ? data.unread : false); });
+    return () => { cancelled = true; };
+  }, [user?.username]);
+
+  // Re-check the unread count when the user returns to the window or tab.
+  // A failed refresh keeps the previous value so a real badge is not hidden.
+  useEffect(() => {
+    if (!user?.username) return undefined;
+    let cancelled = false;
+    const refreshUnread = () => {
+      apiFetch('/api/inbox/unread-count')
+        .then((res) => (res.ok ? res.json() : null))
+        .catch(() => null)
+        .then((data) => {
+          if (!cancelled && data) setUnread(Number(data.unread) || 0);
+        });
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') refreshUnread();
+    };
+    window.addEventListener('focus', refreshUnread);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('focus', refreshUnread);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [user?.username]);
+
+  // Active tab lives in the URL (?tab=inbox); tab switches replace the history entry
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = resolveDashboardTab(searchParams.get('tab'));
+  const tabRefs = useRef({});
+  const selectTab = useCallback((id) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (id === 'inbox') next.set('tab', 'inbox');
+      else next.delete('tab');
+      return next;
+    }, { replace: true });
+  }, [setSearchParams]);
+  const handleTabKeyDown = (e, current) => {
+    const next = nextTabId(current, e.key);
+    if (!next) return;
+    e.preventDefault();
+    selectTab(next);
+    tabRefs.current[next]?.focus();
+  };
+  const unreadCount = typeof unread === 'number' ? unread : 0;
+  const unreadBadge = formatUnreadBadge(unreadCount);
 
   // Fill missing days with zero so the chart has one bar per day, oldest first
   const statsDays = useMemo(() => {
@@ -361,15 +423,71 @@ export default function DashboardPage() {
                 {user.isAdmin ? 'Full platform administration access' : 'Standard portfolio account'}
               </span>
             </div>
+
+            <div className="dash-metric-card">
+              <span className="metric-tag">05 // UNREAD</span>
+              <div className="metric-value-row">
+                <span className="metric-number">
+                  {unread === null ? '...' : unread === false ? '-' : unreadBadge || unread}
+                </span>
+                <span className="metric-unit">messages</span>
+              </div>
+              <span className="metric-sub">In your inbox</span>
+            </div>
           </motion.div>
 
-          {/* Visitor Stats (rendered unconditionally so the stagger reaches it; see AGENTS.md) */}
-          <motion.div className="dash-hub-section" variants={itemVariants}>
-            <div className="section-title-wrap">
-              <h2 className="dash-section-title">VISITOR STATS</h2>
-              <span className="section-tag-mono">// LAST 30 DAYS</span>
+          {/* Statistics / Inbox tabs. One always-rendered motion child; both panels stay
+              mounted (inactive one is hidden) so nothing depends on the one-time stagger
+              and the inbox keeps its draft. See AGENTS.md. */}
+          <motion.div className="dash-hub-section dash-tabs-section" variants={itemVariants}>
+            <div className="dash-tabs" role="tablist" aria-label="Dashboard sections">
+              <button
+                type="button"
+                role="tab"
+                id="dash-tab-stats"
+                className="dash-tab"
+                aria-selected={activeTab === 'stats'}
+                aria-controls="dash-panel-stats"
+                tabIndex={activeTab === 'stats' ? 0 : -1}
+                ref={(el) => { tabRefs.current.stats = el; }}
+                onClick={() => selectTab('stats')}
+                onKeyDown={(e) => handleTabKeyDown(e, 'stats')}
+              >
+                <BarChart3 size={16} aria-hidden="true" />
+                <span>Statistics</span>
+              </button>
+              <button
+                type="button"
+                role="tab"
+                id="dash-tab-inbox"
+                className="dash-tab"
+                aria-selected={activeTab === 'inbox'}
+                aria-controls="dash-panel-inbox"
+                tabIndex={activeTab === 'inbox' ? 0 : -1}
+                ref={(el) => { tabRefs.current.inbox = el; }}
+                onClick={() => selectTab('inbox')}
+                onKeyDown={(e) => handleTabKeyDown(e, 'inbox')}
+              >
+                <Inbox size={16} aria-hidden="true" />
+                <span>Inbox</span>
+                {unreadBadge && (
+                  <>
+                    <span className="dash-tab-badge" aria-hidden="true">{unreadBadge}</span>
+                    <span className="dash-visually-hidden">{unreadCount} unread messages</span>
+                  </>
+                )}
+              </button>
             </div>
 
+            <div
+              role="tabpanel"
+              id="dash-panel-stats"
+              aria-labelledby="dash-tab-stats"
+              className="dash-tabpanel"
+              hidden={activeTab !== 'stats'}
+              tabIndex={0}
+            >
+            <span className="section-tag-mono">// VISITOR STATS · LAST 30 DAYS</span>
             <div className="dash-hub-card dash-stats-card">
               {stats === null && <p className="hub-desc">Loading stats...</p>}
               {stats === false && <p className="hub-desc">Stats are unavailable right now.</p>}
@@ -419,6 +537,18 @@ export default function DashboardPage() {
                   </p>
                 </>
               )}
+            </div>
+            </div>
+
+            <div
+              role="tabpanel"
+              id="dash-panel-inbox"
+              aria-labelledby="dash-tab-inbox"
+              className="dash-tabpanel"
+              hidden={activeTab !== 'inbox'}
+            >
+              <span className="section-tag-mono">// MESSAGES</span>
+              <InboxSection onUnreadChange={setUnread} />
             </div>
           </motion.div>
 
@@ -554,6 +684,7 @@ export default function DashboardPage() {
             label: 'Home',
             Icon: LayoutDashboard,
             active: !showSettingsModal,
+            badge: unreadBadge || undefined,
             onClick: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
           },
           {

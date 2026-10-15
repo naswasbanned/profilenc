@@ -1,6 +1,7 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from 'react';
 import { ArrowLeft, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import BlockRenderer from '../Blocks/BlockRenderer';
+import ProfileBackgroundLayer from '../Profile/ProfileBackgroundLayer';
 import SchemaBlockForm from './SchemaBlockForm';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getCanvasBackground, getCanvasStyleAttributes } from '../../lib/canvasStyle';
@@ -147,13 +148,16 @@ export default function BlockEditorWorkbench({
                   backgroundImage: background.backgroundGradient || undefined,
                 }}
               >
-                <BlockRenderer
-                  block={previewBlock}
-                  index={0}
-                  totalBlocks={1}
-                  isEditing={false}
-                  disableReveal
-                />
+                <ProfileBackgroundLayer background={background} />
+                <main className="profile-canvas-main" style={{ flex: 1, padding: '20px 0 40px' }}>
+                  <BlockRenderer
+                    block={previewBlock}
+                    index={0}
+                    totalBlocks={1}
+                    isEditing={false}
+                    disableReveal
+                  />
+                </main>
               </div>
             </div>
           </div>

@@ -123,18 +123,21 @@
 }
 
 /* Ensure all labels and inputs in modals follow Field Notes styles */
-.editor-modal-dialog label {
+/* The live preview (.bf-preview-canvas) renders the profile's own theme, so these
+   editor-chrome element rules must never reach into it. :where() keeps the
+   specificity unchanged. */
+.editor-modal-dialog label:not(:where(.bf-preview-canvas *)) {
   color: var(--fn-editor-ink) !important;
   font-family: var(--fn-editor-body);
   font-weight: 700;
 }
 
-.editor-modal-dialog textarea,
-.editor-modal-dialog input[type="text"],
-.editor-modal-dialog input[type="url"],
-.editor-modal-dialog input[type="password"],
-.editor-modal-dialog input[type="number"],
-.editor-modal-dialog select {
+.editor-modal-dialog textarea:not(:where(.bf-preview-canvas *)),
+.editor-modal-dialog input[type="text"]:not(:where(.bf-preview-canvas *)),
+.editor-modal-dialog input[type="url"]:not(:where(.bf-preview-canvas *)),
+.editor-modal-dialog input[type="password"]:not(:where(.bf-preview-canvas *)),
+.editor-modal-dialog input[type="number"]:not(:where(.bf-preview-canvas *)),
+.editor-modal-dialog select:not(:where(.bf-preview-canvas *)) {
   background: var(--fn-editor-paper-light) !important;
   border: 2px solid var(--fn-editor-line) !important;
   color: var(--fn-editor-ink) !important;
@@ -142,12 +145,12 @@
   font-family: var(--fn-editor-body);
 }
 
-.editor-modal-dialog textarea:focus,
-.editor-modal-dialog input[type="text"]:focus,
-.editor-modal-dialog input[type="url"]:focus,
-.editor-modal-dialog input[type="password"]:focus,
-.editor-modal-dialog input[type="number"]:focus,
-.editor-modal-dialog select:focus {
+.editor-modal-dialog textarea:not(:where(.bf-preview-canvas *)):focus,
+.editor-modal-dialog input[type="text"]:not(:where(.bf-preview-canvas *)):focus,
+.editor-modal-dialog input[type="url"]:not(:where(.bf-preview-canvas *)):focus,
+.editor-modal-dialog input[type="password"]:not(:where(.bf-preview-canvas *)):focus,
+.editor-modal-dialog input[type="number"]:not(:where(.bf-preview-canvas *)):focus,
+.editor-modal-dialog select:not(:where(.bf-preview-canvas *)):focus {
   border-color: var(--fn-editor-ink) !important;
   box-shadow: var(--fn-editor-shadow-xs) !important;
   outline: none !important;

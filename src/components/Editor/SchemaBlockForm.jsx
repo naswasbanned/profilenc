@@ -188,6 +188,7 @@ export default function SchemaBlockForm({ group, data, onFieldChange, onListChan
         defaultItem={list.defaultItem}
         exampleItem={list.exampleItem}
         emptyHint={list.emptyHint}
+        max={list.max}
         renderFields={(item, setItemField) => (
           <div className="bf-fields">
             {list.fields.map((field) => (

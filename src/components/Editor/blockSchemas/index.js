@@ -1,4 +1,5 @@
 import cardsGrid from './cardsGrid';
+import contact from './contact';
 import events from './events';
 import featuredVideo from './featuredVideo';
 import gallery from './gallery';
@@ -44,6 +45,7 @@ const SCHEMAS = {
   [skills.type]: skills,
   [milestones.type]: milestones,
   [journal.type]: journal,
+  [contact.type]: contact,
 };
 
 export function getBlockSchema(type) {

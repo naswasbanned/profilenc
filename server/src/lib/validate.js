@@ -30,6 +30,11 @@ export const LIMITS = {
   suggestionEmail: 200,
   suggestionTitle: 200,
   suggestionMessage: 5000,
+  directMessage: 2000,
+  messageField: 5000,
+  messageMaxFields: 8,
+  messageLabel: 120,
+  messageTotal: 20000,
 };
 
 /**

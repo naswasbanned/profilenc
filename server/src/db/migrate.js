@@ -147,6 +147,25 @@ export async function runMigrations() {
     )
   `);
 
+  // Inbox: direct messages between accounts and submissions from the public
+  // contact block. Kept OUT of user_content because the editor overwrites that
+  // whole blob on save. A block/opt-out setting can be added later (e.g. a
+  // users.accepts_messages column); today every account accepts everything.
+  await query(`
+    CREATE TABLE IF NOT EXISTS profile_messages (
+      id                SERIAL PRIMARY KEY,
+      recipient_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      sender_user_id    INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      sender_name       TEXT,
+      source            TEXT NOT NULL,
+      block_id          TEXT,
+      answers           JSONB NOT NULL,
+      status            TEXT NOT NULL DEFAULT 'NEW',
+      ip_hash           TEXT,
+      created_at        TIMESTAMPTZ DEFAULT NOW()
+    )
+  `);
+
   // Indexes
   await query(`
     CREATE INDEX IF NOT EXISTS idx_user_content_user_key ON user_content(user_id, key)
@@ -159,6 +178,10 @@ export async function runMigrations() {
   `);
   await query(`
     CREATE INDEX IF NOT EXISTS idx_suggestions_created ON suggestions(created_at DESC)
+  `);
+  await query(`
+    CREATE INDEX IF NOT EXISTS idx_profile_messages_inbox
+    ON profile_messages(recipient_user_id, status, created_at DESC)
   `);
 
   console.log('  ✓ All database tables and indexes verified.');

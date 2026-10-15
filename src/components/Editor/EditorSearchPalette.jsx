@@ -34,6 +34,7 @@ import {
   LogOut,
   Trash2,
   Gamepad2,
+  Mail,
   Disc3,
 } from 'lucide-react';
 import { buildSearchEntries, searchEntries } from './searchRegistry';
@@ -44,7 +45,7 @@ const ICON_MAP = {
   Save, Undo2, Redo2, Eye, X, Plus, FolderKanban, Palette, Settings, Moon,
   Sparkles, Type, Layers, Compass, Image, Square, Sliders, User, Briefcase,
   Code2, BookOpen, Cpu, Video, Film, Music, Target, Edit3, Globe, Lock,
-  LogOut, Trash2, Gamepad2, Disc3,
+  LogOut, Trash2, Gamepad2, Disc3, Mail,
   Github: Code2,
 };
 

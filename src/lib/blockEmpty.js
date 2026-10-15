@@ -14,6 +14,8 @@ export function isBlockEmpty(block) {
       return !d.videoUrl && !d.title && !d.description;
     case 'music_player':
       return !hasItems(d.items) && !d.embedUrl;
+    case 'contact':
+      return !hasItems(d.fields);
     case 'github_heatmap':
       return !d.username;
     case 'cards_grid':

@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Folder, LayoutDashboard, Settings } from 'lucide-react';
 import BlockRenderer from '../Blocks/BlockRenderer';
+import ProfileBackgroundLayer from './ProfileBackgroundLayer';
 import AccountSettingsModal from '../Editor/AccountSettingsModal';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
@@ -164,12 +165,6 @@ export default function ProfileCanvas({
   const tabBgGradient = background.backgroundGradient;
   const tabNavBg = background.tabNavBackground;
 
-  // Custom background image (per-tab or global)
-  const bgImage = background.backgroundImage;
-  const bgOverlayOpacity = background.backgroundOverlayOpacity;
-  const bgOverlayColor = background.backgroundOverlayColor;
-  const bgBlur = background.backgroundBlur;
-
   return (
     <div
       className="app"
@@ -188,24 +183,7 @@ export default function ProfileCanvas({
       }}
     >
       {/* Custom Background Image Layer with Glass Effect */}
-      {bgImage && (
-        <div className="profile-bg-layer" aria-hidden="true">
-          <div
-            className="profile-bg-image"
-            style={{
-              backgroundImage: `url(${bgImage})`,
-              filter: bgBlur > 0 ? `blur(${bgBlur}px)` : undefined,
-            }}
-          />
-          <div
-            className="profile-bg-overlay"
-            style={{
-              backgroundColor: bgOverlayColor,
-              opacity: bgOverlayOpacity,
-            }}
-          />
-        </div>
-      )}
+      <ProfileBackgroundLayer background={background} />
 
       {/* Settings + Edit FABs for profile owner */}
       {isOwner && !isEditing && (

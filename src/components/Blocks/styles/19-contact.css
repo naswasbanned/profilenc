@@ -1,0 +1,354 @@
+/* Contact block: visitor message form.
+   Card, text and control colors come from theme tokens only. Buttons reuse
+   .hero-btn so border, shadow, hover and active match every other block. */
+.contact-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 22px;
+  background: var(--card-bg, var(--color-surface-raised, transparent));
+  border-width: var(--card-border-width, 1px);
+  border-style: var(--card-border-style, solid);
+  border-color: var(--card-border, var(--color-border-subtle, rgba(128, 128, 128, 0.3)));
+  border-radius: var(--card-border-radius, var(--radius-md, 12px));
+  box-shadow: var(--card-shadow, none);
+  color: var(--card-text-color, var(--text-color, inherit));
+  backdrop-filter: blur(var(--glass-blur, 0px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 0px));
+}
+
+/* Layout: size and position */
+.contact-size-compact {
+  max-width: 480px;
+}
+
+.contact-size-compact.contact-align-left { margin-inline: 0 auto; }
+.contact-size-compact.contact-align-center { margin-inline: auto; }
+.contact-size-compact.contact-align-right { margin-inline: auto 0; }
+
+.contact-size-full {
+  max-width: none;
+  margin-inline: 0;
+}
+
+.contact-intro {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: var(--heading-font-weight, 700);
+  line-height: 1.35;
+  color: var(--card-text-color, inherit);
+  overflow-wrap: anywhere;
+}
+
+.contact-block-note {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--card-text-muted, var(--text-muted, inherit));
+}
+
+.contact-block-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contact-block-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contact-block-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--card-heading-color, var(--heading-color, inherit));
+}
+
+.contact-block-input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--card-text-color, inherit);
+  background: color-mix(in srgb, var(--card-text-color, currentColor) 5%, var(--card-bg, var(--color-surface-sunken, transparent)));
+  border: 1.5px solid var(--card-border, var(--color-border-subtle, rgba(128, 128, 128, 0.4)));
+  border-radius: var(--radius-sm, 8px);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.contact-block-input::placeholder {
+  color: color-mix(in srgb, var(--card-text-color, currentColor) 58%, transparent);
+  opacity: 1;
+}
+
+textarea.contact-block-input {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.contact-block-input:hover {
+  border-color: var(--color-accent-primary);
+}
+
+/* global.css removes outlines on form controls, so focus is drawn with border + shadow */
+.contact-block-input:focus,
+.contact-block-input:focus-visible {
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent-primary) 30%, transparent);
+}
+
+.contact-block-counter {
+  align-self: flex-end;
+  font-size: 0.75rem;
+  color: var(--card-text-muted, var(--text-muted, inherit));
+}
+
+.contact-block-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--card-text-color, inherit);
+}
+
+.contact-block-check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-accent-primary);
+}
+
+.contact-block-check input:focus-visible {
+  outline: 2px solid var(--color-accent-primary) !important;
+  outline-offset: 2px;
+}
+
+/* Button look (border, shadow, hover, active) comes from .hero-btn */
+.contact-block-submit {
+  align-self: flex-start;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.contact-block-submit:focus-visible {
+  outline: 2px solid var(--color-accent-primary) !important;
+  outline-offset: 3px;
+}
+
+.contact-block-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.contact-block-error,
+.contact-block-success .contact-block-note {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 0.88rem;
+  color: var(--card-text-color, inherit);
+  border-radius: var(--radius-sm, 8px);
+}
+
+.contact-block-error {
+  border: 1.5px solid #ef4444;
+  background: color-mix(in srgb, #ef4444 12%, var(--card-bg, transparent));
+}
+
+.contact-block-error svg {
+  color: #ef4444;
+  flex-shrink: 0;
+}
+
+.contact-block-success {
+  align-items: flex-start;
+}
+
+.contact-block-success .contact-block-note {
+  border: 1.5px solid var(--color-accent-primary);
+  background: color-mix(in srgb, var(--color-accent-primary) 12%, var(--card-bg, transparent));
+}
+
+.contact-block-success .contact-block-note svg {
+  color: var(--color-accent-primary);
+  flex-shrink: 0;
+}
+
+.contact-block-link {
+  color: var(--color-accent-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Off-screen rather than display:none so naive bots still fill it */
+.contact-block-hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.contact-block-spin {
+  animation: contact-block-spin 0.8s linear infinite;
+}
+
+@keyframes contact-block-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-block-spin { animation-duration: 2s; }
+}
+
+/* ==========================================================================
+   Theme variants (same selector pairing as other blocks)
+   ========================================================================== */
+
+/* Field Notes / editorial-tactile: ink border, hard offset shadow */
+[data-design-style="field-notes"] .contact-block,
+[data-button-style="editorial-tactile"] .contact-block {
+  border-width: 2px;
+  border-color: color-mix(in srgb, var(--card-text-color, #252320) 85%, var(--card-bg, transparent));
+  box-shadow: 4px 5px 0 var(--tactile-shadow-color, rgba(37, 35, 32, 0.32));
+}
+
+[data-design-style="field-notes"] .contact-block-input,
+[data-button-style="editorial-tactile"] .contact-block-input {
+  border: 2px solid color-mix(in srgb, var(--card-text-color, #252320) 85%, var(--card-bg, transparent));
+}
+
+[data-design-style="field-notes"] .contact-block-input:focus,
+[data-button-style="editorial-tactile"] .contact-block-input:focus {
+  border-color: var(--color-accent-primary);
+  box-shadow: 3px 3px 0 var(--tactile-shadow-color, #252320);
+  transform: translate(-1px, -1px);
+}
+
+[data-design-style="field-notes"] .contact-block-label,
+[data-button-style="editorial-tactile"] .contact-block-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs, 0.72rem);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Neo-brutalist: light surface, hard black borders */
+[data-design-style="neo-brutalist"] .contact-block,
+[data-button-style="neo-brutalist"] .contact-block {
+  border: 3px solid #000 !important;
+  box-shadow: 5px 5px 0 #000 !important;
+  border-radius: 0 !important;
+}
+
+[data-design-style="neo-brutalist"] .contact-block-input,
+[data-button-style="neo-brutalist"] .contact-block-input {
+  border: 2.5px solid #000;
+  border-radius: 0;
+  background: #fff;
+  color: #000;
+}
+
+[data-design-style="neo-brutalist"] .contact-block-input::placeholder,
+[data-button-style="neo-brutalist"] .contact-block-input::placeholder {
+  color: rgba(0, 0, 0, 0.58);
+}
+
+[data-design-style="neo-brutalist"] .contact-block-input:focus,
+[data-button-style="neo-brutalist"] .contact-block-input:focus {
+  border-color: #000;
+  box-shadow: 3px 3px 0 #000;
+  background: color-mix(in srgb, var(--color-accent-primary) 18%, #fff);
+}
+
+[data-design-style="neo-brutalist"] .contact-block-check input,
+[data-button-style="neo-brutalist"] .contact-block-check input {
+  accent-color: #000;
+}
+
+/* Press Mono / press-outline: flat, square, hairline */
+[data-design-style="press-mono"] .contact-block,
+[data-button-style="press-outline"] .contact-block {
+  background: transparent;
+  border: 1px solid var(--card-border, #d6d6d2);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+[data-design-style="press-mono"] .contact-block-input,
+[data-button-style="press-outline"] .contact-block-input {
+  border: 1px solid var(--card-border, #d6d6d2);
+  border-radius: 0;
+}
+
+[data-design-style="press-mono"] .contact-block-input:focus,
+[data-button-style="press-outline"] .contact-block-input:focus {
+  border-color: var(--heading-color, currentColor);
+  box-shadow: inset 0 -2px 0 var(--color-accent-primary);
+}
+
+/* Aurora Soft / soft-raised: borderless, rounded, soft shadow */
+[data-design-style="aurora-soft"] .contact-block,
+[data-button-style="soft-raised"] .contact-block {
+  border: none;
+  border-radius: var(--card-border-radius, 24px);
+  box-shadow: var(--card-shadow);
+}
+
+[data-design-style="aurora-soft"] .contact-block-input,
+[data-button-style="soft-raised"] .contact-block-input {
+  border: none;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--card-text-color) 6%, var(--card-bg));
+  box-shadow: inset 0 0 0 1.5px transparent;
+}
+
+[data-design-style="aurora-soft"] .contact-block-input:focus,
+[data-button-style="soft-raised"] .contact-block-input:focus {
+  box-shadow: inset 0 0 0 2px var(--color-accent-primary);
+}
+
+/* Midnight Violet / rounded-glow */
+[data-design-style="midnight-violet"] .contact-block-input,
+[data-button-style="rounded-glow"] .contact-block-input {
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--color-accent-primary) 30%, transparent);
+}
+
+[data-design-style="midnight-violet"] .contact-block-input:focus,
+[data-button-style="rounded-glow"] .contact-block-input:focus {
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--color-accent-primary) 30%, transparent),
+    0 0 14px color-mix(in srgb, var(--color-accent-primary) 35%, transparent);
+}
+
+/* Dark designs: keep native select popups readable */
+[data-design-style="obsidian"] .contact-block-input,
+[data-design-style="midnight-violet"] .contact-block-input {
+  color-scheme: dark;
+}
+
+/* Narrow screens: always full width, button fills the row */
+@media (max-width: 640px) {
+  .contact-block,
+  .contact-size-compact {
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  .contact-block-submit {
+    align-self: stretch;
+  }
+}

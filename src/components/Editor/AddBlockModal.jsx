@@ -17,6 +17,7 @@ import {
   Music,
   Target,
   Disc3,
+  Mail,
 } from 'lucide-react';
 
 const BLOCK_PRESETS = [
@@ -453,6 +454,25 @@ const BLOCK_PRESETS = [
           date: '2026',
           subTasks: [],
         },
+      ],
+    },
+  },
+  {
+    type: 'contact',
+    title: 'Contact Form',
+    desc: 'A message form that delivers to your dashboard inbox.',
+    icon: <Mail size={24} color="#38bdf8" />,
+    defaultTitle: 'Get in Touch',
+    defaultData: {
+      mode: 'either',
+      align: 'center',
+      size: 'compact',
+      intro: '',
+      submitLabel: 'Send message',
+      successMessage: 'Thanks, your message was sent.',
+      fields: [
+        { id: 'f-message', label: 'Message', type: 'textarea', required: true, options: [], maxLength: 2000 },
+        { id: 'f-name', label: 'Name', type: 'text', required: false, options: [], maxLength: 80 },
       ],
     },
   },

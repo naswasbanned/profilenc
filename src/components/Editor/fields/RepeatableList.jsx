@@ -8,10 +8,15 @@ import SortableRow from './SortableRow';
 // impure calls.
 let idSequence = 0;
 
-function makeItemId(itemLabel) {
-  idSequence += 1;
+function makeItemId(itemLabel, taken = []) {
   const slug = itemLabel.toLowerCase().replace(/\s+/g, '-');
-  return `${slug}-${idSequence}-${idSequence * 7919}`;
+  let id;
+  // The counter restarts on every page load, so skip ids the list already holds
+  do {
+    idSequence += 1;
+    id = `${slug}-${idSequence}-${idSequence * 7919}`;
+  } while (taken.includes(id));
+  return id;
 }
 
 /**
@@ -31,6 +36,7 @@ export default function RepeatableList({
   exampleItem,
   emptyHint,
   renderFields,
+  max,
 }) {
   const [openId, setOpenId] = useState(null);
 
@@ -42,8 +48,12 @@ export default function RepeatableList({
     id: item.id || `${itemLabel.toLowerCase().replace(/\s+/g, '-')}-${index}`,
   }));
 
+  const atMax = Number.isFinite(max) && withIds.length >= max;
+  const takenIds = withIds.map((item) => item.id);
+
   const addItem = (template) => {
-    const id = makeItemId(itemLabel);
+    if (atMax) return;
+    const id = makeItemId(itemLabel, takenIds);
     const next = [...withIds, { ...template, id }];
     onChange(next);
     setOpenId(id);
@@ -55,9 +65,10 @@ export default function RepeatableList({
   };
 
   const duplicateItem = (index) => {
+    if (atMax) return;
     const copy = {
       ...withIds[index],
-      id: makeItemId(itemLabel),
+      id: makeItemId(itemLabel, takenIds),
     };
     const next = [...withIds];
     next.splice(index + 1, 0, copy);
@@ -127,6 +138,7 @@ export default function RepeatableList({
                       type="button"
                       className="bf-row-action"
                       onClick={() => duplicateItem(index)}
+                      disabled={atMax}
                       title={`Duplicate ${itemLabel.toLowerCase()}`}
                     >
                       <Copy size={14} />
@@ -153,8 +165,13 @@ export default function RepeatableList({
         })}
       </Reorder.Group>
 
-      <button type="button" className="bf-btn bf-btn-add" onClick={() => addItem(defaultItem)}>
-        <Plus size={14} /> Add {itemLabel.toLowerCase()}
+      <button
+        type="button"
+        className="bf-btn bf-btn-add"
+        onClick={() => addItem(defaultItem)}
+        disabled={atMax}
+      >
+        <Plus size={14} /> {atMax ? `Limit of ${max} reached` : `Add ${itemLabel.toLowerCase()}`}
       </button>
     </div>
   );
