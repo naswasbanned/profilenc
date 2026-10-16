@@ -216,17 +216,18 @@ textarea.contact-block-input {
    Theme variants (same selector pairing as other blocks)
    ========================================================================== */
 
-/* Field Notes / editorial-tactile: ink border, hard offset shadow */
+/* Field Notes / editorial-tactile: same card tokens and fallbacks as every other
+   Field Notes card (see .music-player-block, .card-item) */
 [data-design-style="field-notes"] .contact-block,
 [data-button-style="editorial-tactile"] .contact-block {
-  border-width: 2px;
-  border-color: color-mix(in srgb, var(--card-text-color, #252320) 85%, var(--card-bg, transparent));
-  box-shadow: 4px 5px 0 var(--tactile-shadow-color, rgba(37, 35, 32, 0.32));
+  border-width: var(--card-border-width, 2px);
+  border-color: var(--card-border, #d7ccb8);
+  box-shadow: var(--card-shadow, 4px 5px 0 rgba(37, 35, 32, 0.22));
 }
 
 [data-design-style="field-notes"] .contact-block-input,
 [data-button-style="editorial-tactile"] .contact-block-input {
-  border: 2px solid color-mix(in srgb, var(--card-text-color, #252320) 85%, var(--card-bg, transparent));
+  border: var(--card-border-width, 2px) solid var(--card-border, #d7ccb8);
 }
 
 [data-design-style="field-notes"] .contact-block-input:focus,
