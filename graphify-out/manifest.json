@@ -1038,9 +1038,9 @@
     "semantic_hash": ""
   },
   "server/src/routes/inbox.js": {
-    "mtime": 1792082082.479989,
-    "seen": 1792083026.3729205,
-    "ast_hash": "d70bc6aee3089c7da271eed5fb68734f",
+    "mtime": 1792156050.1675353,
+    "seen": 1792163772.1869345,
+    "ast_hash": "a95f550a70452c0da9fbb54d4090312f",
     "semantic_hash": ""
   },
   "server/src/routes/messages.js": {
@@ -1116,15 +1116,15 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard/InboxMessageList.jsx": {
-    "mtime": 1792082588.2773683,
-    "seen": 1792083026.3729708,
-    "ast_hash": "9d94a389757dc241ff5519b83cb69950",
+    "mtime": 1792156071.6645818,
+    "seen": 1792163772.18702,
+    "ast_hash": "d6f54ae34ac42486ca7094641002947c",
     "semantic_hash": ""
   },
   "src/components/Dashboard/InboxReader.jsx": {
-    "mtime": 1792082690.104038,
-    "seen": 1792083026.3729718,
-    "ast_hash": "0c9639d8498838952fed89f5553d00e0",
+    "mtime": 1792156073.96132,
+    "seen": 1792163772.1870224,
+    "ast_hash": "924529e55a6b764804eda1f2df889ffa",
     "semantic_hash": ""
   },
   "src/components/Dashboard/InboxSidebar.jsx": {
@@ -1134,9 +1134,9 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard/UserSuggestInput.jsx": {
-    "mtime": 1792084064.702498,
-    "seen": 1792100666.4981217,
-    "ast_hash": "c0bd8233ec1ad11404f27f63437bb3a5",
+    "mtime": 1792156069.6565309,
+    "seen": 1792163772.1870286,
+    "ast_hash": "46b42a97313733612d6ea3acdbc69a49",
     "semantic_hash": ""
   },
   "src/hooks/useMediaQuery.js": {
@@ -1179,6 +1179,12 @@
     "mtime": 1792102660.4145608,
     "seen": 1792102956.2624276,
     "ast_hash": "8b74ab90a24427bbd9694fec05839b18",
+    "semantic_hash": ""
+  },
+  "src/components/Dashboard/InboxAvatar.jsx": {
+    "mtime": 1792156050.3238487,
+    "seen": 1792163772.1870143,
+    "ast_hash": "31d424db971efd39cafa608cafe56a62",
     "semantic_hash": ""
   }
 }
