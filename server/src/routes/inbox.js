@@ -116,7 +116,8 @@ router.get('/', async (req, res) => {
     );
     const { rows: items } = await query(
       `SELECT m.id, m.source, m.block_id, m.sender_user_id, m.sender_name,
-              u.username AS sender_username, m.answers, m.status, m.created_at
+              u.username AS sender_username, u.avatar_url AS sender_avatar_url,
+              m.answers, m.status, m.created_at
        FROM profile_messages m
        LEFT JOIN users u ON u.id = m.sender_user_id
        WHERE ${where}

@@ -1827,8 +1827,8 @@
 
 .suggest-avatar {
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  width: var(--avatar-size, 24px);
+  height: var(--avatar-size, 24px);
   border-radius: 50%;
   border: 1.5px solid var(--line);
   object-fit: cover;
@@ -1841,7 +1841,7 @@
   justify-content: center;
   color: var(--coral-text);
   background: var(--paper-elevated);
-  font-size: 0.72rem;
+  font-size: calc(var(--avatar-size, 24px) * 0.45);
   font-weight: 800;
 }
 

@@ -1,29 +1,10 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { apiFetch } from '../../lib/api';
 import { normalizeSuggestQuery, nextActiveIndex } from '../../lib/inboxSuggest';
+import InboxAvatar from './InboxAvatar';
 
 const DEBOUNCE_MS = 200;
 const UNAVAILABLE = 'Suggestions unavailable';
-
-function SuggestAvatar({ user }) {
-  const [failed, setFailed] = useState(false);
-  if (user.avatarUrl && !failed) {
-    return (
-      <img
-        className="suggest-avatar"
-        src={user.avatarUrl}
-        alt=""
-        loading="lazy"
-        onError={() => setFailed(true)}
-      />
-    );
-  }
-  return (
-    <span className="suggest-avatar suggest-avatar-fallback" aria-hidden="true">
-      {(user.username || '?').charAt(0).toUpperCase()}
-    </span>
-  );
-}
 
 /**
  * Username input with prefix suggestions (ARIA 1.2 combobox with a listbox popup).
@@ -184,7 +165,7 @@ export default function UserSuggestInput({ value, onChange, id, disabled = false
                   onMouseEnter={() => setActive(i)}
                   onClick={() => choose(user)}
                 >
-                  <SuggestAvatar user={user} />
+                  <InboxAvatar url={user.avatarUrl} name={user.username} />
                   <span className="suggest-name">@{user.username}</span>
                   {user.displayName && user.displayName.toLowerCase() !== user.username.toLowerCase() && (
                     <span className="suggest-display">{user.displayName}</span>

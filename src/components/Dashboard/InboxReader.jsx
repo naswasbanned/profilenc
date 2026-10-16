@@ -8,8 +8,8 @@ import {
   Mail,
   MailOpen,
   Trash2,
-  User,
 } from 'lucide-react';
+import InboxAvatar from './InboxAvatar';
 import { formatFullDate, isDirect, senderLabel } from '../../lib/inbox';
 
 /** Reading pane: empty state, or one message with its toolbar. */
@@ -110,7 +110,7 @@ export default function InboxReader({ message, busy, onBack, onSetStatus, onDele
         <article className="inbox-message" aria-label={`Message from ${sender}`}>
           <header className="inbox-message-head">
             <h3 className="inbox-message-sender">
-              {direct ? <User size={16} aria-hidden="true" /> : <Mail size={16} aria-hidden="true" />}
+              <InboxAvatar url={message.sender_avatar_url} name={sender} size={36} />
               {direct && message.sender_username ? (
                 <Link to={`/@${message.sender_username}`}>@{message.sender_username}</Link>
               ) : (

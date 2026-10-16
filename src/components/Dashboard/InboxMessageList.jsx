@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Mail, User } from 'lucide-react';
+import InboxAvatar from './InboxAvatar';
 import {
   senderLabel,
   subjectOf,
@@ -56,7 +56,7 @@ export default function InboxMessageList({ items, selectedId, onOpen, label }) {
             >
               <span className="inbox-row-top">
                 <span className="inbox-row-sender">
-                  {direct ? <User size={13} aria-hidden="true" /> : <Mail size={13} aria-hidden="true" />}
+                  <InboxAvatar url={m.sender_avatar_url} name={senderLabel(m)} size={28} />
                   <span className="dash-visually-hidden">{direct ? 'Direct message from' : 'Contact form from'}</span>
                   <span className="inbox-row-name">{senderLabel(m)}</span>
                 </span>
