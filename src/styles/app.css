@@ -58,11 +58,12 @@
   align-items: center;
   justify-content: center;
   padding: 10px 16px;
-  background: var(--tabs-nav-bg, rgba(10, 10, 15, 0.82));
-  backdrop-filter: blur(var(--glass-blur, 20px));
-  -webkit-backdrop-filter: blur(var(--glass-blur, 20px));
-  border-bottom: var(--card-border-width, 1px) solid var(--tabs-nav-border, rgba(255, 255, 255, 0.06));
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  /* Colors, shape and effects are --nav-* tokens from resolveNav (src/lib/navStyle.js);
+     data-nav-align / data-nav-size on the nav only change layout. */
+  background: var(--nav-bar-bg);
+  backdrop-filter: blur(var(--nav-bar-blur, 0px));
+  -webkit-backdrop-filter: blur(var(--nav-bar-blur, 0px));
+  border-bottom: var(--card-border-width, 1px) solid var(--nav-bar-border);
   transition: top var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
   width: 100%;
   box-sizing: border-box;
@@ -106,53 +107,61 @@
   align-items: center;
   gap: 8px;
   padding: 8px 18px;
-  border-radius: var(--radius-full, 9999px);
-  border: var(--card-border-width, 1px) solid var(--tab-btn-border, var(--color-border-subtle, rgba(255, 255, 255, 0.08)));
-  background: var(--tab-btn-bg, var(--color-surface-raised, rgba(255, 255, 255, 0.03)));
-  color: var(--tab-btn-text, var(--color-text-muted, #aaa));
+  border-radius: var(--nav-tab-radius);
+  border: var(--nav-tab-border-w) solid var(--nav-tab-border);
+  background: var(--nav-tab-bg);
+  color: var(--nav-tab-text);
   font-family: var(--font-family, var(--font-body));
   font-size: 0.84rem;
-  font-weight: 600;
+  font-weight: var(--nav-tab-weight);
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: all var(--transition-fast);
+  transition: background var(--transition-fast), color var(--transition-fast),
+    border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 
 .profile-tab-btn:hover {
-  background: var(--color-surface-overlay, rgba(255, 255, 255, 0.07));
-  color: var(--heading-color, #fff);
-  border-color: var(--heading-color, rgba(255, 255, 255, 0.16));
+  background: var(--nav-hover-bg);
+  color: var(--nav-hover-text);
+  border-color: var(--nav-hover-border);
+  box-shadow: var(--nav-hover-shadow);
+  transform: translate(var(--nav-hover-lift), var(--nav-hover-lift));
 }
 
-.profile-tab-btn.active {
-  border-color: var(--tab-btn-active-border, var(--accent-color, var(--color-accent-primary)));
-  background: var(--tab-btn-active-bg, color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 15%, rgba(0,0,0,0.4)));
-  color: var(--tab-btn-active-text, var(--accent-color, var(--color-accent-primary)));
-  box-shadow: 0 0 16px color-mix(in srgb, var(--accent-color, var(--color-accent-primary)) 20%, transparent);
+/* global.css removes outlines on buttons, so the focus ring is forced back on */
+.profile-tab-btn:focus-visible,
+.profile-tab-arrow:focus-visible {
+  outline: 2px solid var(--nav-accent) !important;
+  outline-offset: 2px;
 }
 
-/* Editorial Tactile styling for Profile Tab Navigation */
-[data-button-style="editorial-tactile"] .profile-tab-btn {
-  border: 2px solid var(--tab-btn-border, #d7ccb8) !important;
-  background: var(--tab-btn-bg, #fffaf0);
-  color: var(--tab-btn-text, #746e63);
-  font-weight: 700;
-  box-shadow: none;
+.profile-tab-btn.active,
+.profile-tab-btn.active:hover {
+  background: var(--nav-active-bg);
+  color: var(--nav-active-text);
+  border-color: var(--nav-active-border);
+  box-shadow: var(--nav-active-shadow);
+  transform: none;
 }
 
-[data-button-style="editorial-tactile"] .profile-tab-btn:hover {
-  border-color: var(--tactile-border-color, #252320) !important;
-  color: var(--heading-color, #252320);
-  transform: translate(-1px, -1px);
-  box-shadow: 2px 2px 0 var(--tactile-shadow-color, #252320);
+/* Layout options (data-nav-size / data-nav-align are set on the nav element) */
+.profile-tabs-nav[data-nav-size="compact"] .profile-tab-btn {
+  padding: 6px 14px;
+  font-size: 0.76rem;
+  gap: 6px;
 }
 
-[data-button-style="editorial-tactile"] .profile-tab-btn.active {
-  border-color: var(--tactile-border-color, #252320) !important;
-  background: var(--tab-btn-active-bg, #e96d52) !important;
-  color: var(--tab-btn-active-text, #fffaf0) !important;
-  box-shadow: 2px 2px 0 var(--tactile-shadow-color, #252320);
+.profile-tabs-nav[data-nav-align="left"] .profile-tabs-scroll {
+  margin: 0 auto 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-tab-btn,
+  .profile-tab-btn:hover {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* Scroll Arrows for Multi-Tab Navigation */
@@ -167,20 +176,16 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(18, 20, 28, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #cbd5e1;
+  background: var(--nav-arrow-bg);
+  border: 1px solid color-mix(in srgb, var(--nav-hover-text) 22%, transparent);
+  color: var(--nav-hover-text);
   cursor: pointer;
-  backdrop-filter: blur(var(--glass-blur, 12px));
-  -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  transition: all var(--transition-fast);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--nav-hover-text) 12%, transparent);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .profile-tab-arrow:hover {
-  background: rgba(28, 32, 45, 1);
-  color: #fff;
-  border-color: var(--accent-color, #00f0aa);
+  border-color: var(--nav-accent);
   transform: translateY(-50%) scale(1.08);
 }
 
@@ -207,7 +212,7 @@
     gap: 6px;
   }
 
-  .profile-tab-btn {
+  .profile-tabs-nav .profile-tab-btn {
     padding: 6px 14px;
     font-size: 0.76rem;
     gap: 6px;

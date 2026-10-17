@@ -9,6 +9,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { getIcon, isIconDisabled } from '../../lib/icons';
 import { getCanvasBackground, getCanvasStyleAttributes } from '../../lib/canvasStyle';
+import { resolveNav } from '../../lib/navStyle';
 import { isTabEmpty } from '../../lib/blockEmpty';
 import { clickTarget, track } from '../../lib/stats';
 import '../../styles/app.css';
@@ -27,7 +28,7 @@ const pageVariants = {
   exit: { opacity: 0, y: -10, transition: { duration: 0.2 } },
 };
 
-function ProfileTabsNav({ tabs, currentTabId, onSelectTab, isEditing, navBackground }) {
+function ProfileTabsNav({ tabs, currentTabId, onSelectTab, isEditing, navBackground, navAttrs }) {
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -81,6 +82,7 @@ function ProfileTabsNav({ tabs, currentTabId, onSelectTab, isEditing, navBackgro
   return (
     <nav
       className="profile-tabs-nav"
+      {...navAttrs}
       style={{
         top: isEditing ? '58px' : 0,
         backgroundColor: navBackground || undefined,
@@ -235,6 +237,7 @@ export default function ProfileCanvas({
           onSelectTab={setActiveTabId}
           isEditing={isEditing}
           navBackground={tabNavBg}
+          navAttrs={resolveNav(theme).attrs}
         />
       )}
 

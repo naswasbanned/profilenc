@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { apiJson } from '../lib/api';
+import { resolveNav } from '../lib/navStyle';
 
 const ThemeContext = createContext(null);
 
@@ -87,13 +88,6 @@ export const FIELD_NOTES_THEME = {
     cardHeadingColor: '#252320',
     cardTextColor: '#252320',
     cardTextMuted: '#746e63',
-    tabNavBackground: 'rgba(255, 250, 240, 0.96)',
-    tabNavBorder: '#d7ccb8',
-    tabButtonBackground: '#fffaf0',
-    tabButtonTextColor: '#746e63',
-    tabButtonBorder: '#d7ccb8',
-    tabButtonActiveBackground: '#e96d52',
-    tabButtonActiveTextColor: '#fffaf0',
     glassBlur: 0,
     animationSpeed: 1,
     backgroundImage: null,
@@ -284,23 +278,8 @@ function themeToCSSVars(theme) {
   const buttonStyle = g.buttonStyle || (g.designStyle === 'field-notes' ? 'editorial-tactile' : g.designStyle === 'neo-brutalist' ? 'neo-brutalist' : g.designStyle === 'midnight-violet' ? 'rounded-glow' : 'flat-border');
   vars['--button-style'] = buttonStyle;
 
-  vars['--tabs-nav-bg'] = g.tabNavBackground || (isLightOrPaper ? 'rgba(255, 250, 240, 0.96)' : 'rgba(10, 10, 15, 0.82)');
-  vars['--tabs-nav-border'] = g.tabNavBorder || (isLightOrPaper ? cardBorder : 'rgba(255, 255, 255, 0.06)');
-  vars['--tab-btn-bg'] = g.tabButtonBackground || (isLightOrPaper ? cardBg : 'rgba(255, 255, 255, 0.03)');
-  vars['--tab-btn-text'] = g.tabButtonTextColor || (isLightOrPaper ? textMuted : '#aaaaaa');
-  vars['--tab-btn-border'] = g.tabButtonBorder || (isLightOrPaper ? cardBorder : 'rgba(255, 255, 255, 0.08)');
-  if (g.tabButtonActiveBackground) {
-    vars['--tab-btn-active-bg'] = g.tabButtonActiveBackground;
-  } else if (isLightOrPaper) {
-    vars['--tab-btn-active-bg'] = accent;
-  }
-  if (g.tabButtonActiveTextColor) {
-    vars['--tab-btn-active-text'] = g.tabButtonActiveTextColor;
-    vars['--tab-btn-active-border'] = g.tabButtonActiveTextColor;
-  } else if (isLightOrPaper) {
-    vars['--tab-btn-active-text'] = '#fffaf0';
-    vars['--tab-btn-active-border'] = heading;
-  }
+  // Tab bar: colors, shape and effects all come from one resolver (src/lib/navStyle.js)
+  Object.assign(vars, resolveNav(theme).vars);
 
   // Glass & Animation
   vars['--glass-blur'] = `${blur}px`;

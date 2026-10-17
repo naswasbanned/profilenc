@@ -97,25 +97,12 @@
 
 /* --- Tab navigation ----------------------------------------------------- */
 
-[data-design-style="press-mono"] .profile-tabs-nav {
-  border-bottom: 1px solid var(--heading-color, #17171a);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
+/* Tab colors and shape come from the --nav-* tokens (src/lib/navStyle.js); only the type is design specific. */
 [data-design-style="press-mono"] .profile-tab-btn {
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
   font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-[data-design-style="press-mono"] .profile-tab-btn.active {
-  background: var(--heading-color, #17171a);
-  color: var(--bg-color, #f2f2f0);
 }
 
 /* ==========================================================================

@@ -3,6 +3,9 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { Sparkles, Type, Check, Layers, Palette, Square, FolderKanban, Image, Trash2, LayoutTemplate, ShieldCheck, Sliders, Compass, Info } from 'lucide-react';
 import ImageUploadPicker from '../ImageUploadPicker';
+import ColorInput from './ColorInput';
+import NavigationSection from './NavigationSection';
+import { NAV_RESET_PATHS } from '../../../lib/navStyle';
 
 const HEADING_FONT_GROUPS = {
   'Editorial & Classic Serif': [
@@ -351,13 +354,6 @@ const DESIGN_PRESETS = [
       'global.pillStyle': 'editorial-bordered',
       'global.buttonStyle': 'editorial-tactile',
       'global.iconStyle': 'bordered-box',
-      'global.tabNavBackground': 'rgba(255, 250, 240, 0.96)',
-      'global.tabNavBorder': '#d7ccb8',
-      'global.tabButtonBackground': '#fffaf0',
-      'global.tabButtonTextColor': '#746e63',
-      'global.tabButtonBorder': '#d7ccb8',
-      'global.tabButtonActiveBackground': '#e96d52',
-      'global.tabButtonActiveTextColor': '#fffaf0',
       'global.glassBlur': 0,
     },
   },
@@ -408,13 +404,6 @@ const DESIGN_PRESETS = [
       'global.pillStyle': 'rule-tag',
       'global.buttonStyle': 'press-outline',
       'global.iconStyle': 'none',
-      'global.tabNavBackground': 'rgba(242, 242, 240, 0.92)',
-      'global.tabNavBorder': '#17171a',
-      'global.tabButtonBackground': 'transparent',
-      'global.tabButtonTextColor': '#6b6b70',
-      'global.tabButtonBorder': 'transparent',
-      'global.tabButtonActiveBackground': '#17171a',
-      'global.tabButtonActiveTextColor': '#f2f2f0',
       'global.glassBlur': 0,
     },
   },
@@ -465,13 +454,6 @@ const DESIGN_PRESETS = [
       'global.pillStyle': 'soft-cloud',
       'global.buttonStyle': 'soft-raised',
       'global.iconStyle': 'soft-tint',
-      'global.tabNavBackground': 'rgba(255, 255, 255, 0.72)',
-      'global.tabNavBorder': 'transparent',
-      'global.tabButtonBackground': 'rgba(255, 255, 255, 0.6)',
-      'global.tabButtonTextColor': '#6f6a80',
-      'global.tabButtonBorder': 'transparent',
-      'global.tabButtonActiveBackground': '#f472b6',
-      'global.tabButtonActiveTextColor': '#ffffff',
       'global.glassBlur': 6,
     },
   },
@@ -521,13 +503,6 @@ const DESIGN_PRESETS = [
       'global.pillStyle': 'rounded-glow',
       'global.buttonStyle': 'flat-border',
       'global.iconStyle': 'glass-accent',
-      'global.tabNavBackground': 'rgba(10, 10, 15, 0.82)',
-      'global.tabNavBorder': 'rgba(255, 255, 255, 0.08)',
-      'global.tabButtonBackground': 'rgba(255, 255, 255, 0.03)',
-      'global.tabButtonTextColor': '#8b949e',
-      'global.tabButtonBorder': 'rgba(255, 255, 255, 0.08)',
-      'global.tabButtonActiveBackground': 'rgba(0, 240, 170, 0.15)',
-      'global.tabButtonActiveTextColor': '#00f0aa',
       'global.glassBlur': 12,
     },
   },
@@ -577,13 +552,6 @@ const DESIGN_PRESETS = [
       'global.pillStyle': 'editorial-bordered',
       'global.buttonStyle': 'neo-brutalist',
       'global.iconStyle': 'bordered-box',
-      'global.tabNavBackground': '#ffffff',
-      'global.tabNavBorder': '#000000',
-      'global.tabButtonBackground': '#ffffff',
-      'global.tabButtonTextColor': '#000000',
-      'global.tabButtonBorder': '#000000',
-      'global.tabButtonActiveBackground': '#ffdd00',
-      'global.tabButtonActiveTextColor': '#000000',
       'global.glassBlur': 0,
     },
   },
@@ -633,13 +601,6 @@ const DESIGN_PRESETS = [
       'global.pillStyle': 'rounded-glow',
       'global.buttonStyle': 'rounded-glow',
       'global.iconStyle': 'glass-accent',
-      'global.tabNavBackground': 'rgba(19, 13, 36, 0.85)',
-      'global.tabNavBorder': 'rgba(167, 139, 250, 0.15)',
-      'global.tabButtonBackground': 'rgba(255, 255, 255, 0.03)',
-      'global.tabButtonTextColor': '#8b5cf6',
-      'global.tabButtonBorder': 'rgba(167, 139, 250, 0.15)',
-      'global.tabButtonActiveBackground': 'rgba(167, 139, 250, 0.2)',
-      'global.tabButtonActiveTextColor': '#a78bfa',
       'global.glassBlur': 16,
     },
   },
@@ -700,28 +661,6 @@ const HEADING_WEIGHT_OPTIONS = [
   { label: '800 - Extra Bold', value: '800' },
   { label: '900 - Black', value: '900' },
 ];
-
-function ColorInput({ label, value, onChange }) {
-  return (
-    <div className="editor-control">
-      <label>{label}</label>
-      <div className="editor-color-input">
-        <input
-          type="color"
-          value={value || '#000000'}
-          onChange={(e) => onChange(e.target.value)}
-        />
-        <input
-          type="text"
-          value={value || ''}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="#000000"
-          className="editor-text-input"
-        />
-      </div>
-    </div>
-  );
-}
 
 function SliderInput({ label, value, onChange, min, max, step, unit }) {
   return (
@@ -868,12 +807,16 @@ export default function ThemePanel({ tabs = [], initialSection, scrollToField })
     updateTheme('global.accentColorSecondary', p.accentSec);
     updateTheme('global.buttonBackground', p.btnBg);
     updateTheme('global.buttonTextColor', p.btnText);
+    // Most recent change wins: a new palette makes the nav follow it again
+    NAV_RESET_PATHS.forEach((path) => updateTheme(path, null));
   };
 
   const applyDesignPreset = (preset) => {
     Object.entries(preset.theme).forEach(([path, val]) => {
       updateTheme(path, val);
     });
+    // Most recent change wins: a new preset makes the nav follow it again
+    NAV_RESET_PATHS.forEach((path) => updateTheme(path, null));
   };
 
   const displayTabs = tabs && tabs.length > 0 ? tabs : [{ id: 'tab-main', label: 'Portfolio' }];
@@ -895,13 +838,6 @@ export default function ThemePanel({ tabs = [], initialSection, scrollToField })
   const currentDesignStyle = getNestedValue('global.designStyle') || (liveCanvasBg === '#f5efdf' ? 'field-notes' : 'obsidian');
   const isLightOrPaper = liveCanvasBg === '#f5efdf' || liveCanvasBg === '#fffaf0' || liveCanvasBg === '#fafafa' || liveCanvasBg === '#ffffff' || liveCanvasBg === '#f8fafc' || currentDesignStyle === 'field-notes' || currentDesignStyle === 'clean-light' || currentDesignStyle === 'neo-brutalist';
 
-  const liveTabNavBg = getNestedValue('global.tabNavBackground') || (isLightOrPaper ? 'rgba(255, 250, 240, 0.96)' : 'rgba(10, 10, 15, 0.82)');
-  const liveTabNavBorder = getNestedValue('global.tabNavBorder') || (isLightOrPaper ? liveCardBorder : 'rgba(255, 255, 255, 0.06)');
-  const liveTabBtnBg = getNestedValue('global.tabButtonBackground') || (isLightOrPaper ? liveCardBg : 'rgba(255, 255, 255, 0.03)');
-  const liveTabBtnText = getNestedValue('global.tabButtonTextColor') || (isLightOrPaper ? (getNestedValue('global.textColorMuted') || '#746e63') : '#aaaaaa');
-  const liveTabBtnBorder = getNestedValue('global.tabButtonBorder') || (isLightOrPaper ? liveCardBorder : 'rgba(255, 255, 255, 0.08)');
-  const liveTabActiveBg = getNestedValue('global.tabButtonActiveBackground') || (isLightOrPaper ? liveAccentColor : `color-mix(in srgb, ${liveAccentColor} 15%, rgba(0,0,0,0.4))`);
-  const liveTabActiveText = getNestedValue('global.tabButtonActiveTextColor') || (isLightOrPaper ? '#fffaf0' : liveAccentColor);
 
   const liveCardShadow = getNestedValue('global.cardBoxShadow') || getNestedValue('global.cardShadow') || 'none';
   const liveCardBorderWidth = getNestedValue('global.cardBorderWidth') ?? 1;
@@ -1897,115 +1833,7 @@ export default function ThemePanel({ tabs = [], initialSection, scrollToField })
         {/* --- NAVIGATION TAB --- */}
         {section === 'navigation' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {/* Tab Navigation Bar Background & Buttons */}
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
-                <FolderKanban size={14} color="var(--fn-editor-coral)" />
-                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--fn-editor-ink)' }}>
-                  Tab Navigation Bar & Button Colors
-                </span>
-              </div>
-              <p style={{ fontSize: '0.76rem', color: 'var(--fn-editor-muted)', marginBottom: '14px', lineHeight: '1.4' }}>
-                Customize the header navigation bar appearance and button states. The navigation bar color is separated from the main canvas background by default.
-              </p>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <ColorInput
-                  label="Navigation Bar Background (Header)"
-                  value={getNestedValue('global.tabNavBackground') || (isLightOrPaper ? 'rgba(255, 250, 240, 0.96)' : 'rgba(10, 10, 15, 0.82)')}
-                  onChange={(v) => updateTheme('global.tabNavBackground', v)}
-                />
-                <ColorInput
-                  label="Navigation Bar Bottom Border Line"
-                  value={getNestedValue('global.tabNavBorder') || (isLightOrPaper ? liveCardBorder : 'rgba(255, 255, 255, 0.06)')}
-                  onChange={(v) => updateTheme('global.tabNavBorder', v)}
-                />
-                <ColorInput
-                  label="Inactive Tab Button Background"
-                  value={getNestedValue('global.tabButtonBackground') || (isLightOrPaper ? liveCardBg : 'rgba(255, 255, 255, 0.03)')}
-                  onChange={(v) => updateTheme('global.tabButtonBackground', v)}
-                />
-                <ColorInput
-                  label="Inactive Tab Button Text Color"
-                  value={getNestedValue('global.tabButtonTextColor') || (isLightOrPaper ? (getNestedValue('global.textColorMuted') || '#746e63') : '#aaaaaa')}
-                  onChange={(v) => updateTheme('global.tabButtonTextColor', v)}
-                />
-                <ColorInput
-                  label="Inactive Tab Button Border Color"
-                  value={getNestedValue('global.tabButtonBorder') || (isLightOrPaper ? liveCardBorder : 'rgba(255, 255, 255, 0.08)')}
-                  onChange={(v) => updateTheme('global.tabButtonBorder', v)}
-                />
-                <ColorInput
-                  label="Active Tab Button Background Highlight (Optional)"
-                  value={getNestedValue('global.tabButtonActiveBackground') || ''}
-                  onChange={(v) => updateTheme('global.tabButtonActiveBackground', v || null)}
-                />
-                <ColorInput
-                  label="Active Tab Text & Border Color (Optional)"
-                  value={getNestedValue('global.tabButtonActiveTextColor') || getNestedValue('global.accentColor') || '#00f0aa'}
-                  onChange={(v) => updateTheme('global.tabButtonActiveTextColor', v || null)}
-                />
-              </div>
-
-              {/* Live Interactive Tab Bar Preview */}
-              <div
-                style={{
-                  marginTop: '14px',
-                  padding: '12px 14px',
-                  borderRadius: '8px',
-                  background: liveTabNavBg,
-                  border: `1px solid ${liveTabNavBorder}`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  overflowX: 'auto',
-                }}
-              >
-                <div
-                  style={{
-                    padding: '6px 14px',
-                    borderRadius: '9999px',
-                    background: liveTabActiveBg,
-                    color: liveTabActiveText,
-                    border: `1px solid ${liveTabActiveText}`,
-                    fontSize: '0.76rem',
-                    fontWeight: 700,
-                    whiteSpace: 'nowrap',
-                    boxShadow: `0 0 12px color-mix(in srgb, ${liveTabActiveText} 25%, transparent)`,
-                  }}
-                >
-                  Active Tab
-                </div>
-                <div
-                  style={{
-                    padding: '6px 14px',
-                    borderRadius: '9999px',
-                    background: liveTabBtnBg,
-                    color: liveTabBtnText,
-                    border: `1px solid ${liveTabBtnBorder}`,
-                    fontSize: '0.76rem',
-                    fontWeight: 600,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  Inactive Tab
-                </div>
-                <div
-                  style={{
-                    padding: '6px 14px',
-                    borderRadius: '9999px',
-                    background: liveTabBtnBg,
-                    color: liveTabBtnText,
-                    border: `1px solid ${liveTabBtnBorder}`,
-                    fontSize: '0.76rem',
-                    fontWeight: 600,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  Projects
-                </div>
-              </div>
-            </div>
+            <NavigationSection />
 
             <hr style={{ border: 'none', borderTop: '1.5px solid var(--fn-editor-line)', margin: 0 }} />
 
@@ -2052,7 +1880,8 @@ export default function ThemePanel({ tabs = [], initialSection, scrollToField })
 
                     <ColorInput
                       label="Navigation Bar Background (This Tab, Optional)"
-                      value={getNestedValue(`tabs.${tab.id}.tabNavBackground`) || getNestedValue('global.tabNavBackground') || (isLightOrPaper ? 'rgba(255, 250, 240, 0.96)' : 'rgba(10, 10, 15, 0.82)')}
+                      value={getNestedValue(`tabs.${tab.id}.tabNavBackground`) || ''}
+                      placeholder="Follows the navigation bar"
                       onChange={(v) => updateTheme(`tabs.${tab.id}.tabNavBackground`, v || null)}
                     />
 

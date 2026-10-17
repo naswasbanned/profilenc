@@ -264,9 +264,9 @@
     "semantic_hash": "b00c21d33f29dc1d4e96bca648d52e38"
   },
   "src/components/Editor/panels/ThemePanel.jsx": {
-    "mtime": 1791863658.062947,
-    "seen": 1791864643.4907556,
-    "ast_hash": "9a11e1ee7845814fd79c2aa33debe76c",
+    "mtime": 1792222655.7359302,
+    "seen": 1792223496.6387436,
+    "ast_hash": "cd239dbb518916625935efcb05227dee",
     "semantic_hash": ""
   },
   "src/components/OptimizedImage/OptimizedImage.jsx": {
@@ -312,9 +312,9 @@
     "semantic_hash": ""
   },
   "src/contexts/ThemeContext.jsx": {
-    "mtime": 1790053235.6151874,
-    "seen": 1790062712.9107447,
-    "ast_hash": "7c170519733901f40a3af6da7512331b",
+    "mtime": 1792222392.6946921,
+    "seen": 1792223496.6387954,
+    "ast_hash": "5220ffb17668450c15cc6d279c4f7dd1",
     "semantic_hash": ""
   },
   "src/hooks/useDoubleBackdropClose.js": {
@@ -420,9 +420,9 @@
     "semantic_hash": ""
   },
   "src/components/Profile/ProfileCanvas.jsx": {
-    "mtime": 1792079579.528304,
-    "seen": 1792079692.0589423,
-    "ast_hash": "0f1a7af6f6173bd0d82e5e9360f2db57",
+    "mtime": 1792222448.56189,
+    "seen": 1792223496.638777,
+    "ast_hash": "20eeb41cea853857f934074c33ad78ea",
     "semantic_hash": ""
   },
   "src/components/primitives/EditorModal.jsx": {
@@ -684,9 +684,9 @@
     "semantic_hash": ""
   },
   "src/lib/canvasStyle.js": {
-    "mtime": 1790165139.8744614,
-    "seen": 1790165524.667546,
-    "ast_hash": "0144c81cf5f9ede40730decbd928c013",
+    "mtime": 1792222466.2601056,
+    "seen": 1792223496.6388075,
+    "ast_hash": "3ab7363be9645e35aeaf1f75a4effac1",
     "semantic_hash": ""
   },
   "src/components/Editor/fields/SortableRow.jsx": {
@@ -834,9 +834,9 @@
     "semantic_hash": ""
   },
   "src/components/Editor/searchRegistry.js": {
-    "mtime": 1792073282.056627,
-    "seen": 1792075630.0283916,
-    "ast_hash": "e95b0cf77c8207aa54edc35c8222f742",
+    "mtime": 1792222687.2879512,
+    "seen": 1792223496.6387477,
+    "ast_hash": "b318728c9e06488c8da88b4ceba3876a",
     "semantic_hash": ""
   },
   "src/components/Blocks/CanvasPortal.jsx": {
@@ -1185,6 +1185,42 @@
     "mtime": 1792156050.3238487,
     "seen": 1792163772.1870143,
     "ast_hash": "31d424db971efd39cafa608cafe56a62",
+    "semantic_hash": ""
+  },
+  "src/components/Editor/panels/ColorInput.jsx": {
+    "mtime": 1792223374.050059,
+    "seen": 1792223496.6387339,
+    "ast_hash": "19497a226106658b41e1eb3194dfe2e6",
+    "semantic_hash": ""
+  },
+  "src/components/Editor/panels/NavigationSection.jsx": {
+    "mtime": 1792222621.474102,
+    "seen": 1792223496.638739,
+    "ast_hash": "be838980f704790e54c24e5cef49a5a4",
+    "semantic_hash": ""
+  },
+  "src/lib/color.js": {
+    "mtime": 1792222297.7292323,
+    "seen": 1792223496.6388092,
+    "ast_hash": "36ae0c64d1f626e0e626257754ceedf4",
+    "semantic_hash": ""
+  },
+  "src/lib/color.test.js": {
+    "mtime": 1792222298.7652082,
+    "seen": 1792223496.6388109,
+    "ast_hash": "64f88388ed25496efe5b666476647206",
+    "semantic_hash": ""
+  },
+  "src/lib/navStyle.js": {
+    "mtime": 1792222572.6883304,
+    "seen": 1792223496.638846,
+    "ast_hash": "a643381e40a08d41bd53b37c8d14facf",
+    "semantic_hash": ""
+  },
+  "src/lib/navStyle.test.js": {
+    "mtime": 1792222768.2213979,
+    "seen": 1792223496.6388478,
+    "ast_hash": "bb106049dd4948553a5a2eeb63d782d7",
     "semantic_hash": ""
   }
 }

@@ -72,23 +72,7 @@
   background: var(--card-bg, #ffffff);
 }
 
-/* --- Tab navigation ----------------------------------------------------- */
-
-[data-design-style="aurora-soft"] .profile-tabs-nav {
-  border-bottom: none;
-  backdrop-filter: blur(var(--glass-blur, 6px));
-  -webkit-backdrop-filter: blur(var(--glass-blur, 6px));
-}
-
-[data-design-style="aurora-soft"] .profile-tab-btn {
-  border: none;
-  border-radius: 999px;
-  box-shadow: none;
-}
-
-[data-design-style="aurora-soft"] .profile-tab-btn.active {
-  box-shadow: 0 6px 14px color-mix(in srgb, var(--accent-color, #f472b6) 38%, transparent);
-}
+/* Tab navigation colors and shape come from the --nav-* tokens (src/lib/navStyle.js). */
 
 /* ==========================================================================
    PART STYLE: SOFT CLOUD PILLS

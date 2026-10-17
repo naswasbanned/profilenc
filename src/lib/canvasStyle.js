@@ -40,7 +40,8 @@ export function getCanvasBackground(theme, tabId) {
   return {
     backgroundColor: tabTheme?.backgroundColor || theme?.global?.backgroundColor || '#090a0f',
     backgroundGradient: tabTheme?.backgroundGradient || theme?.global?.backgroundGradient || null,
-    tabNavBackground: tabTheme?.tabNavBackground || theme?.global?.tabNavBackground || null,
+    // Per-tab override only. The global bar color is resolved by resolveNav (--nav-bar-bg).
+    tabNavBackground: tabTheme?.tabNavBackground || null,
     backgroundImage: tabTheme?.backgroundImage || theme?.global?.backgroundImage || null,
     backgroundOverlayOpacity:
       tabTheme?.backgroundOverlayOpacity ?? theme?.global?.backgroundOverlayOpacity ?? 0.75,
